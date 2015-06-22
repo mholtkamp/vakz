@@ -69,6 +69,7 @@
   <ItemGroup>
     <ClCompile Include="CoreWin.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="VGL.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
@@ -79,6 +80,7 @@
     <ClInclude Include="Matter.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Vakz.h" />
+    <ClInclude Include="VGL.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
