@@ -12,16 +12,16 @@
 #include "CoreWin.h"
 #include "stdio.h"
 #include <windows.h>        // Header File For Windows
-#include <gl\gl.h>          // Header File For The OpenGL32 Library
-#include <gl\glu.h>         // Header File For The GLu32 Library
+//#include <gl\gl.h>          // Header File For The OpenGL32 Library
+//#include <gl\glu.h>         // Header File For The GLu32 Library
+#include "VGL.h"
+#include "Settings.h"
 
 HDC            hDC = NULL;  // Private GDI Device Context
 HGLRC          hRC = NULL;    // Permanent Rendering Context
 HWND           hWnd = NULL;    // Holds Our Window Handle
 HINSTANCE      hInstance;     // Holds The Instance Of The Application
 
-int     nWindowWidth       = 800;
-int     nWindowHeight      = 600;
 char    szWindowTitle[256] = {0};
 
 int     keys[256];            // Array Used For The Keyboard Routine
@@ -37,32 +37,21 @@ GLvoid ReSizeGLScene(GLsizei width, GLsizei height)      // Resize And Initializ
     }
 
     glViewport(0, 0, width, height);                     // Reset The Current Viewport
-
-    glMatrixMode(GL_PROJECTION);                         // Select The Projection Matrix
-    glLoadIdentity();                                    // Reset The Projection Matrix
-
-    // Calculate The Aspect Ratio Of The Window
-    gluPerspective(45.0f, (GLfloat)width / (GLfloat)height, 0.1f, 100.0f);
-
-    glMatrixMode(GL_MODELVIEW);                          // Select The Modelview Matrix
-    glLoadIdentity();                                    // Reset The Modelview Matrix
 }
 
 int InitGL(GLvoid)                                       // All Setup For OpenGL Goes Here
 {
-    glShadeModel(GL_SMOOTH);                             // Enable Smooth Shading
     glClearColor(1.0f, 0.0f, 0.0f, 0.5f);                // Black Background
-    glClearDepth(1.0f);                                  // Depth Buffer Setup
+    glClearDepthf(1.0f);                                 // Depth Buffer Setup
     glEnable(GL_DEPTH_TEST);                             // Enables Depth Testing
     glDepthFunc(GL_LEQUAL);                              // The Type Of Depth Testing To Do
-    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);   // Really Nice Perspective Calculations
     return TRUE;                                         // Initialization Went OK
 }
 
 int DrawGLScene(GLvoid)                                  // Here's Where We Do All The Drawing
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  // Clear Screen And Depth Buffer
-    glLoadIdentity();                                    // Reset The Current Modelview Matrix
+
     return TRUE;                                         // Everything Went OK
 }
 
@@ -169,8 +158,8 @@ int SetWindowSize(int nWidth,
     if (nWidth  > 0 &&
         nHeight > 0)
     {
-        nWindowWidth = nWidth;
-        nWindowHeight = nHeight;
+        nScreenWidth  = nWidth;
+        nScreenHeight = nHeight;
         return 1;
     }
     return 0;
@@ -198,9 +187,9 @@ int Initialize()
     DWORD        dwStyle;                           // Window Style
     RECT        WindowRect;                         // Grabs Rectangle Upper Left / Lower Right Values
     WindowRect.left = (long)0;                      // Set Left Value To 0
-    WindowRect.right = (long)nWindowWidth;          // Set Right Value To Requested Width
+    WindowRect.right = (long) nScreenWidth;         // Set Right Value To Requested Width
     WindowRect.top = (long)0;                       // Set Top Value To 0
-    WindowRect.bottom = (long)nWindowHeight;        // Set Bottom Value To Requested Height
+    WindowRect.bottom = (long) nScreenHeight;       // Set Bottom Value To Requested Height
 
     hInstance = GetModuleHandle(NULL);              // Grab An Instance For Our Window
     wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;  // Redraw On Size, And Own DC For Window.
@@ -302,10 +291,23 @@ int Initialize()
         return FALSE;                                  // Return FALSE
     }
 
+    if (LoadVGL() == 0)
+    {
+        KillGLWindow();                                // Reset the display
+        MessageBox(NULL, "Failed to load ES30 extensions.", "ERROR", MB_OK | MB_ICONEXCLAMATION);
+        return 0;                                      // Return 0
+    }
+
+    if (LoadShaders() == 0)
+    {
+        KillGLWindow();
+        MessageBox(NULL, "Failed to compile/link shaders.", "ERROR", MB_OK | MB_ICONEXCLAMATION);
+    }
+
     ShowWindow(hWnd, SW_SHOW);                         // Show The Window
     SetForegroundWindow(hWnd);                         // Slightly Higher Priority
     SetFocus(hWnd);                                    // Sets Keyboard Focus To The Window
-    ReSizeGLScene(nWindowWidth, nWindowHeight);                    // Set Up Our Perspective GL Screen
+    ReSizeGLScene(nScreenWidth, nScreenHeight);        // Set Up Our Perspective GL Screen
 
     if (!InitGL())                                     // Initialize Our Newly Created GL Window
     {

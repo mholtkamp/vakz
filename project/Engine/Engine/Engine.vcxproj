@@ -68,7 +68,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CoreWin.cpp" />
+    <ClCompile Include="Glyph.cpp" />
+    <ClCompile Include="Log.cpp" />
+    <ClCompile Include="Quad.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="Settings.cpp" />
     <ClCompile Include="VGL.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -77,8 +81,12 @@
     <ClInclude Include="Effect.h" />
     <ClInclude Include="Glyph.h" />
     <ClInclude Include="Light.h" />
+    <ClInclude Include="Log.h" />
     <ClInclude Include="Matter.h" />
+    <ClInclude Include="Quad.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="Settings.h" />
+    <ClInclude Include="Shaders.h" />
     <ClInclude Include="Vakz.h" />
     <ClInclude Include="VGL.h" />
   </ItemGroup>

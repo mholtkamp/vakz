@@ -3,17 +3,44 @@
 
 #include "Scene.h"
 
-// Sets the window size
+//## **************************************************************************
+//## SetWindowSize
+//## 
+//## Sets window size.
+//##
+//## Input:
+//##   nWidth  - width of window.
+//##   nHeight - height of window.
+//##
+//## Returns:
+//##   int - 1 if successful, otherwise 0.
+//## **************************************************************************
 int SetWindowSize(int nWidth,
                   int nHeight);
 
-// Initializes the Vakz Engine
+//## **************************************************************************
+//## Initialize
+//##
+//## Initializes the Vakz Engine
+//## 
+//## Returns:
+//##   int - 1 if successful, 0 otherwise.
+//## **************************************************************************
 int Initialize();
 
-// Render the current scene 
+//## **************************************************************************
+//## Render
+//##
+//## Renders the current scene.
+//##  int - 1 if successful, 0 otherwise.
+//## **************************************************************************
 int Render();
 
-// Set the scene
+//## **************************************************************************
+//## SetScene
+//##
+//## Assigns the scene to be rendered.
+//## **************************************************************************
 int SetScene(Scene* pScene);
 
 #endif

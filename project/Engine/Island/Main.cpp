@@ -3,6 +3,7 @@
 
 int main()
 {
+    SetWindowSize(1024,768);
     Initialize();
 
     while (Render())
