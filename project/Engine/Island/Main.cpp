@@ -11,6 +11,10 @@ int main()
     Scene* pTestScene = new Scene();
     SetScene(pTestScene);
 
+    // Force a warning to occur.
+    Camera* pCamera = 0;
+    pTestScene->SetCamera(pCamera);
+
     Quad* pTestQuad = new Quad();
     pTestScene->AddGlyph(pTestQuad);
     
@@ -23,8 +27,6 @@ int main()
     while (1)
     {
         Render();
-
-        printf("Rendering.\n");
     }
 
     delete pTestQuad;
