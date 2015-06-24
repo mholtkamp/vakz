@@ -1,4 +1,4 @@
 #include "Settings.h"
 
-int nScreenWidth  = 800;
-int nScreenHeight = 600;
+int g_nScreenWidth   = 800;
+int g_nScreenHeight  = 600;

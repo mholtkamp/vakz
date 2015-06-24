@@ -38,6 +38,21 @@ int LoadVGL();
 //## **************************************************************************
 int LoadShaders();
 
+//## **************************************************************************
+//## LoadShaders
+//##
+//## Based on the given shader index, returns the corresponding shader program
+//## handle. This is needed when using a program or retrieving variable
+//## locations.
+//##
+//## Input:
+//##   nIndex - the shader program index (refer to ProgramEnum in this file)
+//##
+//## Returns:
+//##   unsigned int - the requested shader program handle
+//## **************************************************************************
+unsigned int GetShaderProgram(int nIndex);
+
 // Define data types used by OpenGL ES30 Specification
 typedef unsigned int   GLenum;
 typedef unsigned char  GLboolean;

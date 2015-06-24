@@ -757,3 +757,19 @@ int LoadShaders()
 
     return nStatus;
 }
+
+//*****************************************************************************
+// GetShaderProgram
+//*****************************************************************************
+unsigned int GetShaderProgram(int nIndex)
+{
+    unsigned int hProg = 0;
+
+    if (nIndex >= 0 &&
+        nIndex < MAX_PROGRAMS)
+    {
+        hProg = s_arPrograms[nIndex];
+    }
+
+    return hProg;
+}

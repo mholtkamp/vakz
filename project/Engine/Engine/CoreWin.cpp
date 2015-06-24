@@ -12,10 +12,12 @@
 #include "CoreWin.h"
 #include "stdio.h"
 #include <windows.h>        // Header File For Windows
-//#include <gl\gl.h>          // Header File For The OpenGL32 Library
-//#include <gl\glu.h>         // Header File For The GLu32 Library
 #include "VGL.h"
 #include "Settings.h"
+#include "Log.h"
+
+// Pointer to the scene object used during rendering.
+static Scene* s_pScene = 0;
 
 HDC            hDC = NULL;  // Private GDI Device Context
 HGLRC          hRC = NULL;    // Permanent Rendering Context
@@ -52,6 +54,14 @@ int DrawGLScene(GLvoid)                                  // Here's Where We Do A
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);  // Clear Screen And Depth Buffer
 
+    if (s_pScene != 0)
+    {
+        s_pScene->Render();
+    }
+    else
+    {
+        LogWarning("No scene is set.");
+    }
     return TRUE;                                         // Everything Went OK
 }
 
@@ -158,8 +168,8 @@ int SetWindowSize(int nWidth,
     if (nWidth  > 0 &&
         nHeight > 0)
     {
-        nScreenWidth  = nWidth;
-        nScreenHeight = nHeight;
+        g_nScreenWidth  = nWidth;
+        g_nScreenHeight = nHeight;
         return 1;
     }
     return 0;
@@ -187,9 +197,9 @@ int Initialize()
     DWORD        dwStyle;                           // Window Style
     RECT        WindowRect;                         // Grabs Rectangle Upper Left / Lower Right Values
     WindowRect.left = (long)0;                      // Set Left Value To 0
-    WindowRect.right = (long) nScreenWidth;         // Set Right Value To Requested Width
+    WindowRect.right = (long) g_nScreenWidth;         // Set Right Value To Requested Width
     WindowRect.top = (long)0;                       // Set Top Value To 0
-    WindowRect.bottom = (long) nScreenHeight;       // Set Bottom Value To Requested Height
+    WindowRect.bottom = (long) g_nScreenHeight;       // Set Bottom Value To Requested Height
 
     hInstance = GetModuleHandle(NULL);              // Grab An Instance For Our Window
     wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;  // Redraw On Size, And Own DC For Window.
@@ -307,7 +317,7 @@ int Initialize()
     ShowWindow(hWnd, SW_SHOW);                         // Show The Window
     SetForegroundWindow(hWnd);                         // Slightly Higher Priority
     SetFocus(hWnd);                                    // Sets Keyboard Focus To The Window
-    ReSizeGLScene(nScreenWidth, nScreenHeight);        // Set Up Our Perspective GL Screen
+    ReSizeGLScene(g_nScreenWidth, g_nScreenHeight);    // Set Up Our Perspective GL Screen
 
     if (!InitGL())                                     // Initialize Our Newly Created GL Window
     {
@@ -367,5 +377,6 @@ int Render()
 // Set the scene
 int SetScene(Scene* pScene)
 {
+    s_pScene = pScene;
     return 0;
 }

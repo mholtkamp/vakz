@@ -37,7 +37,7 @@ GLSL_VERSION_STRING
 
 static const char* pQuadFragmentShader = 
 GLSL_VERSION_STRING
-"uniform vec4 uType;\n"
+"uniform int uType;\n"
 "uniform vec4 uColor;\n"
 "uniform sampler2D uTexture;\n"
 "in vec2 vTexCoord;\n"
