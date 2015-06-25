@@ -8,7 +8,7 @@
 //*****************************************************************************
 // LogError
 //*****************************************************************************
-void LogError(char* pError)
+void LogError(const char* pError)
 {
 #if defined(WIN32)
     // Grab handle to console to change color.
@@ -32,7 +32,7 @@ void LogError(char* pError)
 //*****************************************************************************
 // LogWarning
 //*****************************************************************************
-void LogWarning(char* pWarning)
+void LogWarning(const char* pWarning)
 {
 #if defined(WIN32)
     // Grab handle to console to change color.
@@ -56,7 +56,7 @@ void LogWarning(char* pWarning)
 //*****************************************************************************
 // LogDebug
 //*****************************************************************************
-void LogDebug(char* pDebug)
+void LogDebug(const char* pDebug)
 {
 #if defined (WINDOWS)
     // Grab handle to console to change color.

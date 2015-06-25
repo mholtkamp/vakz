@@ -9,7 +9,7 @@
 //## Input:
 //##   pError - null terminated string to log.
 //## **************************************************************************
-void LogError(char* pError);
+void LogError(const char* pError);
 
 //## **************************************************************************
 //## LogWarning
@@ -19,7 +19,7 @@ void LogError(char* pError);
 //## Input:
 //##   pWarning - null terminated string to log.
 //## **************************************************************************
-void LogWarning(char* pWarning);
+void LogWarning(const char* pWarning);
 
 //## **************************************************************************
 //## LogDebug
@@ -29,6 +29,6 @@ void LogWarning(char* pWarning);
 //## Input:
 //##   pDebug - null terminated string to log.
 //## **************************************************************************
-void LogDebug(char* pDebug);
+void LogDebug(const char* pDebug);
 
 #endif

@@ -3,6 +3,7 @@
 	<name>Island</name>
 	<comment></comment>
 	<projects>
+		<project>Vakz</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
