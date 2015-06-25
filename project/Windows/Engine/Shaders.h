@@ -1,11 +1,7 @@
 #ifndef SHADERS_H
 #define SHADERS_H
 
-#ifdef WIN32
-#define GLSL_VERSION_STRING "#version 330\n"
-#else
 #define GLSL_VERSION_STRING "#version 300 es\n"
-#endif
 
 //## **************************************************************************
 //## Quad Shader
@@ -37,6 +33,7 @@ GLSL_VERSION_STRING
 
 static const char* pQuadFragmentShader = 
 GLSL_VERSION_STRING
+"precision mediump float;"
 "uniform int uType;\n"
 "uniform vec4 uColor;\n"
 "uniform sampler2D uTexture;\n"

@@ -1,5 +1,6 @@
 #include "VGL.h"
 #include "Log.h"
+#include <string.h>
 
 // Buffer used to store shader compilation logs
 #define LOG_SIZE 1024
@@ -8,6 +9,7 @@ static char pLogBuffer[LOG_SIZE];
 // Array of shaders
 static unsigned int s_arPrograms[MAX_PROGRAMS];
 
+#if defined(WINDOWS)
 PFNGLGETRENDERBUFFERPARAMETERIVPROC glGetRenderbufferParameteriv;
 PFNGLGETUNIFORMBLOCKINDEXPROC glGetUniformBlockIndex;
 PFNGLCLEARBUFFERIVPROC glClearBufferiv;
@@ -208,12 +210,14 @@ PFNGLVALIDATEPROGRAMPROC glValidateProgram;
 PFNGLCLEARBUFFERUIVPROC glClearBufferuiv;
 PFNGLUNIFORM3UIVPROC glUniform3uiv;
 PFNGLVERTEXATTRIBIPOINTERPROC glVertexAttribIPointer;
+#endif
 
 //*****************************************************************************
 // LoadVGL
 //*****************************************************************************
 int LoadVGL()
 {
+#if defined(WINDOWS)
     glActiveTexture = (PFNGLACTIVETEXTUREPROC)wglGetProcAddress("glActiveTexture");
 	glAttachShader = (PFNGLATTACHSHADERPROC)wglGetProcAddress("glAttachShader");
 	glBindAttribLocation = (PFNGLBINDATTRIBLOCATIONPROC)wglGetProcAddress("glBindAttribLocation");
@@ -626,6 +630,9 @@ int LoadVGL()
             // At least one "extension" failed to load.
             return 0;
         }
+#endif
+
+    return 1;
 }
 
 //*****************************************************************************

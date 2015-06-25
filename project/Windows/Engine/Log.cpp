@@ -1,6 +1,9 @@
 #include "Log.h"
-#include <Windows.h>
 #include <stdio.h>
+
+#if defined(WINDOWS)
+#include <Windows.h>
+#endif
 
 //*****************************************************************************
 // LogError
@@ -21,8 +24,8 @@ void LogError(char* pError)
     SetConsoleTextAttribute(hConsole, 15);
 #else
     // Print error message.
-    printf(pError);
-    printf("\n");
+    puts(pError);
+    puts("\n");
 #endif
 }
 
@@ -45,8 +48,8 @@ void LogWarning(char* pWarning)
     SetConsoleTextAttribute(hConsole, 15);
 #else
     // Print warning message.
-    printf(pWarning);
-    printf("\n");
+    puts(pWarning);
+    puts("\n");
 #endif
 }
 
@@ -66,7 +69,7 @@ void LogDebug(char* pDebug)
     printf("\n");
 #else
     // Print debug message
-    printf(pDebug);
-    printf("\n");
+    puts(pDebug);
+    puts("\n");
 #endif
 }

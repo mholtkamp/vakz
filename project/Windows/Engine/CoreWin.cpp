@@ -1,3 +1,5 @@
+#if defined(WINDOWS)
+
 /*
 *        This Code Was Created By Jeff Molofee 2000
 *        A HUGE Thanks To Fredric Echols For Cleaning Up
@@ -380,3 +382,5 @@ int SetScene(Scene* pScene)
     s_pScene = pScene;
     return 0;
 }
+
+#endif

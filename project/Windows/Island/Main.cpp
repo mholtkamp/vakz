@@ -18,8 +18,8 @@ int main()
     Quad* pTestQuad = new Quad();
     pTestScene->AddGlyph(pTestQuad);
     
-    pTestQuad->SetBox(200.0f,
-                      300.0f,
+    pTestQuad->SetBox(100.0f,
+                      100.0f,
                       100.0f,
                       200.0f);
     pTestQuad->SetColor(0.0f, 0.0f, 0.6f, 1.0f);

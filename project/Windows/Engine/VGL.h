@@ -1,12 +1,7 @@
 #ifndef VGL_H
 #define VGL_H
 
-#include <windows.h>
-#include <gl/GL.h>
 #include "Shaders.h"
-
-#define GLAPI extern
-#define APIENTRYP APIENTRY*
 
 enum ProgramEnum
 {
@@ -52,6 +47,21 @@ int LoadShaders();
 //##   unsigned int - the requested shader program handle
 //## **************************************************************************
 unsigned int GetShaderProgram(int nIndex);
+
+
+#if defined(ANDROID)
+#include <GLES3/gl3.h>
+#include <EGL/egl.h>
+#include <EGL/eglext.h>
+#endif
+
+#if defined(WINDOWS)
+#include <windows.h>
+#include <gl/GL.h>
+
+
+#define GLAPI extern
+#define APIENTRYP APIENTRY*
 
 // Define data types used by OpenGL ES30 Specification
 typedef unsigned int   GLenum;
@@ -1096,5 +1106,7 @@ typedef void (APIENTRYP PFNGLTEXSTORAGE3DPROC)(GLenum, GLsizei, GLenum, GLsizei,
 GLAPI PFNGLTEXSTORAGE3DPROC glTexStorage3D;
 typedef void (APIENTRYP PFNGLGETINTERNALFORMATIVPROC)(GLenum, GLenum, GLenum, GLsizei, GLint*);
 GLAPI PFNGLGETINTERNALFORMATIVPROC glGetInternalformativ;
+
+#endif // defined(WINDOWS)
 
 #endif
