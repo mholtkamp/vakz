@@ -52,31 +52,41 @@ int Initialize(void* pData)
     EGLSurface surface;
     EGLContext context;
 
+    LOGW("eglGetDisplay");
     EGLDisplay display = eglGetDisplay(EGL_DEFAULT_DISPLAY);
 
+    LOGW("eglInitialize");
     eglInitialize(display, 0, 0);
 
+    LOGW("eglChooseConfig");
     /* Here, the application chooses the configuration it desires. In this
      * sample, we have a very simplified selection process, where we pick
      * the first EGLConfig that matches our criteria */
     eglChooseConfig(display, attribs, &config, 1, &numConfigs);
 
+    LOGW("eglGetConfigAttrib");
     /* EGL_NATIVE_VISUAL_ID is an attribute of the EGLConfig that is
      * guaranteed to be accepted by ANativeWindow_setBuffersGeometry().
      * As soon as we picked a EGLConfig, we can safely reconfigure the
      * ANativeWindow buffers to match, using EGL_NATIVE_VISUAL_ID. */
     eglGetConfigAttrib(display, config, EGL_NATIVE_VISUAL_ID, &format);
 
+    LOGW("ANativeWindow_setBuffersGeometry");
     ANativeWindow_setBuffersGeometry(vakzData.window, 0, 0, format);
 
+    LOGW("eglCreateWindowSurface");
     surface = eglCreateWindowSurface(display, config, vakzData.window, NULL);
+
+    LOGW("eglCreateContext");
     context = eglCreateContext(display, config, NULL, NULL);
 
+    LOGW("eglMakeCurrent");
     if (eglMakeCurrent(display, surface, surface, context) == EGL_FALSE) {
-        printf("Error making context current");
+        LOGW("Error making context current");
         return -1;
     }
 
+    LOGW("eglQuerySurface");
     eglQuerySurface(display, surface, EGL_WIDTH, &w);
     eglQuerySurface(display, surface, EGL_HEIGHT, &h);
 
@@ -95,8 +105,13 @@ int Initialize(void* pData)
 // Render the current scene 
 int Render()
 {
-
-	return 1;
+    if (vakzData.display != 0)
+    {
+        glClearColor(1.0f, 1.0f, 0.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        eglSwapBuffers(vakzData.display, vakzData.surface);
+        return 1;
+    }
 }
 
 // Set the scene

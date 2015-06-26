@@ -31,13 +31,44 @@
 #include "Vakz.h"
 #include "Quad.h"
 
+int animating = 1;
+
+static void handle_cmd(struct android_app* app, int32_t cmd)
+{
+    switch (cmd) {
+        case APP_CMD_INIT_WINDOW:
+            LOGW("**** APP_CMD_INIT_WINDOW ****");
+            // The window is being shown, get it ready.
+            if (app->window != NULL) {
+                LOGW("**** app->window != null ****");
+                Initialize(app->window);
+                Render();
+            }
+            break;
+    }
+}
 
 void android_main(struct android_app* state) {
 
+    state->onAppCmd = handle_cmd;
+
+    int ident;
+    int events;
+    struct android_poll_source* source;
+
+    LOGW("****ISLAND APP STARTING****");
+    while ((ident=ALooper_pollAll(animating ? 1 : -1, NULL, &events,
+            (void**)&source)) >= 0)
+    {
+        LOGW("****Processing Event****");
+        // Process this event.
+        if (source != NULL)
+        {
+            source->process(state, source);
+        }
+    }
     // Make sure glue isn't stripped.
     app_dummy();
-    LogWarning("Okay...");
-    Initialize(state->window);
 
     Scene* pTestScene = new Scene();
     SetScene(pTestScene);
@@ -57,6 +88,16 @@ void android_main(struct android_app* state) {
 
     while (1)
     {
+        while ((ident=ALooper_pollAll(animating ? 1 : -1, NULL, &events,
+                (void**)&source)) >= 0)
+        {
+            // Process this event.
+            if (source != NULL)
+            {
+                source->process(state, source);
+            }
+        }
+
         Render();
     }
 

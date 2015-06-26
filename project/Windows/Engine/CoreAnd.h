@@ -3,6 +3,11 @@
 
 #include "VGL.h"
 #include "Scene.h"
+
+#include <android/log.h>
+#define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "Island", __VA_ARGS__))
+#define LOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN, "Island", __VA_ARGS__))
+
 //#include <android/native_window.h>
 
 //## VakzData struct to hold information needed when rendering.
