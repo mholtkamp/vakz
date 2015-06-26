@@ -5,6 +5,13 @@
 #include <Windows.h>
 #endif
 
+#if defined(ANDROID)
+#include <android/log.h>
+#define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO, "Island", "%s", __VA_ARGS__))
+#define LOGW(...) ((void)__android_log_print(ANDROID_LOG_WARN, "Island", "%s", __VA_ARGS__))
+#define LOGE(...) ((void)__android_log_print(ANDROID_LOG_ERROR, "Island", "%s", __VA_ARGS__))
+#endif
+
 //*****************************************************************************
 // LogError
 //*****************************************************************************
@@ -22,6 +29,8 @@ void LogError(const char* pError)
 
     // Return color back to normal
     SetConsoleTextAttribute(hConsole, 15);
+#elif defined(ANDROID)
+    LOGE(pError);
 #else
     // Print error message.
     puts(pError);
@@ -46,6 +55,8 @@ void LogWarning(const char* pWarning)
 
     // Return color back to normal
     SetConsoleTextAttribute(hConsole, 15);
+#elif defined(ANDROID)
+    LOGW(pWarning);
 #else
     // Print warning message.
     puts(pWarning);
@@ -67,6 +78,8 @@ void LogDebug(const char* pDebug)
     // Print debug message
     printf(pDebug);
     printf("\n");
+#elif defined(ANDROID)
+    LOGI(pDebug);
 #else
     // Print debug message
     puts(pDebug);

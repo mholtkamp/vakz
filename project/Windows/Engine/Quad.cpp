@@ -1,6 +1,8 @@
 #include "Quad.h"
 #include "VGL.h"
 #include "Settings.h"
+#include "Log.h"
+#include <stdio.h>
 
 //*****************************************************************************
 // Constructor

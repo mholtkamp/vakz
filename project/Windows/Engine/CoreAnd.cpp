@@ -52,41 +52,41 @@ int Initialize(void* pData)
     EGLSurface surface;
     EGLContext context;
 
-    LOGW("eglGetDisplay");
+    LogWarning("eglGetDisplay");
     EGLDisplay display = eglGetDisplay(EGL_DEFAULT_DISPLAY);
 
-    LOGW("eglInitialize");
+    LogWarning("eglInitialize");
     eglInitialize(display, 0, 0);
 
-    LOGW("eglChooseConfig");
+    LogWarning("eglChooseConfig");
     /* Here, the application chooses the configuration it desires. In this
      * sample, we have a very simplified selection process, where we pick
      * the first EGLConfig that matches our criteria */
     eglChooseConfig(display, attribs, &config, 1, &numConfigs);
 
-    LOGW("eglGetConfigAttrib");
+    LogWarning("eglGetConfigAttrib");
     /* EGL_NATIVE_VISUAL_ID is an attribute of the EGLConfig that is
      * guaranteed to be accepted by ANativeWindow_setBuffersGeometry().
      * As soon as we picked a EGLConfig, we can safely reconfigure the
      * ANativeWindow buffers to match, using EGL_NATIVE_VISUAL_ID. */
     eglGetConfigAttrib(display, config, EGL_NATIVE_VISUAL_ID, &format);
 
-    LOGW("ANativeWindow_setBuffersGeometry");
+    LogWarning("ANativeWindow_setBuffersGeometry");
     ANativeWindow_setBuffersGeometry(vakzData.window, 0, 0, format);
 
-    LOGW("eglCreateWindowSurface");
+    LogWarning("eglCreateWindowSurface");
     surface = eglCreateWindowSurface(display, config, vakzData.window, NULL);
 
-    LOGW("eglCreateContext");
+    LogWarning("eglCreateContext");
     context = eglCreateContext(display, config, NULL, NULL);
 
-    LOGW("eglMakeCurrent");
+    LogWarning("eglMakeCurrent");
     if (eglMakeCurrent(display, surface, surface, context) == EGL_FALSE) {
-        LOGW("Error making context current");
+        LogWarning("Error making context current");
         return -1;
     }
 
-    LOGW("eglQuerySurface");
+    LogWarning("eglQuerySurface");
     eglQuerySurface(display, surface, EGL_WIDTH, &w);
     eglQuerySurface(display, surface, EGL_HEIGHT, &h);
 
@@ -96,8 +96,21 @@ int Initialize(void* pData)
     vakzData.width = w;
     vakzData.height = h;
 
+    char arBuff[64] = {0};
+    sprintf(arBuff, "Width: %d Height: %d", vakzData.width, vakzData.height);
+    LogWarning((const char*) arBuff);
+
+    SetWindowSize(vakzData.width, vakzData.height);
+
     // Initialize GL state.
     glDisable(GL_DEPTH_TEST);
+    glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+
+    // Load all shaders used by Vakz
+    if (LoadShaders() == 0)
+    {
+        LogError("Failed to compile/link shaders.");
+    }
 
     return 0;
 }
@@ -107,11 +120,20 @@ int Render()
 {
     if (vakzData.display != 0)
     {
-        glClearColor(1.0f, 1.0f, 0.0f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        if (s_pScene != 0)
+        {
+            s_pScene->Render();
+        }
+        else
+        {
+            LogWarning("No scene is set.");
+        }
         eglSwapBuffers(vakzData.display, vakzData.surface);
         return 1;
     }
+    return 0;
 }
 
 // Set the scene

@@ -42,6 +42,7 @@
 LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
+APP_CFLAGS += -Wno-error=format-security
 LOCAL_MODULE    := Vakz
 LOCAL_SRC_FILES := E:\Projects\vakz\project\Android\Vakz\obj\local\armeabi\libVakz.a
 include $(PREBUILT_STATIC_LIBRARY)

@@ -26,22 +26,25 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <unistd.h>
 
 #include "Log.h"
 #include "Vakz.h"
 #include "Quad.h"
 
 int animating = 1;
+static volatile int nInitialized = 0;
 
 static void handle_cmd(struct android_app* app, int32_t cmd)
 {
     switch (cmd) {
         case APP_CMD_INIT_WINDOW:
-            LOGW("**** APP_CMD_INIT_WINDOW ****");
+            LogWarning("**** APP_CMD_INIT_WINDOW ****");
             // The window is being shown, get it ready.
             if (app->window != NULL) {
-                LOGW("**** app->window != null ****");
+                LogWarning("**** app->window != null ****");
                 Initialize(app->window);
+                nInitialized = 1;
                 Render();
             }
             break;
@@ -56,17 +59,23 @@ void android_main(struct android_app* state) {
     int events;
     struct android_poll_source* source;
 
-    LOGW("****ISLAND APP STARTING****");
-    while ((ident=ALooper_pollAll(animating ? 1 : -1, NULL, &events,
-            (void**)&source)) >= 0)
+    LogWarning("****ISLAND APP STARTING****");
+
+    // Keep processing events until the OpenGL context is created.
+    while(nInitialized == 0)
     {
-        LOGW("****Processing Event****");
-        // Process this event.
-        if (source != NULL)
+        while ((ident=ALooper_pollAll(animating ? 1 : -1, NULL, &events,
+                (void**)&source)) >= 0)
         {
-            source->process(state, source);
+            LogWarning("****Processing Event****");
+            // Process this event.
+            if (source != NULL)
+            {
+                source->process(state, source);
+            }
         }
     }
+
     // Make sure glue isn't stripped.
     app_dummy();
 
