@@ -53,6 +53,7 @@ unsigned int GetShaderProgram(int nIndex);
 #include <GLES3/gl3.h>
 #include <EGL/egl.h>
 #include <EGL/eglext.h>
+#include <EGL/eglplatform.h>
 #endif
 
 #if defined(WINDOWS)

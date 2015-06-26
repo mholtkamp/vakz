@@ -28,13 +28,39 @@
 #include <math.h>
 
 #include "Log.h"
+#include "Vakz.h"
+#include "Quad.h"
 
 
 void android_main(struct android_app* state) {
-    static int init;
 
     // Make sure glue isn't stripped.
     app_dummy();
+    LogWarning("Okay...");
+    Initialize(state->window);
 
-    LogWarning("Beep!!");
+    Scene* pTestScene = new Scene();
+    SetScene(pTestScene);
+
+    // Force a warning to occur.
+    Camera* pCamera = 0;
+    pTestScene->SetCamera(pCamera);
+
+    Quad* pTestQuad = new Quad();
+    pTestScene->AddGlyph(pTestQuad);
+
+    pTestQuad->SetBox(100.0f,
+                      100.0f,
+                      100.0f,
+                      200.0f);
+    pTestQuad->SetColor(0.0f, 0.0f, 0.6f, 1.0f);
+
+    while (1)
+    {
+        Render();
+    }
+
+    delete pTestQuad;
+    delete pTestScene;
 }
+

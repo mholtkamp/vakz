@@ -1,3 +1,30 @@
+#LOCAL_PATH := $(call my-dir)
+#
+##include $(CLEAR_VARS)
+##LOCAL_MODULE    := Vakz
+##LOCAL_SRC_FILES := E:\Projects\vakz\project\Android\Vakz\obj\local\arm64-v8a\libVakz.a
+##include $(PREBUILT_STATIC_LIBRARY)
+#
+#
+##Build the library
+#include $(CLEAR_VARS)
+#LOCAL_CFLAGS := -Wno-write-strings
+#LOCAL_MODULE    := Vakz
+#FILE_LIST := $(wildcard ../../../Windows/Engine/*.cpp)
+#LOCAL_SRC_FILES := $(FILE_LIST:%=%)
+#include $(BUILD_STATIC_LIBRARY)
+#
+##Build the activity
+#include $(CLEAR_VARS)
+#LOCAL_MODULE    := Island
+#LOCAL_SRC_FILES := Main.cpp
+#LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../Windows/Engine 
+#LOCAL_LDLIBS    := -lm -llog -lGLESv3 -landroid
+#LOCAL_STATIC_LIBRARIES := android_native_app_glue Vakz
+#include $(BUILD_SHARED_LIBRARY)
+#
+#$(call import-module,android/native_app_glue)
+
 # Copyright (C) 2010 The Android Open Source Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,26 +41,17 @@
 #
 LOCAL_PATH := $(call my-dir)
 
-#include $(CLEAR_VARS)
-#LOCAL_MODULE    := Vakz
-#LOCAL_SRC_FILES := E:\Projects\vakz\project\Android\Vakz\obj\local\arm64-v8a\libVakz.a
-#include $(PREBUILT_STATIC_LIBRARY)
-
-
-#Build the library
 include $(CLEAR_VARS)
-LOCAL_CFLAGS := -Wno-write-strings
 LOCAL_MODULE    := Vakz
-FILE_LIST := $(wildcard ../../../Windows/Engine/*.cpp)
-LOCAL_SRC_FILES := $(FILE_LIST:%=%)
-include $(BUILD_STATIC_LIBRARY)
+LOCAL_SRC_FILES := E:\Projects\vakz\project\Android\Vakz\obj\local\armeabi\libVakz.a
+include $(PREBUILT_STATIC_LIBRARY)
 
 #Build the activity
 include $(CLEAR_VARS)
 LOCAL_MODULE    := Island
 LOCAL_SRC_FILES := Main.cpp
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../Windows/Engine 
-LOCAL_LDLIBS    := -lm -llog -lGLESv3 -landroid
+LOCAL_LDLIBS    := -lm -llog -lGLESv3 -landroid -lEGL
 LOCAL_STATIC_LIBRARIES := android_native_app_glue Vakz
 include $(BUILD_SHARED_LIBRARY)
 
