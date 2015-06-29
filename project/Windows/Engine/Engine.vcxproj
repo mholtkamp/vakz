@@ -70,6 +70,7 @@
     <ClCompile Include="CoreWin.cpp" />
     <ClCompile Include="Glyph.cpp" />
     <ClCompile Include="Log.cpp" />
+    <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="Quad.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Settings.cpp" />
@@ -80,8 +81,10 @@
     <ClInclude Include="CoreWin.h" />
     <ClInclude Include="Effect.h" />
     <ClInclude Include="Glyph.h" />
+    <ClInclude Include="VMath.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="Log.h" />
+    <ClInclude Include="Matrix.h" />
     <ClInclude Include="Matter.h" />
     <ClInclude Include="Quad.h" />
     <ClInclude Include="Scene.h" />
