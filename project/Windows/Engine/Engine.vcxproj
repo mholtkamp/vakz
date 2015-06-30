@@ -67,6 +67,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CoreWin.cpp" />
     <ClCompile Include="Glyph.cpp" />
     <ClCompile Include="Log.cpp" />
