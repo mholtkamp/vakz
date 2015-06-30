@@ -112,23 +112,41 @@ public:
     //## GenerateViewMatrix
     //##
     //## Calculates the view matrix based on the position and orientation of
-    //## the camera, and returns a pointer to it.
-    //##
-    //## Returns:
-    //##   Matrix - view matrix.
+    //## the camera.
     //## **********************************************************************
-    Matrix* GenerateViewMatrix();
+    void GenerateViewMatrix();
 
     //## **********************************************************************
     //## GenerateProjectionMatrix
     //##
     //## Calculates the projection matrix based on near/far clip planes and
-    //## field of view. Returns a pointer to the new matrix.
-    //## 
-    //## Returns:
-    //##   Matrix - projection matrix.
+    //## field of view.
     //## **********************************************************************
-    Matrix* GenerateProjectionMatrix();
+    void GenerateProjectionMatrix();
+
+    //## **********************************************************************
+    //## GetViewMatrix
+    //##
+    //## Returns a pointer to the current View matrix. This should be called
+    //## only after GenerateViewMatrix has already been called for the current
+    //## rendering frame.
+    //##
+    //## Input:
+    //##   Matrix* - pointer to view matrix.
+    //## **********************************************************************
+    Matrix* GetViewMatrix();
+
+    //## **********************************************************************
+    //## GetProjectionMatrix
+    //##
+    //## Returns a pointer to the current Projection matrix. This should be 
+    //## called only after GenerateProjctionMatrix has already been called for 
+    //## the current rendering frame.
+    //##
+    //## Input:
+    //##   Matrix* - pointer to projection matrix.
+    //## **********************************************************************
+    Matrix* GetProjectionMatrix();
 
     enum CameraEnum
     {
