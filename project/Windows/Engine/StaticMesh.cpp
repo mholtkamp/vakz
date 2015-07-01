@@ -93,6 +93,41 @@ float* StaticMesh::GetNormalArray()
 //*****************************************************************************
 void StaticMesh::SetRenderState(unsigned int hProg)
 {
-    //@@ TODO
+    // Assign vertex attributes
+    int hPosition = glGetAttribLocation(hProg, "aPosition");
+    int hTexCoord = glGetAttribLocation(hProg, "aTexCoord");
+    int hNormal   = glGetAttribLocation(hProg, "aNormal");
 
+    // All static meshes will have a position array.
+    glEnableVertexAttribArray(hPosition);
+    glVertexAttribPointer(hPosition,
+                          3,                       // X,Y,Z coordinates
+                          GL_FLOAT,
+                          GL_FALSE,
+                          0,                       // 0 means tightly packed
+                          m_pClientPosition);
+
+    // If a texcoord array has been set, assign it.
+    glEnableVertexAttribArray(hTexCoord);
+    if (m_pClientTexCoord != 0)
+    {
+        glVertexAttribPointer(hTexCoord,
+                              2,                   // U,V coordinates
+                              GL_FLOAT,
+                              GL_FALSE,
+                              0,
+                              m_pClientTexCoord);
+    }
+
+    // If a normal array has been set, assign it.
+    glEnableVertexAttribArray(hNormal);
+    if (m_pClientNormal != 0)
+    {
+        glVertexAttribPointer(hNormal,
+                              3,
+                              GL_FLOAT,
+                              GL_FALSE,
+                              0,
+                              m_pClientNormal);
+    }
 }

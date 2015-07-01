@@ -57,4 +57,41 @@ GLSL_VERSION_STRING
 
 "}\n";
 
+//## **************************************************************************
+//## StaticMesh Vertex Shader
+//## **************************************************************************
+static const char* pStaticMeshVertexShader = 
+GLSL_VERSION_STRING
+"in vec3 aPosition;\n"
+"in vec2 aTexCoord;\n"
+"in vec3 aNormal;\n"
+"out vec2 vTexCoord;\n"
+"out vec3 vNormal;\n"
+"uniform mat4 uMatrix;\n"
+
+"void main()\n"
+"{\n"
+"   vTexCoord = aTexCoord;\n"
+"   vNormal   = aNormal;\n"  
+"   gl_Position = uMatrix * vec4(aPosition, 1.0);\n"
+"}\n";
+
+
+//## **************************************************************************
+//## Diffuse Fragment Shader
+//## **************************************************************************
+static const char* pDiffuseFragmentShader = 
+GLSL_VERSION_STRING
+"precision mediump float;"
+"in vec2 vTexCoord;\n"
+"in vec3 vNormal;\n"
+"out vec4 oFragColor;\n"
+"uniform vec4 uColor;\n"
+"uniform sampler2D uTexture;\n"
+
+"void main()\n"
+"{\n"
+"   oFragColor = uColor;\n"
+"}\n";
+
 #endif

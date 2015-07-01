@@ -78,15 +78,25 @@ Scene::~Scene()
 void Scene::Render()
 {
     int i = 0;
+    m_pCamera->GenerateViewMatrix();
+    m_pCamera->GenerateProjectionMatrix();
 
     // Render screen glyphs last after 3D scene has rendered
     //@@ Possibly render code to a RenderGlyphs() private helper function.
     glDisable(GL_DEPTH_TEST);
+
+    for (i = 0; i < m_nNumMatters; i++)
+    {
+        m_pMatters[i]->Render(m_pCamera);
+    }
+
     for (i = 0; i < m_nNumGlyphs; i++)
     {
         m_pGlyphs[i]->Render();
     }
     glEnable(GL_DEPTH_TEST);
+
+
 }
 
 //*****************************************************************************

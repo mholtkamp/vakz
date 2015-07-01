@@ -762,6 +762,15 @@ int LoadShaders()
                                pQuadFragmentShader);
     }
 
+    // Static Diffuse Shader
+    if (nStatus != 0)
+    {
+        LogDebug("Building StaticMesh Diffuse Shader");
+        nStatus = BuildProgram(STATIC_DIFFUSE_PROGRAM,
+                               pStaticMeshVertexShader,
+                               pDiffuseFragmentShader);
+    }
+
     return nStatus;
 }
 

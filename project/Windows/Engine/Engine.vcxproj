@@ -69,19 +69,35 @@
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CoreWin.cpp" />
+    <ClCompile Include="DiffuseMaterial.cpp" />
     <ClCompile Include="Glyph.cpp" />
     <ClCompile Include="Log.cpp" />
+    <ClCompile Include="Material.cpp" />
     <ClCompile Include="Matrix.cpp" />
+    <ClCompile Include="Matter.cpp" />
+    <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Quad.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Settings.cpp" />
+    <ClCompile Include="ResourceLibrary.cpp" />
+    <ClCompile Include="StaticMesh.cpp" />
     <ClCompile Include="VGL.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AnimatedMesh.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CoreWin.h" />
+    <ClInclude Include="DiffuseMaterial.h" />
     <ClInclude Include="Effect.h" />
     <ClInclude Include="Glyph.h" />
+    <ClInclude Include="Material.h" />
+    <ClInclude Include="Mesh.h" />
+    <ClInclude Include="Primitives.h" />
+    <ClInclude Include="SkeletalMesh.h" />
+    <ClInclude Include="Sound.h" />
+    <ClInclude Include="StaticMesh.h" />
+    <ClInclude Include="Texture.h" />
+    <ClInclude Include="ResourceLibrary.h" />
     <ClInclude Include="VMath.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="Log.h" />

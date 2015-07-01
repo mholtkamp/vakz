@@ -6,6 +6,7 @@
 #include "SkeletalMesh.h"
 #include "Texture.h"
 #include "Material.h"
+#include "Matrix.h"
 
 class Matter
 {
@@ -43,13 +44,55 @@ public:
     //## **********************************************************************
     void SetMaterial(Material* pMaterial);
 
-    void Render();
+    //## **********************************************************************
+    //## Render
+    //##
+    //## Renders the matter.
+    //## **********************************************************************
+    void Render(void* pCamera);
+
+    void SetPosition(float fX,
+                     float fY,
+                     float fZ);
+
+    void SetRotation(float fRotX,
+                     float fRotY,
+                     float fRotZ);
+
+    void SetScale(float fScaleX,
+                  float fScaleY,
+                  float fScaleZ);
 
 private:
 
+    //## Generates the model matrix
+    void GenerateModelMatrix();
+
+    //## Position
+    float m_fX;
+    float m_fY;
+    float m_fZ;
+
+    //## Orientation
+    float m_fRotX;
+    float m_fRotY;
+    float m_fRotZ;
+
+    //## Scale
+    float m_fScaleX;
+    float m_fScaleY;
+    float m_fScaleZ;
+
+    //## Mesh pointers
     StaticMesh*   m_pStaticMesh;
     AnimatedMesh* m_pAnimatedMesh;
     SkeletalMesh* m_pSkeletalMesh;
+
+    //## Material pointer
+    Material* m_pMaterial;
+
+    //## Model matrix
+    Matrix m_matModel;
 };
 
 #endif

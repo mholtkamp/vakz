@@ -5,8 +5,9 @@
 
 enum ProgramEnum
 {
-    QUAD_PROGRAM        = 0,
-    MAX_PROGRAMS        = 1
+    QUAD_PROGRAM                    = 0,
+    STATIC_DIFFUSE_PROGRAM          = 1,
+    MAX_PROGRAMS                    = 2
 };
 
 //## **************************************************************************

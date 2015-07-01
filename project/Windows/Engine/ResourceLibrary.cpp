@@ -46,7 +46,7 @@ ResourceLibrary::ResourceLibrary(int nMaxTextures,
     m_arSoundStrings        = new char*[m_nMaxSounds];
 
     // Cube primitive
-    if (s_pCube != 0)
+    if (s_pCube == 0)
     {
         s_pCube = new StaticMesh();
         reinterpret_cast<StaticMesh*>(s_pCube)->SetVertexCount(s_nCubeVertexCount);

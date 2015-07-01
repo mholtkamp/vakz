@@ -86,12 +86,14 @@ void Camera::LookAt(float fX,
     // The Yaw is in range -90 to 270
     if (fDistZ < 0.0f)
     {
-        m_fRotY = atan(fDistX/(-1*fDistZ)) * RADIANS_TO_DEGREES;
+        m_fRotY = -1 * atan(fDistX/(-1*fDistZ)) * RADIANS_TO_DEGREES;
     }
     else
     {
-        m_fRotY = (atan(fDistX/(-1*fDistZ)) + 180.0f) * RADIANS_TO_DEGREES;
+        m_fRotY = -1 * (atan(fDistX/(-1*fDistZ)) * RADIANS_TO_DEGREES + 180.0f);
     }
+
+    LogWarning("LookAt not working yet.");
 
     //@@ TODO:
     //@@ gluLookAt method... produces view matrix.
@@ -229,11 +231,11 @@ void Camera::GenerateViewMatrix()
     // Roll
     m_matView.Rotate(-m_fRotZ, 0.0f, 0.0f, 1.0f);
 
-    // Heading
-    m_matView.Rotate(-m_fRotY, 0.0f, 1.0f, 0.0f);
-
     // Pitch
     m_matView.Rotate(-m_fRotX, 1.0f, 0.0f, 0.0f);
+
+    // Heading
+    m_matView.Rotate(-m_fRotY, 0.0f, 1.0f, 0.0f);
 
     // Translation
     m_matView.Translate(-m_fX, -m_fY, -m_fZ);
@@ -247,6 +249,8 @@ void Camera::GenerateProjectionMatrix()
     float fWidth       = 0.0f;
     float fHeight      = 0.0f;
     float fAspectRatio = 0.0f;
+    float fFovXRadians = m_fFovX * DEGREES_TO_RADIANS;
+    float fFovYRadians = m_fFovY * DEGREES_TO_RADIANS;
 
     //Reset the matrix back to identity
     m_matProjection.LoadIdentity();
@@ -263,14 +267,14 @@ void Camera::GenerateProjectionMatrix()
     }
     else if (m_nProjectionType == CAMERA_PERSPECTIVE)
     {
-        fHeight = 2.0f * tan(m_fFovY/2.0f) * m_fNear;
+        fHeight = 2.0f * tan(fFovYRadians/2.0f) * m_fNear;
 
         // If no x-field of view is provided, then use the
         // screen height/width from settings to calculate
         // the aspect ratio to derive the width from.
-        if (m_fFovX != 0.0f)
+        if (fFovXRadians != 0.0f)
         {
-            fWidth = 2.0f * tan(m_fFovX/2.0f) * m_fNear;
+            fWidth = 2.0f * tan(fFovXRadians/2.0f) * m_fNear;
         }
         else
         {

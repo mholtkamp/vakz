@@ -16,6 +16,11 @@ public:
 
     void SetRenderState(unsigned int hProg);
 
+    void SetColor(float fRed,
+                  float fGreen,
+                  float fBlue,
+                  float fAlpha);
+
 private:
 
     // Material properties

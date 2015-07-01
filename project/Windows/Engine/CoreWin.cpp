@@ -45,7 +45,7 @@ GLvoid ReSizeGLScene(GLsizei width, GLsizei height)      // Resize And Initializ
 
 int InitGL(GLvoid)                                       // All Setup For OpenGL Goes Here
 {
-    glClearColor(1.0f, 0.0f, 0.0f, 0.5f);                // Black Background
+    glClearColor(0.2f, 0.2f, 0.2f, 1.0f);                // Black Background
     glClearDepthf(1.0f);                                 // Depth Buffer Setup
     glEnable(GL_DEPTH_TEST);                             // Enables Depth Testing
     glDepthFunc(GL_LEQUAL);                              // The Type Of Depth Testing To Do
@@ -381,6 +381,14 @@ int SetScene(Scene* pScene)
 {
     s_pScene = pScene;
     return 0;
+}
+
+void SetClearColor(float fRed,
+                   float fGreen,
+                   float fBlue,
+                   float fAlpha)
+{
+    glClearColor(fRed, fGreen, fBlue, fAlpha);
 }
 
 #endif
