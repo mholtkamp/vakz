@@ -78,9 +78,11 @@ public:
     //## vertex buffer object(s) and specifying vertex array properties.
     //##
     //## Input:
-    //##   hProg - handle to shader program.
+    //##   pScene - pointer to Scene that is currently rendering.
+    //##   hProg  - handle to shader program.
     //## **********************************************************************
-    void SetRenderState(unsigned int hProg);
+    void SetRenderState(void* pScene,
+                        unsigned int hProg);
 
 private:
     

@@ -70,7 +70,9 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CoreWin.cpp" />
     <ClCompile Include="DiffuseMaterial.cpp" />
+    <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="Glyph.cpp" />
+    <ClCompile Include="Light.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Matrix.cpp" />
@@ -88,6 +90,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CoreWin.h" />
     <ClInclude Include="DiffuseMaterial.h" />
+    <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="Effect.h" />
     <ClInclude Include="Glyph.h" />
     <ClInclude Include="Material.h" />

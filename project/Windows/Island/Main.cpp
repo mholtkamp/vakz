@@ -4,6 +4,7 @@
 #include "Matrix.h"
 #include "ResourceLibrary.h"
 #include "DiffuseMaterial.h"
+#include "DirectionalLight.h"
 
 #include <stdio.h>
 
@@ -39,6 +40,13 @@ int main()
     pTestCube2->SetStaticMesh(reinterpret_cast<StaticMesh*>(pLibrary->GetPrimitive(PRIMITIVE_CUBE)));
     pTestCube2->SetMaterial(pCubeMat);
     pTestCube2->SetPosition(-5.0f, 0.0f, 0.0f);
+
+    // Create sun
+    DirectionalLight* pSun = new DirectionalLight();
+    pSun->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
+    pSun->SetIntensity(1.0f);
+    pSun->SetDirectionVector(3.0f, -1.0f, -2.0f);
+    pTestScene->AddLight(pSun);
 
     // Add the test cube to the scene
     pTestScene->AddMatter(pTestCube);
@@ -136,8 +144,10 @@ int main()
         unStart = GetTickCount();
         Render();
     }
-
+    
+    delete pSun;
     delete pTestCube;
+    delete pTestCube2;
     delete pCamera;
     delete pCubeMat;
     delete pLibrary;

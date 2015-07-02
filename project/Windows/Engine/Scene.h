@@ -87,6 +87,20 @@ public:
     //## **********************************************************************
     void SetCamera(Camera* pCamera);
 
+    //## **********************************************************************
+    //## GetCamera
+    //##
+    //## Gets the currently assigned camera.
+    //##
+    //## Returns:
+    //##   Camera* - pointer to camera
+    //## **********************************************************************
+    Camera* GetCamera();
+
+    Light** GetLightArray();
+
+    int GetNumLights();
+
     enum SceneEnum
     {
         DEFAULT_MAX_MATTERS = 1024,

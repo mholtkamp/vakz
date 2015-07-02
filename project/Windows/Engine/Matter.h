@@ -49,7 +49,7 @@ public:
     //##
     //## Renders the matter.
     //## **********************************************************************
-    void Render(void* pCamera);
+    void Render(void* pScene);
 
     void SetPosition(float fX,
                      float fY,

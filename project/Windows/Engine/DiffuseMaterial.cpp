@@ -16,9 +16,10 @@ DiffuseMaterial::~DiffuseMaterial()
 
 }
 
-void DiffuseMaterial::SetRenderState(unsigned int hProg)
+void DiffuseMaterial::SetRenderState(void*        pScene,
+                                     unsigned int hProg)
 {
-    int hColor = glGetUniformLocation(hProg, "uColor");
+    int hColor = glGetUniformLocation(hProg, "uDiffuseColor");
     glUniform4fv(hColor, 1, m_arColor);
 }
 

@@ -14,7 +14,8 @@ public:
 
     int GetType();
 
-    void SetRenderState(unsigned int hProg);
+    void SetRenderState(void*        pScene,
+                        unsigned int hProg);
 
     void SetColor(float fRed,
                   float fGreen,

@@ -83,13 +83,15 @@ void Scene::Render()
 
     // Render screen glyphs last after 3D scene has rendered
     //@@ Possibly render code to a RenderGlyphs() private helper function.
-    glDisable(GL_DEPTH_TEST);
+    
 
     for (i = 0; i < m_nNumMatters; i++)
     {
-        m_pMatters[i]->Render(m_pCamera);
+        m_pMatters[i]->Render(this);
     }
 
+    // Render glyphs
+    glDisable(GL_DEPTH_TEST);
     for (i = 0; i < m_nNumGlyphs; i++)
     {
         m_pGlyphs[i]->Render();
@@ -208,4 +210,28 @@ void Scene::SetCamera(Camera* pCamera)
     {
         LogWarning("Denied attempt to set scene camera to null pointer.");
     }
+}
+
+//*****************************************************************************
+// GetCamera
+//*****************************************************************************
+Camera* Scene::GetCamera()
+{
+    return m_pCamera;
+}
+
+//*****************************************************************************
+// GetLightArray
+//*****************************************************************************
+Light** Scene::GetLightArray()
+{
+    return m_pLights;
+}
+
+//*****************************************************************************
+// GetLightArray
+//*****************************************************************************
+int Scene::GetNumLights()
+{
+    return m_nNumLights;
 }

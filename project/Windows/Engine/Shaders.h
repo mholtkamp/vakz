@@ -67,13 +67,14 @@ GLSL_VERSION_STRING
 "in vec3 aNormal;\n"
 "out vec2 vTexCoord;\n"
 "out vec3 vNormal;\n"
-"uniform mat4 uMatrix;\n"
+"uniform mat4 uMatrixMVP;\n"
+"uniform mat4 uMatrixM;\n"
 
 "void main()\n"
 "{\n"
 "   vTexCoord = aTexCoord;\n"
-"   vNormal   = aNormal;\n"  
-"   gl_Position = uMatrix * vec4(aPosition, 1.0);\n"
+"   vNormal   = (uMatrixM * vec4(aNormal, 0.0)).xyz;\n"  
+"   gl_Position = uMatrixMVP * vec4(aPosition, 1.0);\n"
 "}\n";
 
 
@@ -86,12 +87,23 @@ GLSL_VERSION_STRING
 "in vec2 vTexCoord;\n"
 "in vec3 vNormal;\n"
 "out vec4 oFragColor;\n"
-"uniform vec4 uColor;\n"
+"uniform vec4 uDiffuseColor;\n"
+"uniform vec3 uDirLightVector;\n"
+"uniform vec4 uDirLightColor;\n"
 "uniform sampler2D uTexture;\n"
 
 "void main()\n"
 "{\n"
-"   oFragColor = uColor;\n"
+
+// Directional Light Power
+"   vec3  lLightVector = normalize(-1.0*uDirLightVector);\n"
+"   vec3  lNormalVector = normalize(vNormal);\n"
+"   float lPower = dot(lLightVector, lNormalVector);\n"
+
+"   vec4  lObjectColor = uDiffuseColor;\n"  // * texture(uTexture,  vTexCoord).rgb;
+"   vec3  lDiffuse = clamp(lPower * uDirLightColor.rgb * lObjectColor.rgb, 0.0, 1.0);\n"
+"   oFragColor.rgb = lDiffuse.rgb;\n"
+"   oFragColor.a   = lObjectColor.a;\n"
 "}\n";
 
 #endif

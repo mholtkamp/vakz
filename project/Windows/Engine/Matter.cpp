@@ -2,6 +2,10 @@
 #include "Log.h"
 #include "VGL.h"
 #include "Camera.h"
+#include "Scene.h"
+
+#define MATTER_MAX_POINT_LIGHTS 4
+#define MATTER_MAX_DIRECTIONAL_LIGHTS 1
 
 Matter::Matter()
 {
@@ -59,13 +63,18 @@ void Matter::SetMaterial(Material* pMaterial)
     }
 }
 
-void Matter::Render(void* pCamera)
+void Matter::Render(void* pScene)
 {
+    int          i           =  0;
     unsigned int hProg       =  0;
-    int          hMatrix     = -1;
+    int          hMatrixMVP  = -1;
+    int          hMatrixM    = -1;
     Matrix*      pView       =  0;
     Matrix*      pProjection =  0;
     Matrix       matMVP;
+    Camera*      pCamera     = reinterpret_cast<Scene*>(pScene)->GetCamera();
+    Light**      pLights     = reinterpret_cast<Scene*>(pScene)->GetLightArray();
+    int          nNumLights  = reinterpret_cast<Scene*>(pScene)->GetNumLights();
 
     // Generate model matrix
     // Note: May want to move this generation to the SetPosition()/
@@ -84,8 +93,16 @@ void Matter::Render(void* pCamera)
         glUseProgram(hProg);
     
         // Set up uniforms/attributes
-        m_pStaticMesh->SetRenderState(hProg);
-        m_pMaterial->SetRenderState(hProg);
+        m_pStaticMesh->SetRenderState(pScene, hProg);
+        m_pMaterial->SetRenderState(pScene, hProg);
+
+        // Set up lights
+        for (i = 0; i < nNumLights; i++)
+        {
+            pLights[i]->SetRenderState(pScene,
+                                       hProg,
+                                       0);
+        }
 
         // Get View and Projection matrices from camera
         pView       = reinterpret_cast<Camera*>(pCamera)->GetViewMatrix();
@@ -97,8 +114,12 @@ void Matter::Render(void* pCamera)
         {
             // MVP matrix = Projection * View * Model
             matMVP = (*pProjection) * (*pView) * m_matModel;
-            hMatrix = glGetUniformLocation(hProg, "uMatrix");
-            glUniformMatrix4fv(hMatrix, 1, GL_FALSE, matMVP.GetArray());
+            hMatrixMVP = glGetUniformLocation(hProg, "uMatrixMVP");
+            glUniformMatrix4fv(hMatrixMVP, 1, GL_FALSE, matMVP.GetArray());
+
+            // Upload model matrix to shader for normal transformations
+            hMatrixM = glGetUniformLocation(hProg, "uMatrixM");
+            glUniformMatrix4fv(hMatrixM, 1, GL_FALSE, m_matModel.GetArray());
         }
         else
         {
