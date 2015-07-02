@@ -2,6 +2,11 @@
 #include "VGL.h"
 #include "Log.h"
 
+#define DEFAULT_AMBIENT_RED   0.2f;
+#define DEFAULT_AMBIENT_GREEN 0.2f;
+#define DEFAULT_AMBIENT_BLUE  0.2f;
+#define DEFAULT_AMBIENT_ALPHA 0.2f;
+
 //*****************************************************************************
 // Constructor
 //*****************************************************************************
@@ -36,6 +41,11 @@ Scene::Scene(int nMaxMatters,
     }
 
     m_pCamera = 0;
+
+    m_arAmbientColor[0] = DEFAULT_AMBIENT_RED;
+    m_arAmbientColor[1] = DEFAULT_AMBIENT_GREEN;
+    m_arAmbientColor[2] = DEFAULT_AMBIENT_BLUE;
+    m_arAmbientColor[3] = DEFAULT_AMBIENT_ALPHA;
 }
 
 //*****************************************************************************
@@ -234,4 +244,20 @@ Light** Scene::GetLightArray()
 int Scene::GetNumLights()
 {
     return m_nNumLights;
+}
+
+void Scene::SetAmbientLight(float fRed,
+                            float fGreen,
+                            float fBlue,
+                            float fAlpha)
+{
+    m_arAmbientColor[0] = fRed;
+    m_arAmbientColor[1] = fGreen;
+    m_arAmbientColor[2] = fBlue;
+    m_arAmbientColor[3] = fAlpha;
+}
+
+float* Scene::GetAmbientLight()
+{
+    return m_arAmbientColor;
 }

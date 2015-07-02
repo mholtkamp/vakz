@@ -99,6 +99,13 @@ public:
 
     Light** GetLightArray();
 
+    void SetAmbientLight(float fRed,
+                         float fGreen,
+                         float fBlue,
+                         float fAlpha);
+
+    float* GetAmbientLight();
+
     int GetNumLights();
 
     enum SceneEnum
@@ -131,6 +138,9 @@ private:
 
     //## Pointer to camera that the 3D scene should be rendered from.
     Camera* m_pCamera;
+
+    // Ambient light
+    float m_arAmbientColor[4];
 };
 
 #endif

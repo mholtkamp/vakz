@@ -65,16 +65,18 @@ void Matter::SetMaterial(Material* pMaterial)
 
 void Matter::Render(void* pScene)
 {
-    int          i           =  0;
-    unsigned int hProg       =  0;
-    int          hMatrixMVP  = -1;
-    int          hMatrixM    = -1;
-    Matrix*      pView       =  0;
-    Matrix*      pProjection =  0;
+    int          i             =  0;
+    unsigned int hProg         =  0;
+    int          hMatrixMVP    = -1;
+    int          hMatrixM      = -1;
+    int          hAmbientColor = -1;
+    Matrix*      pView         =  0;
+    Matrix*      pProjection   =  0;
     Matrix       matMVP;
-    Camera*      pCamera     = reinterpret_cast<Scene*>(pScene)->GetCamera();
-    Light**      pLights     = reinterpret_cast<Scene*>(pScene)->GetLightArray();
-    int          nNumLights  = reinterpret_cast<Scene*>(pScene)->GetNumLights();
+    Camera*      pCamera       = reinterpret_cast<Scene*>(pScene)->GetCamera();
+    Light**      pLights       = reinterpret_cast<Scene*>(pScene)->GetLightArray();
+    int          nNumLights    = reinterpret_cast<Scene*>(pScene)->GetNumLights();
+    float*       pAmbientColor = 0;
 
     // Generate model matrix
     // Note: May want to move this generation to the SetPosition()/
@@ -104,9 +106,15 @@ void Matter::Render(void* pScene)
                                        0);
         }
 
+        // Fetch ambient light from the scene
+        pAmbientColor = reinterpret_cast<Scene*>(pScene)->GetAmbientLight();
+        hAmbientColor = glGetUniformLocation(hProg, "uAmbientColor");
+        glUniform4fv(hAmbientColor, 1, pAmbientColor);
+
+
         // Get View and Projection matrices from camera
-        pView       = reinterpret_cast<Camera*>(pCamera)->GetViewMatrix();
-        pProjection = reinterpret_cast<Camera*>(pCamera)->GetProjectionMatrix();
+        pView       = pCamera->GetViewMatrix();
+        pProjection = pCamera->GetProjectionMatrix();
 
         // Construct MVP matrix
         if (pView       != 0 &&
