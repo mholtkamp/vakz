@@ -44,6 +44,8 @@ int Initialize(void* pData)
             EGL_BLUE_SIZE, 8,
             EGL_GREEN_SIZE, 8,
             EGL_RED_SIZE, 8,
+            EGL_DEPTH_SIZE, 24,
+            EGL_STENCIL_SIZE, 8,
             EGL_NONE
     };
     EGLint w, h, dummy, format;
@@ -103,8 +105,10 @@ int Initialize(void* pData)
     SetWindowSize(vakzData.width, vakzData.height);
 
     // Initialize GL state.
-    glDisable(GL_DEPTH_TEST);
-    glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+    glClearColor(0.2f, 0.2f, 0.2f, 1.0f);                // Black Background
+    glClearDepthf(1.0f);                                 // Depth Buffer Setup
+    glEnable(GL_DEPTH_TEST);                             // Enables Depth Testing
+    glDepthFunc(GL_LESS);                              // The Type Of Depth Testing To Do
 
     // Load all shaders used by Vakz
     if (LoadShaders() == 0)

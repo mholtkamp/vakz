@@ -47,4 +47,11 @@
 		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>src</name>
+			<type>2</type>
+			<location>E:/Projects/vakz/project/Windows/Engine</location>
+		</link>
+	</linkedResources>
 </projectDescription>

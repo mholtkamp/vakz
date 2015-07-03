@@ -20,7 +20,8 @@ public:
 
     int GetType();
 
-    virtual void SetRenderState(unsigned int hProg) = 0;
+    virtual void SetRenderState(void*        pScene,
+                                unsigned int hProg) = 0;
 
 protected:
 

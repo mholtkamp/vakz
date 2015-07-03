@@ -8,6 +8,8 @@
 #define DEFAULT_FAR 1024.0f
 #define DEFAULT_FOV_X 60.0f
 #define DEFAULT_FOV_Y 40.0f
+#define DEFAULT_ORTHO_WIDTH 30.0f
+#define DEFAULT_ORTHO_HEIGHT 20.0f
 
 //*****************************************************************************
 // Constructor
@@ -27,6 +29,9 @@ Camera::Camera()
 
     m_fNear = DEFAULT_NEAR;
     m_fFar  = DEFAULT_FAR;
+
+    m_fOrthoWidth  = DEFAULT_ORTHO_WIDTH;
+    m_fOrthoHeight = DEFAULT_ORTHO_HEIGHT;
 
     m_nProjectionType = CAMERA_PERSPECTIVE;
 
@@ -221,7 +226,7 @@ void Camera::SetProjectionType(int nProjectionType)
 }
 
 //*****************************************************************************
-// GenerateViewMatrix()
+// GenerateViewMatrix
 //*****************************************************************************
 void Camera::GenerateViewMatrix()
 {
@@ -242,7 +247,7 @@ void Camera::GenerateViewMatrix()
 }
 
 //*****************************************************************************
-// GenerateProjectionMatrix()
+// GenerateProjectionMatrix
 //*****************************************************************************
 void Camera::GenerateProjectionMatrix()
 {
@@ -258,10 +263,10 @@ void Camera::GenerateProjectionMatrix()
     // Perform proper projection
     if (m_nProjectionType == CAMERA_ORTHOGRAPHIC)
     {
-        m_matProjection.Ortho(-1.0f,
-                               1.0f,
-                              -1.0f,
-                               1.0f,
+        m_matProjection.Ortho(-m_fOrthoWidth/2.0f,
+                               m_fOrthoWidth/2.0f,
+                              -m_fOrthoHeight/2.0f,
+                               m_fOrthoHeight,
                                m_fNear,
                                m_fFar);
     }
@@ -292,7 +297,7 @@ void Camera::GenerateProjectionMatrix()
 }
 
 //*****************************************************************************
-// GetViewMatrix()
+// GetViewMatrix
 //*****************************************************************************
 Matrix* Camera::GetViewMatrix()
 {
@@ -300,9 +305,19 @@ Matrix* Camera::GetViewMatrix()
 }
 
 //*****************************************************************************
-// GetProjectionMatrix()
+// GetProjectionMatrix
 //*****************************************************************************
 Matrix* Camera::GetProjectionMatrix()
 {
     return &m_matProjection;
+}
+
+//*****************************************************************************
+// SetOrthographicWindow
+//*****************************************************************************
+void Camera::SetOrthographicWindow(float fWidth,
+                                   float fHeight)
+{
+    m_fOrthoWidth  = fWidth;
+    m_fOrthoHeight = fHeight;
 }

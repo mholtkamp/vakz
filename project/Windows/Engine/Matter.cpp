@@ -135,6 +135,7 @@ void Matter::Render(void* pScene)
             return;
         }
         
+        glEnable(GL_DEPTH_TEST);
         glDrawArrays(GL_TRIANGLES,
                      0,
                      m_pStaticMesh->GetVertexCount());

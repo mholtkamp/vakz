@@ -148,6 +148,18 @@ public:
     //## **********************************************************************
     Matrix* GetProjectionMatrix();
 
+    //## **********************************************************************
+    //## SetOrthographicWindow
+    //##
+    //## Sets the dimensions of the orthographic camera.
+    //##
+    //## Input:
+    //##   fWidth  - width of viewing range.
+    //##   fHeight - height of viewing range.
+    //## **********************************************************************
+    void SetOrthographicWindow(float fWidth,
+                               float fHeight);
+
     enum CameraEnum
     {
         CAMERA_ORTHOGRAPHIC = 0,
@@ -173,6 +185,10 @@ private:
     //## Clipping planes
     float m_fNear;
     float m_fFar;
+
+    //## Orthographic projection dimensions
+    float m_fOrthoWidth;
+    float m_fOrthoHeight;
 
     //## Projection Type: Orthographic or Perspective
     int m_nProjectionType;

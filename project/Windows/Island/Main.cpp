@@ -20,8 +20,7 @@ int main()
 
     // Create camera
     Camera* pCamera = new Camera();
-    pCamera->SetPosition(0.0f, 10.0f, 10.0f);
-    pCamera->SetRotation(-45.0f, 0.0f, 0.0f);
+    pCamera->SetProjectionType(Camera::CAMERA_PERSPECTIVE);
     pTestScene->SetCamera(pCamera);
 
     // Create ResourceLibrary

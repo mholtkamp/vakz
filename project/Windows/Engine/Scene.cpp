@@ -94,10 +94,14 @@ void Scene::Render()
     // Render screen glyphs last after 3D scene has rendered
     //@@ Possibly render code to a RenderGlyphs() private helper function.
     
-
-    for (i = 0; i < m_nNumMatters; i++)
+    // Render 3D Objects
+    if (m_pCamera != 0)
     {
-        m_pMatters[i]->Render(this);
+        // Render matter
+        for (i = 0; i < m_nNumMatters; i++)
+        {
+            m_pMatters[i]->Render(this);
+        }
     }
 
     // Render glyphs
