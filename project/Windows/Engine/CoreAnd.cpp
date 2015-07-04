@@ -147,3 +147,11 @@ int SetScene(Scene* pScene)
     return 0;
 }
 
+void SetClearColor(float fRed,
+                   float fGreen,
+                   float fBlue,
+                   float fAlpha)
+{
+    glClearColor(fRed, fGreen, fBlue, fAlpha);
+}
+

@@ -151,7 +151,8 @@ public:
     //## **********************************************************************
     //## SetOrthographicWindow
     //##
-    //## Sets the dimensions of the orthographic camera.
+    //## Sets the dimensions of the orthographic camera. Units are in world 
+    //## space.
     //##
     //## Input:
     //##   fWidth  - width of viewing range.

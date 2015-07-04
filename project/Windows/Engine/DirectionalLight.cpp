@@ -1,19 +1,31 @@
 #include "DirectionalLight.h"
 #include "VGL.h"
 
+//*****************************************************************************
+// Constructor
+//*****************************************************************************
 DirectionalLight::DirectionalLight()
 {
+    // Overwrite parent constructor with correct type.
+    m_nType = LIGHT_DIRECTIONAL;
+
     // Set initial light direction to straight down
     m_arDirection[0] =  0.0f;
     m_arDirection[1] = -1.0f;
     m_arDirection[2] =  0.0f;
 }
 
+//*****************************************************************************
+// Destructor
+//*****************************************************************************
 DirectionalLight::~DirectionalLight()
 {
 
 }
 
+//*****************************************************************************
+// SetRenderState
+//*****************************************************************************
 void DirectionalLight::SetRenderState(void*        pScene,
                                       unsigned int hProg,
                                       int          nLightIndex)
@@ -25,6 +37,9 @@ void DirectionalLight::SetRenderState(void*        pScene,
     glUniform4fv(hColor,  1, m_arColor);
 }
 
+//*****************************************************************************
+// SetDirectionVector
+//*****************************************************************************
 void DirectionalLight::SetDirectionVector(float fX,
                                           float fY,
                                           float fZ)

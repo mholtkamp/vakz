@@ -25,14 +25,6 @@ StaticMesh::~StaticMesh()
 }
 
 //*****************************************************************************
-// SetVertexCount
-//*****************************************************************************
-void StaticMesh::SetVertexCount(int nCount)
-{
-    m_nVertexCount = nCount;
-}
-
-//*****************************************************************************
 // SetPositionArray
 //*****************************************************************************
 void StaticMesh::SetPositionArray(float* pArray)
@@ -54,14 +46,6 @@ void StaticMesh::SetTexCoordArray(float* pArray)
 void StaticMesh::SetNormalArray(float* pArray)
 {
     m_pClientNormal = pArray;
-}
-
-//*****************************************************************************
-// GetVertexCount
-//*****************************************************************************
-int StaticMesh::GetVertexCount()
-{
-    return m_nVertexCount;
 }
 
 //*****************************************************************************

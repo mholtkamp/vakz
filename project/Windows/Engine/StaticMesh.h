@@ -34,16 +34,6 @@ public:
     int Load(const char* pFile);
 
     //## **********************************************************************
-    //## SetVertexCount
-    //##
-    //## Sets the number of vertices that the static mesh contains.
-    //## 
-    //## Input:
-    //##   nCount - the number of vertices to draw.
-    //## **********************************************************************
-    void SetVertexCount(int nCount);
-
-    //## **********************************************************************
     //## Set*Array
     //##
     //## Sets a client-side vertex array.
@@ -53,17 +43,7 @@ public:
     void SetNormalArray(float* pNormal);
 
     //## **********************************************************************
-    //## GetVertexCount
-    //##
-    //## Returns number of vertices to be rendered.
-    //## 
-    //## Returns:
-    //##   int - number of vertices in static mesh.
-    //## **********************************************************************
-    int GetVertexCount();
-
-    //## **********************************************************************
-    //## get*Array
+    //## Get*Array
     //##
     //## Returns pointer to specified vertex array.
     //## **********************************************************************
@@ -85,9 +65,6 @@ public:
                         unsigned int hProg);
 
 private:
-    
-    //## Number of vertices to render
-    int m_nVertexCount;
 
     //## Handle to vertex buffer object holding vertex data.
     unsigned int m_unVBO;

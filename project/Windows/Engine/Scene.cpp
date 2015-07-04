@@ -40,7 +40,8 @@ Scene::Scene(int nMaxMatters,
         LogError("Memory allocation error in Scene Constructor");
     }
 
-    m_pCamera = 0;
+    m_pCamera           = 0;
+    m_pDirectionalLight = 0;
 
     m_arAmbientColor[0] = DEFAULT_AMBIENT_RED;
     m_arAmbientColor[1] = DEFAULT_AMBIENT_GREEN;
@@ -146,7 +147,11 @@ void Scene::AddLight(Light* pLight)
 {
     if (pLight != 0)
     {
-        if (m_nNumLights < m_nMaxLights)
+        if (pLight->GetType() == LIGHT_DIRECTIONAL)
+        {
+            m_pDirectionalLight = reinterpret_cast<DirectionalLight*>(pLight);
+        }
+        else if (m_nNumLights < m_nMaxLights)
         {
             m_pLights[m_nNumLights] = pLight;
             m_nNumLights++;
@@ -243,13 +248,24 @@ Light** Scene::GetLightArray()
 }
 
 //*****************************************************************************
-// GetLightArray
+// GetDirectionalLight
+//*****************************************************************************
+DirectionalLight* Scene::GetDirectionalLight()
+{
+    return m_pDirectionalLight;
+}
+
+//*****************************************************************************
+// GetNumLights
 //*****************************************************************************
 int Scene::GetNumLights()
 {
     return m_nNumLights;
 }
 
+//*****************************************************************************
+// SetAmbientLight
+//*****************************************************************************
 void Scene::SetAmbientLight(float fRed,
                             float fGreen,
                             float fBlue,
@@ -261,6 +277,9 @@ void Scene::SetAmbientLight(float fRed,
     m_arAmbientColor[3] = fAlpha;
 }
 
+//*****************************************************************************
+// GetAmbientLight
+//*****************************************************************************
 float* Scene::GetAmbientLight()
 {
     return m_arAmbientColor;

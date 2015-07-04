@@ -1,6 +1,9 @@
 #include "DiffuseMaterial.h"
 #include "VGL.h"
 
+//*****************************************************************************
+// Constructor
+//*****************************************************************************
 DiffuseMaterial::DiffuseMaterial()
 {
     m_nType = MATERIAL_DIFFUSE;
@@ -11,11 +14,17 @@ DiffuseMaterial::DiffuseMaterial()
     m_arColor[3] = 0.0f;
 }
 
+//*****************************************************************************
+// Destructor
+//*****************************************************************************
 DiffuseMaterial::~DiffuseMaterial()
 {
 
 }
 
+//*****************************************************************************
+// SetRenderState
+//*****************************************************************************
 void DiffuseMaterial::SetRenderState(void*        pScene,
                                      unsigned int hProg)
 {
@@ -23,6 +32,9 @@ void DiffuseMaterial::SetRenderState(void*        pScene,
     glUniform4fv(hColor, 1, m_arColor);
 }
 
+//*****************************************************************************
+// SetColor
+//*****************************************************************************
 void DiffuseMaterial::SetColor(float fRed,
                                float fGreen,
                                float fBlue,

@@ -7,6 +7,9 @@
 #define MATTER_MAX_POINT_LIGHTS 4
 #define MATTER_MAX_DIRECTIONAL_LIGHTS 1
 
+//*****************************************************************************
+// Constructor
+//*****************************************************************************
 Matter::Matter()
 {
     m_fX = 0.0f;
@@ -21,28 +24,27 @@ Matter::Matter()
     m_fScaleY = 1.0f;
     m_fScaleZ = 1.0f;
 
-    m_pStaticMesh   = 0;
-    m_pAnimatedMesh = 0;
-    m_pSkeletalMesh = 0;
-    
-    m_pMaterial     = 0;
+    m_pMesh     = 0;
+    m_pMaterial = 0;
 }
 
+//*****************************************************************************
+// Destructor
+//*****************************************************************************
 Matter::~Matter()
 {
     
 }
 
-void Matter::SetStaticMesh(StaticMesh* pMesh)
+//*****************************************************************************
+// SetMesh
+//*****************************************************************************
+void Matter::SetMesh(Mesh* pMesh)
 {
     if (pMesh != 0)
     {
-        // Set the new static mesh.
-        m_pStaticMesh   = pMesh;
-
-        // Clear any other types of meshes.
-        m_pAnimatedMesh = 0;
-        m_pSkeletalMesh = 0;
+        // Set the new mesh.
+        m_pMesh   = pMesh;
     }
     else
     {
@@ -51,10 +53,14 @@ void Matter::SetStaticMesh(StaticMesh* pMesh)
     }
 }
 
+//*****************************************************************************
+// SetMaterial
+//*****************************************************************************
 void Matter::SetMaterial(Material* pMaterial)
 {
     if (pMaterial != 0)
     {
+        // Set the new material
         m_pMaterial = pMaterial;
     }
     else
@@ -63,27 +69,31 @@ void Matter::SetMaterial(Material* pMaterial)
     }
 }
 
+//*****************************************************************************
+// Render
+//*****************************************************************************
 void Matter::Render(void* pScene)
 {
-    int          i             =  0;
-    unsigned int hProg         =  0;
-    int          hMatrixMVP    = -1;
-    int          hMatrixM      = -1;
-    int          hAmbientColor = -1;
-    Matrix*      pView         =  0;
-    Matrix*      pProjection   =  0;
-    Matrix       matMVP;
-    Camera*      pCamera       = reinterpret_cast<Scene*>(pScene)->GetCamera();
-    Light**      pLights       = reinterpret_cast<Scene*>(pScene)->GetLightArray();
-    int          nNumLights    = reinterpret_cast<Scene*>(pScene)->GetNumLights();
-    float*       pAmbientColor = 0;
+    int               i             =  0;
+    unsigned int      hProg         =  0;
+    int               hMatrixMVP    = -1;
+    int               hMatrixM      = -1;
+    int               hAmbientColor = -1;
+    Matrix*           pView         =  0;
+    Matrix*           pProjection   =  0;
+    Camera*           pCamera       = reinterpret_cast<Scene*>(pScene)->GetCamera();
+    Light**           pLights       = reinterpret_cast<Scene*>(pScene)->GetLightArray();
+    int               nNumLights    = reinterpret_cast<Scene*>(pScene)->GetNumLights();
+    float*            pAmbientColor = 0;
+    DirectionalLight* pDirLight     = 0;
+    Matrix            matMVP;
 
     // Generate model matrix
     // Note: May want to move this generation to the SetPosition()/
     // SetRotation()/SetScale() functions to reduce calculations.
     GenerateModelMatrix();
     
-    if (m_pStaticMesh != 0 &&
+    if (m_pMesh       != 0 &&
         m_pMaterial   != 0 &&
         pCamera       != 0)
     {
@@ -95,16 +105,18 @@ void Matter::Render(void* pScene)
         glUseProgram(hProg);
     
         // Set up uniforms/attributes
-        m_pStaticMesh->SetRenderState(pScene, hProg);
+        m_pMesh->SetRenderState(pScene, hProg);
         m_pMaterial->SetRenderState(pScene, hProg);
 
-        // Set up lights
-        for (i = 0; i < nNumLights; i++)
+        // Set up directional lighting
+        pDirLight = reinterpret_cast<Scene*>(pScene)->GetDirectionalLight();
+        if (pDirLight != 0)
         {
-            pLights[i]->SetRenderState(pScene,
-                                       hProg,
-                                       0);
+            pDirLight->SetRenderState(pScene,
+                                      hProg,
+                                      0);
         }
+        
 
         // Fetch ambient light from the scene
         pAmbientColor = reinterpret_cast<Scene*>(pScene)->GetAmbientLight();
@@ -135,15 +147,17 @@ void Matter::Render(void* pScene)
             return;
         }
         
-        glEnable(GL_DEPTH_TEST);
         glDrawArrays(GL_TRIANGLES,
                      0,
-                     m_pStaticMesh->GetVertexCount());
+                     m_pMesh->GetVertexCount());
     }
 
 
 }
 
+//*****************************************************************************
+// GenerateModelMatrix
+//*****************************************************************************
 void Matter::GenerateModelMatrix()
 {
     // Reset the matrix
@@ -161,6 +175,9 @@ void Matter::GenerateModelMatrix()
     m_matModel.Scale(m_fScaleX, m_fScaleY, m_fScaleZ);
 }
 
+//*****************************************************************************
+// SetPosition
+//*****************************************************************************
 void Matter::SetPosition(float fX,
                          float fY,
                          float fZ)
@@ -170,6 +187,9 @@ void Matter::SetPosition(float fX,
     m_fZ = fZ;
 }
 
+//*****************************************************************************
+// SetRotation
+//*****************************************************************************
 void Matter::SetRotation(float fRotX,
                          float fRotY,
                          float fRotZ)
@@ -179,6 +199,9 @@ void Matter::SetRotation(float fRotX,
     m_fRotZ = fRotZ;
 }
 
+//*****************************************************************************
+// SetScale
+//*****************************************************************************
 void Matter::SetScale(float fScaleX,
                       float fScaleY,
                       float fScaleZ)

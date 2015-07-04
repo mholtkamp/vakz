@@ -73,7 +73,7 @@ GLSL_VERSION_STRING
 "void main()\n"
 "{\n"
 "   vTexCoord = aTexCoord;\n"
-"   vNormal   = (uMatrixM * vec4(aNormal, 0.0)).xyz;\n"
+//"   vNormal   = (uMatrixM * vec4(aNormal, 0.0)).xyz;\n"
 "   vNormal   = (transpose(inverse(uMatrixM)) * vec4(aNormal, 0.0)).xyz;\n" 
 "   gl_Position = uMatrixMVP * vec4(aPosition, 1.0);\n"
 "}\n";

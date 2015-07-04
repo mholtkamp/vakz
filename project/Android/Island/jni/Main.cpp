@@ -107,18 +107,17 @@ void android_main(struct android_app* state) {
 
     // Create Matter
     Matter* pTestCube = new Matter();
-    pTestCube->SetStaticMesh(reinterpret_cast<StaticMesh*>(pLibrary->GetPrimitive(PRIMITIVE_CUBE)));
+    pTestCube->SetMesh(reinterpret_cast<StaticMesh*>(pLibrary->GetPrimitive(PRIMITIVE_CUBE)));
     pTestCube->SetMaterial(pCubeMat);
 
     Matter* pTestCube2 = new Matter();
-    pTestCube2->SetStaticMesh(reinterpret_cast<StaticMesh*>(pLibrary->GetPrimitive(PRIMITIVE_CUBE)));
+    pTestCube2->SetMesh(reinterpret_cast<StaticMesh*>(pLibrary->GetPrimitive(PRIMITIVE_CUBE)));
     pTestCube2->SetMaterial(pCubeMat);
     pTestCube2->SetPosition(-5.0f, 0.0f, 0.0f);
 
     // Create sun
     DirectionalLight* pSun = new DirectionalLight();
     pSun->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
-    pSun->SetIntensity(1.0f);
     pSun->SetDirectionVector(3.0f, -1.0f, -2.0f);
     pTestScene->AddLight(pSun);
 

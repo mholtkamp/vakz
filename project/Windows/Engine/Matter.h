@@ -24,15 +24,14 @@ public:
     ~Matter();
 
     //## **********************************************************************
-    //## SetStaticMesh
+    //## SetMesh
     //##
-    //## Assigns a StaticMesh to this Matter. Clears any AnimatedMesh or
-    //## SkeletalMesh that has already been assigned to this Matter.
+    //## Assigns a mesh to this Matter.
     //##
     //## Input:
     //##   pMesh - pointer to StaticMesh that this matter will use to render.
     //## **********************************************************************
-    void SetStaticMesh(StaticMesh* pMesh);
+    void SetMesh(Mesh* pMesh);
 
     //## **********************************************************************
     //## SetMaterial
@@ -48,17 +47,50 @@ public:
     //## Render
     //##
     //## Renders the matter.
+    //##
+    //## Input:
+    //##   pScene - pointer to the scene that is rendering this matter.
     //## **********************************************************************
     void Render(void* pScene);
 
+    //## **********************************************************************
+    //## SetPosition
+    //##
+    //## Sets the matters position in world coordinates.
+    //##
+    //## Input:
+    //##   fX - x position.
+    //##   fY - y position.
+    //##   fZ - z position.
+    //## **********************************************************************
     void SetPosition(float fX,
                      float fY,
                      float fZ);
 
+    //## **********************************************************************
+    //## SetRotation
+    //##
+    //## Sets the matter's rotation in degrees.
+    //## 
+    //## Input:
+    //##   fRotX - rotation about x axis in degrees.
+    //##   fRotY - rotation about y axis in degrees.
+    //##   fRotZ - rotation about z axis in degrees.
+    //## **********************************************************************
     void SetRotation(float fRotX,
                      float fRotY,
                      float fRotZ);
 
+    //## **********************************************************************
+    //## SetScale
+    //##
+    //## Sets the matter's scale.
+    //##
+    //## Input:
+    //##   fScaleX - scaling along x axis.
+    //##   fScaleY - scaling along y axis.
+    //##   fScaleZ - scaling along z axis.
+    //## **********************************************************************
     void SetScale(float fScaleX,
                   float fScaleY,
                   float fScaleZ);
@@ -83,10 +115,8 @@ private:
     float m_fScaleY;
     float m_fScaleZ;
 
-    //## Mesh pointers
-    StaticMesh*   m_pStaticMesh;
-    AnimatedMesh* m_pAnimatedMesh;
-    SkeletalMesh* m_pSkeletalMesh;
+    //## Mesh pointer
+    Mesh*   m_pMesh;
 
     //## Material pointer
     Material* m_pMaterial;

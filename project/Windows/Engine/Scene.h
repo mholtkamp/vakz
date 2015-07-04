@@ -4,6 +4,7 @@
 #include "Camera.h"
 #include "Matter.h"
 #include "Light.h"
+#include "DirectionalLight.h"
 #include "Glyph.h"
 #include "Effect.h"
 
@@ -46,7 +47,9 @@ public:
     //## AddLight
     //##
     //## Adds a Light object to the scene. A Light object is anything that will
-    //## effect fragment color of Matters rendered to the screen.
+    //## effect fragment color of Matters rendered to the screen. There can
+    //## only be one directional light per scene. Adding a directional light
+    //## will replace the previous directional light (if one has been set).
     //##
     //## Input:
     //##   pLight - pointer to a light object to add to the scene.
@@ -97,15 +100,62 @@ public:
     //## **********************************************************************
     Camera* GetCamera();
 
+    //## **********************************************************************
+    //## GetLightArray
+    //##
+    //## Gets scene's array of lights.
+    //##
+    //## Returns:
+    //##   Light** - array of pointers to Lights.
+    //## **********************************************************************
     Light** GetLightArray();
 
+    //## **********************************************************************
+    //## GetDirectionalLight
+    //##
+    //## Gets the scene's directional light.
+    //##
+    //## Returns:
+    //##   DirectionalLight* - pointer to scene's directional light.
+    //## **********************************************************************
+    DirectionalLight* GetDirectionalLight();
+
+    //## **********************************************************************
+    //## SetAmbientLight
+    //##
+    //## Sets the ambient light color of the scene. Color components should
+    //## be in range 0.0f to 1.0f.
+    //##
+    //## Input:
+    //##   fRed   - red component.
+    //##   fGreen - green component.
+    //##   fBlue  - blue component.
+    //##   fAlpha - alpha component.
+    //## **********************************************************************
     void SetAmbientLight(float fRed,
                          float fGreen,
                          float fBlue,
                          float fAlpha);
 
+    //## **********************************************************************
+    //## GetAmbientLight
+    //##
+    //## Retrieves the scene's ambient light color.
+    //##
+    //## Returns:
+    //##   float* - pointer to an array of size 4 floats containging the 
+    //##            ambient lighting color.
+    //## **********************************************************************
     float* GetAmbientLight();
 
+    //## **********************************************************************
+    //## GetNumLights
+    //##
+    //## Gets the number of point lights in the scene.
+    //##
+    //## Returns:
+    //##   int - number of point lights.
+    //## **********************************************************************
     int GetNumLights();
 
     enum SceneEnum
@@ -138,6 +188,9 @@ private:
 
     //## Pointer to camera that the 3D scene should be rendered from.
     Camera* m_pCamera;
+
+    //## Pointer to the directional light to light all of the scene.
+    DirectionalLight* m_pDirectionalLight;
 
     // Ambient light
     float m_arAmbientColor[4];
