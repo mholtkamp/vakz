@@ -31,14 +31,21 @@ int main()
     pCubeMat->SetColor(0.3f, 0.3f, 0.8f, 1.0f);
 
     // Create Matter
-    Matter* pTestCube = new Matter();
-    pTestCube->SetMesh(reinterpret_cast<StaticMesh*>(pLibrary->GetPrimitive(PRIMITIVE_CUBE)));
-    pTestCube->SetMaterial(pCubeMat);
+    //Matter* pTestCube = new Matter();
+    //pTestCube->SetMesh(reinterpret_cast<StaticMesh*>(pLibrary->GetPrimitive(PRIMITIVE_CUBE)));
+    //pTestCube->SetMaterial(pCubeMat);
 
-    Matter* pTestCube2 = new Matter();
-    pTestCube2->SetMesh(reinterpret_cast<StaticMesh*>(pLibrary->GetPrimitive(PRIMITIVE_CUBE)));
-    pTestCube2->SetMaterial(pCubeMat);
-    pTestCube2->SetPosition(-5.0f, 0.0f, 0.0f);
+    //Matter* pTestCube2 = new Matter();
+    //pTestCube2->SetMesh(reinterpret_cast<StaticMesh*>(pLibrary->GetPrimitive(PRIMITIVE_CUBE)));
+    //pTestCube2->SetMaterial(pCubeMat);
+    //pTestCube2->SetPosition(-5.0f, 0.0f, 0.0f);
+
+    Matter* pTestMonkey = new Matter();
+    StaticMesh* pMonkeyMesh = new StaticMesh();
+    pMonkeyMesh->Load("E:/Projects/vakz/project/Windows/Island/monkey_smooth.obj");
+    pTestMonkey->SetMesh(pMonkeyMesh);
+    pTestMonkey->SetMaterial(pCubeMat);
+    pTestMonkey->SetPosition(0.0f, 0.0f, 0.0f);
 
     // Create sun
     DirectionalLight* pSun = new DirectionalLight();
@@ -47,8 +54,9 @@ int main()
     pTestScene->AddLight(pSun);
 
     // Add the test cube to the scene
-    pTestScene->AddMatter(pTestCube);
-    pTestScene->AddMatter(pTestCube2);
+    //pTestScene->AddMatter(pTestCube);
+    //pTestScene->AddMatter(pTestCube2);
+    pTestScene->AddMatter(pTestMonkey);
 
     unsigned long unStart = GetTickCount();
     unsigned long unEnd = GetTickCount();
@@ -137,15 +145,17 @@ int main()
         }
         
         fCube2Rot += fSeconds * ROT_SPEED;
-        pTestCube2->SetRotation(fCube2Rot, 0.0f, 0.0f);
+        pTestMonkey->SetRotation(fCube2Rot, 0.0f, 0.0f);
 
         unStart = GetTickCount();
         Render();
     }
     
     delete pSun;
-    delete pTestCube;
-    delete pTestCube2;
+    //delete pTestCube;
+    //delete pTestCube2;
+    delete pTestMonkey;
+    delete pMonkeyMesh;
     delete pCamera;
     delete pCubeMat;
     delete pLibrary;
