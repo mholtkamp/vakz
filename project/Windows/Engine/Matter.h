@@ -44,6 +44,18 @@ public:
     void SetMaterial(Material* pMaterial);
 
     //## **********************************************************************
+    //## SetTexture
+    //##
+    //## Assigns a texture to the matter. This texture will be drawn onto
+    //## the Matter's mesh based on the UV cooridinates specificed in the mesh's
+    //## vertex attributes.
+    //##
+    //## Input:
+    //##   pTexture - pointer to new texture.
+    //## **********************************************************************
+    void SetTexture(Texture* pTexture);
+
+    //## **********************************************************************
     //## Render
     //##
     //## Renders the matter.
@@ -120,6 +132,9 @@ private:
 
     //## Material pointer
     Material* m_pMaterial;
+
+    //## Texture pointer
+    Texture* m_pTexture;
 
     //## Model matrix
     Matrix m_matModel;

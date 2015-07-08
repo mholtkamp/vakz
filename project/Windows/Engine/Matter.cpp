@@ -26,6 +26,7 @@ Matter::Matter()
 
     m_pMesh     = 0;
     m_pMaterial = 0;
+    m_pTexture  = 0;
 }
 
 //*****************************************************************************
@@ -70,6 +71,14 @@ void Matter::SetMaterial(Material* pMaterial)
 }
 
 //*****************************************************************************
+// SetTexture
+//*****************************************************************************
+void Matter::SetTexture(Texture* pTexture)
+{
+    m_pTexture = pTexture;
+}
+
+//*****************************************************************************
 // Render
 //*****************************************************************************
 void Matter::Render(void* pScene)
@@ -79,6 +88,8 @@ void Matter::Render(void* pScene)
     int               hMatrixMVP    = -1;
     int               hMatrixM      = -1;
     int               hAmbientColor = -1;
+    int               hTexture      = -1;
+    int               hTextureMode  = -1;
     Matrix*           pView         =  0;
     Matrix*           pProjection   =  0;
     Camera*           pCamera       = reinterpret_cast<Scene*>(pScene)->GetCamera();
@@ -103,6 +114,21 @@ void Matter::Render(void* pScene)
         
         // Start Rendering
         glUseProgram(hProg);
+
+        // Matter is textured, bind texture and set uniforms
+        hTexture     = glGetUniformLocation(hProg, "uTexture");
+        hTextureMode = glGetUniformLocation(hProg, "uTextureMode");
+        if (m_pTexture != 0)
+        {
+            m_pTexture->Bind();
+            glUniform1i(hTexture, 0);
+            glUniform1i(hTextureMode, 1);
+        }
+        else
+        {
+            glBindTexture(GL_TEXTURE_2D, 0);
+            glUniform1i(hTextureMode, 0);
+        }
     
         // Set up uniforms/attributes
         m_pMesh->SetRenderState(pScene, hProg);
@@ -117,12 +143,10 @@ void Matter::Render(void* pScene)
                                       0);
         }
         
-
         // Fetch ambient light from the scene
         pAmbientColor = reinterpret_cast<Scene*>(pScene)->GetAmbientLight();
         hAmbientColor = glGetUniformLocation(hProg, "uAmbientColor");
         glUniform4fv(hAmbientColor, 1, pAmbientColor);
-
 
         // Get View and Projection matrices from camera
         pView       = pCamera->GetViewMatrix();
@@ -151,8 +175,6 @@ void Matter::Render(void* pScene)
                      0,
                      m_pMesh->GetVertexCount());
     }
-
-
 }
 
 //*****************************************************************************

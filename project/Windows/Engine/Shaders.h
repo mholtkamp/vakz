@@ -93,6 +93,7 @@ GLSL_VERSION_STRING
 "uniform vec4 uDirLightColor;\n"
 "uniform sampler2D uTexture;\n"
 "uniform vec4 uAmbientColor;\n"
+"uniform int uTextureMode;\n"
 
 "void main()\n"
 "{\n"
@@ -102,7 +103,11 @@ GLSL_VERSION_STRING
 "   vec3  lNormalVector = normalize(vNormal);\n"
 "   float lPower = dot(lLightVector, lNormalVector);\n"
 
-"   vec4  lObjectColor = uDiffuseColor;\n"// * texture(uTexture,  vTexCoord);\n"
+"   vec4  lObjectColor = uDiffuseColor;\n"
+"   if (uTextureMode == 1)\n"
+"   {\n"
+"       lObjectColor.rgb = lObjectColor.rgb * texture(uTexture,  vTexCoord).rgb;\n"
+"   }\n"
 "   vec3  lAmbient = lObjectColor.rgb * uAmbientColor.rgb;\n"
 "   vec3  lDiffuse = clamp(lPower * uDirLightColor.rgb * lObjectColor.rgb, 0.0, 1.0);\n"
 "   oFragColor.rgb = lDiffuse.rgb + lAmbient.rgb;\n"

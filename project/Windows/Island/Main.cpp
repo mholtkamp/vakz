@@ -28,7 +28,7 @@ int main()
 
     // Create diffuse material
     DiffuseMaterial* pCubeMat = new DiffuseMaterial();
-    pCubeMat->SetColor(0.3f, 0.3f, 0.8f, 1.0f);
+    pCubeMat->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
 
     // Create Matter
     //Matter* pTestCube = new Matter();
@@ -42,10 +42,14 @@ int main()
 
     Matter* pTestMonkey = new Matter();
     StaticMesh* pMonkeyMesh = new StaticMesh();
-    pMonkeyMesh->Load("E:/Projects/vakz/project/Windows/Island/monkey_smooth.obj");
+    pMonkeyMesh->Load("E:/Projects/vakz/project/Windows/Island/druid.obj");
     pTestMonkey->SetMesh(pMonkeyMesh);
     pTestMonkey->SetMaterial(pCubeMat);
     pTestMonkey->SetPosition(0.0f, 0.0f, 0.0f);
+    
+    Texture* pTestTexture = new Texture();
+    pTestTexture->LoadBMP("E:/Projects/vakz/project/Windows/Island/trueform_base_color.bmp");
+    pTestMonkey->SetTexture(pTestTexture);
 
     // Create sun
     DirectionalLight* pSun = new DirectionalLight();
@@ -145,7 +149,7 @@ int main()
         }
         
         fCube2Rot += fSeconds * ROT_SPEED;
-        pTestMonkey->SetRotation(fCube2Rot, 0.0f, 0.0f);
+        pTestMonkey->SetRotation(0.0f, fCube2Rot, 0.0f);
 
         unStart = GetTickCount();
         Render();
