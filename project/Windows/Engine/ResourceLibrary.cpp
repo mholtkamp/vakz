@@ -8,6 +8,8 @@
 #include "SkeletalMesh.h"
 #include "Sound.h"
 
+#include <string.h>
+
 // Cube Primitive Data
 void* ResourceLibrary::s_pCube = 0;
 
@@ -39,11 +41,23 @@ ResourceLibrary::ResourceLibrary(int nMaxTextures,
     m_arSkeletalMeshes = new void*[m_nMaxSkeletalMeshes];
     m_arSounds         = new void*[m_nMaxSounds];
 
+    memset(m_arTextures,       0, m_nMaxTextures       * sizeof(void*));
+    memset(m_arStaticMeshes,   0, m_nMaxStaticMeshes   * sizeof(void*));
+    memset(m_arAnimatedMeshes, 0, m_nMaxAnimatedMeshes * sizeof(void*));
+    memset(m_arSkeletalMeshes, 0, m_nMaxSkeletalMeshes * sizeof(void*));
+    memset(m_arSounds,         0, m_nMaxSounds         * sizeof(void*));
+
     m_arTextureStrings      = new char*[m_nMaxTextures];
     m_arStaticMeshStrings   = new char*[m_nMaxStaticMeshes];
     m_arAnimatedMeshStrings = new char*[m_nMaxAnimatedMeshes];
     m_arSkeletalMeshStrings = new char*[m_nMaxSkeletalMeshes];
     m_arSoundStrings        = new char*[m_nMaxSounds];
+
+    memset(m_arTextureStrings,      0, m_nMaxTextures       * sizeof(char*));
+    memset(m_arStaticMeshStrings,   0, m_nMaxStaticMeshes   * sizeof(char*));
+    memset(m_arAnimatedMeshStrings, 0, m_nMaxAnimatedMeshes * sizeof(char*));
+    memset(m_arSkeletalMeshStrings, 0, m_nMaxSkeletalMeshes * sizeof(char*));
+    memset(m_arSoundStrings,        0, m_nMaxSounds         * sizeof(char*));
 
     // Cube primitive
     if (s_pCube == 0)
@@ -93,13 +107,13 @@ ResourceLibrary::~ResourceLibrary()
         }
 
         delete [] m_arStaticMeshes;
-        m_arStaticMeshes[i] = 0;
+        m_arStaticMeshes = 0;
     }
 
     // Free animated meshes
     if (m_arAnimatedMeshes != 0)
     {
-        for (i = 0; i < m_nMaxAnimatedMeshes; i ++)
+        for (i = 0; i < m_nMaxAnimatedMeshes; i++)
         {
             if (m_arAnimatedMeshes[i] != 0)
             {
@@ -173,7 +187,7 @@ ResourceLibrary::~ResourceLibrary()
         }
 
         delete [] m_arStaticMeshStrings;
-        m_arStaticMeshStrings[i] = 0;
+        m_arStaticMeshStrings = 0;
     }
 
     // Free animated mesh strings
@@ -222,6 +236,13 @@ ResourceLibrary::~ResourceLibrary()
 
         delete [] m_arSoundStrings;
         m_arSoundStrings = 0;
+    }
+
+    // Delete Primitives
+    if (s_pCube != 0)
+    {
+        delete reinterpret_cast<StaticMesh*>(s_pCube);
+        s_pCube = 0;
     }
 }
 

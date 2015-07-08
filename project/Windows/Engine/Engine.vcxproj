@@ -105,6 +105,7 @@
     <ClInclude Include="StaticMesh.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="ResourceLibrary.h" />
+    <ClInclude Include="VInput.h" />
     <ClInclude Include="VMath.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="Log.h" />

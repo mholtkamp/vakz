@@ -2,10 +2,10 @@
 #include "VGL.h"
 #include "Log.h"
 
-#define DEFAULT_AMBIENT_RED   0.2f;
-#define DEFAULT_AMBIENT_GREEN 0.2f;
-#define DEFAULT_AMBIENT_BLUE  0.2f;
-#define DEFAULT_AMBIENT_ALPHA 0.2f;
+#define DEFAULT_AMBIENT_RED   0.12f;
+#define DEFAULT_AMBIENT_GREEN 0.12f;
+#define DEFAULT_AMBIENT_BLUE  0.12f;
+#define DEFAULT_AMBIENT_ALPHA 0.12f;
 
 //*****************************************************************************
 // Constructor

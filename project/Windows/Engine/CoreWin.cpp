@@ -11,7 +11,8 @@
 #pragma comment (lib, "opengl32.lib")
 #pragma comment (lib, "glu32.lib")
 
-#include "CoreWin.h"
+#include "Vakz.h"
+#include "Scene.h"
 #include "stdio.h"
 #include <windows.h>        // Header File For Windows
 #include "VGL.h"
@@ -19,7 +20,8 @@
 #include "Log.h"
 
 // Pointer to the scene object used during rendering.
-static Scene* s_pScene = 0;
+static           Scene* s_pScene    = 0;
+static    unsigned char s_ucStatus  = 0;
 
 HDC            hDC = NULL;  // Private GDI Device Context
 HGLRC          hRC = NULL;    // Permanent Rendering Context
@@ -113,11 +115,11 @@ LRESULT CALLBACK WndProc(HWND    hWnd,            // Handle For This Window
     {
         if (!HIWORD(wParam))                      // Check Minimization State
         {
-            active = TRUE;                        // Program Is Active
+            s_ucStatus |= VAKZ_ACTIVE;                        // Program Is Active
         }
         else
         {
-            active = FALSE;                       // Program Is No Longer Active
+            s_ucStatus &= (~VAKZ_ACTIVE);                       // Program Is No Longer Active
         }
 
         return 0;                                 // Return To The Message Loop
@@ -142,13 +144,13 @@ LRESULT CALLBACK WndProc(HWND    hWnd,            // Handle For This Window
 
     case WM_KEYDOWN:                              // Is A Key Being Held Down?
     {
-        keys[wParam] = TRUE;                      // If So, Mark It As TRUE
+        keys[wParam] = 1;                         // If So, Mark It As TRUE
         return 0;                                 // Jump Back
     }
 
     case WM_KEYUP:                                // Has A Key Been Released?
     {
-        keys[wParam] = FALSE;                     // If So, Mark It As FALSE
+        keys[wParam] = 0;                         // If So, Mark It As FALSE
         return 0;                                 // Jump Back
     }
 
@@ -191,16 +193,16 @@ int SetTitle(char* szTitle)
 }
 
 // Initializes the Vakz Engine
-int Initialize()
+int Initialize(void* pData)
 {
     GLuint        PixelFormat;                      // Holds The Results After Searching For A Match
     WNDCLASS    wc;                                 // Windows Class Structure
     DWORD        dwExStyle;                         // Window Extended Style
     DWORD        dwStyle;                           // Window Style
     RECT        WindowRect;                         // Grabs Rectangle Upper Left / Lower Right Values
-    WindowRect.left = (long)0;                      // Set Left Value To 0
-    WindowRect.right = (long) g_nScreenWidth;         // Set Right Value To Requested Width
-    WindowRect.top = (long)0;                       // Set Top Value To 0
+    WindowRect.left   = (long) 0;                      // Set Left Value To 0
+    WindowRect.right  = (long) g_nScreenWidth;         // Set Right Value To Requested Width
+    WindowRect.top    = (long) 0;                       // Set Top Value To 0
     WindowRect.bottom = (long) g_nScreenHeight;       // Set Bottom Value To Requested Height
 
     hInstance = GetModuleHandle(NULL);              // Grab An Instance For Our Window
@@ -260,8 +262,8 @@ int Initialize()
         0,                                         // Shift Bit Ignored
         0,                                         // No Accumulation Buffer
         0, 0, 0, 0,                                // Accumulation Bits Ignored
-        16,                                        // 16Bit Z-Buffer (Depth Buffer)  
-        0,                                         // No Stencil Buffer
+        24,                                        // 24Bit Z-Buffer (Depth Buffer)  
+        8,                                         // 8 bit Stencil Buffer
         0,                                         // No Auxiliary Buffer
         PFD_MAIN_PLANE,                            // Main Drawing Layer
         0,                                         // Reserved
@@ -334,52 +336,27 @@ int Initialize()
 // Render the current scene 
 int Render()
 {
-    MSG     msg;                                   // Windows Message Structure
-    BOOL    done = FALSE;                          // Bool Variable To Exit Loop
-
-    if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))  // Is There A Message Waiting?
+    // Draw The Scene.  Watch For ESC Key And Quit Messages From DrawGLScene()
+    if (s_ucStatus & VAKZ_ACTIVE)              // Program Active?
     {
-        if (msg.message == WM_QUIT)                // Have We Received A Quit Message?
+        if (keys[VK_ESCAPE])                   // Was ESC Pressed?
         {
-            done = TRUE;                           // If So done=TRUE
+            s_ucStatus |= VAKZ_QUIT;           // ESC Signalled A Quit
         }
-        else                                       // If Not, Deal With Window Messages
+        else                                   // Not Time To Quit, Update Screen
         {
-            TranslateMessage(&msg);                // Translate The Message
-            DispatchMessage(&msg);                 // Dispatch The Message
+            DrawGLScene();                     // Draw The Scene
+            SwapBuffers(hDC);                  // Swap Buffers (Double Buffering)
         }
-    }
-    else                                           // If There Are No Messages
-    {
-        // Draw The Scene.  Watch For ESC Key And Quit Messages From DrawGLScene()
-        if (active)                                // Program Active?
-        {
-            if (keys[VK_ESCAPE])                   // Was ESC Pressed?
-            {
-                done = TRUE;                       // ESC Signalled A Quit
-            }
-            else                                   // Not Time To Quit, Update Screen
-            {
-                DrawGLScene();                     // Draw The Scene
-                SwapBuffers(hDC);                  // Swap Buffers (Double Buffering)
-            }
-        }
-    }
-
-    if (done)
-    {
-        // Shutdown
-        KillGLWindow();            // Kill The Window
-        return 0;                  // Exit The Program
     }
 
     return 1;
 }
 
 // Set the scene
-int SetScene(Scene* pScene)
+int SetScene(void* pScene)
 {
-    s_pScene = pScene;
+    s_pScene = reinterpret_cast<Scene*>(pScene);
     return 0;
 }
 
@@ -391,4 +368,32 @@ void SetClearColor(float fRed,
     glClearColor(fRed, fGreen, fBlue, fAlpha);
 }
 
+void Shutdown()
+{
+    KillGLWindow();
+}
+
+void Update()
+{
+    MSG     msg;                                   // Windows Message Structure
+    BOOL    done = FALSE;                          // Bool Variable To Exit Loop
+
+    if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))  // Is There A Message Waiting?
+    {
+        if (msg.message == WM_QUIT)                // Have We Received A Quit Message?
+        {
+            s_ucStatus |= VAKZ_QUIT;                   // If So done=TRUE
+        }
+        else                                       // If Not, Deal With Window Messages
+        {
+            TranslateMessage(&msg);                // Translate The Message
+            DispatchMessage(&msg);                 // Dispatch The Message
+        }
+    }
+}
+
+unsigned char GetStatus()
+{
+    return s_ucStatus;
+}
 #endif

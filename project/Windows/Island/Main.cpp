@@ -1,4 +1,5 @@
 #include "Vakz.h"
+#include "Scene.h"
 #include "Quad.h"
 #include "VGL.h"
 #include "Matrix.h"
@@ -73,15 +74,16 @@ int main()
     float fRotZ = 0.0f;
     int nLock = 0;
     float fCube2Rot = 0.0f;
+    int nActive = 1;
 
-
-    while (1)
+    while ((GetStatus() & VAKZ_QUIT) == 0)
     {
         unEnd = GetTickCount();
 
         fSeconds = static_cast<float>(unEnd - unStart)/1000.0f;
 
         // Update
+        Update();
         
         // Rotate camera
         if (GetAsyncKeyState(VK_UP))
@@ -152,9 +154,10 @@ int main()
         pTestMonkey->SetRotation(0.0f, fCube2Rot, 0.0f);
 
         unStart = GetTickCount();
-        Render();
+        nActive = Render();
     }
     
+    delete pLibrary;
     delete pSun;
     //delete pTestCube;
     //delete pTestCube2;
@@ -162,7 +165,6 @@ int main()
     delete pMonkeyMesh;
     delete pCamera;
     delete pCubeMat;
-    delete pLibrary;
     delete pTestScene;
 
     printf("Exiting.\n");
