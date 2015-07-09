@@ -95,6 +95,7 @@
     <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="Effect.h" />
     <ClInclude Include="Glyph.h" />
+    <ClInclude Include="InputHandler.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="MeshLoader.h" />

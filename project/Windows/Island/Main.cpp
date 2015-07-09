@@ -130,6 +130,30 @@ int main()
             fY -= fSeconds * MOVE_SPEED;
         }
 
+        if (IsButtonDown(VBUTTON_LEFT))
+        {
+            int nX = 0;
+            int nY = 0;
+            GetMousePosition(nX,nY);
+            printf("X: %d   Y: %d\n", nX, nY);
+        }
+        if (IsButtonDown(VBUTTON_RIGHT))
+        {
+            printf("Right Mouse Down\n");
+        }
+        if (IsButtonDown(VBUTTON_MIDDLE))
+        {
+            printf("Middle Mouse Down\n");
+        }
+        if (IsButtonDown(VBUTTON_X1))
+        {
+            printf("X1 Mouse Down\n");
+        }
+        if (IsButtonDown(VBUTTON_X2))
+        {
+            printf("X2 Mouse Down\n");
+        }
+
         pCamera->SetPosition(fX, fY, fZ);
         pCamera->SetRotation(fRotX, fRotY, fRotZ);
         

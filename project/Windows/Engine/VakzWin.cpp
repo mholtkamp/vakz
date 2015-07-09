@@ -44,6 +44,7 @@ GLvoid ReSizeGLScene(GLsizei width, GLsizei height)      // Resize And Initializ
     }
 
     glViewport(0, 0, width, height);                     // Reset The Current Viewport
+    SetWindowSize(width, height);
 }
 
 int InitGL(GLvoid)                                       // All Setup For OpenGL Goes Here
@@ -153,6 +154,86 @@ LRESULT CALLBACK WndProc(HWND    hWnd,            // Handle For This Window
     {
         ClearKey(wParam);                        // If So, Mark It As FALSE
         return 0;                                 // Jump Back
+    }
+
+    case WM_LBUTTONDOWN:
+    {
+        SetButton(VBUTTON_LEFT);
+        return 0;
+    }
+
+    case WM_RBUTTONDOWN:
+    {
+        SetButton(VBUTTON_RIGHT);
+        return 0;
+    }
+
+    case WM_MBUTTONDOWN:
+    {
+        SetButton(VBUTTON_MIDDLE);
+        return 0;
+    }
+
+    case WM_XBUTTONDOWN:
+    {
+        int nButton = HIWORD(wParam);
+        
+        if (nButton == 1)
+        {
+            SetButton(VBUTTON_X1);
+        }
+        else if (nButton == 2)
+        {
+            SetButton(VBUTTON_X2);
+        }
+
+        return 0;
+    }
+
+    case WM_LBUTTONUP:
+    {
+        ClearButton(VBUTTON_LEFT);
+        return 0;
+    }
+
+    case WM_RBUTTONUP:
+    {
+        ClearButton(VBUTTON_RIGHT);
+        return 0;
+    }
+
+    case WM_MBUTTONUP:
+    {
+        ClearButton(VBUTTON_MIDDLE);
+        return 0;
+    }
+
+    case WM_XBUTTONUP:
+    {
+        int nButton = HIWORD(wParam);
+        
+        if (nButton == 1)
+        {
+            ClearButton(VBUTTON_X1);
+        }
+        else if (nButton == 2)
+        {
+            ClearButton(VBUTTON_X2);
+        }
+
+        return 0;
+    }
+
+    case WM_MOUSEMOVE:
+    {
+        int nX = LOWORD(lParam);
+        int nY = HIWORD(lParam);
+
+        // Invert the y axis to match the bottom-left origin
+        // convention used thoughout Vakz.
+        SetMousePosition(nX, (g_nScreenHeight - 1) - nY);
+
+        return 0;
     }
 
     case WM_SIZE:                                 // Resize The OpenGL Window

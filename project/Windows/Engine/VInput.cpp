@@ -59,7 +59,7 @@ void ClearButton(int nButton)
     }
 }
 
-int IsButotnDown(int nButton)
+int IsButtonDown(int nButton)
 {
     if (nButton >= 0 &&
         nButton <  VINPUT_MAX_BUTTONS)
@@ -101,7 +101,7 @@ int IsTouchDown(int nTouch)
     else
     {
         LogWarning("Invalid touch queried in IsTouchDown().");
-        return;
+        return 0;
     }
 }
 
