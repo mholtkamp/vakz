@@ -32,15 +32,19 @@ int main()
     DiffuseMaterial* pCubeMat = new DiffuseMaterial();
     pCubeMat->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
 
-    // Create Matter
-    //Matter* pTestCube = new Matter();
-    //pTestCube->SetMesh(reinterpret_cast<StaticMesh*>(pLibrary->GetPrimitive(PRIMITIVE_CUBE)));
-    //pTestCube->SetMaterial(pCubeMat);
+    DiffuseMaterial* pCubeMat2 = new DiffuseMaterial();
+    pCubeMat2->SetColor(0.3f, 0.3f, 0.9f, 1.0f);
 
-    //Matter* pTestCube2 = new Matter();
-    //pTestCube2->SetMesh(reinterpret_cast<StaticMesh*>(pLibrary->GetPrimitive(PRIMITIVE_CUBE)));
-    //pTestCube2->SetMaterial(pCubeMat);
-    //pTestCube2->SetPosition(-5.0f, 0.0f, 0.0f);
+    // Create Matter
+    Matter* pTestCube = new Matter();
+    pTestCube->SetMesh(reinterpret_cast<StaticMesh*>(pLibrary->GetPrimitive(PRIMITIVE_CUBE)));
+    pTestCube->SetMaterial(pCubeMat2);
+    pTestCube->SetPosition(5.0f, 0.0f, 0.0f);
+
+    Matter* pTestCube2 = new Matter();
+    pTestCube2->SetMesh(reinterpret_cast<StaticMesh*>(pLibrary->GetPrimitive(PRIMITIVE_CUBE)));
+    pTestCube2->SetMaterial(pCubeMat2);
+    pTestCube2->SetPosition(-5.0f, 0.0f, 0.0f);
 
     Matter* pTestMonkey = new Matter();
     StaticMesh* pMonkeyMesh = new StaticMesh();
@@ -60,9 +64,9 @@ int main()
     pTestScene->AddLight(pSun);
 
     // Add the test cube to the scene
-    //pTestScene->AddMatter(pTestCube);
-    //pTestScene->AddMatter(pTestCube2);
+    pTestScene->AddMatter(pTestCube);
     pTestScene->AddMatter(pTestMonkey);
+    pTestScene->AddMatter(pTestCube2);
 
     unsigned long unStart = GetTickCount();
     unsigned long unEnd = GetTickCount();

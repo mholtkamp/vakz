@@ -38,54 +38,20 @@
 #include "DiffuseMaterial.h"
 #include "DirectionalLight.h"
 
+#include "Camera.h"
+#include "Scene.h"
+
 #define ROT_SPEED 30.0f
 #define MOVE_SPEED 5.0f
 
 int animating = 1;
-static volatile int nInitialized = 0;
-
-static void handle_cmd(struct android_app* app, int32_t cmd)
-{
-    switch (cmd) {
-        case APP_CMD_INIT_WINDOW:
-            LogWarning("**** APP_CMD_INIT_WINDOW ****");
-            // The window is being shown, get it ready.
-            if (app->window != NULL) {
-                LogWarning("**** app->window != null ****");
-                Initialize(app->window);
-                nInitialized = 1;
-                Render();
-            }
-            break;
-    }
-}
 
 void android_main(struct android_app* state) {
 
-    state->onAppCmd = handle_cmd;
+    //state->onAppCmd = handle_cmd;
+    Initialize(state);
 
-    usleep(55000);
-
-    int ident;
-    int events;
-    struct android_poll_source* source;
-
-    LogWarning("****ISLAND APP STARTING****");
-
-    // Keep processing events until the OpenGL context is created.
-    while(nInitialized == 0)
-    {
-        while ((ident=ALooper_pollAll(animating ? 1 : -1, NULL, &events,
-                (void**)&source)) >= 0)
-        {
-            LogWarning("****Processing Event****");
-            // Process this event.
-            if (source != NULL)
-            {
-                source->process(state, source);
-            }
-        }
-    }
+    //usleep(55000);
 
     // Make sure glue isn't stripped.
     app_dummy();

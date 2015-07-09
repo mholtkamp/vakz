@@ -2,9 +2,7 @@
 #include "VGL.h"
 #include "Log.h"
 #include <stdlib.h>
-#include <string>
-#include <iostream>
-#include <fstream>
+#include <stdio.h>
 
 char MeshLoader::s_arFileBuffer[MESH_LOADER_MAX_FILE_SIZE];
 

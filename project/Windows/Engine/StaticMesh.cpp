@@ -98,14 +98,14 @@ void StaticMesh::SetRenderState(void*        pScene,
     int hTexCoord = glGetAttribLocation(hProg, "aTexCoord");
     int hNormal   = glGetAttribLocation(hProg, "aNormal");
 
-    // All static meshes will have a position array.
-    glEnableVertexAttribArray(hPosition);
-    glEnableVertexAttribArray(hTexCoord);
-    glEnableVertexAttribArray(hNormal);
-
     // If the mesh is using a VBO, use it when setting attributes.
     if (m_unVBO != 0)
     {
+        // All static meshes will have a position array.
+        glEnableVertexAttribArray(hPosition);
+        glEnableVertexAttribArray(hTexCoord);
+        glEnableVertexAttribArray(hNormal);
+
         glBindBuffer(GL_ARRAY_BUFFER, m_unVBO);
         glVertexAttribPointer(hPosition,
                               3,                     // X/Y/Z
@@ -133,6 +133,8 @@ void StaticMesh::SetRenderState(void*        pScene,
         // Unbind any VBO, use client side arrays
         glBindBuffer(GL_ARRAY_BUFFER, 0);
 
+        // All static meshes will have a position array.
+        glEnableVertexAttribArray(hPosition);
         glVertexAttribPointer(hPosition,
                               3,                       // X,Y,Z coordinates
                               GL_FLOAT,
@@ -143,6 +145,7 @@ void StaticMesh::SetRenderState(void*        pScene,
         // If a texcoord array has been set, assign it.
         if (m_pClientTexCoord != 0)
         {
+            glEnableVertexAttribArray(hTexCoord);
             glVertexAttribPointer(hTexCoord,
                                   2,                   // U,V coordinates
                                   GL_FLOAT,
@@ -154,6 +157,7 @@ void StaticMesh::SetRenderState(void*        pScene,
         // If a normal array has been set, assign it.
         if (m_pClientNormal != 0)
         {
+            glEnableVertexAttribArray(hNormal);
             glVertexAttribPointer(hNormal,
                                   3,
                                   GL_FLOAT,
