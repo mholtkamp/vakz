@@ -68,7 +68,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="CoreWin.cpp" />
+    <ClCompile Include="VakzWin.cpp" />
     <ClCompile Include="DiffuseMaterial.cpp" />
     <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="Glyph.cpp" />
@@ -86,11 +86,11 @@
     <ClCompile Include="StaticMesh.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="VGL.cpp" />
+    <ClCompile Include="VInput.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimatedMesh.h" />
     <ClInclude Include="Camera.h" />
-    <ClInclude Include="CoreWin.h" />
     <ClInclude Include="DiffuseMaterial.h" />
     <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="Effect.h" />

@@ -18,6 +18,7 @@
 #include "VGL.h"
 #include "Settings.h"
 #include "Log.h"
+#include "VInput.h"
 
 // Pointer to the scene object used during rendering.
 static           Scene* s_pScene    = 0;
@@ -28,7 +29,7 @@ HGLRC          hRC = NULL;    // Permanent Rendering Context
 HWND           hWnd = NULL;    // Holds Our Window Handle
 HINSTANCE      hInstance;     // Holds The Instance Of The Application
 
-char    szWindowTitle[256] = {0};
+char    szWindowTitle[256] = "Vakz";
 
 int     keys[256];            // Array Used For The Keyboard Routine
 int     active = TRUE;        // Window Active Flag Set To TRUE By Default
@@ -144,13 +145,13 @@ LRESULT CALLBACK WndProc(HWND    hWnd,            // Handle For This Window
 
     case WM_KEYDOWN:                              // Is A Key Being Held Down?
     {
-        keys[wParam] = 1;                         // If So, Mark It As TRUE
+        SetKey(wParam);                         // If So, Mark It As TRUE
         return 0;                                 // Jump Back
     }
 
     case WM_KEYUP:                                // Has A Key Been Released?
     {
-        keys[wParam] = 0;                         // If So, Mark It As FALSE
+        ClearKey(wParam);                        // If So, Mark It As FALSE
         return 0;                                 // Jump Back
     }
 

@@ -2,6 +2,7 @@
 #include "Scene.h"
 #include "Quad.h"
 #include "VGL.h"
+#include "VInput.h"
 #include "Matrix.h"
 #include "ResourceLibrary.h"
 #include "DiffuseMaterial.h"
@@ -86,69 +87,51 @@ int main()
         Update();
         
         // Rotate camera
-        if (GetAsyncKeyState(VK_UP))
+        if (IsKeyDown(VKEY_UP))
         {
             fRotX += fSeconds * ROT_SPEED;
         }
-        if (GetAsyncKeyState(VK_DOWN))
+        if (IsKeyDown(VKEY_DOWN))
         {
             fRotX -= fSeconds * ROT_SPEED;
         }
-        if (GetAsyncKeyState(VK_RIGHT))
+        if (IsKeyDown(VKEY_RIGHT))
         {
             fRotY -= fSeconds * ROT_SPEED;
         }
-        if (GetAsyncKeyState(VK_LEFT))
+        if (IsKeyDown(VKEY_LEFT))
         {
             fRotY += fSeconds * ROT_SPEED;
         }
 
         // Rotate 
-        if (GetAsyncKeyState('W'))
+        if (IsKeyDown(VKEY_W))
         {
             fZ -= fSeconds * MOVE_SPEED;
         }
-        if (GetAsyncKeyState('S'))
+        if (IsKeyDown(VKEY_S))
         {
             fZ += fSeconds * MOVE_SPEED;
         }
-        if (GetAsyncKeyState('A'))
+        if (IsKeyDown(VKEY_A))
         {
             fX -= fSeconds * MOVE_SPEED;
         }
-        if (GetAsyncKeyState('D'))
+        if (IsKeyDown(VKEY_D))
         {
             fX += fSeconds * MOVE_SPEED;
         }
-        if (GetAsyncKeyState(VK_SPACE))
+        if (IsKeyDown(VKEY_SPACE))
         {
             fY += fSeconds * MOVE_SPEED;
         }
-        if (GetAsyncKeyState(VK_CONTROL))
+        if (IsKeyDown(VKEY_CONTROL))
         {
             fY -= fSeconds * MOVE_SPEED;
         }
 
-        // Camera Lock
-        if (GetAsyncKeyState('L'))
-        {
-            nLock = 1;
-        }
-        if (GetAsyncKeyState('U'))
-        {
-            nLock = 0;
-        }
-
         pCamera->SetPosition(fX, fY, fZ);
-
-        if (nLock == 0)
-        {
-            pCamera->SetRotation(fRotX, fRotY, fRotZ);
-        }
-        else
-        {
-            pCamera->LookAt(0.0f, 0.0f, 0.0f);
-        }
+        pCamera->SetRotation(fRotX, fRotY, fRotZ);
         
         fCube2Rot += fSeconds * ROT_SPEED;
         pTestMonkey->SetRotation(0.0f, fCube2Rot, 0.0f);
