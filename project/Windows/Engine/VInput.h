@@ -56,20 +56,63 @@ enum VakzKeyEnum
     VKEY_RIGHT     = 39
 };
 
+enum VakzButtonEnum
+{
+    VBUTTON_LEFT   = 0,
+    VBUTTON_RIGHT  = 1,
+    VBUTTON_MIDDLE = 2,
+    VBUTTON_X1     = 3,
+    VBUTTON_X2     = 4
+};
+
+#elif defined(ANDROID)
+
+#endif
+
 enum VInputEnum
 {
-    VINPUT_MAX_KEYS = 256
+    VINPUT_MAX_KEYS    = 256,
+    VINPUT_MAX_BUTTONS = 16,
+    VINPUT_MAX_TOUCHES = 16
 };
 
 void SetKey(int nKey);
 
 void ClearKey(int nKey);
 
-void ClearAllKeys();
-
 int IsKeyDown(int nKey);
 
-#elif defined(ANDROID)
+void SetButton(int nButton);
 
-#endif
+void ClearButton(int nButton);
+
+int IsButtonDown(int nButton);
+
+void SetTouch(int nTouch);
+
+void ClearTouch(int nTouch);
+
+int IsTouchDown(int nTouch);
+
+int IsPointerDown(int nPointer = 0);
+
+void GetMousePosition(int& nMouseX,
+                      int& nMouseY);
+
+void GetTouchPosition(int& nTouchX,
+                      int& nTouchY);
+
+void GetPointerPosition(int& nPointerX,
+                        int& nPointerY,
+                        int  nPointer = 0);
+
+void SetMousePosition(int nMouseX,
+                      int nMouseY);
+
+void SetTouchPosition(int nTouchX,
+                      int nTouchY,
+                      int nTouch = 0);
+
+
+
 #endif
