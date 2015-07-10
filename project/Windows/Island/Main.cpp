@@ -3,6 +3,7 @@
 #include "Quad.h"
 #include "VGL.h"
 #include "VInput.h"
+#include "VTime.h"
 #include "Matrix.h"
 #include "ResourceLibrary.h"
 #include "DiffuseMaterial.h"
@@ -68,8 +69,8 @@ int main()
     pTestScene->AddMatter(pTestMonkey);
     pTestScene->AddMatter(pTestCube2);
 
-    unsigned long unStart = GetTickCount();
-    unsigned long unEnd = GetTickCount();
+    float fStart = GetTime();
+    float fEnd   = GetTime();
     float fSeconds = 0.0;
     float fZ = 10.0f;
     float fY = 0.0f;
@@ -79,13 +80,12 @@ int main()
     float fRotZ = 0.0f;
     int nLock = 0;
     float fCube2Rot = 0.0f;
-    int nActive = 1;
 
     while ((GetStatus() & VAKZ_QUIT) == 0)
     {
-        unEnd = GetTickCount();
+        fEnd = GetTime();
 
-        fSeconds = static_cast<float>(unEnd - unStart)/1000.0f;
+        fSeconds = fEnd - fStart;
 
         // Update
         Update();
@@ -164,8 +164,8 @@ int main()
         fCube2Rot += fSeconds * ROT_SPEED;
         pTestMonkey->SetRotation(0.0f, fCube2Rot, 0.0f);
 
-        unStart = GetTickCount();
-        nActive = Render();
+        fStart = GetTime();
+        Render();
     }
     
     delete pLibrary;

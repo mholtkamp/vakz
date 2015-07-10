@@ -87,6 +87,7 @@
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="VGL.cpp" />
     <ClCompile Include="VInput.cpp" />
+    <ClCompile Include="VTime.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimatedMesh.h" />
@@ -118,6 +119,7 @@
     <ClInclude Include="Shaders.h" />
     <ClInclude Include="Vakz.h" />
     <ClInclude Include="VGL.h" />
+    <ClInclude Include="VTime.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

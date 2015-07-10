@@ -19,6 +19,7 @@
 #include "Settings.h"
 #include "Log.h"
 #include "VInput.h"
+#include "VTime.h"
 
 // Pointer to the scene object used during rendering.
 static           Scene* s_pScene    = 0;
@@ -287,6 +288,8 @@ int Initialize(void* pData)
     WindowRect.top    = (long) 0;                       // Set Top Value To 0
     WindowRect.bottom = (long) g_nScreenHeight;       // Set Bottom Value To Requested Height
 
+    SetInitTime();
+
     hInstance = GetModuleHandle(NULL);              // Grab An Instance For Our Window
     wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;  // Redraw On Size, And Own DC For Window.
     wc.lpfnWndProc = (WNDPROC)WndProc;              // WndProc Handles Messages
@@ -460,7 +463,7 @@ void Update()
     MSG     msg;                                   // Windows Message Structure
     BOOL    done = FALSE;                          // Bool Variable To Exit Loop
 
-    if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))  // Is There A Message Waiting?
+    while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))  // Is There A Message Waiting?
     {
         if (msg.message == WM_QUIT)                // Have We Received A Quit Message?
         {
