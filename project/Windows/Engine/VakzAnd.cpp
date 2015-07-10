@@ -8,10 +8,12 @@
 #include "Log.h"
 #include "Scene.h"
 #include <android_native_app_glue.h>
+#include <android/input.h>
 
 //## VakzData struct to hold information needed when rendering.
 typedef struct VakzData
                {
+                    struct android_app* state;
                     ANativeWindow* window;
                     int animating;
                     EGLDisplay display;
@@ -178,7 +180,7 @@ static void HandleCommand(struct android_app* app,
         {
             LogDebug("APP_CMD_TERM_WINDOW");
             // The window is being hidden or closed, clean it up.
-            Shutdown();
+            //Shutdown();
             break;
         }
         case APP_CMD_GAINED_FOCUS:
@@ -213,15 +215,41 @@ static void HandleCommand(struct android_app* app,
         case APP_CMD_STOP:
         {
             LogDebug("APP_CMD_STOP");
+            s_ucStatus |= VAKZ_QUIT;
             break;
         }
         case APP_CMD_DESTROY:
         {
             LogDebug("APP_CMD_DESTROY");
+            s_ucStatus |= VAKZ_QUIT;
             break;
         }
 
     }
+}
+
+static int HandleInput(struct android_app* app, AInputEvent* event)
+{
+    int nAction = 0;
+
+    if (AInputEvent_getType(event) == AINPUT_EVENT_TYPE_MOTION)
+    {
+        LogDebug("Input Event");
+        nAction = AMotionEvent_getAction(event);
+
+        if (nAction == AMOTION_EVENT_ACTION_DOWN)
+        {
+            SetTouch(0);
+            return 1;
+        }
+        else if (nAction == AMOTION_EVENT_ACTION_UP)
+        {
+            ClearTouch(0);
+            return 1;
+        }
+    }
+
+    return 0;
 }
 
 // Initializes the Vakz Engine
@@ -232,18 +260,19 @@ int Initialize(void* pData)
 
     struct android_app* pState = reinterpret_cast<struct android_app*>(pData);
 
-    // Assign that app state to the engine data struct.
+    // Assign the app state
+    vakzData.state = pState;
     vakzData.window = pState->window;
 
     // Set the command handler
     pState->onAppCmd = HandleCommand;
 
+    // Set the input handler
+    pState->onInputEvent = HandleInput;
 
     int ident;
     int events;
     struct android_poll_source* source;
-
-    LogWarning("****ISLAND APP STARTING****");
 
     // Keep processing events until the OpenGL context is created.
     while(nInitialized == 0)
@@ -251,7 +280,6 @@ int Initialize(void* pData)
         while ((ident=ALooper_pollAll(nAnimating ? 1 : -1, NULL, &events,
                 (void**)&source)) >= 0)
         {
-            LogWarning("****Processing Event****");
             // Process this event.
             if (source != NULL)
             {
@@ -303,7 +331,28 @@ void SetClearColor(float fRed,
 
 void Update()
 {
+    // Read all pending events.
+    int ident;
+    int events;
+    struct android_poll_source* source;
 
+    // If not animating, we will block forever waiting for events.
+    // If animating, we loop until all events are read, then continue
+    // to draw the next frame of animation.
+    while ((ident=ALooper_pollAll(0, NULL, &events,
+            (void**)&source)) >= 0) {
+
+        // Process this event.
+        if (source != NULL) {
+            source->process(vakzData.state, source);
+        }
+
+        // Check if we are exiting.
+        if (vakzData.state->destroyRequested != 0) {
+            Shutdown();
+            return;
+        }
+    }
 }
 
 unsigned char GetStatus()

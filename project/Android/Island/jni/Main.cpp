@@ -203,10 +203,13 @@ void android_main(struct android_app* state) {
         pCamera->SetPosition(fX, fY, fZ);
         pCamera->SetRotation(fRotX, fRotY, fRotZ);
 
-        fCube2Rot += fSeconds * ROT_SPEED;
-        pTestMonkey->SetRotation(0.0f, fCube2Rot, 0.0f);
-        pTestCube->SetRotation(fCube2Rot, 0.0f, 0.0f);
-        pTestCube2->SetRotation(-1.0f * fCube2Rot, 0.0f, 0.0f);
+        if (IsPointerDown())
+        {
+            fCube2Rot += fSeconds * ROT_SPEED;
+            pTestMonkey->SetRotation(0.0f, fCube2Rot, 0.0f);
+            pTestCube->SetRotation(fCube2Rot, 0.0f, 0.0f);
+            pTestCube2->SetRotation(-1.0f * fCube2Rot, 0.0f, 0.0f);
+        }
 
         timer.Start();
         Render();
@@ -222,6 +225,8 @@ void android_main(struct android_app* state) {
     delete pCubeMat;
     delete pTestScene;
 
-    printf("Exiting.\n");
+    Update();
+    LogWarning("Exiting");
+    exit(0);
 }
 
