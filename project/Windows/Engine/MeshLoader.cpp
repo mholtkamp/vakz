@@ -25,6 +25,15 @@ void MeshLoader::GetCounts(const char* pFileName,
 
     // Open the requested file.
     pFile = fopen(pFileName, "r");
+
+    // Check if file was found
+    if (pFile == 0)
+    {
+        LogError("OBJ file could not be loaded.");
+        return;
+    }
+
+    // Check the file size.
     fseek(pFile, 0, SEEK_END);
     nFileSize = ftell(pFile);
     fseek(pFile, 0, SEEK_SET);
@@ -33,14 +42,6 @@ void MeshLoader::GetCounts(const char* pFileName,
     if (nFileSize >= MeshLoader::MESH_LOADER_MAX_FILE_SIZE - 1)
     {
         LogError("OBJ is too large.");
-        fclose(pFile);
-        return;
-    }
-
-    // Check if file was found
-    if (pFile == 0)
-    {
-        LogError("OBJ file could not be loaded.");
         fclose(pFile);
         return;
     }

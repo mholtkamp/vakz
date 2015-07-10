@@ -68,6 +68,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Timer.cpp" />
     <ClCompile Include="VakzWin.cpp" />
     <ClCompile Include="DiffuseMaterial.cpp" />
     <ClCompile Include="DirectionalLight.cpp" />
@@ -87,7 +88,6 @@
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="VGL.cpp" />
     <ClCompile Include="VInput.cpp" />
-    <ClCompile Include="VTime.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimatedMesh.h" />
@@ -107,6 +107,7 @@
     <ClInclude Include="StaticMesh.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="ResourceLibrary.h" />
+    <ClInclude Include="Timer.h" />
     <ClInclude Include="VInput.h" />
     <ClInclude Include="VMath.h" />
     <ClInclude Include="Light.h" />
@@ -119,7 +120,6 @@
     <ClInclude Include="Shaders.h" />
     <ClInclude Include="Vakz.h" />
     <ClInclude Include="VGL.h" />
-    <ClInclude Include="VTime.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

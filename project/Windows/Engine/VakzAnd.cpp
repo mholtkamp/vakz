@@ -3,6 +3,7 @@
 #include "Vakz.h"
 #include <stdio.h>
 #include "VGL.h"
+#include "VInput.h"
 #include "Settings.h"
 #include "Log.h"
 #include "Scene.h"
@@ -27,7 +28,10 @@ static volatile int nInitialized = 0;
 static int nAnimating = 1;
 
 // Pointer to the scene object used during rendering.
-static Scene* s_pScene = 0;
+static           Scene* s_pScene    = 0;
+
+// Status bitfield
+static    unsigned char s_ucStatus  = 0;
 
 static const EGLint arContextAttribs[] =
 {
@@ -131,6 +135,28 @@ int InitializeGraphics(ANativeWindow* pWindow)
     return 0;
 }
 
+void Shutdown()
+{
+    if (vakzData.display != EGL_NO_DISPLAY) {
+        eglMakeCurrent(vakzData.display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
+        if (vakzData.context != EGL_NO_CONTEXT) {
+            eglDestroyContext(vakzData.display, vakzData.context);
+        }
+        if (vakzData.surface != EGL_NO_SURFACE) {
+            eglDestroySurface(vakzData.display, vakzData.surface);
+        }
+        eglTerminate(vakzData.display);
+    }
+
+    // Stop rendering
+    s_ucStatus &= (~VAKZ_ACTIVE);
+    s_ucStatus |= VAKZ_QUIT;
+
+    vakzData.display = EGL_NO_DISPLAY;
+    vakzData.context = EGL_NO_CONTEXT;
+    vakzData.surface = EGL_NO_SURFACE;
+}
+
 static void HandleCommand(struct android_app* app,
                           int cmd)
 {
@@ -138,17 +164,63 @@ static void HandleCommand(struct android_app* app,
     {
         case APP_CMD_INIT_WINDOW:
         {
-            LogWarning("**** APP_CMD_INIT_WINDOW ****");
+            LogDebug("APP_CMD_INIT_WINDOW");
             // The window is being shown, get it ready.
             if (app->window != NULL)
             {
-                LogWarning("**** app->window != null ****");
                 InitializeGraphics(app->window);
                 nInitialized = 1;
                 Render();
             }
             break;
         }
+        case APP_CMD_TERM_WINDOW:
+        {
+            LogDebug("APP_CMD_TERM_WINDOW");
+            // The window is being hidden or closed, clean it up.
+            Shutdown();
+            break;
+        }
+        case APP_CMD_GAINED_FOCUS:
+        {
+            LogDebug("APP_CMD_GAINED_FOCUS");
+            // Enable rendering again.
+            s_ucStatus |= VAKZ_ACTIVE;
+            break;
+        }
+        case APP_CMD_LOST_FOCUS:
+        {
+            LogDebug("APP_CMD_LOST_FOCUS");
+            // Disable rendering.
+            s_ucStatus &= (~VAKZ_ACTIVE);
+            break;
+        }
+        case APP_CMD_START:
+        {
+            LogDebug("APP_CMD_START");
+            break;
+        }
+        case APP_CMD_RESUME:
+        {
+            LogDebug("APP_CMD_RESUME");
+            break;
+        }
+        case APP_CMD_PAUSE:
+        {
+            LogDebug("APP_CMD_PAUSE");
+            break;
+        }
+        case APP_CMD_STOP:
+        {
+            LogDebug("APP_CMD_STOP");
+            break;
+        }
+        case APP_CMD_DESTROY:
+        {
+            LogDebug("APP_CMD_DESTROY");
+            break;
+        }
+
     }
 }
 
@@ -194,7 +266,8 @@ int Initialize(void* pData)
 // Render the current scene 
 int Render()
 {
-    if (vakzData.display != 0)
+    if (vakzData.display != 0 &&
+        (s_ucStatus & VAKZ_ACTIVE))
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -226,6 +299,16 @@ void SetClearColor(float fRed,
                    float fAlpha)
 {
     glClearColor(fRed, fGreen, fBlue, fAlpha);
+}
+
+void Update()
+{
+
+}
+
+unsigned char GetStatus()
+{
+    return s_ucStatus;
 }
 
 #endif

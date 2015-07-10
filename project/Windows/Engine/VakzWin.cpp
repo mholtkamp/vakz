@@ -19,10 +19,11 @@
 #include "Settings.h"
 #include "Log.h"
 #include "VInput.h"
-#include "VTime.h"
 
 // Pointer to the scene object used during rendering.
 static           Scene* s_pScene    = 0;
+
+// Status bit field
 static    unsigned char s_ucStatus  = 0;
 
 HDC            hDC = NULL;  // Private GDI Device Context
@@ -287,8 +288,6 @@ int Initialize(void* pData)
     WindowRect.right  = (long) g_nScreenWidth;         // Set Right Value To Requested Width
     WindowRect.top    = (long) 0;                       // Set Top Value To 0
     WindowRect.bottom = (long) g_nScreenHeight;       // Set Bottom Value To Requested Height
-
-    SetInitTime();
 
     hInstance = GetModuleHandle(NULL);              // Grab An Instance For Our Window
     wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;  // Redraw On Size, And Own DC For Window.

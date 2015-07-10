@@ -3,7 +3,7 @@
 #include "Quad.h"
 #include "VGL.h"
 #include "VInput.h"
-#include "VTime.h"
+#include "Timer.h"
 #include "Matrix.h"
 #include "ResourceLibrary.h"
 #include "DiffuseMaterial.h"
@@ -53,7 +53,7 @@ int main()
     pTestMonkey->SetMesh(pMonkeyMesh);
     pTestMonkey->SetMaterial(pCubeMat);
     pTestMonkey->SetPosition(0.0f, 0.0f, 0.0f);
-    
+
     Texture* pTestTexture = new Texture();
     pTestTexture->LoadBMP("E:/Projects/vakz/project/Windows/Island/trueform_base_color.bmp");
     pTestMonkey->SetTexture(pTestTexture);
@@ -69,9 +69,7 @@ int main()
     pTestScene->AddMatter(pTestMonkey);
     pTestScene->AddMatter(pTestCube2);
 
-    float fStart = GetTime();
-    float fEnd   = GetTime();
-    float fSeconds = 0.0;
+    float fSeconds = 0.0f;
     float fZ = 10.0f;
     float fY = 0.0f;
     float fX = 0.0f;
@@ -80,16 +78,18 @@ int main()
     float fRotZ = 0.0f;
     int nLock = 0;
     float fCube2Rot = 0.0f;
+    Timer timer;
+    timer.Start();
 
     while ((GetStatus() & VAKZ_QUIT) == 0)
     {
-        fEnd = GetTime();
+        timer.Stop();
 
-        fSeconds = fEnd - fStart;
+        fSeconds = timer.Time();
 
         // Update
         Update();
-        
+
         // Rotate camera
         if (IsKeyDown(VKEY_UP))
         {
@@ -108,7 +108,7 @@ int main()
             fRotY += fSeconds * ROT_SPEED;
         }
 
-        // Rotate 
+        // Rotate
         if (IsKeyDown(VKEY_W))
         {
             fZ -= fSeconds * MOVE_SPEED;
@@ -160,18 +160,20 @@ int main()
 
         pCamera->SetPosition(fX, fY, fZ);
         pCamera->SetRotation(fRotX, fRotY, fRotZ);
-        
+
         fCube2Rot += fSeconds * ROT_SPEED;
         pTestMonkey->SetRotation(0.0f, fCube2Rot, 0.0f);
+        pTestCube->SetRotation(fCube2Rot, 0.0f, 0.0f);
+        pTestCube2->SetRotation(-1.0f * fCube2Rot, 0.0f, 0.0f);
 
-        fStart = GetTime();
+        timer.Start();
         Render();
     }
-    
+
     delete pLibrary;
     delete pSun;
-    //delete pTestCube;
-    //delete pTestCube2;
+    delete pTestCube;
+    delete pTestCube2;
     delete pTestMonkey;
     delete pMonkeyMesh;
     delete pCamera;

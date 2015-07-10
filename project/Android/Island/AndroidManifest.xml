@@ -6,6 +6,7 @@
         android:versionName="1.0">
 
     <uses-feature android:glEsVersion="0x00030000" android:required="true" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     
     
     <!-- This is the platform API where NativeActivity was introduced. -->
