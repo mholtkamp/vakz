@@ -231,20 +231,50 @@ static void HandleCommand(struct android_app* app,
 static int HandleInput(struct android_app* app, AInputEvent* event)
 {
     int nAction = 0;
+    int nKey = 0;
 
     if (AInputEvent_getType(event) == AINPUT_EVENT_TYPE_MOTION)
     {
-        LogDebug("Input Event");
         nAction = AMotionEvent_getAction(event);
 
         if (nAction == AMOTION_EVENT_ACTION_DOWN)
         {
             SetTouch(0);
+            SetTouchPosition(static_cast<int>(AMotionEvent_getX(event,0)),
+                            (g_nScreenHeight - 1) - static_cast<int>(AMotionEvent_getY(event,0)),
+                             0);
             return 1;
         }
         else if (nAction == AMOTION_EVENT_ACTION_UP)
         {
             ClearTouch(0);
+            SetTouchPosition(static_cast<int>(AMotionEvent_getX(event,0)),
+                            (g_nScreenHeight - 1) - static_cast<int>(AMotionEvent_getY(event,0)),
+                             0);
+            return 1;
+        }
+        else if (nAction = AMOTION_EVENT_ACTION_MOVE)
+        {
+            SetTouchPosition(static_cast<int>(AMotionEvent_getX(event,0)),
+                            (g_nScreenHeight - 1) - static_cast<int>(AMotionEvent_getY(event,0)),
+                             0);
+            return 1;
+        }
+    }
+    else if (AInputEvent_getType(event) == AINPUT_EVENT_TYPE_KEY)
+    {
+        nAction = AKeyEvent_getAction(event);
+
+        if (nAction == AKEY_EVENT_ACTION_DOWN)
+        {
+            nKey = AKeyEvent_getKeyCode(event);
+            SetKey(nKey);
+            return 1;
+        }
+        else if (nAction == AKEY_EVENT_ACTION_UP)
+        {
+            nKey = AKeyEvent_getKeyCode(event);
+            ClearKey(nKey);
             return 1;
         }
     }

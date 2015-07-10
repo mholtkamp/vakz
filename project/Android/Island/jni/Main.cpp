@@ -209,6 +209,13 @@ void android_main(struct android_app* state) {
             pTestMonkey->SetRotation(0.0f, fCube2Rot, 0.0f);
             pTestCube->SetRotation(fCube2Rot, 0.0f, 0.0f);
             pTestCube2->SetRotation(-1.0f * fCube2Rot, 0.0f, 0.0f);
+
+            char arMsg[32] = {0};
+            int nX = 0;
+            int nY = 0;
+            GetPointerPosition(nX, nY);
+            sprintf(arMsg, "X: %d Y: %d", nX, nY);
+            LogDebug(arMsg);
         }
 
         timer.Start();
