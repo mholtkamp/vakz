@@ -138,39 +138,188 @@ enum VInputEnum
     VINPUT_MAX_TOUCHES = 16
 };
 
+//## **********************************************************************
+//## SetKey
+//## 
+//## Registers that a key is currently being pressed.
+//## Should only be called internally by the engine.
+//##
+//## Input:
+//##   nKey - keycode to set.
+//## **********************************************************************
 void SetKey(int nKey);
 
+//## **********************************************************************
+//## ClearKey
+//##
+//## Indicate that a key is no longer being pressed.
+//## Should only be called internally by the engine.
+//## 
+//## Input:
+//##   nKey - keycode to clear.
+//## **********************************************************************
 void ClearKey(int nKey);
 
+//## **********************************************************************
+//## IsKeyDown
+//##
+//## Used to tell if a key is currently being pressed.
+//##
+//## Input:
+//##   nKey - keycode to check.
+//##
+//## Returns:
+//##   int - '1' if key is down.
+//##         '0' if key is up.
+//## **********************************************************************
 int IsKeyDown(int nKey);
 
+//## **********************************************************************
+//## SetButton
+//##
+//## Registers that a mouse button is pressed down.
+//## Should only be called internally by the engine.
+//## 
+//## Input:
+//##   nButton - button code to register.
+//## **********************************************************************
 void SetButton(int nButton);
 
+//## **********************************************************************
+//## ClearButton
+//## 
+//## Indicate that a button is not being pressed.
+//## Should only be called internally by the engine.
+//## 
+//## Input:
+//##   nButton - button code to register.
+//## **********************************************************************
 void ClearButton(int nButton);
 
+//## **********************************************************************
+//## IsButtonDown
+//##
+//## Used to check if a mouse button is being held down.
+//##
+//## Input:
+//##   nButton - mouse button code to check (see above).
+//## 
+//## Returns:
+//##   int - '1' if mouse button is pressed down.
+//##       - '0' if mouse button is not pressed.
+//## **********************************************************************
 int IsButtonDown(int nButton);
 
+//## **********************************************************************
+//## SetTouch
+//##
+//## Indicate that a touch index is being used (finger touching screen).
+//## Should only be used internally by the engine.
+//## 
+//## Input:
+//##   nTouch - touch index.
+//## **********************************************************************
 void SetTouch(int nTouch);
 
+//## **********************************************************************
+//## ClearTouch
+//##
+//## Indicate that a touch index is not being used.
+//## Should only be used internally by the engine.
+//##
+//## Input:
+//##   nTouch - touch index.
+//## **********************************************************************
 void ClearTouch(int nTouch);
 
+//## **********************************************************************
+//## IsTouchDown
+//## 
+//## Used to check if a touch is down on screen.
+//## 
+//## Input:
+//##   nTouch - touch index to check.
+//##
+//## Returns:
+//##   int - '1' if touch index is down.
+//##         '0' otherwise.
+//## **********************************************************************
 int IsTouchDown(int nTouch);
 
+//## **********************************************************************
+//## IsPointerDown
+//## 
+//## Same as IsTouchDown(), but with the default touch index set to the 
+//## mouse index.
+//##
+//## Input:
+//##   nPointer - index of pointer (mouse or touch).
+//##
+//## Returns:
+//##   int - '1' if pointer is pressed down.
+//##       - '0' otherwise.
+//## **********************************************************************
 int IsPointerDown(int nPointer = 0);
 
+//## **********************************************************************
+//## GetMousePosition
+//## 
+//## Used to check the mouse position
+//## **********************************************************************
 void GetMousePosition(int& nMouseX,
                       int& nMouseY);
 
+//## **********************************************************************
+//## GetTouchPosition
+//## 
+//## Gets the position of a pointer in screen coordinates. Coordinate
+//## origin is at bottom left corner of the screen.
+//##
+//## Input:
+//##   nTouch - touch index to query.
+//##
+//## Output:
+//##   nTouchX - x coordinate of touch position.
+//##   nTouchY - y coordinate of touch position.
+//## **********************************************************************
 void GetTouchPosition(int& nTouchX,
-                      int& nTouchY);
+                      int& nTouchY,
+                      int  nTouch);
 
+//## **********************************************************************
+//## GetPointerPosition
+//## 
+//## Refer to GetTouchPosition. It is the same as that function except 
+//## the touch index is defaulted to 0 (mouse index).
+//## **********************************************************************
 void GetPointerPosition(int& nPointerX,
                         int& nPointerY,
                         int  nPointer = 0);
 
+//## **********************************************************************
+//## SetMousePosition
+//## 
+//## Register the current mouse location. Should only be called internally
+//## by the engine. Origin is at bottom left of screen.
+//##
+//## Input:
+//##   nMouseX - x coordinate of mouse position.
+//##   nMouseY - y coordinate of mouse position.
+//## **********************************************************************
 void SetMousePosition(int nMouseX,
                       int nMouseY);
 
+//## **********************************************************************
+//## SetTouchPosition
+//## 
+//## Register the current touch position. Should only be called internally
+//## by the engine. Origin as at the bottom left of the screen.
+//## 
+//## Input:
+//##   nTouchX - x coordinate of the touch position.
+//##   nTouchY - y cooridnate of the touch position.
+//##   nTouch  - touch index.
+//## **********************************************************************
 void SetTouchPosition(int nTouchX,
                       int nTouchY,
                       int nTouch = 0);

@@ -11,17 +11,36 @@ public :
         MESH_LOADER_MAX_FILE_SIZE = 1048576
     };
 
-    static unsigned int LoadOBJ(const char*   filename,
-                                unsigned int& faceNum);
+    //## **********************************************************************
+    //## LoadOBJ
+    //##
+    //## Loads an wavefront .obj file from disk and constructs an interleaved
+    //## vertex array. The vertex array array gets uploaded to the GPU into
+    //## a vertex buffer object.
+    //##
+    //## Input:
+    //##   pFileName - path to obj file to load.
+    //##
+    //## Output:
+    //##   nFaces - number of faces in mesh.
+    //## 
+    //## Returns:
+    //##   unsigned int - handle to the newly created vertex buffer object.
+    //## **********************************************************************
+    static unsigned int LoadOBJ(const char*   pFileName,
+                                unsigned int& nFaces);
 
 private:
 
+    //## Scans file for number of vertices/UVs/normals/faces
+    //## Needed to figure out how much heap memory to allocate.
     static void GetCounts(const char* pFileName,
                                  int& nNumVerts,
                                  int& nNumUVs,
                                  int& nNumNormals,
 	                             int& nNumFaces);
 
+    //## Generates an interleaved vertex buffer in system memory.
     static void GenerateVertexBuffer(int    nNumFaces,
                                      float* pVertices,
                                      float* pUVs,
@@ -29,6 +48,7 @@ private:
                                      int*   pFaces,
                                      float* pVB);
 
+    //## Buffer to hold file contents.
     static char s_arFileBuffer[MESH_LOADER_MAX_FILE_SIZE];
 };
 

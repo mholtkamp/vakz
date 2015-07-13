@@ -9,6 +9,9 @@ static int s_arTouches[VINPUT_MAX_TOUCHES] = {0};
 static int s_arPointerX[VINPUT_MAX_TOUCHES] = {0};
 static int s_arPointerY[VINPUT_MAX_TOUCHES] = {0};
 
+//*****************************************************************************
+// SetKey
+//*****************************************************************************
 void SetKey(int nKey)
 {
     if (nKey >= 0 &&
@@ -18,6 +21,9 @@ void SetKey(int nKey)
     }
 }
 
+//*****************************************************************************
+// ClearKey
+//*****************************************************************************
 void ClearKey(int nKey)
 {
     if (nKey >= 0 &&
@@ -27,6 +33,9 @@ void ClearKey(int nKey)
     }
 }
 
+//*****************************************************************************
+// IsKeyDown
+//*****************************************************************************
 int IsKeyDown(int nKey)
 {
     if (nKey >= 0 &&
@@ -41,6 +50,9 @@ int IsKeyDown(int nKey)
     }
 }
 
+//*****************************************************************************
+// SetButton
+//*****************************************************************************
 void SetButton(int nButton)
 {
     if (nButton >= 0 &&
@@ -50,6 +62,9 @@ void SetButton(int nButton)
     }
 }
 
+//*****************************************************************************
+// ClearButton
+//*****************************************************************************
 void ClearButton(int nButton)
 {
     if (nButton >= 0 &&
@@ -59,6 +74,9 @@ void ClearButton(int nButton)
     }
 }
 
+//*****************************************************************************
+// IsButtonDown
+//*****************************************************************************
 int IsButtonDown(int nButton)
 {
     if (nButton >= 0 &&
@@ -73,6 +91,9 @@ int IsButtonDown(int nButton)
     }
 }
 
+//*****************************************************************************
+// SetTouch
+//*****************************************************************************
 void SetTouch(int nTouch)
 {
     if (nTouch >= 0 &&
@@ -82,6 +103,9 @@ void SetTouch(int nTouch)
     }
 }
 
+//*****************************************************************************
+// ClearTouch
+//*****************************************************************************
 void ClearTouch(int nTouch)
 {
     if (nTouch >= 0 &&
@@ -91,6 +115,9 @@ void ClearTouch(int nTouch)
     }
 }
 
+//*****************************************************************************
+// IsTouchDown
+//*****************************************************************************
 int IsTouchDown(int nTouch)
 {
     if (nTouch >= 0 &&
@@ -105,6 +132,9 @@ int IsTouchDown(int nTouch)
     }
 }
 
+//*****************************************************************************
+// IsPointerDown
+//*****************************************************************************
 int IsPointerDown(int nPointer)
 {
     if (nPointer >= 0 &&
@@ -129,6 +159,9 @@ int IsPointerDown(int nPointer)
     }
 }
 
+//*****************************************************************************
+// GetMousePosition
+//*****************************************************************************
 void GetMousePosition(int& nMouseX, int& nMouseY)
 {
     // First pointer location is for mouse.
@@ -137,6 +170,9 @@ void GetMousePosition(int& nMouseX, int& nMouseY)
 }
 
 
+//*****************************************************************************
+// GetTouchPosition
+//*****************************************************************************
 void GetTouchPosition(int& nTouchX,
                       int& nTouchY,
                       int nTouch)
@@ -154,6 +190,9 @@ void GetTouchPosition(int& nTouchX,
     }
 }
 
+//*****************************************************************************
+// GetPointerPosition
+//*****************************************************************************
 void GetPointerPosition(int& nPointerX,
                         int& nPointerY,
                         int nPointer)
@@ -163,6 +202,9 @@ void GetPointerPosition(int& nPointerX,
                      nPointer);
 }
 
+//*****************************************************************************
+// SetMousePosition
+//*****************************************************************************
 void SetMousePosition(int nMouseX, int nMouseY)
 {
     // First index in pointer array is mouse position.
@@ -170,6 +212,9 @@ void SetMousePosition(int nMouseX, int nMouseY)
     s_arPointerY[0] = nMouseY;
 }
 
+//*****************************************************************************
+// SetTouchPosition
+//*****************************************************************************
 void SetTouchPosition(int nTouchX,
                       int nTouchY,
                       int nTouch)
