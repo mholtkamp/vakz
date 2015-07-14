@@ -8,7 +8,8 @@ public :
 
     enum MeshLoaderEnum
     {
-        MESH_LOADER_MAX_FILE_SIZE = 1048576
+        MESH_LOADER_MAX_FILE_SIZE = 1048576,
+        MESH_LOADER__ANIMATION_NAME_SIZE_WARNING = 32
     };
 
     //## **********************************************************************
@@ -31,8 +32,12 @@ public :
                                 unsigned int& nFaces);
 
     static void LoadAMF(const char*     pFileName,
-                        unsigned int ** pFaces,
-                        unsigned int ** pVBOs);
+                        char***         pAnimationNames,
+                        unsigned int*   pAnimationCount,
+                        unsigned int**  pKeyFrameCounts,
+                        unsigned int*** pKeyFrameStarts,
+                        unsigned int*** pFaces,
+                        unsigned int*** pVBO);
 
 private:
 

@@ -305,13 +305,20 @@ unsigned int MeshLoader::LoadOBJ(const char*   pFileName,
 	return unVBO;
 }
 
-void LoadAMF(const char*    pFileName,
-             unsigned int** pFaces,
-             unsigned int** pVBO)
+void MeshLoader::LoadAMF(const char*     pFileName,
+                         char***         pAnimationNames,
+                         unsigned int*   pAnimationCount,
+                         unsigned int**  pKeyFrameCounts,
+                         unsigned int*** pKeyFrameStarts,
+                         unsigned int*** pFaces,
+                         unsigned int*** pVBO)
 {
-    FILE* pFile;
-    int nFileSize;
-    char* pBuffer;
+    int   i              = 0;
+    int   j              = 0;
+    FILE* pFile          = 0;
+    char* pBuffer        = 0;
+    int   nFileSize      = 0;
+    int   nNameLength    = 0;
 
     // Open the AMF file in read mode.
     pFile = fopen(pFileName, "r");
@@ -342,8 +349,65 @@ void LoadAMF(const char*    pFileName,
     fread(pBuffer, nFileSize, 1, pFile);
     fclose(pFile);
 
-    // Parse file
+    // Begin parsing file
+    // Grab animation count
     pBuffer = strstr(pBuffer, "animationcount");
     pBuffer += sizeof("animationcount");
+    *pAnimationCount = atoi(pBuffer);
+    pBuffer = strchr(pBuffer, '\n');
+
+    // Based on the animation count, allocate the name array
+    // and the keyframe count array.
+    *pAnimationNames = new char*[*pAnimationCount];
+    *pKeyFrameCounts = new unsigned int[*pAnimationCount];
+    *pKeyFrameStarts = new unsigned int*[*pAnimationCount];
+    *pVBO            = new unsigned int*[*pAnimationCount];
+    *pFaces          = new unsigned int*[*pAnimationCount];
     
+
+    // Loop through animations
+    for (i = 0; i < *pAnimationCount; i++)
+    {
+        // Find the next animation section
+        strstr(pBuffer, "animation ");
+        pBuffer += sizeof("animation ");
+        pBuffer = strtok(pBuffer, " \n");
+
+        // Allocate the new string
+        nNameLength = strlen(pBuffer);
+        if (nNameLength > MESH_LOADER__ANIMATION_NAME_SIZE_WARNING)
+        {
+            // Log a warning to hint at incorrect file parsing.
+            LogWarning("Animation name is very long in LoadAMF().");
+        }
+        (*pAnimationNames)[i] = new char[nNameLength + 1];
+        memset((*pAnimationNames)[i], 0, nNameLength + 1);
+        strcpy((*pAnimationNames)[i], pBuffer);
+
+        // Find the framecount for this animation
+        pBuffer = strstr(pBuffer, "keyframecount ");
+        pBuffer += sizeof("keyframecount ");
+        (*pKeyFrameCounts)[i] = atoi(pBuffer);
+
+        // Now that we know how many keyframes are in the current animation
+        // we can allocate the arrays for VBOs, Faces, and KeyFrameStarts
+        (*pKeyFrameStarts)[i] = new unsigned int[(*pKeyFrameCounts)[i]];
+        (*pFaces)[i]          = new unsigned int[(*pKeyFrameCounts)[i]];
+        (*pVBO)[i]            = new unsigned int[(*pKeyFrameCounts)[i]];
+
+        // Begin looping through each of the keyframes
+        for (j = 0; j < (*pKeyFrameCounts)[i]; j++)
+        {
+            pBuffer = strstr(pBuffer, "keyframe ");
+            pBuffer += sizeof ("keyframe ");
+            strtok(pBuffer, " ");
+            (*pKeyFrameStarts)[i][j] = atoi(pBuffer);
+
+            // Now point to the file name
+            pBuffer = strtok(0, " \n");
+
+            // Read the individual OBJ file
+            (*pVBO)[i][j] = LoadOBJ(pBuffer, (*pFaces)[i][j]);
+        }
+    }
 }
