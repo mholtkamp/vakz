@@ -123,7 +123,7 @@ void Texture::LoadBMP(const char* pFileName)
         }
         else if (sBPP == 32)
         {
-            m_nFormat == TEXTURE_BMP_RGBA;
+            m_nFormat = TEXTURE_BMP_RGBA;
             LogError("32 bit BMPs not supported yet.");
             return;
         }

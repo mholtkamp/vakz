@@ -304,3 +304,46 @@ unsigned int MeshLoader::LoadOBJ(const char*   pFileName,
 
 	return unVBO;
 }
+
+void LoadAMF(const char*    pFileName,
+             unsigned int** pFaces,
+             unsigned int** pVBO)
+{
+    FILE* pFile;
+    int nFileSize;
+    char* pBuffer;
+
+    // Open the AMF file in read mode.
+    pFile = fopen(pFileName, "r");
+    
+    // If file wasn't found, report error.
+    if (pFile == 0)
+    {
+        LogError("Failed to load AMF file.");
+        return;
+    }
+
+    // Check file size
+    fseek(pFile, 0, SEEK_END);
+    nFileSize = ftell(pFile);
+    fseek(pFile, 0, SEEK_SET);
+
+    // If file is too big, bail.
+    if (nFileSize >= MeshLoader::MESH_LOADER_MAX_FILE_SIZE - 1)
+    {
+        LogError("AMF file is too large.");
+        fclose(pFile);
+        return;
+    }
+
+    // Allocate temporary buffer to hold AMF file
+    pBuffer = new char[nFileSize + 1];
+    memset(pBuffer, 0, nFileSize + 1);
+    fread(pBuffer, nFileSize, 1, pFile);
+    fclose(pFile);
+
+    // Parse file
+    pBuffer = strstr(pBuffer, "animationcount");
+    pBuffer += sizeof("animationcount");
+    
+}

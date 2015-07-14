@@ -30,6 +30,10 @@ public :
     static unsigned int LoadOBJ(const char*   pFileName,
                                 unsigned int& nFaces);
 
+    static void LoadAMF(const char*     pFileName,
+                        unsigned int ** pFaces,
+                        unsigned int ** pVBOs);
+
 private:
 
     //## Scans file for number of vertices/UVs/normals/faces
