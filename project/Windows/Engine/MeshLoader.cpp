@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#define FULL_PATH_BUFFER_SIZE 256
+
 char MeshLoader::s_arFileBuffer[MESH_LOADER_MAX_FILE_SIZE];
 
 //*****************************************************************************
@@ -313,12 +315,16 @@ void MeshLoader::LoadAMF(const char*     pFileName,
                          unsigned int*** pFaces,
                          unsigned int*** pVBO)
 {
-    int   i              = 0;
-    int   j              = 0;
-    FILE* pFile          = 0;
-    char* pBuffer        = 0;
-    int   nFileSize      = 0;
-    int   nNameLength    = 0;
+    int   i                = 0;
+    int   j                = 0;
+    FILE* pFile            = 0;
+    char* pBuffer          = 0;
+    char* pOrigBuffer      = 0;
+    const char* pTemp      = 0;
+    int   nFileSize        = 0;
+    int   nNameLength      = 0;
+
+    char  arFullPath[FULL_PATH_BUFFER_SIZE]  = {0};
 
     // Open the AMF file in read mode.
     pFile = fopen(pFileName, "r");
@@ -335,7 +341,7 @@ void MeshLoader::LoadAMF(const char*     pFileName,
     nFileSize = ftell(pFile);
     fseek(pFile, 0, SEEK_SET);
 
-    // If file is too big, bail.
+    // If file is too big, bonk.
     if (nFileSize >= MeshLoader::MESH_LOADER_MAX_FILE_SIZE - 1)
     {
         LogError("AMF file is too large.");
@@ -344,7 +350,8 @@ void MeshLoader::LoadAMF(const char*     pFileName,
     }
 
     // Allocate temporary buffer to hold AMF file
-    pBuffer = new char[nFileSize + 1];
+    pOrigBuffer = new char[nFileSize + 1];
+    pBuffer = pOrigBuffer;
     memset(pBuffer, 0, nFileSize + 1);
     fread(pBuffer, nFileSize, 1, pFile);
     fclose(pFile);
@@ -364,7 +371,6 @@ void MeshLoader::LoadAMF(const char*     pFileName,
     *pVBO            = new unsigned int*[*pAnimationCount];
     *pFaces          = new unsigned int*[*pAnimationCount];
     
-
     // Loop through animations
     for (i = 0; i < *pAnimationCount; i++)
     {
@@ -406,8 +412,36 @@ void MeshLoader::LoadAMF(const char*     pFileName,
             // Now point to the file name
             pBuffer = strtok(0, " \n");
 
+            // Use the local buffer to construct the full
+            // file paths, as paths in the AMF file should be relative
+            // to the current directory.
+            memset(arFullPath, 0, FULL_PATH_BUFFER_SIZE);
+
+            pTemp = pFileName;
+            while(1)
+            {
+                if(strchr(pTemp, '/') != 0)
+                {
+                    pTemp = strchr(pTemp, '/') + 1;
+                }
+                else
+                {
+                    memcpy(arFullPath, pFileName, pTemp - pFileName);
+                    break;
+                }
+            }
+
+            // Now concatenate the OBJ file name onto end
+            strcat(arFullPath, pBuffer);
+
             // Read the individual OBJ file
-            (*pVBO)[i][j] = LoadOBJ(pBuffer, (*pFaces)[i][j]);
+            (*pVBO)[i][j] = LoadOBJ(arFullPath, (*pFaces)[i][j]);
         }
     }
+
+    // Delete heap memory that this function is responsible for.
+    // The heap memory allocated for the pointers passed into the 
+    // function will be deleted at a higher level (ie. AnimatedMesh).
+    delete [] pOrigBuffer;
+    pOrigBuffer = 0;
 }

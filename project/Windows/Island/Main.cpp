@@ -42,17 +42,19 @@ int main()
     pTestCube->SetMaterial(pCubeMat2);
     pTestCube->SetPosition(5.0f, 0.0f, 0.0f);
 
-    Matter* pTestCube2 = new Matter();
-    pTestCube2->SetMesh(reinterpret_cast<StaticMesh*>(pLibrary->GetPrimitive(PRIMITIVE_CUBE)));
-    pTestCube2->SetMaterial(pCubeMat2);
-    pTestCube2->SetPosition(-5.0f, 0.0f, 0.0f);
-
     Matter* pTestMonkey = new Matter();
     StaticMesh* pMonkeyMesh = new StaticMesh();
     pMonkeyMesh->Load("E:/Projects/vakz/project/Windows/Island/druid.obj");
     pTestMonkey->SetMesh(pMonkeyMesh);
     pTestMonkey->SetMaterial(pCubeMat);
     pTestMonkey->SetPosition(0.0f, 0.0f, 0.0f);
+
+    Matter* pTestAnim = new Matter();
+    AnimatedMesh* pAnimMesh = new AnimatedMesh();
+    pAnimMesh->Load("E:\Projects\vakz\project\Windows\Island\Druid_AM\druid.amf");
+    pTestAnim->SetMesh(pAnimMesh);
+    pTestAnim->SetMaterial(pCubeMat);
+    pTestMonkey->SetPosition(-3.5f, 0.0f, 0.0f);
 
     Texture* pTestTexture = new Texture();
     pTestTexture->LoadBMP("E:/Projects/vakz/project/Windows/Island/trueform_base_color.bmp");
@@ -67,7 +69,7 @@ int main()
     // Add the test cube to the scene
     pTestScene->AddMatter(pTestCube);
     pTestScene->AddMatter(pTestMonkey);
-    pTestScene->AddMatter(pTestCube2);
+    pTestScene->AddMatter(pTestAnim);
 
     float fSeconds = 0.0f;
     float fZ = 10.0f;
@@ -166,7 +168,7 @@ int main()
             fCube2Rot += fSeconds * ROT_SPEED;
             pTestMonkey->SetRotation(0.0f, fCube2Rot, 0.0f);
             pTestCube->SetRotation(fCube2Rot, 0.0f, 0.0f);
-            pTestCube2->SetRotation(-1.0f * fCube2Rot, 0.0f, 0.0f);
+            pTestAnim->SetRotation(-1.0f * fCube2Rot, 0.0f, 0.0f);
         }
 
         timer.Start();
@@ -176,7 +178,7 @@ int main()
     delete pLibrary;
     delete pSun;
     delete pTestCube;
-    delete pTestCube2;
+    delete pTestAnim;
     delete pTestMonkey;
     delete pMonkeyMesh;
     delete pCamera;
