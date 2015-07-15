@@ -52,6 +52,9 @@ int main()
     Matter* pTestAnim = new Matter();
     AnimatedMesh* pAnimMesh = new AnimatedMesh();
     pAnimMesh->Load("E:/Projects/vakz/project/Windows/Island/Druid_AM/druid.amf");
+    pAnimMesh->SetLoopMode(AnimatedMesh::LOOP_NONE);
+    pAnimMesh->SetAnimation("No");
+    pAnimMesh->StartAnimation();
     pTestAnim->SetMesh(pAnimMesh);
     pTestAnim->SetMaterial(pCubeMat);
     pTestMonkey->SetPosition(-3.5f, 0.0f, 0.0f);
@@ -69,7 +72,7 @@ int main()
     // Add the test cube to the scene
     pTestScene->AddMatter(pTestCube);
     pTestScene->AddMatter(pTestMonkey);
-    //pTestScene->AddMatter(pTestAnim);
+    pTestScene->AddMatter(pTestAnim);
 
     float fSeconds = 0.0f;
     float fZ = 10.0f;
@@ -80,6 +83,7 @@ int main()
     float fRotZ = 0.0f;
     int nLock = 0;
     float fCube2Rot = 0.0f;
+    float fAnimSpeed = 1.0f;
     Timer timer;
     timer.Start();
 
@@ -149,15 +153,48 @@ int main()
         }
         if (IsButtonDown(VBUTTON_MIDDLE))
         {
-            printf("Middle Mouse Down\n");
+            pAnimMesh->SetLoopMode(AnimatedMesh::LOOP_PING_PONG);
+            pAnimMesh->ResetAnimation();
         }
         if (IsButtonDown(VBUTTON_X1))
         {
-            printf("X1 Mouse Down\n");
+            pAnimMesh->SetLoopMode(AnimatedMesh::LOOP_NONE);
+            pAnimMesh->ResetAnimation();
         }
         if (IsButtonDown(VBUTTON_X2))
         {
-            printf("X2 Mouse Down\n");
+            pAnimMesh->SetLoopMode(AnimatedMesh::LOOP_CYCLE);
+            pAnimMesh->ResetAnimation();
+        }
+
+        if (IsKeyDown(VKEY_U))
+        {
+            fAnimSpeed -= 0.005f;
+            pAnimMesh->SetSpeed(fAnimSpeed);
+        }
+
+        if (IsKeyDown(VKEY_I))
+        {
+            fAnimSpeed += 0.005f;
+            pAnimMesh->SetSpeed(fAnimSpeed);
+        }
+
+        if (IsKeyDown(VKEY_O))
+        {
+            fAnimSpeed = 1.0f;
+            pAnimMesh->SetSpeed(fAnimSpeed);
+        }
+
+        if (IsKeyDown(VKEY_1))
+        {
+            pAnimMesh->SetAnimation("Wave");
+            pAnimMesh->ResetAnimation();
+        }
+
+        if (IsKeyDown(VKEY_2))
+        {
+            pAnimMesh->SetAnimation("No");
+            pAnimMesh->ResetAnimation();
         }
 
         pCamera->SetPosition(fX, fY, fZ);

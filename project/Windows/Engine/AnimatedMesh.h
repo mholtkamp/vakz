@@ -28,6 +28,8 @@ public:
 
     void ResetAnimation();
 
+    void SetSpeed(float fSpeed);
+
     enum AnimatedMeshEnum
     {
         LOOP_NONE      = 0,
@@ -68,6 +70,8 @@ private:
     int m_nPlay;
 
     int m_nDirection;
+
+    float m_fSpeed;
 
     Timer m_timerFrame;
 };

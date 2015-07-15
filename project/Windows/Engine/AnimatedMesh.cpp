@@ -20,6 +20,7 @@ AnimatedMesh::AnimatedMesh()
     m_nFramesPerSecond      = DEFUALT_FPS;
     m_nPlay                 = 0;
     m_nDirection            = DIRECTION_FORWARD;
+    m_fSpeed                = 1.0f;
 }
 
 AnimatedMesh::~AnimatedMesh()
@@ -134,6 +135,9 @@ void AnimatedMesh::SetRenderState(void* pScene,
         // Get the time since last render
         m_timerFrame.Stop();
         fElapsedTime = m_timerFrame.Time();
+        
+        // Reset the timer to record next frame's time
+        m_timerFrame.Start();
 
         if (m_nLoopMode == LOOP_NONE)
         {
@@ -141,14 +145,16 @@ void AnimatedMesh::SetRenderState(void* pScene,
             {
                 // If the animation hasn't ended, increase the frame count.
                 m_fCurrentFrame += fElapsedTime * 
-                                   static_cast<float>(m_nFramesPerSecond);
+                                   static_cast<float>(m_nFramesPerSecond) * 
+                                   m_fSpeed;
             }
         }
         else if (m_nLoopMode == LOOP_CYCLE)
         {
             // Increase the framecount
             m_fCurrentFrame += fElapsedTime * 
-                               static_cast<float>(m_nFramesPerSecond);
+                               static_cast<float>(m_nFramesPerSecond) * 
+                               m_fSpeed;
             
             // If the current frame is higher than the last keyframe, then
             // subtract the number of frames in the animation to reset animation.
@@ -163,7 +169,8 @@ void AnimatedMesh::SetRenderState(void* pScene,
             {
                 // Increase the framecount
                 m_fCurrentFrame += fElapsedTime * 
-                                   static_cast<float>(m_nFramesPerSecond);
+                                   static_cast<float>(m_nFramesPerSecond) *
+                                   m_fSpeed;
 
                 // If the current frame is higher than the last keyframe, then
                 // reverse the direction.
@@ -176,7 +183,8 @@ void AnimatedMesh::SetRenderState(void* pScene,
             {
                 // Decrease the framecount
                 m_fCurrentFrame -= fElapsedTime *
-                                   static_cast<float>(m_nFramesPerSecond);
+                                   static_cast<float>(m_nFramesPerSecond) *
+                                   m_fSpeed;
 
                 // If the current frame is less than than 0, then 
                 // set the direction to forward
@@ -293,6 +301,9 @@ void AnimatedMesh::Load(const char* pFileName)
                             &m_arKeyFrameStarts,
                             &m_arFaces,
                             &m_arVBO);
+
+        // Every face has 3 vertices.
+        m_nVertexCount = m_arFaces[0][0] * 3;
     }
 }
 
@@ -348,4 +359,9 @@ void AnimatedMesh::StopAnimation()
 void AnimatedMesh::ResetAnimation()
 {
     m_fCurrentFrame = 0.0f;
+}
+
+void AnimatedMesh::SetSpeed(float fSpeed)
+{
+    m_fSpeed = fSpeed;
 }

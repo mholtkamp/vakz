@@ -114,4 +114,34 @@ GLSL_VERSION_STRING
 "   oFragColor.a   = lObjectColor.a;\n"
 "}\n";
 
+
+//## **************************************************************************
+//## AnimatedMesh Vertex Shader
+//## **************************************************************************
+static const char* pAnimatedMeshVertexShader = 
+GLSL_VERSION_STRING
+"in vec3 aPosition1;\n"
+"in vec2 aTexCoord1;\n"
+"in vec3 aNormal1;\n"
+"in vec3 aPosition2;\n"
+"in vec2 aTexCoord2;\n"
+"in vec3 aNormal2;\n"
+"out vec2 vTexCoord;\n"
+"out vec3 vNormal;\n"
+"uniform mat4 uMatrixMVP;\n"
+"uniform mat4 uMatrixM;\n"
+"uniform float uMix;\n"
+
+"void main()\n"
+"{\n"
+"   float lMix = clamp(uMix, 0.0, 1.0);\n"
+"   vec3 lPosition = mix(aPosition1, aPosition2, lMix);\n"
+"   vec2 lTexCoord = mix(aTexCoord1, aTexCoord2, lMix);\n"
+"   vec3 lNormal   = mix(aNormal1,   aNormal2,   lMix);\n"
+"   vTexCoord = lTexCoord;\n"
+//"   vNormal   = (uMatrixM * vec4(aNormal, 0.0)).xyz;\n"
+"   vNormal   = (transpose(inverse(uMatrixM)) * vec4(lNormal, 0.0)).xyz;\n" 
+"   gl_Position = uMatrixMVP * vec4(lPosition, 1.0);\n"
+"}\n";
+
 #endif

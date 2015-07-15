@@ -773,6 +773,15 @@ int LoadShaders()
                                pDiffuseFragmentShader);
     }
 
+    // Animated Diffuse Shader
+    if (nStatus != 0)
+    {
+        LogDebug("Building AnimatedMesh Diffuse Shader");
+        nStatus = BuildProgram(ANIMATED_DIFFUSE_PROGRAM,
+                               pAnimatedMeshVertexShader,
+                               pDiffuseFragmentShader);
+    }
+
     return nStatus;
 }
 
