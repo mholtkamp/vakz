@@ -67,6 +67,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AnimatedMesh.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="VakzWin.cpp" />

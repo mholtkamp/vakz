@@ -1,4 +1,5 @@
 animationcount 2
+framespersecond 60
 
 animation Wave
 keyframecount 5

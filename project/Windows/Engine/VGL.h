@@ -7,7 +7,8 @@ enum ProgramEnum
 {
     QUAD_PROGRAM                    = 0,
     STATIC_DIFFUSE_PROGRAM          = 1,
-    MAX_PROGRAMS                    = 2
+    ANIMATED_DIFFUSE_PROGRAM        = 2,
+    MAX_PROGRAMS                    = 3
 };
 
 //## **************************************************************************
@@ -35,7 +36,7 @@ int LoadVGL();
 int LoadShaders();
 
 //## **************************************************************************
-//## LoadShaders
+//## GetShaderProgram
 //##
 //## Based on the given shader index, returns the corresponding shader program
 //## handle. This is needed when using a program or retrieving variable
@@ -49,6 +50,21 @@ int LoadShaders();
 //## **************************************************************************
 unsigned int GetShaderProgram(int nIndex);
 
+//## **************************************************************************
+//## GetMatterShaderProgram
+//##
+//## Based on the given mesh type and material type, a shader program is 
+//## returned.
+//##
+//## Input:
+//##   nMeshType     - the mesh type (see MeshType enum in Mesh.h)
+//##   nMaterialType - the material type (see MaterialType enum in Material.h) 
+//##
+//## Returns:
+//##   unsigned int - the resulting shader program handle
+//## **************************************************************************
+unsigned int GetMatterShaderProgram(int nMeshType,
+                                    int nMaterialType);
 
 #if defined(ANDROID)
 #include <GLES3/gl3.h>

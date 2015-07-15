@@ -33,9 +33,10 @@ public :
 
     static void LoadAMF(const char*     pFileName,
                         char***         pAnimationNames,
-                        unsigned int*   pAnimationCount,
-                        unsigned int**  pKeyFrameCounts,
-                        unsigned int*** pKeyFrameStarts,
+                        int*            pAnimationCount,
+                        int*            pFramesPerSecond,
+                        int**           pKeyFrameCounts,
+                        int***          pKeyFrameStarts,
                         unsigned int*** pFaces,
                         unsigned int*** pVBO);
 

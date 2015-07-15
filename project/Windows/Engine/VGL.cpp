@@ -1,4 +1,6 @@
 #include "VGL.h"
+#include "Mesh.h"
+#include "Material.h"
 #include "Log.h"
 #include <string.h>
 
@@ -788,4 +790,25 @@ unsigned int GetShaderProgram(int nIndex)
     }
 
     return hProg;
+}
+
+//*****************************************************************************
+// GetMatterShaderProgram
+//*****************************************************************************
+unsigned int GetMatterShaderProgram(int nMeshType,
+                                    int nMaterialType)
+{
+    if (nMeshType     == MESH_STATIC &&
+        nMaterialType == MATERIAL_DIFFUSE)
+    {
+        return s_arPrograms[STATIC_DIFFUSE_PROGRAM];
+    }
+
+    if (nMeshType     == MESH_ANIMATED &&
+        nMaterialType == MATERIAL_DIFFUSE)
+    {
+        return s_arPrograms[ANIMATED_DIFFUSE_PROGRAM];
+    }
+
+    return 0;
 }

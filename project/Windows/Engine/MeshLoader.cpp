@@ -309,9 +309,10 @@ unsigned int MeshLoader::LoadOBJ(const char*   pFileName,
 
 void MeshLoader::LoadAMF(const char*     pFileName,
                          char***         pAnimationNames,
-                         unsigned int*   pAnimationCount,
-                         unsigned int**  pKeyFrameCounts,
-                         unsigned int*** pKeyFrameStarts,
+                         int*            pAnimationCount,
+                         int*            pFramesPerSecond,
+                         int**           pKeyFrameCounts,
+                         int***          pKeyFrameStarts,
                          unsigned int*** pFaces,
                          unsigned int*** pVBO)
 {
@@ -358,25 +359,31 @@ void MeshLoader::LoadAMF(const char*     pFileName,
 
     // Begin parsing file
     // Grab animation count
-    pBuffer = strstr(pBuffer, "animationcount");
-    pBuffer += sizeof("animationcount");
+    pBuffer = strstr(pBuffer, "animationcount ");
+    pBuffer += strlen("animationcount ");
     *pAnimationCount = atoi(pBuffer);
     pBuffer = strchr(pBuffer, '\n');
 
     // Based on the animation count, allocate the name array
     // and the keyframe count array.
     *pAnimationNames = new char*[*pAnimationCount];
-    *pKeyFrameCounts = new unsigned int[*pAnimationCount];
-    *pKeyFrameStarts = new unsigned int*[*pAnimationCount];
+    *pKeyFrameCounts = new int[*pAnimationCount];
+    *pKeyFrameStarts = new int*[*pAnimationCount];
     *pVBO            = new unsigned int*[*pAnimationCount];
     *pFaces          = new unsigned int*[*pAnimationCount];
+
+    // Next read the framerate
+    pBuffer = strstr(pBuffer, "framespersecond ");
+    pBuffer += strlen("framespersecond ");
+    *pFramesPerSecond = atoi(pBuffer);
+    pBuffer = strchr(pBuffer, '\n');
     
     // Loop through animations
     for (i = 0; i < *pAnimationCount; i++)
     {
         // Find the next animation section
-        strstr(pBuffer, "animation ");
-        pBuffer += sizeof("animation ");
+        pBuffer = strstr(pBuffer, "animation ");
+        pBuffer += strlen("animation ");
         pBuffer = strtok(pBuffer, " \n");
 
         // Allocate the new string
@@ -389,15 +396,16 @@ void MeshLoader::LoadAMF(const char*     pFileName,
         (*pAnimationNames)[i] = new char[nNameLength + 1];
         memset((*pAnimationNames)[i], 0, nNameLength + 1);
         strcpy((*pAnimationNames)[i], pBuffer);
+        pBuffer += strlen(pBuffer) + 1;
 
         // Find the framecount for this animation
         pBuffer = strstr(pBuffer, "keyframecount ");
-        pBuffer += sizeof("keyframecount ");
+        pBuffer += strlen("keyframecount ");
         (*pKeyFrameCounts)[i] = atoi(pBuffer);
 
         // Now that we know how many keyframes are in the current animation
         // we can allocate the arrays for VBOs, Faces, and KeyFrameStarts
-        (*pKeyFrameStarts)[i] = new unsigned int[(*pKeyFrameCounts)[i]];
+        (*pKeyFrameStarts)[i] = new int[(*pKeyFrameCounts)[i]];
         (*pFaces)[i]          = new unsigned int[(*pKeyFrameCounts)[i]];
         (*pVBO)[i]            = new unsigned int[(*pKeyFrameCounts)[i]];
 
@@ -405,7 +413,7 @@ void MeshLoader::LoadAMF(const char*     pFileName,
         for (j = 0; j < (*pKeyFrameCounts)[i]; j++)
         {
             pBuffer = strstr(pBuffer, "keyframe ");
-            pBuffer += sizeof ("keyframe ");
+            pBuffer += strlen("keyframe ");
             strtok(pBuffer, " ");
             (*pKeyFrameStarts)[i][j] = atoi(pBuffer);
 
@@ -436,6 +444,9 @@ void MeshLoader::LoadAMF(const char*     pFileName,
 
             // Read the individual OBJ file
             (*pVBO)[i][j] = LoadOBJ(arFullPath, (*pFaces)[i][j]);
+
+            // Increment pointer past the token'd string
+            pBuffer += strlen(pBuffer) + 1;
         }
     }
 

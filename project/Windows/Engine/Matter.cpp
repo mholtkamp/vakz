@@ -109,8 +109,8 @@ void Matter::Render(void* pScene)
         pCamera       != 0)
     {
         // Get the proper shader based on mesh type and material type
-        // GetShader(MESH_STATIC, m_pMaterial->GetType());
-        hProg = GetShaderProgram(STATIC_DIFFUSE_PROGRAM);
+        hProg = GetMatterShaderProgram(m_pMesh->GetType(),
+                                       m_pMaterial->GetType());
         
         // Start Rendering
         glUseProgram(hProg);

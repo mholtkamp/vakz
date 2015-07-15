@@ -51,7 +51,7 @@ int main()
 
     Matter* pTestAnim = new Matter();
     AnimatedMesh* pAnimMesh = new AnimatedMesh();
-    pAnimMesh->Load("E:\Projects\vakz\project\Windows\Island\Druid_AM\druid.amf");
+    pAnimMesh->Load("E:/Projects/vakz/project/Windows/Island/Druid_AM/druid.amf");
     pTestAnim->SetMesh(pAnimMesh);
     pTestAnim->SetMaterial(pCubeMat);
     pTestMonkey->SetPosition(-3.5f, 0.0f, 0.0f);
@@ -69,7 +69,7 @@ int main()
     // Add the test cube to the scene
     pTestScene->AddMatter(pTestCube);
     pTestScene->AddMatter(pTestMonkey);
-    pTestScene->AddMatter(pTestAnim);
+    //pTestScene->AddMatter(pTestAnim);
 
     float fSeconds = 0.0f;
     float fZ = 10.0f;
