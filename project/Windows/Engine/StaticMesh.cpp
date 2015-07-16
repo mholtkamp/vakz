@@ -91,7 +91,9 @@ float* StaticMesh::GetNormalArray()
 // SetRenderState
 //*****************************************************************************
 void StaticMesh::SetRenderState(void*        pScene,
-                                unsigned int hProg)
+                                unsigned int hProg,
+                                int          nAnimationIndex,
+                                float        fCurrentFrame)
 {
     // Assign vertex attributes
     int hPosition = glGetAttribLocation(hProg, "aPosition");

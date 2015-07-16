@@ -14,13 +14,7 @@ AnimatedMesh::AnimatedMesh()
     m_arKeyFrameStarts      = 0;
     m_arFaces               = 0;
     m_arVBO                 = 0;
-    m_nCurrentAnimation     = 0;
-    m_fCurrentFrame         = 0.0f;
-    m_nLoopMode             = LOOP_NONE;
     m_nFramesPerSecond      = DEFUALT_FPS;
-    m_nPlay                 = 0;
-    m_nDirection            = DIRECTION_FORWARD;
-    m_fSpeed                = 1.0f;
 }
 
 AnimatedMesh::~AnimatedMesh()
@@ -109,16 +103,18 @@ AnimatedMesh::~AnimatedMesh()
     }
 }
 
-void AnimatedMesh::SetRenderState(void* pScene,
-                                  unsigned int hProg)
+void AnimatedMesh::SetRenderState(void*        pScene,
+                                  unsigned int hProg,
+                                  int          nAnimationIndex,
+                                  float        fCurrentFrame)
 {
     int   i                    = 0;
     float fElapsedTime         = 0.0f;
-    int   nKeyFrames           = m_arKeyFrameCounts[m_nCurrentAnimation];
-    float fLastFrame           = static_cast<float>(m_arKeyFrameStarts[m_nCurrentAnimation][nKeyFrames - 1]);
+    int   nKeyFrames           = m_arKeyFrameCounts[nAnimationIndex];
+    float fLastFrame           = static_cast<float>(m_arKeyFrameStarts[nAnimationIndex][nKeyFrames - 1]);
     int   nKeyFrame1           = 0;
     int   nKeyFrame2           = 0;
-    int* arStarts              = m_arKeyFrameStarts[m_nCurrentAnimation];
+    int* arStarts              = m_arKeyFrameStarts[nAnimationIndex];
     float fMix                 = 0.0f;
 
     // Shader handles
@@ -130,163 +126,97 @@ void AnimatedMesh::SetRenderState(void* pScene,
     int   hTexCoord2           = -1;
     int   hNormal2             = -1;
 
-    if(m_nPlay != 0)
+
+    // Now that we know the current frame, we can find the two keyframes
+    // that the frame is between.
+    for (i = 0; i < m_arKeyFrameCounts[nAnimationIndex]; i++)
     {
-        // Get the time since last render
-        m_timerFrame.Stop();
-        fElapsedTime = m_timerFrame.Time();
-        
-        // Reset the timer to record next frame's time
-        m_timerFrame.Start();
-
-        if (m_nLoopMode == LOOP_NONE)
+        if (static_cast<int>(fCurrentFrame) < arStarts[i])
         {
-            if (static_cast<int>(m_fCurrentFrame) < fLastFrame)
-            {
-                // If the animation hasn't ended, increase the frame count.
-                m_fCurrentFrame += fElapsedTime * 
-                                   static_cast<float>(m_nFramesPerSecond) * 
-                                   m_fSpeed;
-            }
+            nKeyFrame1 = i - 1;
+            nKeyFrame2 = i;
+            break;
         }
-        else if (m_nLoopMode == LOOP_CYCLE)
-        {
-            // Increase the framecount
-            m_fCurrentFrame += fElapsedTime * 
-                               static_cast<float>(m_nFramesPerSecond) * 
-                               m_fSpeed;
-            
-            // If the current frame is higher than the last keyframe, then
-            // subtract the number of frames in the animation to reset animation.
-            if (m_fCurrentFrame >= fLastFrame)
-            {
-                m_fCurrentFrame -= fLastFrame;
-            }
-        }
-        else if (m_nLoopMode == LOOP_PING_PONG)
-        {
-            if (m_nDirection == DIRECTION_FORWARD)
-            {
-                // Increase the framecount
-                m_fCurrentFrame += fElapsedTime * 
-                                   static_cast<float>(m_nFramesPerSecond) *
-                                   m_fSpeed;
-
-                // If the current frame is higher than the last keyframe, then
-                // reverse the direction.
-                if (m_fCurrentFrame >= fLastFrame)
-                {
-                    m_nDirection = DIRECTION_REVERSE;
-                }
-            }
-            else
-            {
-                // Decrease the framecount
-                m_fCurrentFrame -= fElapsedTime *
-                                   static_cast<float>(m_nFramesPerSecond) *
-                                   m_fSpeed;
-
-                // If the current frame is less than than 0, then 
-                // set the direction to forward
-                if (m_fCurrentFrame <= 0.0f)
-                {
-                    m_nDirection = DIRECTION_FORWARD;
-                    m_fCurrentFrame = 0.0f;
-                }
-            }
-        }
-
-        // Now that we know the current frame, we can find the two keyframes
-        // that the frame is between.
-        for (i = 0; i < m_arKeyFrameCounts[m_nCurrentAnimation]; i++)
-        {
-            if (static_cast<int>(m_fCurrentFrame) < arStarts[i])
-            {
-                nKeyFrame1 = i - 1;
-                nKeyFrame2 = i;
-                break;
-            }
-        }
-
-        if (i == m_arKeyFrameCounts[m_nCurrentAnimation])
-        {
-            // If the current frame is higher than
-            // the last keyframe's framestart, then it isn't
-            // higher by much. Just set the 2nd keyframe to the
-            // last keyframe of this animation. 
-            nKeyFrame1 = i - 2;
-            nKeyFrame2 = i - 1;
-        }
-
-        // Calculate the mix factor (that will be sent to vertex shader).
-        fMix = (m_fCurrentFrame - static_cast<float>(arStarts[nKeyFrame1])) / 
-               static_cast<float>(arStarts[nKeyFrame2] - arStarts[nKeyFrame1]);
-
-        // Get the uniform and attribute locations
-        hMix = glGetUniformLocation(hProg, "uMix");
-        hPosition1 = glGetAttribLocation(hProg, "aPosition1");
-        hTexCoord1 = glGetAttribLocation(hProg, "aTexCoord1");
-        hNormal1   = glGetAttribLocation(hProg, "aNormal1");
-        hPosition2 = glGetAttribLocation(hProg, "aPosition2");
-        hTexCoord2 = glGetAttribLocation(hProg, "aTexCoord2");
-        hNormal2   = glGetAttribLocation(hProg, "aNormal2");
-
-        // Set the mix uniform
-        glUniform1f(hMix, fMix);
-
-        // Enable vertex attribute arrays
-        glEnableVertexAttribArray(hPosition1);
-        glEnableVertexAttribArray(hTexCoord1);
-        glEnableVertexAttribArray(hNormal1);
-        glEnableVertexAttribArray(hPosition2);
-        glEnableVertexAttribArray(hTexCoord2);
-        glEnableVertexAttribArray(hNormal2);
-
-        // Set the vertex attributes for first keyframe
-        // The proper VBO needs to be bound first.
-        glBindBuffer(GL_ARRAY_BUFFER, m_arVBO[m_nCurrentAnimation][nKeyFrame1]);
-
-        glVertexAttribPointer(hPosition1,
-                              3,
-                              GL_FLOAT,
-                              GL_FALSE,
-                              8 * sizeof(float),
-                              0);
-        glVertexAttribPointer(hTexCoord1,
-                              2,
-                              GL_FLOAT,
-                              GL_FALSE,
-                              8 * sizeof(float),
-                              (void*) (3 * sizeof(float)));
-        glVertexAttribPointer(hNormal1,
-                              3,
-                              GL_FLOAT,
-                              GL_FALSE,
-                              8 * sizeof(float),
-                              (void*) (5 * sizeof(float)));
-
-        // Now set the vertex arrays for the second keyframe
-        glBindBuffer(GL_ARRAY_BUFFER, m_arVBO[m_nCurrentAnimation][nKeyFrame2]);
-
-        glVertexAttribPointer(hPosition2,
-                              3,
-                              GL_FLOAT,
-                              GL_FALSE,
-                              8 * sizeof(float),
-                              0);
-        glVertexAttribPointer(hTexCoord2,
-                              2,
-                              GL_FLOAT,
-                              GL_FALSE,
-                              8 * sizeof(float),
-                              (void*) (3 * sizeof(float)));
-        glVertexAttribPointer(hNormal2,
-                              3,
-                              GL_FLOAT,
-                              GL_FALSE,
-                              8 * sizeof(float),
-                              (void*) (5 * sizeof(float)));
     }
+
+    if (i == m_arKeyFrameCounts[nAnimationIndex])
+    {
+        // If the current frame is higher than
+        // the last keyframe's framestart, then it isn't
+        // higher by much. Just set the 2nd keyframe to the
+        // last keyframe of this animation. 
+        nKeyFrame1 = i - 2;
+        nKeyFrame2 = i - 1;
+    }
+
+    // Calculate the mix factor (that will be sent to vertex shader).
+    fMix = (fCurrentFrame - static_cast<float>(arStarts[nKeyFrame1])) / 
+            static_cast<float>(arStarts[nKeyFrame2] - arStarts[nKeyFrame1]);
+
+    // Get the uniform and attribute locations
+    hMix = glGetUniformLocation(hProg, "uMix");
+    hPosition1 = glGetAttribLocation(hProg, "aPosition1");
+    hTexCoord1 = glGetAttribLocation(hProg, "aTexCoord1");
+    hNormal1   = glGetAttribLocation(hProg, "aNormal1");
+    hPosition2 = glGetAttribLocation(hProg, "aPosition2");
+    hTexCoord2 = glGetAttribLocation(hProg, "aTexCoord2");
+    hNormal2   = glGetAttribLocation(hProg, "aNormal2");
+
+    // Set the mix uniform
+    glUniform1f(hMix, fMix);
+
+    // Enable vertex attribute arrays
+    glEnableVertexAttribArray(hPosition1);
+    glEnableVertexAttribArray(hTexCoord1);
+    glEnableVertexAttribArray(hNormal1);
+    glEnableVertexAttribArray(hPosition2);
+    glEnableVertexAttribArray(hTexCoord2);
+    glEnableVertexAttribArray(hNormal2);
+
+    // Set the vertex attributes for first keyframe
+    // The proper VBO needs to be bound first.
+    glBindBuffer(GL_ARRAY_BUFFER, m_arVBO[nAnimationIndex][nKeyFrame1]);
+
+    glVertexAttribPointer(hPosition1,
+                            3,
+                            GL_FLOAT,
+                            GL_FALSE,
+                            8 * sizeof(float),
+                            0);
+    glVertexAttribPointer(hTexCoord1,
+                            2,
+                            GL_FLOAT,
+                            GL_FALSE,
+                            8 * sizeof(float),
+                            (void*) (3 * sizeof(float)));
+    glVertexAttribPointer(hNormal1,
+                            3,
+                            GL_FLOAT,
+                            GL_FALSE,
+                            8 * sizeof(float),
+                            (void*) (5 * sizeof(float)));
+
+    // Now set the vertex arrays for the second keyframe
+    glBindBuffer(GL_ARRAY_BUFFER, m_arVBO[nAnimationIndex][nKeyFrame2]);
+
+    glVertexAttribPointer(hPosition2,
+                            3,
+                            GL_FLOAT,
+                            GL_FALSE,
+                            8 * sizeof(float),
+                            0);
+    glVertexAttribPointer(hTexCoord2,
+                            2,
+                            GL_FLOAT,
+                            GL_FALSE,
+                            8 * sizeof(float),
+                            (void*) (3 * sizeof(float)));
+    glVertexAttribPointer(hNormal2,
+                            3,
+                            GL_FLOAT,
+                            GL_FALSE,
+                            8 * sizeof(float),
+                            (void*) (5 * sizeof(float)));
 }
 
 void AnimatedMesh::Load(const char* pFileName)
@@ -307,7 +237,7 @@ void AnimatedMesh::Load(const char* pFileName)
     }
 }
 
-void AnimatedMesh::SetAnimation(const char* pAnimation)
+int AnimatedMesh::GetAnimationIndex(const char* pAnimation)
 {
     int i = 0;
 
@@ -315,53 +245,40 @@ void AnimatedMesh::SetAnimation(const char* pAnimation)
     {
         if(strcmp(pAnimation, m_arAnimationNames[i]) == 0)
         {
-            m_nCurrentAnimation = i;
-            m_fCurrentFrame = 0.0f;
-            return;
+            return i;
         }
     }
 
-    LogWarning("No matching animation found in AnimatedMesh::SetAnimation().");
+    return -1;
 }
 
-void AnimatedMesh::SetLoopMode(int nLoopMode)
+int AnimatedMesh::GetKeyFrameCount(int nAnimationIndex)
 {
-    if (nLoopMode == LOOP_NONE  ||
-        nLoopMode == LOOP_CYCLE ||
-        nLoopMode == LOOP_PING_PONG)
+    if (nAnimationIndex >= 0 &&
+        nAnimationIndex <  m_nAnimationCount)
     {
-        m_nLoopMode = nLoopMode;
-
-        if (nLoopMode == LOOP_NONE ||
-            nLoopMode == LOOP_CYCLE)
-        {
-            m_nDirection = DIRECTION_FORWARD;
-        }
+        return m_arKeyFrameCounts[nAnimationIndex];
     }
     else
     {
-        LogWarning("Invalid loop mode set in AnimatedMesh::SetLoopMode().");
+        return 0;
     }
 }
 
-void AnimatedMesh::StartAnimation()
+int AnimatedMesh::GetLastFrame(int nAnimationIndex)
 {
-    m_nPlay = 1;
-    m_timerFrame.Start();
+    int nKeyFrames = GetKeyFrameCount(nAnimationIndex);
+
+    if (nAnimationIndex >= 0 &&
+        nAnimationIndex <  m_nAnimationCount)
+    {
+        return m_arKeyFrameStarts[nAnimationIndex][nKeyFrames - 1];
+    }
+
+    return 0;
 }
 
-void AnimatedMesh::StopAnimation()
+int AnimatedMesh::GetFramesPerSecond()
 {
-    m_nPlay = 0;
-    m_timerFrame.Stop();
-}
-
-void AnimatedMesh::ResetAnimation()
-{
-    m_fCurrentFrame = 0.0f;
-}
-
-void AnimatedMesh::SetSpeed(float fSpeed)
-{
-    m_fSpeed = fSpeed;
+    return m_nFramesPerSecond;
 }

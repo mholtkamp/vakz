@@ -60,9 +60,13 @@ public:
     //## Input:
     //##   pScene - pointer to Scene that is currently rendering.
     //##   hProg  - handle to shader program.
+    //##   nAnimationIndex - not used.
+    //##   fCurrentFrame   - not used.
     //## **********************************************************************
-    void SetRenderState(void* pScene,
-                        unsigned int hProg);
+    void SetRenderState(void*        pScene,
+                        unsigned int hProg,
+                        int          nAnimationIndex,
+                        float        fCurrentFrame);
 
 private:
 

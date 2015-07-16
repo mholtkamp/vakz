@@ -38,14 +38,19 @@ public:
     //## SetRenderState
     //##
     //## Sets the opengl state for rendering a mesh. This is a pure virtual
-    //## function and must be implemented by any Mesh Child.
+    //## function and must be implemented by any Mesh Child. Animation
+    //## parameters are unused by subclasses that do not render animation.
     //##
     //## Input:
     //##   pScene - pointer to the scene that is rendering.
     //##   hProg  - handle to shader program that is already bound.
+    //##   nAnimationIndex - current animation to animate.
+    //##   fCurrentFrame   - frame to animate.
     //## **********************************************************************
     virtual void SetRenderState(void*        pScene,
-                                unsigned int hProg) = 0;
+                                unsigned int hProg,
+                                int          nAnimationIndex,
+                                float        fCurrentFrame) = 0;
 
     //## **********************************************************************
     //## SetVertexCount

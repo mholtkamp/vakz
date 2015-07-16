@@ -107,10 +107,38 @@ public:
                   float fScaleY,
                   float fScaleZ);
 
+    void SetAnimation(const char* pAnimation);
+
+    void SetLoopMode(int nLoopMode);
+
+    void StartAnimation();
+
+    void StopAnimation();
+
+    void ResetAnimation();
+
+    void SetAnimationSpeed(float fSpeed);
+
+    enum MatterEnum
+    {
+        LOOP_NONE      = 0,
+        LOOP_CYCLE     = 1,
+        LOOP_PING_PONG = 2,
+
+        ANIMATION_STOP = 0,
+        ANIMATION_PLAY = 1,
+
+        DIRECTION_FORWARD = 0,
+        DIRECTION_REVERSE = 1
+    };
+
 private:
 
     //## Generates the model matrix
     void GenerateModelMatrix();
+
+    //## Updates variables reponsible for animation
+    void UpdateAnimation();
 
     //## Position
     float m_fX;
@@ -138,6 +166,20 @@ private:
 
     //## Model matrix
     Matrix m_matModel;
+
+    int m_nCurrentAnimation;
+
+    float m_fCurrentFrame;
+
+    int m_nLoopMode;
+
+    int m_nPlay;
+
+    int m_nDirection;
+
+    float m_fSpeed;
+
+    Timer m_timerFrame;
 };
 
 #endif

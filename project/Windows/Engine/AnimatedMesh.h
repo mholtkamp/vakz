@@ -14,35 +14,23 @@ public:
     ~AnimatedMesh();
 
     void SetRenderState(void*        pScene,
-                        unsigned int hProg);
+                        unsigned int hProg,
+                        int          nAnimationIndex,
+                        float        fCurrentFrame);
 
     void Load(const char* pFileName);
 
-    void SetAnimation(const char* pAnimation);
+    int GetAnimationIndex(const char* pAnimation);
 
-    void SetLoopMode(int nLoopMode);
+    int GetKeyFrameCount(int nAnimationIndex);
 
-    void StartAnimation();
+    int GetLastFrame(int nAnimationIndex);
 
-    void StopAnimation();
-
-    void ResetAnimation();
-
-    void SetSpeed(float fSpeed);
+    int GetFramesPerSecond();
 
     enum AnimatedMeshEnum
     {
-        LOOP_NONE      = 0,
-        LOOP_CYCLE     = 1,
-        LOOP_PING_PONG = 2,
-
-        DEFUALT_FPS    = 60,
-
-        ANIMATION_STOP = 0,
-        ANIMATION_PLAY = 1,
-
-        DIRECTION_FORWARD = 0,
-        DIRECTION_REVERSE = 1
+        DEFUALT_FPS    = 60
     };
 
 private:
@@ -59,21 +47,7 @@ private:
 
     unsigned int** m_arVBO;
 
-    int m_nCurrentAnimation;
-
-    float m_fCurrentFrame;
-
-    int m_nLoopMode;
-
     int m_nFramesPerSecond;
-
-    int m_nPlay;
-
-    int m_nDirection;
-
-    float m_fSpeed;
-
-    Timer m_timerFrame;
 };
 
 #endif

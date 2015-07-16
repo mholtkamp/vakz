@@ -52,16 +52,17 @@ int main()
     Matter* pTestAnim = new Matter();
     AnimatedMesh* pAnimMesh = new AnimatedMesh();
     pAnimMesh->Load("E:/Projects/vakz/project/Windows/Island/Druid_AM/druid.amf");
-    pAnimMesh->SetLoopMode(AnimatedMesh::LOOP_NONE);
-    pAnimMesh->SetAnimation("No");
-    pAnimMesh->StartAnimation();
     pTestAnim->SetMesh(pAnimMesh);
+    pTestAnim->SetLoopMode(Matter::LOOP_NONE);
+    pTestAnim->SetAnimation("No");
+    pTestAnim->StartAnimation();
     pTestAnim->SetMaterial(pCubeMat);
-    pTestMonkey->SetPosition(-3.5f, 0.0f, 0.0f);
+    pTestAnim->SetPosition(-3.5f, 0.0f, 0.0f);
 
     Texture* pTestTexture = new Texture();
     pTestTexture->LoadBMP("E:/Projects/vakz/project/Windows/Island/trueform_base_color.bmp");
     pTestMonkey->SetTexture(pTestTexture);
+    pTestAnim->SetTexture(pTestTexture);
 
     // Create sun
     DirectionalLight* pSun = new DirectionalLight();
@@ -71,7 +72,7 @@ int main()
 
     // Add the test cube to the scene
     pTestScene->AddMatter(pTestCube);
-    pTestScene->AddMatter(pTestMonkey);
+    //pTestScene->AddMatter(pTestMonkey);
     pTestScene->AddMatter(pTestAnim);
 
     float fSeconds = 0.0f;
@@ -153,48 +154,48 @@ int main()
         }
         if (IsButtonDown(VBUTTON_MIDDLE))
         {
-            pAnimMesh->SetLoopMode(AnimatedMesh::LOOP_PING_PONG);
-            pAnimMesh->ResetAnimation();
+            pTestAnim->SetLoopMode(Matter::LOOP_PING_PONG);
+            pTestAnim->ResetAnimation();
         }
         if (IsButtonDown(VBUTTON_X1))
         {
-            pAnimMesh->SetLoopMode(AnimatedMesh::LOOP_NONE);
-            pAnimMesh->ResetAnimation();
+            pTestAnim->SetLoopMode(Matter::LOOP_NONE);
+            pTestAnim->ResetAnimation();
         }
         if (IsButtonDown(VBUTTON_X2))
         {
-            pAnimMesh->SetLoopMode(AnimatedMesh::LOOP_CYCLE);
-            pAnimMesh->ResetAnimation();
+            pTestAnim->SetLoopMode(Matter::LOOP_CYCLE);
+            pTestAnim->ResetAnimation();
         }
 
         if (IsKeyDown(VKEY_U))
         {
             fAnimSpeed -= 0.005f;
-            pAnimMesh->SetSpeed(fAnimSpeed);
+            pTestAnim->SetAnimationSpeed(fAnimSpeed);
         }
 
         if (IsKeyDown(VKEY_I))
         {
             fAnimSpeed += 0.005f;
-            pAnimMesh->SetSpeed(fAnimSpeed);
+            pTestAnim->SetAnimationSpeed(fAnimSpeed);
         }
 
         if (IsKeyDown(VKEY_O))
         {
             fAnimSpeed = 1.0f;
-            pAnimMesh->SetSpeed(fAnimSpeed);
+            pTestAnim->SetAnimationSpeed(fAnimSpeed);
         }
 
         if (IsKeyDown(VKEY_1))
         {
-            pAnimMesh->SetAnimation("Wave");
-            pAnimMesh->ResetAnimation();
+            pTestAnim->SetAnimation("Wave");
+            pTestAnim->ResetAnimation();
         }
 
         if (IsKeyDown(VKEY_2))
         {
-            pAnimMesh->SetAnimation("No");
-            pAnimMesh->ResetAnimation();
+            pTestAnim->SetAnimation("No");
+            pTestAnim->ResetAnimation();
         }
 
         pCamera->SetPosition(fX, fY, fZ);
@@ -205,7 +206,7 @@ int main()
             fCube2Rot += fSeconds * ROT_SPEED;
             pTestMonkey->SetRotation(0.0f, fCube2Rot, 0.0f);
             pTestCube->SetRotation(fCube2Rot, 0.0f, 0.0f);
-            pTestAnim->SetRotation(-1.0f * fCube2Rot, 0.0f, 0.0f);
+            pTestAnim->SetRotation(0.0f, -1.0f * fCube2Rot, 0.0f);
         }
 
         timer.Start();

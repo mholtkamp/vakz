@@ -27,6 +27,13 @@ Matter::Matter()
     m_pMesh     = 0;
     m_pMaterial = 0;
     m_pTexture  = 0;
+
+    m_nCurrentAnimation   = 0;
+    m_fCurrentFrame       = 0.0f;
+    m_nLoopMode           = LOOP_NONE;
+    m_nPlay               = 0;
+    m_nDirection          = DIRECTION_FORWARD;
+    m_fSpeed              = 1.0f;
 }
 
 //*****************************************************************************
@@ -108,6 +115,10 @@ void Matter::Render(void* pScene)
         m_pMaterial   != 0 &&
         pCamera       != 0)
     {
+        
+        // Update animations (if there are any)
+        UpdateAnimation();
+
         // Get the proper shader based on mesh type and material type
         hProg = GetMatterShaderProgram(m_pMesh->GetType(),
                                        m_pMaterial->GetType());
@@ -131,8 +142,12 @@ void Matter::Render(void* pScene)
         }
     
         // Set up uniforms/attributes
-        m_pMesh->SetRenderState(pScene, hProg);
-        m_pMaterial->SetRenderState(pScene, hProg);
+        m_pMesh->SetRenderState(pScene,
+                                hProg,
+                                m_nCurrentAnimation,
+                                m_fCurrentFrame);
+        m_pMaterial->SetRenderState(pScene,
+                                    hProg);
 
         // Set up directional lighting
         pDirLight = reinterpret_cast<Scene*>(pScene)->GetDirectionalLight();
@@ -231,4 +246,160 @@ void Matter::SetScale(float fScaleX,
     m_fScaleX = fScaleX;
     m_fScaleY = fScaleY;
     m_fScaleZ = fScaleZ;
+}
+
+void Matter::SetAnimation(const char* pAnimation)
+{
+    int i                   = 0;
+    int nNewAnimation       = 0;
+    AnimatedMesh* pAnimMesh = 0;
+
+    if (m_pMesh            != 0 &&
+        m_pMesh->GetType() == MESH_ANIMATED)
+    {
+        // Convert the matter's mesh to an animated mesh
+        pAnimMesh = reinterpret_cast<AnimatedMesh*>(m_pMesh);
+
+        // Retrieve the index of the animation
+        nNewAnimation = pAnimMesh->GetAnimationIndex(pAnimation);
+
+        // If a valid animation index was returned, then set it
+        if (nNewAnimation != -1)
+        {
+            m_nCurrentAnimation = nNewAnimation;
+        }
+        else
+        {
+            LogWarning("No matching animation found in Matter::SetAnimation().");
+        }
+
+        // Set the curret frame to 0
+        m_fCurrentFrame = 0.0f;
+    }
+}
+
+void Matter::SetLoopMode(int nLoopMode)
+{
+    if (nLoopMode == LOOP_NONE  ||
+        nLoopMode == LOOP_CYCLE ||
+        nLoopMode == LOOP_PING_PONG)
+    {
+        m_nLoopMode = nLoopMode;
+
+        if (nLoopMode == LOOP_NONE ||
+            nLoopMode == LOOP_CYCLE)
+        {
+            m_nDirection = DIRECTION_FORWARD;
+        }
+    }
+    else
+    {
+        LogWarning("Invalid loop mode set in AnimatedMesh::SetLoopMode().");
+    }
+}
+
+void Matter::StartAnimation()
+{
+    m_nPlay = 1;
+    m_timerFrame.Start();
+}
+
+void Matter::StopAnimation()
+{
+    m_nPlay = 0;
+    m_timerFrame.Stop();
+}
+
+void Matter::ResetAnimation()
+{
+    m_fCurrentFrame = 0.0f;
+}
+
+void Matter::SetAnimationSpeed(float fSpeed)
+{
+    m_fSpeed = fSpeed;
+}
+
+void Matter::UpdateAnimation()
+{
+    AnimatedMesh* pAnimMesh    = 0;
+    int   i                    = 0;
+    float fElapsedTime         = 0.0f;
+    int   nKeyFrames           = 0;
+    float fLastFrame           = 0.0f;
+    float fFramesPerSecond     = 0.0f;
+
+    if(m_nPlay != 0 &&
+       m_pMesh != 0 &&
+       m_pMesh->GetType() == MESH_ANIMATED)
+    {
+        pAnimMesh            = reinterpret_cast<AnimatedMesh*>(m_pMesh);
+        nKeyFrames           = pAnimMesh->GetKeyFrameCount(m_nCurrentAnimation);
+        fLastFrame           = static_cast<float>(pAnimMesh->GetLastFrame(m_nCurrentAnimation));
+        fFramesPerSecond     = static_cast<float>(pAnimMesh->GetFramesPerSecond());
+
+        // Get the time since last render
+        m_timerFrame.Stop();
+        fElapsedTime = m_timerFrame.Time();
+        
+        // Reset the timer to record next frame's time
+        m_timerFrame.Start();
+
+        if (m_nLoopMode == LOOP_NONE)
+        {
+            if (static_cast<int>(m_fCurrentFrame) < fLastFrame)
+            {
+                // If the animation hasn't ended, increase the frame count.
+                m_fCurrentFrame += fElapsedTime * 
+                                   fFramesPerSecond * 
+                                   m_fSpeed;
+            }
+        }
+        else if (m_nLoopMode == LOOP_CYCLE)
+        {
+            // Increase the framecount
+            m_fCurrentFrame += fElapsedTime * 
+                               fFramesPerSecond * 
+                               m_fSpeed;
+            
+            // If the current frame is higher than the last keyframe, then
+            // subtract the number of frames in the animation to reset animation.
+            if (m_fCurrentFrame >= fLastFrame)
+            {
+                m_fCurrentFrame -= fLastFrame;
+            }
+        }
+        else if (m_nLoopMode == LOOP_PING_PONG)
+        {
+            if (m_nDirection == DIRECTION_FORWARD)
+            {
+                // Increase the framecount
+                m_fCurrentFrame += fElapsedTime * 
+                                   fFramesPerSecond *
+                                   m_fSpeed;
+
+                // If the current frame is higher than the last keyframe, then
+                // reverse the direction.
+                if (m_fCurrentFrame >= fLastFrame)
+                {
+                    m_nDirection = DIRECTION_REVERSE;
+                }
+            }
+            else
+            {
+                // Decrease the framecount
+                m_fCurrentFrame -= fElapsedTime *
+                                   fFramesPerSecond *
+                                   m_fSpeed;
+
+                // If the current frame is less than than 0, then 
+                // set the direction to forward
+                if (m_fCurrentFrame <= 0.0f)
+                {
+                    m_nDirection = DIRECTION_FORWARD;
+                    m_fCurrentFrame = 0.0f;
+                }
+            }
+        }
+    }
 }
