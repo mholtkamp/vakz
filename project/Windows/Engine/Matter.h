@@ -107,16 +107,65 @@ public:
                   float fScaleY,
                   float fScaleZ);
 
+    //## **********************************************************************
+    //## SetAnimation
+    //##
+    //## If the matter has a bound mesh with animation data, then this 
+    //## method will change the animation to the one matching the provided
+    //## name. A warning will be produced if no matching animation is found.
+    //## 
+    //## Input:
+    //##   pAnimation - name of animation to switch to.
+    //## **********************************************************************
     void SetAnimation(const char* pAnimation);
 
+    //## **********************************************************************
+    //## SetLoopMode
+    //##
+    //## Sets the animation looping mode. Loop mode controls the repetition
+    //## of animation while an animation is being played.
+    //## 
+    //## Loop Modes:
+    //## LOOP_ONCE - animation stops on last frame. Must be reset to replay.
+    //## LOOP_CYCLE - animation resets to first frame after the last frame.
+    //## LOOP_PING_PONG - aniamtion reverses once hitting last frame and 
+    //##                  continues forward when reaching the first frame.
+    //##
+    //## Input:
+    //##   nLoopMode - loop mode.
+    //## **********************************************************************
     void SetLoopMode(int nLoopMode);
 
+    //## **********************************************************************
+    //## StartAnimation
+    //## 
+    //## Plays the current animation.
+    //## **********************************************************************
     void StartAnimation();
 
+    //## **********************************************************************
+    //## StopAnimation
+    //##
+    //## Stops the current animation.
+    //## **********************************************************************
     void StopAnimation();
 
+    //## **********************************************************************
+    //## ResetAnimation
+    //##
+    //## Sets the matter's current animation frame to the first frame.
+    //## Does not affect whether the animation is playing or stopped.
+    //## **********************************************************************
     void ResetAnimation();
 
+    //## **********************************************************************
+    //## SetAnimationSpeed
+    //##
+    //## Changes the speed of animation. Default speed is 1.0f.
+    //## 
+    //## Input:
+    //##   fSpeed - new speed factor.
+    //## **********************************************************************
     void SetAnimationSpeed(float fSpeed);
 
     enum MatterEnum
@@ -167,18 +216,25 @@ private:
     //## Model matrix
     Matrix m_matModel;
 
+    //## Current animation index of the bound mesh
     int m_nCurrentAnimation;
 
+    //## Current frame of animation
     float m_fCurrentFrame;
 
+    //## Animation looping mode (ie. ONCE, CYCLE, PING_PONG)
     int m_nLoopMode;
 
+    //## Flag to indicate whether animation is being updated.
     int m_nPlay;
 
+    //## Direction of animation. (DIRECTION_FORWARD or DIRECTION_REVERSE)
     int m_nDirection;
 
+    //## Speed of animation.
     float m_fSpeed;
 
+    //## Timer to record frame time
     Timer m_timerFrame;
 };
 

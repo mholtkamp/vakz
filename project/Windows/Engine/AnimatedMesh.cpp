@@ -5,6 +5,9 @@
 #include <string.h>
 #include <stdio.h>
 
+//*****************************************************************************
+// Constructor
+//*****************************************************************************
 AnimatedMesh::AnimatedMesh()
 {
     // Overwrite the type
@@ -19,6 +22,9 @@ AnimatedMesh::AnimatedMesh()
     m_nFramesPerSecond      = DEFUALT_FPS;
 }
 
+//*****************************************************************************
+// Destructor
+//*****************************************************************************
 AnimatedMesh::~AnimatedMesh()
 {
     int i = 0;
@@ -105,6 +111,9 @@ AnimatedMesh::~AnimatedMesh()
     }
 }
 
+//*****************************************************************************
+// SetRenderState
+//*****************************************************************************
 void AnimatedMesh::SetRenderState(void*        pScene,
                                   unsigned int hProg,
                                   int          nAnimationIndex,
@@ -221,6 +230,9 @@ void AnimatedMesh::SetRenderState(void*        pScene,
                             (void*) (5 * sizeof(float)));
 }
 
+//*****************************************************************************
+// Load
+//*****************************************************************************
 void AnimatedMesh::Load(const char* pFileName)
 {
     if (pFileName != 0)
@@ -239,6 +251,9 @@ void AnimatedMesh::Load(const char* pFileName)
     }
 }
 
+//*****************************************************************************
+// GetAnimationIndex
+//*****************************************************************************
 int AnimatedMesh::GetAnimationIndex(const char* pAnimation)
 {
     int i = 0;
@@ -254,6 +269,9 @@ int AnimatedMesh::GetAnimationIndex(const char* pAnimation)
     return -1;
 }
 
+//*****************************************************************************
+// GetKeyFrameCount
+//*****************************************************************************
 int AnimatedMesh::GetKeyFrameCount(int nAnimationIndex)
 {
     if (nAnimationIndex >= 0 &&
@@ -267,6 +285,9 @@ int AnimatedMesh::GetKeyFrameCount(int nAnimationIndex)
     }
 }
 
+//*****************************************************************************
+// GetLastFrame
+//*****************************************************************************
 int AnimatedMesh::GetLastFrame(int nAnimationIndex)
 {
     int nKeyFrames = GetKeyFrameCount(nAnimationIndex);
@@ -280,6 +301,9 @@ int AnimatedMesh::GetLastFrame(int nAnimationIndex)
     return 0;
 }
 
+//*****************************************************************************
+// GetFramesPerSecond
+//*****************************************************************************
 int AnimatedMesh::GetFramesPerSecond()
 {
     return m_nFramesPerSecond;

@@ -8,6 +8,9 @@
 static AAssetManager* s_pAssetManager = 0;
 #endif
 
+//*****************************************************************************
+// ReadAsset
+//*****************************************************************************
 void ReadAsset(const char* pFileName,
                char*       arBuffer,
                int         nMaxSize)
@@ -76,6 +79,9 @@ void ReadAsset(const char* pFileName,
 #endif
 }
 
+//*****************************************************************************
+// GetAssetSize
+//*****************************************************************************
 int GetAssetSize(const char* pFileName)
 {
 #if defined (WINDOWS)
@@ -124,6 +130,9 @@ int GetAssetSize(const char* pFileName)
 #endif
 }
 
+//*****************************************************************************
+// SetAssetManager
+//*****************************************************************************
 void SetAssetManager(void* pAssetManager)
 {
 #if defined (ANDROID)
