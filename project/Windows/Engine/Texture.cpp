@@ -1,9 +1,13 @@
 #include "Texture.h"
 #include "VGL.h"
+#include "VFile.h"
 #include "Log.h"
 #include <stdio.h>
+#if defined (ANDROID)
+#include <android/asset_manager.h>
+#endif
 
-unsigned char Texture::s_arFileBuffer[TEXTURE_MAX_SIZE*TEXTURE_MAX_SIZE*4 + 64];
+char Texture::s_arFileBuffer[TEXTURE_MAX_SIZE*TEXTURE_MAX_SIZE*4 + 64];
 
 //*****************************************************************************
 // Constructor
@@ -38,37 +42,12 @@ void Texture::LoadBMP(const char* pFileName)
 
     if (pFileName != 0)
     {
-        // Open the file for reading.
-        pFile = fopen(pFileName, "r");
-
-        // Check if file was opened
-        if (pFile == 0)
-        {
-            LogError("Failed to open file in Texture::LoadBMP");
-            return;
-        }
-
-        // Check the size of the file
-        fseek(pFile, 0, SEEK_END);
-        nFileSize = ftell(pFile);
-        fseek(pFile, 0, SEEK_SET);
-
-        // If file is too big, report error
-        if (nFileSize > TEXTURE_MAX_SIZE * 
-                        TEXTURE_MAX_SIZE *
-                        4 + 
-                        TEXTURE_BMP_HEADER_SIZE)
-        {
-            LogError("Texture Bitmap is larger than supported 2048x2048xRGBA.\n");
-            fclose(pFile);
-            return;
-        }
-
-        // Read the file to RAM
-        fread(s_arFileBuffer, nFileSize, 1, pFile);
-
-        // Close the file as it is no longer needed.
-        fclose(pFile);
+        ReadAsset(pFileName,
+                  s_arFileBuffer,
+                  TEXTURE_MAX_SIZE * 
+                  TEXTURE_MAX_SIZE *
+                  4 + 
+                  TEXTURE_BMP_HEADER_SIZE);
 
         // Grab the dimensions of texture
         m_nWidth  = *reinterpret_cast<int*>(&s_arFileBuffer[18]);
@@ -86,7 +65,7 @@ void Texture::LoadBMP(const char* pFileName)
         {
             m_nFormat = TEXTURE_BMP_RGB;
             pData = new unsigned char[m_nWidth * m_nHeight * 3];
-            pSrc  = &s_arFileBuffer[54];
+            pSrc  = reinterpret_cast<unsigned char*>(&s_arFileBuffer[54]);
 
             for (i = 0; i < m_nWidth*m_nHeight*3; i += 3)
             {

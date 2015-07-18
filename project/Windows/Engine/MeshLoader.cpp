@@ -1,12 +1,17 @@
 #include "MeshLoader.h"
 #include "VGL.h"
 #include "Log.h"
+#include "VFile.h"
 #include <stdlib.h>
 #include <stdio.h>
+#if defined(ANDROID)
+#include <unistd.h>
+#include <android/asset_manager.h>
+#endif
 
 #define FULL_PATH_BUFFER_SIZE 256
 
-char MeshLoader::s_arFileBuffer[MESH_LOADER_MAX_FILE_SIZE];
+char  MeshLoader::s_arFileBuffer[MESH_LOADER_MAX_FILE_SIZE];
 
 //*****************************************************************************
 // GetCounts
@@ -28,37 +33,9 @@ void MeshLoader::GetCounts(const char* pFileName,
     nNumNormals = 0;
 	nNumUVs     = 0;
 
-    // Open the requested file.
-    pFile = fopen(pFileName, "r");
-
-    // Check if file was found
-    if (pFile == 0)
-    {
-        LogError("OBJ file could not be loaded.");
-        return;
-    }
-
-    // Check the file size.
-    fseek(pFile, 0, SEEK_END);
-    nFileSize = ftell(pFile);
-    fseek(pFile, 0, SEEK_SET);
-
-    // Check if file is too big
-    if (nFileSize >= MeshLoader::MESH_LOADER_MAX_FILE_SIZE - 1)
-    {
-        LogError("OBJ is too large.");
-        fclose(pFile);
-        return;
-    }
-
-    // Clear the buffer that will hold contents of obj file
-    memset(s_arFileBuffer, 0, nFileSize + 1);
-
-    // Read from file and store in character buffer.
-    fread(s_arFileBuffer, nFileSize, 1, pFile);
-
-    // Close file, it is no longer needed.
-    fclose(pFile);
+    ReadAsset(pFileName,
+              s_arFileBuffer,
+              MESH_LOADER_MAX_FILE_SIZE);
 
     pStr = s_arFileBuffer;
 
@@ -213,7 +190,7 @@ unsigned int MeshLoader::LoadOBJ(const char*   pFileName,
             pVertices[v*3] = (float) atof(pStr);
             pStr = strtok(0," ");
             pVertices[v*3 + 1] = (float) atof(pStr);
-            pStr = strtok(0, " \n");
+            pStr = strtok(0, " \n\r");
             pVertices[v*3 + 2] = (float) atof(pStr);
 
             // Increase the number of vertices
@@ -226,7 +203,7 @@ unsigned int MeshLoader::LoadOBJ(const char*   pFileName,
             pStr = &pStr[3];
             pStr = strtok(pStr, " ");
             pUVs[t*2] = (float) atof(pStr);
-            pStr = strtok(0, " \n");
+            pStr = strtok(0, " \n\r");
             pUVs[t*2 + 1] = (float) atof(pStr);
 
             // Increase number of texcoords
@@ -240,7 +217,7 @@ unsigned int MeshLoader::LoadOBJ(const char*   pFileName,
             pNormals[n*3] = (float) atof(pStr);
             pStr = strtok(0, " ");
             pNormals[n*3 + 1] = (float) atof(pStr);
-            pStr = strtok(0, " \n");
+            pStr = strtok(0, " \n\r");
             pNormals[n*3 + 2] = (float) atof(pStr);
             
             // Increase number of normals
@@ -255,11 +232,11 @@ unsigned int MeshLoader::LoadOBJ(const char*   pFileName,
             {
                 if (i == 0)
                 {
-                    pStr = strtok(pStr, " /\n");
+                    pStr = strtok(pStr, " /\n\r");
                 }
                 else
                 {
-                    pStr = strtok(0, " /\n");
+                    pStr = strtok(0, " /\n\r");
                 }
                 pFaces[f*9 + i] = atoi(pStr);
             }
@@ -327,35 +304,11 @@ void MeshLoader::LoadAMF(const char*     pFileName,
 
     char  arFullPath[FULL_PATH_BUFFER_SIZE]  = {0};
 
-    // Open the AMF file in read mode.
-    pFile = fopen(pFileName, "r");
-    
-    // If file wasn't found, report error.
-    if (pFile == 0)
-    {
-        LogError("Failed to load AMF file.");
-        return;
-    }
-
-    // Check file size
-    fseek(pFile, 0, SEEK_END);
-    nFileSize = ftell(pFile);
-    fseek(pFile, 0, SEEK_SET);
-
-    // If file is too big, bonk.
-    if (nFileSize >= MeshLoader::MESH_LOADER_MAX_FILE_SIZE - 1)
-    {
-        LogError("AMF file is too large.");
-        fclose(pFile);
-        return;
-    }
-
-    // Allocate temporary buffer to hold AMF file
+    nFileSize = GetAssetSize(pFileName);
     pOrigBuffer = new char[nFileSize + 1];
     pBuffer = pOrigBuffer;
     memset(pBuffer, 0, nFileSize + 1);
-    fread(pBuffer, nFileSize, 1, pFile);
-    fclose(pFile);
+    ReadAsset(pFileName, pOrigBuffer, nFileSize);
 
     // Begin parsing file
     // Grab animation count
@@ -384,7 +337,7 @@ void MeshLoader::LoadAMF(const char*     pFileName,
         // Find the next animation section
         pBuffer = strstr(pBuffer, "animation ");
         pBuffer += strlen("animation ");
-        pBuffer = strtok(pBuffer, " \n");
+        pBuffer = strtok(pBuffer, " \n\r");
 
         // Allocate the new string
         nNameLength = strlen(pBuffer);
@@ -418,7 +371,7 @@ void MeshLoader::LoadAMF(const char*     pFileName,
             (*pKeyFrameStarts)[i][j] = atoi(pBuffer);
 
             // Now point to the file name
-            pBuffer = strtok(0, " \n");
+            pBuffer = strtok(0, " \n\r");
 
             // Use the local buffer to construct the full
             // file paths, as paths in the AMF file should be relative

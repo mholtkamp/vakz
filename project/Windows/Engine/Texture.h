@@ -61,7 +61,7 @@ private:
     int m_nFormat;
 
     //## buffer to hold contents of .bmp file.
-    static unsigned char s_arFileBuffer[TEXTURE_MAX_SIZE*TEXTURE_MAX_SIZE*4 + 64];
+    static char s_arFileBuffer[TEXTURE_MAX_SIZE*TEXTURE_MAX_SIZE*4 + 64];
 };
 
 #endif

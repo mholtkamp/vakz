@@ -4,9 +4,11 @@
 #include <stdio.h>
 #include "VGL.h"
 #include "VInput.h"
+#include "VFile.h"
 #include "Settings.h"
 #include "Log.h"
 #include "Scene.h"
+#include "MeshLoader.h"
 #include <android_native_app_glue.h>
 #include <android/input.h>
 
@@ -317,6 +319,10 @@ int Initialize(void* pData)
             }
         }
     }
+
+    // Set the asset manager where it is needed
+    SetAssetManager(pState->activity->assetManager);
+    //Texture::SetAssetManager
 
     return 0;
 }

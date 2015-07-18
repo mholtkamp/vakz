@@ -3,6 +3,7 @@
 #include "VGL.h"
 #include "Camera.h"
 #include "Scene.h"
+#include <stdio.h>
 
 #define MATTER_MAX_POINT_LIGHTS 4
 #define MATTER_MAX_DIRECTIONAL_LIGHTS 1
@@ -57,7 +58,7 @@ void Matter::SetMesh(Mesh* pMesh)
     else
     {
         LogWarning("Denied attempt to set static mesh to null pointer in"
-                   " Matter::SetStaticMesh().");
+                   " Matter::SetMesh().");
     }
 }
 

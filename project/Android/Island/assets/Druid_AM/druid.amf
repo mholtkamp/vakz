@@ -1,0 +1,20 @@
+animationcount 2
+framespersecond 60
+
+animation Wave
+keyframecount 5
+keyframe 0 druid_wave_1.obj 
+keyframe 16 druid_wave_2.obj
+keyframe 25 druid_wave_3.obj
+keyframe 33 druid_wave_4.obj
+keyframe 36 druid_wave_5.obj
+end 36
+
+animation No
+keyframecount 5
+keyframe 0 druid_no_1.obj
+keyframe 16 druid_no_2.obj
+keyframe 27 druid_no_3.obj
+keyframe 38 druid_no_4.obj
+keyframe 53 druid_no_5.obj
+end 53

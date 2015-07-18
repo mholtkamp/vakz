@@ -82,21 +82,29 @@ void android_main(struct android_app* state) {
     pTestCube->SetMaterial(pCubeMat2);
     pTestCube->SetPosition(5.0f, 0.0f, 0.0f);
 
-    Matter* pTestCube2 = new Matter();
-    pTestCube2->SetMesh(reinterpret_cast<StaticMesh*>(pLibrary->GetPrimitive(PRIMITIVE_CUBE)));
-    pTestCube2->SetMaterial(pCubeMat2);
-    pTestCube2->SetPosition(-5.0f, 0.0f, 0.0f);
-
     Matter* pTestMonkey = new Matter();
     StaticMesh* pMonkeyMesh = new StaticMesh();
-    pMonkeyMesh->Load("/storage/sdcard0/druid.obj");
+    pMonkeyMesh->Load("druid.obj");
     pTestMonkey->SetMesh(pMonkeyMesh);
     pTestMonkey->SetMaterial(pCubeMat);
     pTestMonkey->SetPosition(0.0f, 0.0f, 0.0f);
 
+    Matter* pTestAnim = new Matter();
+    AnimatedMesh* pAnimMesh = new AnimatedMesh();
+    pAnimMesh->Load("Druid_AM/druid.amf");
+    pTestAnim->SetMesh(pAnimMesh);
+    pTestAnim->SetLoopMode(Matter::LOOP_NONE);
+    pTestAnim->SetAnimation("No");
+    pTestAnim->StartAnimation();
+    pTestAnim->SetMaterial(pCubeMat);
+    pTestAnim->SetPosition(-3.5f, 0.0f, 0.0f);
+
+    LogDebug("Loaded both meshes.");
+
     Texture* pTestTexture = new Texture();
-    pTestTexture->LoadBMP("/storage/sdcard0/trueform_base_color.bmp");
+    pTestTexture->LoadBMP("trueform_base_color.bmp");
     pTestMonkey->SetTexture(pTestTexture);
+    pTestAnim->SetTexture(pTestTexture);
 
     // Create sun
     DirectionalLight* pSun = new DirectionalLight();
@@ -106,8 +114,8 @@ void android_main(struct android_app* state) {
 
     // Add the test cube to the scene
     pTestScene->AddMatter(pTestCube);
-    pTestScene->AddMatter(pTestMonkey);
-    pTestScene->AddMatter(pTestCube2);
+    //pTestScene->AddMatter(pTestMonkey);
+    pTestScene->AddMatter(pTestAnim);
 
     float fSeconds = 0.0f;
     float fZ = 10.0f;
@@ -118,10 +126,9 @@ void android_main(struct android_app* state) {
     float fRotZ = 0.0f;
     int nLock = 0;
     float fCube2Rot = 0.0f;
+    float fAnimSpeed = 1.0f;
     Timer timer;
     timer.Start();
-
-    usleep(5000);
 
     while ((GetStatus() & VAKZ_QUIT) == 0)
     {
@@ -189,15 +196,48 @@ void android_main(struct android_app* state) {
         }
         if (IsButtonDown(VBUTTON_MIDDLE))
         {
-            printf("Middle Mouse Down\n");
+            pTestAnim->SetLoopMode(Matter::LOOP_PING_PONG);
+            pTestAnim->ResetAnimation();
         }
         if (IsButtonDown(VBUTTON_X1))
         {
-            printf("X1 Mouse Down\n");
+            pTestAnim->SetLoopMode(Matter::LOOP_NONE);
+            pTestAnim->ResetAnimation();
         }
         if (IsButtonDown(VBUTTON_X2))
         {
-            printf("X2 Mouse Down\n");
+            pTestAnim->SetLoopMode(Matter::LOOP_CYCLE);
+            pTestAnim->ResetAnimation();
+        }
+
+        if (IsKeyDown(VKEY_U))
+        {
+            fAnimSpeed -= 0.005f;
+            pTestAnim->SetAnimationSpeed(fAnimSpeed);
+        }
+
+        if (IsKeyDown(VKEY_I))
+        {
+            fAnimSpeed += 0.005f;
+            pTestAnim->SetAnimationSpeed(fAnimSpeed);
+        }
+
+        if (IsKeyDown(VKEY_O))
+        {
+            fAnimSpeed = 1.0f;
+            pTestAnim->SetAnimationSpeed(fAnimSpeed);
+        }
+
+        if (IsKeyDown(VKEY_1))
+        {
+            pTestAnim->SetAnimation("Wave");
+            pTestAnim->ResetAnimation();
+        }
+
+        if (IsKeyDown(VKEY_2))
+        {
+            pTestAnim->SetAnimation("No");
+            pTestAnim->ResetAnimation();
         }
 
         pCamera->SetPosition(fX, fY, fZ);
@@ -208,14 +248,7 @@ void android_main(struct android_app* state) {
             fCube2Rot += fSeconds * ROT_SPEED;
             pTestMonkey->SetRotation(0.0f, fCube2Rot, 0.0f);
             pTestCube->SetRotation(fCube2Rot, 0.0f, 0.0f);
-            pTestCube2->SetRotation(-1.0f * fCube2Rot, 0.0f, 0.0f);
-
-            char arMsg[32] = {0};
-            int nX = 0;
-            int nY = 0;
-            GetPointerPosition(nX, nY);
-            sprintf(arMsg, "X: %d Y: %d", nX, nY);
-            LogDebug(arMsg);
+            pTestAnim->SetRotation(0.0f, -1.0f * fCube2Rot, 0.0f);
         }
 
         timer.Start();
@@ -225,15 +258,13 @@ void android_main(struct android_app* state) {
     delete pLibrary;
     delete pSun;
     delete pTestCube;
-    delete pTestCube2;
+    delete pTestAnim;
     delete pTestMonkey;
     delete pMonkeyMesh;
     delete pCamera;
     delete pCubeMat;
     delete pTestScene;
 
-    Update();
-    LogWarning("Exiting");
     exit(0);
 }
 

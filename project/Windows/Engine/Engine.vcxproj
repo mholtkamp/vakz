@@ -87,6 +87,7 @@
     <ClCompile Include="ResourceLibrary.cpp" />
     <ClCompile Include="StaticMesh.cpp" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="VFile.cpp" />
     <ClCompile Include="VGL.cpp" />
     <ClCompile Include="VInput.cpp" />
   </ItemGroup>
@@ -109,6 +110,7 @@
     <ClInclude Include="Texture.h" />
     <ClInclude Include="ResourceLibrary.h" />
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="VFile.h" />
     <ClInclude Include="VInput.h" />
     <ClInclude Include="VMath.h" />
     <ClInclude Include="Light.h" />

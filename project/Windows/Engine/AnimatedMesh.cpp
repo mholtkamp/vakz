@@ -2,6 +2,8 @@
 #include "VGL.h"
 #include "MeshLoader.h"
 #include "Log.h"
+#include <string.h>
+#include <stdio.h>
 
 AnimatedMesh::AnimatedMesh()
 {
