@@ -17,7 +17,7 @@ void ReadAsset(const char* pFileName,
     int   nFileSize   = 0;
 
     // Open the requested file.
-    pFile = fopen(pFileName, "r");
+    pFile = fopen(pFileName, "rb");
 
     // Check if file was found
     if (pFile == 0)
@@ -83,7 +83,7 @@ int GetAssetSize(const char* pFileName)
     int   nFileSize   = 0;
 
     // Open the requested file.
-    pFile = fopen(pFileName, "r");
+    pFile = fopen(pFileName, "rb");
 
     // Check if file was found
     if (pFile == 0)

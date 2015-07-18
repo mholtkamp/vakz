@@ -270,13 +270,13 @@ unsigned int MeshLoader::LoadOBJ(const char*   pFileName,
     pFaces = 0;
 
     // Create the Vertex Buffer Object and fill it with vertex data
-	glGenBuffers(1, &unVBO);
-	glBindBuffer(GL_ARRAY_BUFFER, unVBO);
-	glBufferData(GL_ARRAY_BUFFER,
+    glGenBuffers(1, &unVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, unVBO);
+    glBufferData(GL_ARRAY_BUFFER,
                  sizeof(float) * (nNumFaces)*24,
                  pVertexBuffer,
                  GL_STATIC_DRAW);
-
+    
     // Delete the clientside buffer, since it is no longer needed.
     delete [] pVertexBuffer;
     pVertexBuffer = 0;

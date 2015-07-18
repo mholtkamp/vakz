@@ -44,14 +44,14 @@ int main()
 
     Matter* pTestMonkey = new Matter();
     StaticMesh* pMonkeyMesh = new StaticMesh();
-    pMonkeyMesh->Load("E:/Projects/vakz/project/Windows/Island/druid.obj");
+    pMonkeyMesh->Load("C:/Projects/vakz/project/Windows/Island/druid.obj");
     pTestMonkey->SetMesh(pMonkeyMesh);
     pTestMonkey->SetMaterial(pCubeMat);
     pTestMonkey->SetPosition(0.0f, 0.0f, 0.0f);
 
     Matter* pTestAnim = new Matter();
     AnimatedMesh* pAnimMesh = new AnimatedMesh();
-    pAnimMesh->Load("E:/Projects/vakz/project/Windows/Island/Druid_AM/druid.amf");
+    pAnimMesh->Load("C:/Projects/vakz/project/Windows/Island/Druid_AM/druid.amf");
     pTestAnim->SetMesh(pAnimMesh);
     pTestAnim->SetLoopMode(Matter::LOOP_NONE);
     pTestAnim->SetAnimation("No");
@@ -60,7 +60,7 @@ int main()
     pTestAnim->SetPosition(-3.5f, 0.0f, 0.0f);
 
     Texture* pTestTexture = new Texture();
-    pTestTexture->LoadBMP("E:/Projects/vakz/project/Windows/Island/trueform_base_color.bmp");
+    pTestTexture->LoadBMP("C:/Projects/vakz/project/Windows/Island/trueform_base_color.bmp");
     pTestMonkey->SetTexture(pTestTexture);
     pTestAnim->SetTexture(pTestTexture);
 
