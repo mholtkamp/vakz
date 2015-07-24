@@ -1,17 +1,22 @@
 #include "ResourceLibrary.h"
 #include "Log.h"
 #include "Primitives.h"
+#include "DefaultFont.h"
 
 #include "Texture.h"
 #include "StaticMesh.h"
 #include "AnimatedMesh.h"
 #include "SkeletalMesh.h"
 #include "Sound.h"
+#include "Font.h"
 
 #include <string.h>
 
 // Cube Primitive Data
 void* ResourceLibrary::s_pCube = 0;
+
+// Default Font Texture
+void* ResourceLibrary::s_pDefaultFont = 0;
 
 
 //*****************************************************************************
@@ -58,16 +63,6 @@ ResourceLibrary::ResourceLibrary(int nMaxTextures,
     memset(m_arAnimatedMeshStrings, 0, m_nMaxAnimatedMeshes * sizeof(char*));
     memset(m_arSkeletalMeshStrings, 0, m_nMaxSkeletalMeshes * sizeof(char*));
     memset(m_arSoundStrings,        0, m_nMaxSounds         * sizeof(char*));
-
-    // Cube primitive
-    if (s_pCube == 0)
-    {
-        s_pCube = new StaticMesh();
-        reinterpret_cast<StaticMesh*>(s_pCube)->SetVertexCount(s_nCubeVertexCount);
-        reinterpret_cast<StaticMesh*>(s_pCube)->SetPositionArray(s_arCubePosition);
-        reinterpret_cast<StaticMesh*>(s_pCube)->SetTexCoordArray(0);
-        reinterpret_cast<StaticMesh*>(s_pCube)->SetNormalArray(s_arCubeNormal);
-    }
 }
 
 //*****************************************************************************
@@ -273,6 +268,15 @@ void* ResourceLibrary::GetPrimitive(int nPrimitiveType)
 {
     if (nPrimitiveType == PRIMITIVE_CUBE)
     {
+        // Cube primitive
+        if (s_pCube == 0)
+        {
+            s_pCube = new StaticMesh();
+            reinterpret_cast<StaticMesh*>(s_pCube)->SetVertexCount(s_nCubeVertexCount);
+            reinterpret_cast<StaticMesh*>(s_pCube)->SetPositionArray(s_arCubePosition);
+            reinterpret_cast<StaticMesh*>(s_pCube)->SetTexCoordArray(0);
+            reinterpret_cast<StaticMesh*>(s_pCube)->SetNormalArray(s_arCubeNormal);
+        }
         return s_pCube;
     }
     else
@@ -280,4 +284,21 @@ void* ResourceLibrary::GetPrimitive(int nPrimitiveType)
         LogWarning("Requested primitive is not implemented yet.");
         return 0;
     }
+}
+
+//*****************************************************************************
+// GetDefaultFontTexture
+//*****************************************************************************
+void* ResourceLibrary::GetDefaultFont()
+{
+    // Check if the texture exists yet. If not, create it.
+    if (s_pDefaultFont == 0)
+    {
+        s_pDefaultFont = new Font();
+        reinterpret_cast<Font*>(s_pDefaultFont)->
+            LoadArray(pDefaultFontArray, 
+                      Font::LEGACY_TYPE);
+    }
+
+    return s_pDefaultFont;
 }

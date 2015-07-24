@@ -90,6 +90,8 @@ public:
     //## **********************************************************************
     void* GetPrimitive(int nPrimitiveType);
 
+    static void* GetDefaultFont();
+
     enum ResourceLibraryEnum
     {
         RL_DEFAULT_MAX_TEXTURES        = 1024,
@@ -131,5 +133,8 @@ private:
 
     //## Static Mesh primitives
     static void* s_pCube;
+
+    //## Static Textures
+    static void* s_pDefaultFont;
 };
 #endif

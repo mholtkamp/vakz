@@ -57,6 +57,51 @@ GLSL_VERSION_STRING
 
 "}\n";
 
+
+//## **************************************************************************
+//## Text Shader
+//## 
+//## Used by Text objects to render a string of characters in screen space.
+//##
+//## Attributes:
+//##   aPosition - X/Y screen position of vertex in normalized format.
+//##   aTexCoord - U/V texture coordinate used in fragment shader.
+//##
+//## Uniforms:
+//##   uColor   - color of text that will be rendered.
+//##   uTexture - the font texture unit that will be sampled.
+//## **************************************************************************
+
+static const char* pTextVertexShader = 
+GLSL_VERSION_STRING
+"in vec2 aPosition;\n"
+"in vec2 aTexCoord;\n"
+"out vec2 vTexCoord;\n"
+
+"void main()\n"
+"{\n"
+"   vTexCoord = aTexCoord;\n"
+"   gl_Position = vec4(aPosition, 0.0, 1.0);\n"
+"}\n";
+
+static const char* pTextFragmentShader = 
+GLSL_VERSION_STRING
+"precision mediump float;"
+"uniform vec4 uColor;\n"
+"uniform sampler2D uTexture;\n"
+"in vec2 vTexCoord;\n"
+"out vec4 oFragColor;\n"
+
+"void main()\n"
+"{\n"
+"   vec4 lTexColor = texture(uTexture, vTexCoord);\n"
+"   if (lTexColor.a < 0.003)\n"
+"   {\n"
+"       discard;\n"
+"   }\n"
+"   oFragColor = uColor * lTexColor.a;\n"
+"}\n";
+
 //## **************************************************************************
 //## StaticMesh Vertex Shader
 //## **************************************************************************

@@ -69,6 +69,8 @@
   <ItemGroup>
     <ClCompile Include="AnimatedMesh.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Font.cpp" />
+    <ClCompile Include="Text.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="VakzWin.cpp" />
     <ClCompile Include="DiffuseMaterial.cpp" />
@@ -94,9 +96,11 @@
   <ItemGroup>
     <ClInclude Include="AnimatedMesh.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="DefaultFont.h" />
     <ClInclude Include="DiffuseMaterial.h" />
     <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="Effect.h" />
+    <ClInclude Include="Font.h" />
     <ClInclude Include="Glyph.h" />
     <ClInclude Include="InputHandler.h" />
     <ClInclude Include="Material.h" />
@@ -107,6 +111,7 @@
     <ClInclude Include="SkeletalMesh.h" />
     <ClInclude Include="Sound.h" />
     <ClInclude Include="StaticMesh.h" />
+    <ClInclude Include="Text.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="ResourceLibrary.h" />
     <ClInclude Include="Timer.h" />

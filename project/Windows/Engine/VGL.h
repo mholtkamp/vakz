@@ -8,7 +8,8 @@ enum ProgramEnum
     QUAD_PROGRAM                    = 0,
     STATIC_DIFFUSE_PROGRAM          = 1,
     ANIMATED_DIFFUSE_PROGRAM        = 2,
-    MAX_PROGRAMS                    = 3
+    TEXT_PROGRAM                    = 3,
+    MAX_PROGRAMS                    = 4
 };
 
 //## **************************************************************************

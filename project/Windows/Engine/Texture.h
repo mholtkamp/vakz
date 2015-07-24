@@ -30,6 +30,24 @@ public:
     void LoadBMP(const char* pFileName);
 
     //## **********************************************************************
+    //## LoadArray
+    //## 
+    //## Generates a texture and uploads texture data from the given array to
+    //## graphics memory.
+    //##
+    //## Input:
+    //##   pData   - array of pixel data for the texutre.
+    //##   nFormat - format of the provided data (RGB/RGBA/ALPHA). See
+    //##             "TextureEnum" below for applicable values.
+    //##   nWidth  - width of texture.
+    //##   nHeight - height of texture.
+    //## **********************************************************************
+    void LoadArray(const unsigned char* pData,
+                   int                  nFormat,
+                   int                  nWidth,
+                   int                  nHeight);
+
+    //## **********************************************************************
     //## Bind
     //##
     //## Calls glBindTexture() using this texture's handle.
@@ -41,9 +59,9 @@ public:
         TEXTURE_MAX_SIZE        = 2048,
         TEXTURE_BMP_HEADER_SIZE = 54,
 
-        TEXTURE_BMP_RGB   = 0,
-        TEXTURE_BMP_RGBA  = 1,
-        TEXTURE_BMP_ALPHA = 2,
+        TEXTURE_RGB   = 0,
+        TEXTURE_RGBA  = 1,
+        TEXTURE_ALPHA = 2,
     };
 
 private:

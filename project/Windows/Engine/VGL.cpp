@@ -782,6 +782,15 @@ int LoadShaders()
                                pDiffuseFragmentShader);
     }
 
+    // Text Shader
+    if (nStatus != 0)
+    {
+        LogDebug("Building Text Shader");
+        nStatus = BuildProgram(TEXT_PROGRAM,
+                               pTextVertexShader,
+                               pTextFragmentShader);
+    }
+
     return nStatus;
 }
 
