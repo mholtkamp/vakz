@@ -37,7 +37,42 @@ Text::~Text()
 
 void Text::Render()
 {
-    //int hProg = GetShaderProgram(ProgramEnum::TEXT_PROGRAM);
+    unsigned int hProg = GetShaderProgram(ProgramEnum::TEXT_PROGRAM);
+    int hColor    = -1;
+    int hPosition = -1;
+    int hTexCoord = -1;
+
+    glUseProgram(hProg);
+    hColor    = glGetUniformLocation(hProg, "uColor");
+    hPosition = glGetAttribLocation(hProg, "aPosition");
+    hTexCoord = glGetAttribLocation(hProg, "aTexCoord");
+
+    m_pFont->SetRenderState(hProg);
+    glUniform4fv(hColor, 1, m_arColor);
+
+    glBindBuffer(GL_ARRAY_BUFFER, m_hVBO);
+
+    glEnableVertexAttribArray(hPosition);
+    glEnableVertexAttribArray(hTexCoord);
+
+    glVertexAttribPointer(hPosition,
+                          2,
+                          GL_FLOAT,
+                          GL_FALSE,
+                          (4 * sizeof(float)),
+                          0);
+    glVertexAttribPointer(hTexCoord,
+                          2,
+                          GL_FLOAT,
+                          GL_FALSE,
+                          (4 * sizeof(float)),
+                          (void*) (2 * sizeof(float)));
+
+    glDrawArrays(GL_TRIANGLES,
+                 0,
+                 TRIANGLES_PER_CHARACTER   * 
+                    VERTICES_PER_TRIANGLE  *
+                        m_nTextLength);
 }
 
 void Text::SetScale(float fX,
@@ -109,7 +144,7 @@ void Text::SetText(const char* pText)
 void Text::GenerateVertexArray(float** pArray,
                                int     nTextLength)
 {
-    unsigned int i      = 0;
+    int i               = 0;
     float* pVertexArray = *pArray;
     float fCharWidth    = m_fScaleX  * DEFAULT_CHAR_WIDTH;
     float fCharHeight   = m_fScaleY  * DEFAULT_CHAR_HEIGHT;

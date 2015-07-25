@@ -17,7 +17,7 @@ public:
     void LoadArray(const unsigned char*  pData,
                    int                   nType);
 
-    void SetRenderState();
+    void SetRenderState(unsigned int hProg);
 
     enum FontEnum
     {

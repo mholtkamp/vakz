@@ -107,10 +107,13 @@ void Scene::Render()
 
     // Render glyphs
     glDisable(GL_DEPTH_TEST);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     for (i = 0; i < m_nNumGlyphs; i++)
     {
         m_pGlyphs[i]->Render();
     }
+    glDisable(GL_BLEND);
     glEnable(GL_DEPTH_TEST);
 
 

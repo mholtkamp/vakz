@@ -8,6 +8,7 @@
 #include "ResourceLibrary.h"
 #include "DiffuseMaterial.h"
 #include "DirectionalLight.h"
+#include "Text.h"
 
 #include <stdio.h>
 
@@ -44,14 +45,14 @@ int main()
 
     Matter* pTestMonkey = new Matter();
     StaticMesh* pMonkeyMesh = new StaticMesh();
-    pMonkeyMesh->Load("E:/Projects/vakz/project/Windows/Island/druid.obj");
+    pMonkeyMesh->Load("C:/Projects/vakz/project/Windows/Island/druid.obj");
     pTestMonkey->SetMesh(pMonkeyMesh);
     pTestMonkey->SetMaterial(pCubeMat);
     pTestMonkey->SetPosition(0.0f, 0.0f, 0.0f);
 
     Matter* pTestAnim = new Matter();
     AnimatedMesh* pAnimMesh = new AnimatedMesh();
-    pAnimMesh->Load("E:/Projects/vakz/project/Windows/Island/Druid_AM/druid.amf");
+    pAnimMesh->Load("C:/Projects/vakz/project/Windows/Island/Druid_AM/druid.amf");
     pTestAnim->SetMesh(pAnimMesh);
     pTestAnim->SetLoopMode(Matter::LOOP_NONE);
     pTestAnim->SetAnimation("No");
@@ -60,7 +61,7 @@ int main()
     pTestAnim->SetPosition(-3.5f, 0.0f, 0.0f);
 
     Texture* pTestTexture = new Texture();
-    pTestTexture->LoadBMP("E:/Projects/vakz/project/Windows/Island/trueform_base_color.bmp");
+    pTestTexture->LoadBMP("C:/Projects/vakz/project/Windows/Island/trueform_base_color.bmp");
     pTestMonkey->SetTexture(pTestTexture);
     pTestAnim->SetTexture(pTestTexture);
 
@@ -70,10 +71,20 @@ int main()
     pSun->SetDirectionVector(3.0f, -1.0f, -2.0f);
     pTestScene->AddLight(pSun);
 
+    // Create some screen text
+    Text* pTestText = new Text();
+    pTestText->SetPosition(-0.9, 0.9f);
+    pTestText->SetColor(1.0f, 0.0f, 0.0f, 0.8f);
+    pTestText->SetScale(0.65f, 0.8f);
+    pTestText->SetText("Beep");
+
     // Add the test cube to the scene
     pTestScene->AddMatter(pTestCube);
     //pTestScene->AddMatter(pTestMonkey);
     pTestScene->AddMatter(pTestAnim);
+
+    // Add text to screen
+    pTestScene->AddGlyph(pTestText);
 
     float fSeconds = 0.0f;
     float fZ = 10.0f;
@@ -189,12 +200,14 @@ int main()
         if (IsKeyDown(VKEY_1))
         {
             pTestAnim->SetAnimation("Wave");
+            pTestText->SetText("Animation: Wave");
             pTestAnim->ResetAnimation();
         }
 
         if (IsKeyDown(VKEY_2))
         {
             pTestAnim->SetAnimation("No");
+            pTestText->SetText("Animation: No");
             pTestAnim->ResetAnimation();
         }
 

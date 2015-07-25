@@ -27,6 +27,7 @@ public:
         DEFAULT_BUFFER_SIZE = 128,
 
         TRIANGLES_PER_CHARACTER = 2,
+        VERTICES_PER_TRIANGLE   = 3,
         FLOATS_PER_TRIANGLE     = 12
     };
 

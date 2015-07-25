@@ -1,5 +1,6 @@
 #include "Font.h"
 #include "Log.h"
+#include "VGL.h"
 
 Font::Font()
 {
@@ -35,7 +36,9 @@ void Font::LoadArray(const unsigned char* pData,
     }
 }
 
-void Font::SetRenderState()
+void Font::SetRenderState(unsigned int hProg)
 {
+    int hTexture = glGetUniformLocation(hProg, "uTexture");
+    glUniform1i(hTexture, 0);
     m_pTexture.Bind();
 }
