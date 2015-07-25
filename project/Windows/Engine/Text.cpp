@@ -3,6 +3,10 @@
 #include "VGL.h"
 #include <string.h>
 
+#define DEFAULT_CHAR_WIDTH  0.05f
+#define DEFAULT_CHAR_HEIGHT 0.05f
+#define CHAR_UNIT           0.125f
+
 Text::Text()
 {
     m_nBufferSize  = DEFAULT_BUFFER_SIZE;
@@ -22,6 +26,12 @@ Text::~Text()
     {
         delete [] m_pText;
         m_pText = 0;
+    }
+
+    if (m_hVBO != 0)
+    {
+        glDeleteBuffers(1, &m_hVBO);
+        m_hVBO = 0;
     }
 }
 
@@ -99,5 +109,76 @@ void Text::SetText(const char* pText)
 void Text::GenerateVertexArray(float** pArray,
                                int     nTextLength)
 {
+    unsigned int i      = 0;
+    float* pVertexArray = *pArray;
+    float fCharWidth    = m_fScaleX  * DEFAULT_CHAR_WIDTH;
+    float fCharHeight   = m_fScaleY  * DEFAULT_CHAR_HEIGHT;
 
+    for (i = 0; i < nTextLength; i++)
+    {
+        unsigned int index; 
+        float xIndex;
+        float yIndex;
+        char target = (char) toupper(m_pText[i]);
+
+        if(target == '\0')         // Breakout on null terminating char
+            break;
+        else if(target >= ' ' &&   // Valid character range
+                target <= 'Z')
+        {
+            index = target - 0x20;
+        }
+        else
+            // Do not render the rest, dip out.
+            // (this might need to be changed later)
+            break;
+
+        yIndex = (float) (index/8);
+        xIndex = (float) (index%8);
+
+        // Each character will be drawn with two triangles like so
+        //    2--3  5
+        //    | /  /|
+        //    |/  / |
+        //    1  4--6
+
+        // Texcoords
+        pVertexArray[i*24 + 2] = CHAR_UNIT * xIndex;
+        pVertexArray[i*24 + 3] = 1.0f - CHAR_UNIT * (yIndex+1.0f);
+
+        pVertexArray[i*24 + 6] = CHAR_UNIT * xIndex;
+        pVertexArray[i*24 + 7] = 1.0f - CHAR_UNIT * (yIndex); 
+
+        pVertexArray[i*24 + 10] = CHAR_UNIT * (xIndex+1.0f);
+        pVertexArray[i*24 + 11] = 1.0f - CHAR_UNIT * (yIndex); 
+
+        pVertexArray[i*24 + 14] = CHAR_UNIT * xIndex;
+        pVertexArray[i*24 + 15] = 1.0f - CHAR_UNIT * (yIndex+1.0f);
+
+        pVertexArray[i*24 + 18] = CHAR_UNIT * (xIndex+1.0f);
+        pVertexArray[i*24 + 19] = 1.0f - CHAR_UNIT * (yIndex); 
+
+        pVertexArray[i*24 + 22] = CHAR_UNIT * (xIndex+1.0f);
+        pVertexArray[i*24 + 23] = 1.0f - CHAR_UNIT * (yIndex+1.0f);
+
+
+        // Position
+        pVertexArray[i*24 + 0] = m_fX + i*fCharWidth;
+        pVertexArray[i*24 + 1] = m_fY;
+
+        pVertexArray[i*24 + 4] = m_fX + i*fCharWidth;
+        pVertexArray[i*24 + 5] = m_fY + fCharHeight;
+
+        pVertexArray[i*24 + 8] = m_fX + fCharWidth + i*fCharWidth;
+        pVertexArray[i*24 + 9] = m_fY + fCharHeight;
+
+        pVertexArray[i*24 + 12] = m_fX + i*fCharWidth;
+        pVertexArray[i*24 + 13] = m_fY;
+
+        pVertexArray[i*24 + 16] = m_fX + fCharWidth + i*fCharWidth;
+        pVertexArray[i*24 + 17] = m_fY + fCharHeight;
+
+        pVertexArray[i*24 + 20] = m_fX + fCharWidth + i*fCharWidth;
+        pVertexArray[i*24 + 21] = m_fY;
+    }
 }
