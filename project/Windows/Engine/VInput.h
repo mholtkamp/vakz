@@ -1,6 +1,8 @@
 #ifndef VINPUT_H
 #define VINPUT_H
 
+#include <string.h>
+
 #if defined(WINDOWS)
 enum VakzKeyEnum
 {
@@ -133,9 +135,52 @@ enum VakzButtonEnum
 
 enum VInputEnum
 {
-    VINPUT_MAX_KEYS    = 256,
-    VINPUT_MAX_BUTTONS = 16,
-    VINPUT_MAX_TOUCHES = 16
+    VINPUT_MAX_KEYS        = 256,
+    VINPUT_MAX_BUTTONS     = 16,
+    VINPUT_MAX_TOUCHES     = 16,
+    VINPUT_MAX_CONTROLLERS = 4,
+    VINPUT_CONT_BUTTONS    = 14,
+    VINPUT_CONT_AXES       = 18
+};
+
+enum VControllerEnum
+{
+    VCONT_A        = 96,
+    VCONT_B        = 97,
+    VCONT_C        = 98,
+    VCONT_X        = 99,
+    VCONT_Y        = 100,
+    VCONT_Z        = 101,
+    VCONT_L1       = 102,
+    VCONT_R1       = 103,
+    VCONT_L2       = 104,
+    VCONT_R2       = 105,
+    VCONT_THUMBL   = 106,
+    VCONT_THUMBR   = 107,
+    VCONT_START    = 108,
+    VCONT_SELECT   = 109,
+
+    VCONT_AXIS_X        = 0,
+    VCONT_AXIS_Y        = 1,
+    VCONT_AXIS_Z        = 11,
+    VCONT_AXIS_RZ       = 14,
+    VCONT_AXIS_HAT_X    = 15,
+    VCONT_AXIS_HAT_Y    = 16,
+    VCONT_AXIS_LTRIGGER = 17,
+    VCONT_AXIS_RTRIGGER = 18
+};
+
+class Controller
+{
+public:
+    Controller()
+    {
+        memset(arButtons, 0, VINPUT_CONT_BUTTONS * sizeof(int));
+        memset(arAxes, 0, VINPUT_CONT_AXES * sizeof(float));
+    }
+
+    int   arButtons[VINPUT_CONT_BUTTONS];
+    float arAxes[VINPUT_CONT_AXES];
 };
 
 //## **********************************************************************
@@ -324,6 +369,13 @@ void SetTouchPosition(int nTouchX,
                       int nTouchY,
                       int nTouch = 0);
 
+void SetControllerButton(int nControllerButton,
+                         int nControllerNumber);
 
+void ClearControllerButton(int nControllerButton,
+                           int nControllerNumber);
+
+int IsControllerButtonDown(int nControllerButton,
+                           int nControllerNumber);
 
 #endif

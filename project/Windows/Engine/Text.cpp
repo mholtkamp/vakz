@@ -2,6 +2,7 @@
 #include "ResourceLibrary.h"
 #include "VGL.h"
 #include <string.h>
+#include <ctype.h>
 
 #define DEFAULT_CHAR_WIDTH  0.05f
 #define DEFAULT_CHAR_HEIGHT 0.05f
@@ -37,7 +38,7 @@ Text::~Text()
 
 void Text::Render()
 {
-    unsigned int hProg = GetShaderProgram(ProgramEnum::TEXT_PROGRAM);
+    unsigned int hProg = GetShaderProgram(TEXT_PROGRAM);
     int hColor    = -1;
     int hPosition = -1;
     int hTexCoord = -1;

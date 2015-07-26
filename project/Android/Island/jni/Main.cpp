@@ -32,6 +32,7 @@
 #include "Log.h"
 #include "Vakz.h"
 #include "Quad.h"
+#include "Text.h"
 #include "VGL.h"
 #include "VInput.h"
 #include "Timer.h"
@@ -112,10 +113,20 @@ void android_main(struct android_app* state) {
     pSun->SetDirectionVector(3.0f, -1.0f, -2.0f);
     pTestScene->AddLight(pSun);
 
+    // Create some screen text
+    Text* pTestText = new Text();
+    pTestText->SetPosition(-0.9, 0.8f);
+    pTestText->SetColor(1.0f, 0.0f, 0.0f, 0.8f);
+    pTestText->SetScale(0.45f, 0.8f);
+    pTestText->SetText("Beep");
+
     // Add the test cube to the scene
     pTestScene->AddMatter(pTestCube);
     //pTestScene->AddMatter(pTestMonkey);
     pTestScene->AddMatter(pTestAnim);
+
+    // Add text to screen
+    pTestScene->AddGlyph(pTestText);
 
     float fSeconds = 0.0f;
     float fZ = 10.0f;
@@ -231,12 +242,14 @@ void android_main(struct android_app* state) {
         if (IsKeyDown(VKEY_1))
         {
             pTestAnim->SetAnimation("Wave");
+            pTestText->SetText("Animation: Wave");
             pTestAnim->ResetAnimation();
         }
 
         if (IsKeyDown(VKEY_2))
         {
             pTestAnim->SetAnimation("No");
+            pTestText->SetText("Animation: No");
             pTestAnim->ResetAnimation();
         }
 

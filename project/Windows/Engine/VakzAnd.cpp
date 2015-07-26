@@ -233,11 +233,27 @@ static void HandleCommand(struct android_app* app,
 static int HandleInput(struct android_app* app, AInputEvent* event)
 {
     int nAction = 0;
+    int nPointer = 0;
     int nKey = 0;
+
+    //@@ DEBUG
+    char arMsg[32] = {0};
+    int nDevice = 0;
+    nDevice = AInputEvent_getDeviceId(event);
+    sprintf(arMsg, "Device: %d", nDevice);
+    LogDebug(arMsg);
+    //@@ END
 
     if (AInputEvent_getType(event) == AINPUT_EVENT_TYPE_MOTION)
     {
-        nAction = AMotionEvent_getAction(event);
+        nAction  = AMotionEvent_getAction(event);
+        nPointer = 0xff00 & nAction;
+        nAction  = 0x00ff & nAction;
+
+        memset(arMsg, 0, 32);
+        sprintf(arMsg, "Action: %d", nAction);
+        LogDebug(arMsg);
+
 
         if (nAction == AMOTION_EVENT_ACTION_DOWN)
         {
@@ -260,6 +276,21 @@ static int HandleInput(struct android_app* app, AInputEvent* event)
             SetTouchPosition(static_cast<int>(AMotionEvent_getX(event,0)),
                             (g_nScreenHeight - 1) - static_cast<int>(AMotionEvent_getY(event,0)),
                              0);
+
+            //@@ DEBUG
+            float fAxisX = AMotionEvent_getAxisValue(event,
+                                                     AMOTION_EVENT_AXIS_X,
+                                                     0);
+            float fAxisZ = AMotionEvent_getAxisValue(event,
+                                                     AMOTION_EVENT_AXIS_Z,
+                                                     0);
+            memset(arMsg, 0, 32);
+            sprintf(arMsg, "X Axis: %f", fAxisX);
+            LogDebug(arMsg);
+            memset(arMsg, 0, 32);
+            sprintf(arMsg, "Z Axis: %f,", fAxisZ);
+            LogDebug(arMsg);
+            //@@ END
             return 1;
         }
     }
@@ -271,6 +302,13 @@ static int HandleInput(struct android_app* app, AInputEvent* event)
         {
             nKey = AKeyEvent_getKeyCode(event);
             SetKey(nKey);
+
+            //@@ DEBUG
+            memset(arMsg, 0, 32);
+            sprintf(arMsg, "Key Down: %d", nKey);
+            LogDebug(arMsg);
+            //@@ END
+
             return 1;
         }
         else if (nAction == AKEY_EVENT_ACTION_UP)

@@ -9,6 +9,8 @@ static int s_arTouches[VINPUT_MAX_TOUCHES] = {0};
 static int s_arPointerX[VINPUT_MAX_TOUCHES] = {0};
 static int s_arPointerY[VINPUT_MAX_TOUCHES] = {0};
 
+static Controller s_arControllers[VINPUT_MAX_CONTROLLERS];
+
 //*****************************************************************************
 // SetKey
 //*****************************************************************************
@@ -229,5 +231,60 @@ void SetTouchPosition(int nTouchX,
     {
         LogWarning("Invalid touch index in SetTouchPosition().");
         return;
+    }
+}
+
+
+//*****************************************************************************
+// SetControllerButton
+//*****************************************************************************
+void SetControllerButton(int nControllerButton,
+                         int nControllerNumber)
+{
+    if (nControllerNumber >= 0 &&
+        nControllerNumber <  VINPUT_MAX_CONTROLLERS)
+    {
+        if (nControllerButton >= VCONT_A &&
+            nControllerButton <  VCONT_SELECT)
+        {
+            // Bias the controller button by VCONT_A to get correct array index
+            s_arControllers[nControllerNumber].arButtons[nControllerButton - VCONT_A] = 1;
+        }
+    }
+}
+
+//*****************************************************************************
+// ClearControllerButton
+//*****************************************************************************
+void ClearControllerButton(int nControllerButton,
+                           int nControllerNumber)
+{
+    if (nControllerNumber >= 0 &&
+        nControllerNumber <  VINPUT_MAX_CONTROLLERS)
+    {
+        if (nControllerButton >= VCONT_A &&
+            nControllerButton <  VCONT_SELECT)
+        {
+            // Bias the controller button by VCONT_A to get correct array index
+            s_arControllers[nControllerNumber].arButtons[nControllerButton - VCONT_A] = 0;
+        }
+    }
+}
+
+//*****************************************************************************
+// IsControllerButtonDown
+//*****************************************************************************
+int IsControllerButtonDown(int nControllerButton,
+                           int nControllerNumber)
+{
+    if (nControllerNumber >= 0 &&
+        nControllerNumber <  VINPUT_MAX_CONTROLLERS)
+    {
+        if (nControllerButton >= VCONT_A &&
+            nControllerButton <  VCONT_SELECT)
+        {
+            // Bias the controller button by VCONT_A to get correct array index
+            return s_arControllers[nControllerNumber].arButtons[nControllerButton - VCONT_A];
+        }
     }
 }
