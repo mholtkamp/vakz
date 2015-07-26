@@ -175,10 +175,12 @@ class Controller
 public:
     Controller()
     {
+        nDevice = -1;
         memset(arButtons, 0, VINPUT_CONT_BUTTONS * sizeof(int));
         memset(arAxes, 0, VINPUT_CONT_AXES * sizeof(float));
     }
 
+    int   nDevice;
     int   arButtons[VINPUT_CONT_BUTTONS];
     float arAxes[VINPUT_CONT_AXES];
 };
@@ -377,5 +379,16 @@ void ClearControllerButton(int nControllerButton,
 
 int IsControllerButtonDown(int nControllerButton,
                            int nControllerNumber);
+
+void SetControllerAxisValue(int   nControllerAxis,
+                            float fAxisValue,
+                            int   nControllerNumber);
+
+float GetControllerAxisValue(int nControllerAxis,
+                             int nControllerNumber);
+
+int GetControllerIndex(int nInputDevice);
+
+void AssignController(int nInputDevice);
 
 #endif

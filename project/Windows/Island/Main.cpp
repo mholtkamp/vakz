@@ -73,7 +73,7 @@ int main()
 
     // Create some screen text
     Text* pTestText = new Text();
-    pTestText->SetPosition(-0.9, 0.9f);
+    pTestText->SetPosition(-0.9f, 0.9f);
     pTestText->SetColor(1.0f, 0.0f, 0.0f, 0.8f);
     pTestText->SetScale(0.65f, 0.8f);
     pTestText->SetText("Beep");

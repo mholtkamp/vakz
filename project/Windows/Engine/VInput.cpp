@@ -10,6 +10,7 @@ static int s_arPointerX[VINPUT_MAX_TOUCHES] = {0};
 static int s_arPointerY[VINPUT_MAX_TOUCHES] = {0};
 
 static Controller s_arControllers[VINPUT_MAX_CONTROLLERS];
+static int s_nNumControllers = 0;
 
 //*****************************************************************************
 // SetKey
@@ -286,5 +287,74 @@ int IsControllerButtonDown(int nControllerButton,
             // Bias the controller button by VCONT_A to get correct array index
             return s_arControllers[nControllerNumber].arButtons[nControllerButton - VCONT_A];
         }
+    }
+
+    return 0;
+}
+
+//*****************************************************************************
+// SetControllerAxisValue
+//*****************************************************************************
+void SetControllerAxisValue(int   nControllerAxis,
+                             float fAxisValue, 
+                             int   nControllerNumber)
+{
+    if (nControllerNumber >= 0 &&
+        nControllerNumber <  VINPUT_MAX_CONTROLLERS)
+    {
+        if (nControllerAxis >= VCONT_AXIS_X &&
+            nControllerAxis <  VCONT_AXIS_RTRIGGER)
+        {
+            s_arControllers[nControllerNumber].arAxes[nControllerAxis] = fAxisValue;
+        }
+    }
+}
+
+//*****************************************************************************
+// GetControllerAxisValue
+//*****************************************************************************
+float GetControllerAxisValue(int nControllerAxis,
+                             int nControllerNumber)
+{
+    if (nControllerNumber >= 0 &&
+        nControllerNumber <  VINPUT_MAX_CONTROLLERS)
+    {
+        if (nControllerAxis >= VCONT_AXIS_X &&
+            nControllerAxis <  VCONT_AXIS_RTRIGGER)
+        {
+            return s_arControllers[nControllerNumber].arAxes[nControllerAxis];
+        }
+    }
+
+    return 0.0f;
+}
+
+int GetControllerIndex(int nInputDevice)
+{
+    int i = 0;
+
+    for (i = 0; i < s_nNumControllers; i++)
+    {
+        if (s_arControllers[i].nDevice == nInputDevice)
+        {
+            return i;
+        }
+    }
+
+    if (i < s_nNumControllers)
+    {
+        AssignController(nInputDevice);
+        return i;
+    }
+
+    return -1;
+}
+
+void AssignController(int nInputDevice)
+{
+    if (s_nNumControllers < VINPUT_MAX_CONTROLLERS)
+    {
+        s_nNumControllers++;
+        s_arControllers[s_nNumControllers].nDevice = nInputDevice;
     }
 }
