@@ -391,4 +391,6 @@ int GetControllerIndex(int nInputDevice);
 
 void AssignController(int nInputDevice);
 
+int IsControllerConnected(int nIndex);
+
 #endif

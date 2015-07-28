@@ -341,7 +341,7 @@ int GetControllerIndex(int nInputDevice)
         }
     }
 
-    if (i < s_nNumControllers)
+    if (i < VINPUT_MAX_CONTROLLERS)
     {
         AssignController(nInputDevice);
         return i;
@@ -354,7 +354,19 @@ void AssignController(int nInputDevice)
 {
     if (s_nNumControllers < VINPUT_MAX_CONTROLLERS)
     {
-        s_nNumControllers++;
         s_arControllers[s_nNumControllers].nDevice = nInputDevice;
+        s_nNumControllers++;
+    }
+}
+
+int IsControllerConnected(int nIndex)
+{
+    if (nIndex < s_nNumControllers)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
     }
 }

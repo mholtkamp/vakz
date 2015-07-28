@@ -232,15 +232,23 @@ static void HandleCommand(struct android_app* app,
 
 static int HandleInput(struct android_app* app, AInputEvent* event)
 {
-    int nAction = 0;
-    int nPointer = 0;
-    int nKey = 0;
+    int nAction    = 0;
+    int nPointer   = 0;
+    int nDevice    = 0;
+    int nKey       = 0;
+    int nSource    = 0;
+    int nContIndex = 0;
+
+    nDevice = AInputEvent_getDeviceId(event);
+    nSource = AInputEvent_getSource(event);
 
     //@@ DEBUG
     char arMsg[32] = {0};
-    int nDevice = 0;
-    nDevice = AInputEvent_getDeviceId(event);
+
     sprintf(arMsg, "Device: %d", nDevice);
+    LogDebug(arMsg);
+    memset(arMsg, 0, 32);
+    sprintf(arMsg, "Source: %d", nSource);
     LogDebug(arMsg);
     //@@ END
 
@@ -277,20 +285,44 @@ static int HandleInput(struct android_app* app, AInputEvent* event)
                             (g_nScreenHeight - 1) - static_cast<int>(AMotionEvent_getY(event,0)),
                              0);
 
-            //@@ DEBUG
-            float fAxisX = AMotionEvent_getAxisValue(event,
-                                                     AMOTION_EVENT_AXIS_X,
-                                                     0);
-            float fAxisZ = AMotionEvent_getAxisValue(event,
-                                                     AMOTION_EVENT_AXIS_Z,
-                                                     0);
-            memset(arMsg, 0, 32);
-            sprintf(arMsg, "X Axis: %f", fAxisX);
-            LogDebug(arMsg);
-            memset(arMsg, 0, 32);
-            sprintf(arMsg, "Z Axis: %f,", fAxisZ);
-            LogDebug(arMsg);
-            //@@ END
+            if (nSource & AINPUT_SOURCE_JOYSTICK)
+            {
+                nContIndex = GetControllerIndex(nDevice);
+
+                float fAxisX = AMotionEvent_getAxisValue(event,
+                                                         AMOTION_EVENT_AXIS_X,
+                                                         0);
+                float fAxisY = AMotionEvent_getAxisValue(event,
+                                                         AMOTION_EVENT_AXIS_Y,
+                                                         0);
+                float fAxisZ = AMotionEvent_getAxisValue(event,
+                                                         AMOTION_EVENT_AXIS_Z,
+                                                         0);
+                float fAxisRZ = AMotionEvent_getAxisValue(event,
+                                                          AMOTION_EVENT_AXIS_RZ,
+                                                          0);
+                float fAxisHatX = AMotionEvent_getAxisValue(event,
+                                                            AMOTION_EVENT_AXIS_HAT_X,
+                                                            0);
+                float fAxisHatY = AMotionEvent_getAxisValue(event,
+                                                            AMOTION_EVENT_AXIS_HAT_Y,
+                                                            0);
+                float fAxisTriggerL = AMotionEvent_getAxisValue(event,
+                                                            AMOTION_EVENT_AXIS_LTRIGGER,
+                                                            0);
+                float fAxisTriggerR = AMotionEvent_getAxisValue(event,
+                                                            AMOTION_EVENT_AXIS_RTRIGGER,
+                                                            0);
+
+                SetControllerAxisValue(VCONT_AXIS_X,  fAxisX,  nContIndex);
+                SetControllerAxisValue(VCONT_AXIS_Y,  fAxisY,  nContIndex);
+                SetControllerAxisValue(VCONT_AXIS_Z,  fAxisZ,  nContIndex);
+                SetControllerAxisValue(VCONT_AXIS_RZ, fAxisRZ, nContIndex);
+                SetControllerAxisValue(VCONT_AXIS_HAT_X, fAxisHatX, nContIndex);
+                SetControllerAxisValue(VCONT_AXIS_HAT_Y, fAxisHatY, nContIndex);
+                SetControllerAxisValue(VCONT_AXIS_LTRIGGER, fAxisTriggerL, nContIndex);
+                SetControllerAxisValue(VCONT_AXIS_RTRIGGER, fAxisTriggerR, nContIndex);
+            }
             return 1;
         }
     }
@@ -301,20 +333,32 @@ static int HandleInput(struct android_app* app, AInputEvent* event)
         if (nAction == AKEY_EVENT_ACTION_DOWN)
         {
             nKey = AKeyEvent_getKeyCode(event);
-            SetKey(nKey);
-
-            //@@ DEBUG
-            memset(arMsg, 0, 32);
-            sprintf(arMsg, "Key Down: %d", nKey);
-            LogDebug(arMsg);
-            //@@ END
+            if (nSource & AINPUT_SOURCE_GAMEPAD)
+            {
+                nContIndex = GetControllerIndex(nDevice);
+                SetControllerButton(nKey, nContIndex);
+            }
+            else
+            {
+                SetKey(nKey);
+            }
 
             return 1;
         }
         else if (nAction == AKEY_EVENT_ACTION_UP)
         {
             nKey = AKeyEvent_getKeyCode(event);
-            ClearKey(nKey);
+
+            if (nSource & AINPUT_SOURCE_GAMEPAD)
+            {
+                nContIndex = GetControllerIndex(nDevice);
+                ClearControllerButton(nKey, nContIndex);
+            }
+            else
+            {
+                ClearKey(nKey);
+            }
+
             return 1;
         }
     }
@@ -360,7 +404,6 @@ int Initialize(void* pData)
 
     // Set the asset manager where it is needed
     SetAssetManager(pState->activity->assetManager);
-    //Texture::SetAssetManager
 
     return 0;
 }

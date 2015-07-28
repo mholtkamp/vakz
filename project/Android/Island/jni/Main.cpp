@@ -35,6 +35,7 @@
 #include "Text.h"
 #include "VGL.h"
 #include "VInput.h"
+#include "VMath.h"
 #include "Timer.h"
 #include "Matrix.h"
 #include "ResourceLibrary.h"
@@ -44,9 +45,9 @@
 #include "Camera.h"
 #include "Scene.h"
 
-#define ROT_SPEED 30.0f
+#define ROT_SPEED 70.0f
 #define MOVE_SPEED 5.0f
-
+#define THRESH 0.4f
 int animating = 1;
 
 void android_main(struct android_app* state) {
@@ -149,6 +150,75 @@ void android_main(struct android_app* state) {
 
         // Update
         Update();
+
+        if (IsControllerConnected(0))
+        {
+            // Camera
+            if (GetControllerAxisValue(VCONT_AXIS_RZ, 0) < -THRESH)
+            {
+                fRotX += fSeconds * ROT_SPEED;
+            }
+            if (GetControllerAxisValue(VCONT_AXIS_RZ, 0) > THRESH)
+            {
+                fRotX -= fSeconds * ROT_SPEED;
+            }
+            if (GetControllerAxisValue(VCONT_AXIS_Z, 0) > THRESH)
+            {
+                fRotY -= fSeconds * ROT_SPEED;
+            }
+            if (GetControllerAxisValue(VCONT_AXIS_Z, 0) < -THRESH)
+            {
+                fRotY += fSeconds * ROT_SPEED;
+            }
+
+            // Movement
+            if (GetControllerAxisValue(VCONT_AXIS_Y, 0) < -THRESH)
+            {
+                fZ -= fSeconds * MOVE_SPEED * cos(fRotY * DEGREES_TO_RADIANS);
+                fX -= fSeconds * MOVE_SPEED * sin(fRotY * DEGREES_TO_RADIANS);
+            }
+            if (GetControllerAxisValue(VCONT_AXIS_Y, 0) > THRESH)
+            {
+                fZ += fSeconds * MOVE_SPEED * cos(fRotY * DEGREES_TO_RADIANS);
+                fX += fSeconds * MOVE_SPEED * sin(fRotY * DEGREES_TO_RADIANS);
+            }
+            if (GetControllerAxisValue(VCONT_AXIS_X, 0) < -THRESH)
+            {
+                fZ -= fSeconds * MOVE_SPEED * cos((90.0f + fRotY) * DEGREES_TO_RADIANS);
+                fX -= fSeconds * MOVE_SPEED * sin((90.0f + fRotY) * DEGREES_TO_RADIANS);
+            }
+            if (GetControllerAxisValue(VCONT_AXIS_X, 0) > THRESH)
+            {
+                fZ += fSeconds * MOVE_SPEED * cos((90.0f + fRotY) * DEGREES_TO_RADIANS);
+                fX += fSeconds * MOVE_SPEED * sin((90.0f + fRotY) * DEGREES_TO_RADIANS);
+            }
+            if (IsControllerButtonDown(VCONT_R1, 0))
+            {
+                fY += fSeconds * MOVE_SPEED;
+            }
+            if (IsControllerButtonDown(VCONT_L1, 0))
+            {
+                fY -= fSeconds * MOVE_SPEED;
+            }
+
+            if (IsControllerButtonDown(VCONT_A, 0))
+            {
+                pTestAnim->SetAnimation("Wave");
+                pTestText->SetText("Animation: Wave");
+                pTestAnim->ResetAnimation();
+            }
+
+            if (IsControllerButtonDown(VCONT_B, 0))
+            {
+                pTestAnim->SetAnimation("No");
+                pTestText->SetText("Animation: No");
+                pTestAnim->ResetAnimation();
+            }
+        }
+        else
+        {
+            //LogDebug("Controller is not connected");
+        }
 
         // Rotate camera
         if (IsKeyDown(VKEY_UP))
