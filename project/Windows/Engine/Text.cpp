@@ -7,6 +7,7 @@
 #define DEFAULT_CHAR_WIDTH  0.05f
 #define DEFAULT_CHAR_HEIGHT 0.05f
 #define CHAR_UNIT           0.125f
+#define TEXCOORD_BUFFER     0.004f
 
 Text::Text()
 {
@@ -149,6 +150,8 @@ void Text::GenerateVertexArray(float** pArray,
     float* pVertexArray = *pArray;
     float fCharWidth    = m_fScaleX  * DEFAULT_CHAR_WIDTH;
     float fCharHeight   = m_fScaleY  * DEFAULT_CHAR_HEIGHT;
+    int nCharOffX = 0;
+    int nCharOffY = 0;
 
     for (i = 0; i < nTextLength; i++)
     {
@@ -163,6 +166,10 @@ void Text::GenerateVertexArray(float** pArray,
                 target <= 'Z')
         {
             index = target - 0x20;
+        }
+        else if (target == '\n')
+        {
+            index = ' ' - 0x20;
         }
         else
             // Do not render the rest, dip out.
@@ -183,38 +190,48 @@ void Text::GenerateVertexArray(float** pArray,
         pVertexArray[i*24 + 3] = 1.0f - CHAR_UNIT * (yIndex+1.0f);
 
         pVertexArray[i*24 + 6] = CHAR_UNIT * xIndex;
-        pVertexArray[i*24 + 7] = 1.0f - CHAR_UNIT * (yIndex); 
+        pVertexArray[i*24 + 7] = 1.0f - CHAR_UNIT * (yIndex) - TEXCOORD_BUFFER; 
 
         pVertexArray[i*24 + 10] = CHAR_UNIT * (xIndex+1.0f);
-        pVertexArray[i*24 + 11] = 1.0f - CHAR_UNIT * (yIndex); 
+        pVertexArray[i*24 + 11] = 1.0f - CHAR_UNIT * (yIndex) - TEXCOORD_BUFFER; 
 
         pVertexArray[i*24 + 14] = CHAR_UNIT * xIndex;
         pVertexArray[i*24 + 15] = 1.0f - CHAR_UNIT * (yIndex+1.0f);
 
         pVertexArray[i*24 + 18] = CHAR_UNIT * (xIndex+1.0f);
-        pVertexArray[i*24 + 19] = 1.0f - CHAR_UNIT * (yIndex); 
+        pVertexArray[i*24 + 19] = 1.0f - CHAR_UNIT * (yIndex) - TEXCOORD_BUFFER; 
 
         pVertexArray[i*24 + 22] = CHAR_UNIT * (xIndex+1.0f);
         pVertexArray[i*24 + 23] = 1.0f - CHAR_UNIT * (yIndex+1.0f);
 
 
         // Position
-        pVertexArray[i*24 + 0] = m_fX + i*fCharWidth;
-        pVertexArray[i*24 + 1] = m_fY;
+        pVertexArray[i*24 + 0] = m_fX + nCharOffX*fCharWidth;
+        pVertexArray[i*24 + 1] = m_fY + nCharOffY*fCharHeight;
 
-        pVertexArray[i*24 + 4] = m_fX + i*fCharWidth;
-        pVertexArray[i*24 + 5] = m_fY + fCharHeight;
+        pVertexArray[i*24 + 4] = m_fX + nCharOffX*fCharWidth;
+        pVertexArray[i*24 + 5] = m_fY + fCharHeight + nCharOffY*fCharHeight;
 
-        pVertexArray[i*24 + 8] = m_fX + fCharWidth + i*fCharWidth;
-        pVertexArray[i*24 + 9] = m_fY + fCharHeight;
+        pVertexArray[i*24 + 8] = m_fX + fCharWidth + nCharOffX*fCharWidth;
+        pVertexArray[i*24 + 9] = m_fY + fCharHeight + nCharOffY*fCharHeight;
 
-        pVertexArray[i*24 + 12] = m_fX + i*fCharWidth;
-        pVertexArray[i*24 + 13] = m_fY;
+        pVertexArray[i*24 + 12] = m_fX + nCharOffX*fCharWidth;
+        pVertexArray[i*24 + 13] = m_fY + nCharOffY*fCharHeight;
 
-        pVertexArray[i*24 + 16] = m_fX + fCharWidth + i*fCharWidth;
-        pVertexArray[i*24 + 17] = m_fY + fCharHeight;
+        pVertexArray[i*24 + 16] = m_fX + fCharWidth + nCharOffX*fCharWidth;
+        pVertexArray[i*24 + 17] = m_fY + fCharHeight + nCharOffY*fCharHeight;
 
-        pVertexArray[i*24 + 20] = m_fX + fCharWidth + i*fCharWidth;
-        pVertexArray[i*24 + 21] = m_fY;
+        pVertexArray[i*24 + 20] = m_fX + fCharWidth + nCharOffX*fCharWidth;
+        pVertexArray[i*24 + 21] = m_fY + nCharOffY*fCharHeight;
+
+        if (target == '\n')
+        {
+            nCharOffX = 0;
+            nCharOffY--;
+        }
+        else
+        {
+            nCharOffX++;
+        }
     }
 }

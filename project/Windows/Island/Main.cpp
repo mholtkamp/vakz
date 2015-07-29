@@ -95,8 +95,8 @@ int main()
     Text* pTestText = new Text();
     pTestText->SetPosition(-0.9f, 0.8f);
     pTestText->SetColor(1.0f, 0.0f, 0.0f, 0.8f);
-    pTestText->SetScale(0.45f, 0.8f);
-    pTestText->SetText("Animation: Wave");
+    pTestText->SetScale(0.6f, 0.8f);
+    pTestText->SetText("Animation:\nWave");
 
     // Add the test cube to the scene
     pTestScene->AddMatter(pTestCube);
@@ -181,14 +181,14 @@ int main()
             if (IsControllerButtonDown(VCONT_A, 0))
             {
                 pTestAnim->SetAnimation("Wave");
-                pTestText->SetText("Animation: Wave");
+                pTestText->SetText("Animation:\nWave");
                 pTestAnim->ResetAnimation();
             }
 
             if (IsControllerButtonDown(VCONT_B, 0))
             {
                 pTestAnim->SetAnimation("No");
-                pTestText->SetText("Animation: No");
+                pTestText->SetText("Animation:\nNo");
                 pTestAnim->ResetAnimation();
             }
         }
@@ -293,14 +293,14 @@ int main()
         if (IsKeyDown(VKEY_1))
         {
             pTestAnim->SetAnimation("Wave");
-            pTestText->SetText("Animation: Wave");
+            pTestText->SetText("Animation:\nWave");
             pTestAnim->ResetAnimation();
         }
 
         if (IsKeyDown(VKEY_2))
         {
             pTestAnim->SetAnimation("No");
-            pTestText->SetText("Animation: No");
+            pTestText->SetText("Animation:\nNo");
             pTestAnim->ResetAnimation();
         }
 
