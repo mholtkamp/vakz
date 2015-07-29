@@ -177,6 +177,10 @@ void Matter::Render(void* pScene)
             hMatrixMVP = glGetUniformLocation(hProg, "uMatrixMVP");
             glUniformMatrix4fv(hMatrixMVP, 1, GL_FALSE, matMVP.GetArray());
 
+            // Create the normal matrix
+            m_matModel.Inverse();
+            m_matModel.Transpose();
+
             // Upload model matrix to shader for normal transformations
             hMatrixM = glGetUniformLocation(hProg, "uMatrixM");
             glUniformMatrix4fv(hMatrixM, 1, GL_FALSE, m_matModel.GetArray());

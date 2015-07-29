@@ -118,8 +118,8 @@ GLSL_VERSION_STRING
 "void main()\n"
 "{\n"
 "   vTexCoord = aTexCoord;\n"
-//"   vNormal   = (uMatrixM * vec4(aNormal, 0.0)).xyz;\n"
-"   vNormal   = (transpose(inverse(uMatrixM)) * vec4(aNormal, 0.0)).xyz;\n" 
+"   vNormal   = (uMatrixM * vec4(aNormal, 0.0)).xyz;\n"
+//"   vNormal   = (transpose(inverse(uMatrixM)) * vec4(aNormal, 0.0)).xyz;\n" 
 "   gl_Position = uMatrixMVP * vec4(aPosition, 1.0);\n"
 "}\n";
 
@@ -184,8 +184,8 @@ GLSL_VERSION_STRING
 "   vec2 lTexCoord = mix(aTexCoord1, aTexCoord2, lMix);\n"
 "   vec3 lNormal   = mix(aNormal1,   aNormal2,   lMix);\n"
 "   vTexCoord = lTexCoord;\n"
-//"   vNormal   = (uMatrixM * vec4(aNormal, 0.0)).xyz;\n"
-"   vNormal   = (transpose(inverse(uMatrixM)) * vec4(lNormal, 0.0)).xyz;\n" 
+"   vNormal   = (uMatrixM * vec4(lNormal, 0.0)).xyz;\n"
+//"   vNormal   = (transpose(inverse(uMatrixM)) * vec4(lNormal, 0.0)).xyz;\n" 
 "   gl_Position = uMatrixMVP * vec4(lPosition, 1.0);\n"
 "}\n";
 
