@@ -23,6 +23,17 @@ int main()
 {
     SetWindowSize(1024,768);
     Initialize();
+
+    //@@ DEBUG INVERSE TEST
+    float arValues[16] = {2.0f,  6.0f, -1.0f,  3.0f,
+                          3.0f,  0.0f,  3.0f, -2.0f,
+                          8.0f, -3.0f,  2.0f, -4.0f,
+                          5.0f,  2.0f, -1.0f,  4.0f};
+    Matrix matTest;
+    matTest.Load(arValues);
+    matTest.Inverse();
+    //@@ END
+
     Scene* pTestScene = new Scene();
     SetScene(pTestScene);
 

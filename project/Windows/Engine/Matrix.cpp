@@ -1,5 +1,6 @@
 #include "Matrix.h"
 #include "VMath.h"
+#include "Log.h"
 #include <math.h>
 #include <string.h> // for memset, memcpy
 
@@ -240,6 +241,7 @@ void Matrix::Inverse()
 
     int i = 0;
     int j = 0;
+    int r = 0;
     int nInverseExists = 1;
     int nTarget        = 0;
     float fMax         = 0.0f;
@@ -320,14 +322,31 @@ void Matrix::Inverse()
 
         // Now multiply row j by 1/arMat[j][j] to make leading number 1
         fFactor = 1/arMat[j + j*4];
-        
-        for (i = j; i < MATRIX_SIZE; i++)
-        {
-            arMat[j + i*4] *= fFactor;
-            arInv[j + i*4] *= fFactor;
-        }
+        arMat[j + 0]  *= fFactor;
+        arMat[j + 4]  *= fFactor;
+        arMat[j + 8]  *= fFactor;
+        arMat[j + 12] *= fFactor;
+        arInv[j + 0]  *= fFactor;
+        arInv[j + 4]  *= fFactor;
+        arInv[j + 8]  *= fFactor;
+        arInv[j + 12] *= fFactor;
 
-        // TODO: eliminate rows below.
+        // Eliminate values in column j for all rows that arent row j
+        for (r = 0; r < MATRIX_SIZE; r++)
+        {
+            if (r != j)
+            {
+                fFactor = -1.0f * arMat[r + j*4];
+                arMat[r + 0]  += fFactor * arMat[j + 0];
+                arMat[r + 4]  += fFactor * arMat[j + 4];
+                arMat[r + 8]  += fFactor * arMat[j + 8];
+                arMat[r + 12] += fFactor * arMat[j + 12];
+                arInv[r + 0]  += fFactor * arInv[j + 0];
+                arInv[r + 4]  += fFactor * arInv[j + 4];
+                arInv[r + 8]  += fFactor * arInv[j + 8];
+                arInv[r + 12] += fFactor * arInv[j + 12];
+            }
+        }
     }
 
 
@@ -335,6 +354,10 @@ void Matrix::Inverse()
     if (nInverseExists != 0)
     {
         memcpy(m_arValues, arInv, MATRIX_VALUE_COUNT * sizeof(float));
+    }
+    else
+    {
+        LogDebug("No inverse exists in Matrix::Inverse().");
     }
 }
 
@@ -344,6 +367,17 @@ void Matrix::Inverse()
 void Matrix::Transpose()
 {
 
+}
+
+//*****************************************************************************
+// Load
+//*****************************************************************************
+void Matrix::Load(float* arValues)
+{
+    if (arValues != 0)
+    {
+        memcpy(m_arValues, arValues, MATRIX_VALUE_COUNT * sizeof(float));
+    }
 }
 
 //*****************************************************************************
