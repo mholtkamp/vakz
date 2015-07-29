@@ -227,6 +227,126 @@ void Matrix::Ortho(float fLeft,
 }
 
 //*****************************************************************************
+// Inverse
+//*****************************************************************************
+void Matrix::Inverse()
+{
+    // This function uses Gauss-Jordan elimination for finding
+    // the inverse of a 4x4 matrix.  If the inverse does not exist, than
+    // the matrix is left alone and not altered in any way.
+    static float arMat[MATRIX_VALUE_COUNT] = {0.0f};
+    static float arInv[MATRIX_VALUE_COUNT] = {0.0f};
+    static float arTmp[MATRIX_SIZE]        = {0.0f};
+
+    int i = 0;
+    int j = 0;
+    int nInverseExists = 1;
+    int nTarget        = 0;
+    float fMax         = 0.0f;
+    float fFactor      = 0.0f;
+
+    // arMat will initially hold the current matrix values
+    memcpy(arMat, m_arValues, MATRIX_VALUE_COUNT * sizeof(float));
+
+    // arInv will initially hold the identity matrix, but by the end
+    // of the algorithm, arInv will contain the inverse matrix.
+    memset(arInv, 0, MATRIX_VALUE_COUNT * sizeof(float));
+    arInv[0]  = 1.0f;
+    arInv[5]  = 1.0f;
+    arInv[10] = 1.0f;
+    arInv[15] = 1.0f;
+
+    // Iterate over columns
+    for (j = 0; j < MATRIX_SIZE; j++)
+    {
+        nTarget = 0;
+        fMax    = 0.0f;
+
+        // First, find the row number that has the largest value in column j.
+        // This row number will be called nTarget.
+        for (i = j; i < MATRIX_SIZE; i++)
+        {
+            if (abs(arMat[i + 4*j]) > fMax)
+            {
+                nTarget = i;
+                fMax    = abs(arMat[i + 4*j]);
+            }
+        }
+
+        // If the maximum value was 0, then no inverse exists.
+        if (fMax == 0.0f)
+        {
+            nInverseExists = 0;
+            break;
+        }
+
+        // If the row with the max value is not equal to j, then swap
+        // the topmost row with the target row. Now row j will have the
+        // biggest leading number.
+        if (nTarget != j)
+        {
+            // Make a backup of top row
+            arTmp[0] = arMat[j + 0];
+            arTmp[1] = arMat[j + 4];
+            arTmp[2] = arMat[j + 8];
+            arTmp[3] = arMat[j + 12];
+
+            // Move target row to top
+            arMat[j + 0]  = arMat[nTarget + 0];
+            arMat[j + 4]  = arMat[nTarget + 4];
+            arMat[j + 8]  = arMat[nTarget + 8];
+            arMat[j + 12] = arMat[nTarget + 12];
+
+            // Copy temp array values to the target row position
+            arMat[nTarget + 0]  = arTmp[0];
+            arMat[nTarget + 4]  = arTmp[1];
+            arMat[nTarget + 8]  = arTmp[2];
+            arMat[nTarget + 12] = arTmp[3];
+
+            // Do the same exact operations on the arInv matrix.
+            arTmp[0] = arInv[j + 0];
+            arTmp[1] = arInv[j + 4];
+            arTmp[2] = arInv[j + 8];
+            arTmp[3] = arInv[j + 12];
+            arInv[j + 0]  = arInv[nTarget + 0];
+            arInv[j + 4]  = arInv[nTarget + 4];
+            arInv[j + 8]  = arInv[nTarget + 8];
+            arInv[j + 12] = arInv[nTarget + 12];
+            arInv[nTarget + 0]  = arTmp[0];
+            arInv[nTarget + 4]  = arTmp[1];
+            arInv[nTarget + 8]  = arTmp[2];
+            arInv[nTarget + 12] = arTmp[3];
+        }
+
+        // Now multiply row j by 1/arMat[j][j] to make leading number 1
+        fFactor = 1/arMat[j + j*4];
+        
+        for (i = j; i < MATRIX_SIZE; i++)
+        {
+            arMat[j + i*4] *= fFactor;
+            arInv[j + i*4] *= fFactor;
+        }
+
+        // TODO: eliminate rows below.
+    }
+
+
+    // Copy the arInv to the Matrix's m_arValues array.
+    if (nInverseExists != 0)
+    {
+        memcpy(m_arValues, arInv, MATRIX_VALUE_COUNT * sizeof(float));
+    }
+}
+
+//*****************************************************************************
+// Transpose
+//*****************************************************************************
+void Matrix::Transpose()
+{
+
+}
+
+//*****************************************************************************
 // Clear
 //*****************************************************************************
 void Matrix::Clear()

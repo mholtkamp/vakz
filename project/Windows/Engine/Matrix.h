@@ -107,6 +107,10 @@ public:
                float fNear,
                float fFar);
 
+    void Inverse();
+
+    void Transpose();
+
     //## **********************************************************************
     //## Clear
     //##

@@ -116,7 +116,7 @@ void android_main(struct android_app* state) {
 
     // Create some screen text
     Text* pTestText = new Text();
-    pTestText->SetPosition(-0.9, 0.8f);
+    pTestText->SetPosition(-0.9f, 0.8f);
     pTestText->SetColor(1.0f, 0.0f, 0.0f, 0.8f);
     pTestText->SetScale(0.45f, 0.8f);
     pTestText->SetText("Beep");
@@ -238,22 +238,26 @@ void android_main(struct android_app* state) {
             fRotY += fSeconds * ROT_SPEED;
         }
 
-        // Rotate
+        // Move
         if (IsKeyDown(VKEY_W))
         {
-            fZ -= fSeconds * MOVE_SPEED;
+            fZ -= fSeconds * MOVE_SPEED * cos(fRotY * DEGREES_TO_RADIANS);
+            fX -= fSeconds * MOVE_SPEED * sin(fRotY * DEGREES_TO_RADIANS);
         }
         if (IsKeyDown(VKEY_S))
         {
-            fZ += fSeconds * MOVE_SPEED;
+            fZ += fSeconds * MOVE_SPEED * cos(fRotY * DEGREES_TO_RADIANS);
+            fX += fSeconds * MOVE_SPEED * sin(fRotY * DEGREES_TO_RADIANS);
         }
         if (IsKeyDown(VKEY_A))
         {
-            fX -= fSeconds * MOVE_SPEED;
+            fZ -= fSeconds * MOVE_SPEED * cos((90.0f + fRotY) * DEGREES_TO_RADIANS);
+            fX -= fSeconds * MOVE_SPEED * sin((90.0f + fRotY) * DEGREES_TO_RADIANS);
         }
         if (IsKeyDown(VKEY_D))
         {
-            fX += fSeconds * MOVE_SPEED;
+            fZ += fSeconds * MOVE_SPEED * cos((90.0f + fRotY) * DEGREES_TO_RADIANS);
+            fX += fSeconds * MOVE_SPEED * sin((90.0f + fRotY) * DEGREES_TO_RADIANS);
         }
         if (IsKeyDown(VKEY_SPACE))
         {

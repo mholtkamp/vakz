@@ -3,6 +3,8 @@
 #include "Quad.h"
 #include "VGL.h"
 #include "VInput.h"
+#include "VMath.h"
+#include "Log.h"
 #include "Timer.h"
 #include "Matrix.h"
 #include "ResourceLibrary.h"
@@ -11,9 +13,11 @@
 #include "Text.h"
 
 #include <stdio.h>
+#include <math.h>
 
-#define ROT_SPEED 30.0f
+#define ROT_SPEED 70.0f
 #define MOVE_SPEED 5.0f
+#define THRESH 0.4f
 
 int main()
 {
@@ -45,14 +49,14 @@ int main()
 
     Matter* pTestMonkey = new Matter();
     StaticMesh* pMonkeyMesh = new StaticMesh();
-    pMonkeyMesh->Load("E:/Projects/vakz/project/Windows/Island/druid.obj");
+    pMonkeyMesh->Load("druid.obj");
     pTestMonkey->SetMesh(pMonkeyMesh);
     pTestMonkey->SetMaterial(pCubeMat);
     pTestMonkey->SetPosition(0.0f, 0.0f, 0.0f);
 
     Matter* pTestAnim = new Matter();
     AnimatedMesh* pAnimMesh = new AnimatedMesh();
-    pAnimMesh->Load("E:/Projects/vakz/project/Windows/Island/Druid_AM/druid.amf");
+    pAnimMesh->Load("Druid_AM/druid.amf");
     pTestAnim->SetMesh(pAnimMesh);
     pTestAnim->SetLoopMode(Matter::LOOP_NONE);
     pTestAnim->SetAnimation("No");
@@ -60,8 +64,10 @@ int main()
     pTestAnim->SetMaterial(pCubeMat);
     pTestAnim->SetPosition(-3.5f, 0.0f, 0.0f);
 
+    LogDebug("Loaded both meshes.");
+
     Texture* pTestTexture = new Texture();
-    pTestTexture->LoadBMP("E:/Projects/vakz/project/Windows/Island/trueform_base_color.bmp");
+    pTestTexture->LoadBMP("trueform_base_color.bmp");
     pTestMonkey->SetTexture(pTestTexture);
     pTestAnim->SetTexture(pTestTexture);
 
@@ -73,10 +79,10 @@ int main()
 
     // Create some screen text
     Text* pTestText = new Text();
-    pTestText->SetPosition(-0.9f, 0.9f);
+    pTestText->SetPosition(-0.9f, 0.8f);
     pTestText->SetColor(1.0f, 0.0f, 0.0f, 0.8f);
-    pTestText->SetScale(0.65f, 0.8f);
-    pTestText->SetText("Beep");
+    pTestText->SetScale(0.45f, 0.8f);
+    pTestText->SetText("Animation: Wave");
 
     // Add the test cube to the scene
     pTestScene->AddMatter(pTestCube);
@@ -108,6 +114,75 @@ int main()
         // Update
         Update();
 
+        if (IsControllerConnected(0))
+        {
+            // Camera
+            if (GetControllerAxisValue(VCONT_AXIS_RZ, 0) < -THRESH)
+            {
+                fRotX += fSeconds * ROT_SPEED;
+            }
+            if (GetControllerAxisValue(VCONT_AXIS_RZ, 0) > THRESH)
+            {
+                fRotX -= fSeconds * ROT_SPEED;
+            }
+            if (GetControllerAxisValue(VCONT_AXIS_Z, 0) > THRESH)
+            {
+                fRotY -= fSeconds * ROT_SPEED;
+            }
+            if (GetControllerAxisValue(VCONT_AXIS_Z, 0) < -THRESH)
+            {
+                fRotY += fSeconds * ROT_SPEED;
+            }
+
+            // Movement
+            if (GetControllerAxisValue(VCONT_AXIS_Y, 0) < -THRESH)
+            {
+                fZ -= fSeconds * MOVE_SPEED * cos(fRotY * DEGREES_TO_RADIANS);
+                fX -= fSeconds * MOVE_SPEED * sin(fRotY * DEGREES_TO_RADIANS);
+            }
+            if (GetControllerAxisValue(VCONT_AXIS_Y, 0) > THRESH)
+            {
+                fZ += fSeconds * MOVE_SPEED * cos(fRotY * DEGREES_TO_RADIANS);
+                fX += fSeconds * MOVE_SPEED * sin(fRotY * DEGREES_TO_RADIANS);
+            }
+            if (GetControllerAxisValue(VCONT_AXIS_X, 0) < -THRESH)
+            {
+                fZ -= fSeconds * MOVE_SPEED * cos((90.0f + fRotY) * DEGREES_TO_RADIANS);
+                fX -= fSeconds * MOVE_SPEED * sin((90.0f + fRotY) * DEGREES_TO_RADIANS);
+            }
+            if (GetControllerAxisValue(VCONT_AXIS_X, 0) > THRESH)
+            {
+                fZ += fSeconds * MOVE_SPEED * cos((90.0f + fRotY) * DEGREES_TO_RADIANS);
+                fX += fSeconds * MOVE_SPEED * sin((90.0f + fRotY) * DEGREES_TO_RADIANS);
+            }
+            if (IsControllerButtonDown(VCONT_R1, 0))
+            {
+                fY += fSeconds * MOVE_SPEED;
+            }
+            if (IsControllerButtonDown(VCONT_L1, 0))
+            {
+                fY -= fSeconds * MOVE_SPEED;
+            }
+
+            if (IsControllerButtonDown(VCONT_A, 0))
+            {
+                pTestAnim->SetAnimation("Wave");
+                pTestText->SetText("Animation: Wave");
+                pTestAnim->ResetAnimation();
+            }
+
+            if (IsControllerButtonDown(VCONT_B, 0))
+            {
+                pTestAnim->SetAnimation("No");
+                pTestText->SetText("Animation: No");
+                pTestAnim->ResetAnimation();
+            }
+        }
+        else
+        {
+            //LogDebug("Controller is not connected");
+        }
+
         // Rotate camera
         if (IsKeyDown(VKEY_UP))
         {
@@ -126,22 +201,26 @@ int main()
             fRotY += fSeconds * ROT_SPEED;
         }
 
-        // Rotate
+        // Move
         if (IsKeyDown(VKEY_W))
         {
-            fZ -= fSeconds * MOVE_SPEED;
+            fZ -= fSeconds * MOVE_SPEED * cos(fRotY * DEGREES_TO_RADIANS);
+            fX -= fSeconds * MOVE_SPEED * sin(fRotY * DEGREES_TO_RADIANS);
         }
         if (IsKeyDown(VKEY_S))
         {
-            fZ += fSeconds * MOVE_SPEED;
+            fZ += fSeconds * MOVE_SPEED * cos(fRotY * DEGREES_TO_RADIANS);
+            fX += fSeconds * MOVE_SPEED * sin(fRotY * DEGREES_TO_RADIANS);
         }
         if (IsKeyDown(VKEY_A))
         {
-            fX -= fSeconds * MOVE_SPEED;
+            fZ -= fSeconds * MOVE_SPEED * cos((90.0f + fRotY) * DEGREES_TO_RADIANS);
+            fX -= fSeconds * MOVE_SPEED * sin((90.0f + fRotY) * DEGREES_TO_RADIANS);
         }
         if (IsKeyDown(VKEY_D))
         {
-            fX += fSeconds * MOVE_SPEED;
+            fZ += fSeconds * MOVE_SPEED * cos((90.0f + fRotY) * DEGREES_TO_RADIANS);
+            fX += fSeconds * MOVE_SPEED * sin((90.0f + fRotY) * DEGREES_TO_RADIANS);
         }
         if (IsKeyDown(VKEY_SPACE))
         {
@@ -236,5 +315,5 @@ int main()
     delete pCubeMat;
     delete pTestScene;
 
-    printf("Exiting.\n");
+    exit(0);
 }
