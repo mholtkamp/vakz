@@ -32,6 +32,9 @@ int main()
     Matrix matTest;
     matTest.Load(arValues);
     matTest.Inverse();
+
+    matTest.Load(arValues);
+    matTest.Transpose();
     //@@ END
 
     Scene* pTestScene = new Scene();

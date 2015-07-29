@@ -366,7 +366,19 @@ void Matrix::Inverse()
 //*****************************************************************************
 void Matrix::Transpose()
 {
+    int   i = 0;
+    int   j = 0;
+    float fTemp = 0.0f;
 
+    for (i = 1; i < MATRIX_SIZE; i++)
+    {
+        for (j = 0; j < i; j++)
+        {
+            fTemp = m_arValues[i + j*4];
+            m_arValues[i + j*4] = m_arValues[j + i*4];
+            m_arValues[j + i*4] = fTemp;
+        }
+    }
 }
 
 //*****************************************************************************
