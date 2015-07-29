@@ -77,11 +77,14 @@ GLSL_VERSION_STRING
 "in vec2 aPosition;\n"
 "in vec2 aTexCoord;\n"
 "out vec2 vTexCoord;\n"
+"uniform vec2 uOrigin;\n"
+"uniform vec2 uScale;\n"
 
 "void main()\n"
 "{\n"
 "   vTexCoord = aTexCoord;\n"
-"   gl_Position = vec4(aPosition, 0.0, 1.0);\n"
+"   vec2 lPosition = (aPosition - uOrigin) * uScale + uOrigin;\n"
+"   gl_Position = vec4(lPosition, 0.0, 1.0);\n"
 "}\n";
 
 static const char* pTextFragmentShader = 

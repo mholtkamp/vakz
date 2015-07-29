@@ -4,10 +4,11 @@
 #include <string.h>
 #include <ctype.h>
 
-#define DEFAULT_CHAR_WIDTH  0.05f
-#define DEFAULT_CHAR_HEIGHT 0.05f
-#define CHAR_UNIT           0.125f
-#define TEXCOORD_BUFFER     0.004f
+#define DEFAULT_LINE_SPACING 0.2f
+#define DEFAULT_CHAR_WIDTH   0.05f
+#define DEFAULT_CHAR_HEIGHT  0.05f
+#define CHAR_UNIT            0.125f
+#define TEXCOORD_BUFFER      0.004f
 
 Text::Text()
 {
@@ -16,6 +17,7 @@ Text::Text()
     m_nTextLength  = 0;
     m_fScaleX      = 1.0f;
     m_fScaleY      = 1.0f;
+    m_fLineSpacing = DEFAULT_LINE_SPACING;
 
     m_pFont = reinterpret_cast<Font*>(ResourceLibrary::GetDefaultFont());
 
@@ -43,14 +45,20 @@ void Text::Render()
     int hColor    = -1;
     int hPosition = -1;
     int hTexCoord = -1;
+    int hOrigin   = -1;
+    int hScale    = -1;
 
     glUseProgram(hProg);
     hColor    = glGetUniformLocation(hProg, "uColor");
+    hOrigin   = glGetUniformLocation(hProg, "uOrigin");
+    hScale    = glGetUniformLocation(hProg, "uScale");
     hPosition = glGetAttribLocation(hProg, "aPosition");
     hTexCoord = glGetAttribLocation(hProg, "aTexCoord");
 
     m_pFont->SetRenderState(hProg);
     glUniform4fv(hColor, 1, m_arColor);
+    glUniform2f(hOrigin, m_fX, m_fY);
+    glUniform2f(hScale, m_fScaleX, m_fScaleY);
 
     glBindBuffer(GL_ARRAY_BUFFER, m_hVBO);
 
@@ -82,6 +90,11 @@ void Text::SetScale(float fX,
 {
     m_fScaleX = fX;
     m_fScaleY = fY;
+}
+
+void Text::SetLineSpacing(float fLineSpacing)
+{
+    m_fLineSpacing = fLineSpacing;
 }
 
 void Text::SetText(const char* pText)
@@ -148,10 +161,10 @@ void Text::GenerateVertexArray(float** pArray,
 {
     int i               = 0;
     float* pVertexArray = *pArray;
-    float fCharWidth    = m_fScaleX  * DEFAULT_CHAR_WIDTH;
-    float fCharHeight   = m_fScaleY  * DEFAULT_CHAR_HEIGHT;
+    float fCharWidth    = DEFAULT_CHAR_WIDTH;
+    float fCharHeight   = DEFAULT_CHAR_HEIGHT;
     int nCharOffX = 0;
-    int nCharOffY = 0;
+    float fCharOffY = 0.0f;
 
     for (i = 0; i < nTextLength; i++)
     {
@@ -204,30 +217,29 @@ void Text::GenerateVertexArray(float** pArray,
         pVertexArray[i*24 + 22] = CHAR_UNIT * (xIndex+1.0f);
         pVertexArray[i*24 + 23] = 1.0f - CHAR_UNIT * (yIndex+1.0f);
 
-
         // Position
         pVertexArray[i*24 + 0] = m_fX + nCharOffX*fCharWidth;
-        pVertexArray[i*24 + 1] = m_fY + nCharOffY*fCharHeight;
+        pVertexArray[i*24 + 1] = m_fY + fCharOffY;
 
         pVertexArray[i*24 + 4] = m_fX + nCharOffX*fCharWidth;
-        pVertexArray[i*24 + 5] = m_fY + fCharHeight + nCharOffY*fCharHeight;
+        pVertexArray[i*24 + 5] = m_fY + fCharHeight + fCharOffY;
 
         pVertexArray[i*24 + 8] = m_fX + fCharWidth + nCharOffX*fCharWidth;
-        pVertexArray[i*24 + 9] = m_fY + fCharHeight + nCharOffY*fCharHeight;
+        pVertexArray[i*24 + 9] = m_fY + fCharHeight + fCharOffY;
 
         pVertexArray[i*24 + 12] = m_fX + nCharOffX*fCharWidth;
-        pVertexArray[i*24 + 13] = m_fY + nCharOffY*fCharHeight;
+        pVertexArray[i*24 + 13] = m_fY + fCharOffY;
 
         pVertexArray[i*24 + 16] = m_fX + fCharWidth + nCharOffX*fCharWidth;
-        pVertexArray[i*24 + 17] = m_fY + fCharHeight + nCharOffY*fCharHeight;
+        pVertexArray[i*24 + 17] = m_fY + fCharHeight + fCharOffY;
 
         pVertexArray[i*24 + 20] = m_fX + fCharWidth + nCharOffX*fCharWidth;
-        pVertexArray[i*24 + 21] = m_fY + nCharOffY*fCharHeight;
+        pVertexArray[i*24 + 21] = m_fY + fCharOffY;
 
         if (target == '\n')
         {
             nCharOffX = 0;
-            nCharOffY--;
+            fCharOffY -= fCharHeight + m_fLineSpacing*fCharHeight;
         }
         else
         {

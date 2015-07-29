@@ -93,9 +93,11 @@ int main()
 
     // Create some screen text
     Text* pTestText = new Text();
+    float fTextScaleX = 0.6f;
+    float fTextScaleY = 0.8f;
     pTestText->SetPosition(-0.9f, 0.8f);
-    pTestText->SetColor(1.0f, 0.0f, 0.0f, 0.8f);
-    pTestText->SetScale(0.6f, 0.8f);
+    pTestText->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
+    pTestText->SetScale(fTextScaleX, fTextScaleY);
     pTestText->SetText("Animation:\nWave");
 
     // Add the test cube to the scene
@@ -245,17 +247,6 @@ int main()
             fY -= fSeconds * MOVE_SPEED;
         }
 
-        if (IsButtonDown(VBUTTON_LEFT))
-        {
-            int nX = 0;
-            int nY = 0;
-            GetMousePosition(nX,nY);
-            printf("X: %d   Y: %d\n", nX, nY);
-        }
-        if (IsButtonDown(VBUTTON_RIGHT))
-        {
-            printf("Right Mouse Down\n");
-        }
         if (IsButtonDown(VBUTTON_MIDDLE))
         {
             pTestAnim->SetLoopMode(Matter::LOOP_PING_PONG);
@@ -302,6 +293,34 @@ int main()
             pTestAnim->SetAnimation("No");
             pTestText->SetText("Animation:\nNo");
             pTestAnim->ResetAnimation();
+        }
+
+        if (IsKeyDown(VKEY_N))
+        {
+            if (IsKeyDown(VKEY_Z))
+            {
+                fTextScaleX -= 0.005;
+            }
+            else
+            {
+                fTextScaleX += 0.005;
+            }
+
+            pTestText->SetScale(fTextScaleX, fTextScaleY);
+        }
+
+        if (IsKeyDown(VKEY_M))
+        {
+            if (IsKeyDown(VKEY_Z))
+            {
+                fTextScaleY -= 0.005;
+            }
+            else
+            {
+                fTextScaleY += 0.005;
+            }
+
+            pTestText->SetScale(fTextScaleX, fTextScaleY);
         }
 
         pCamera->SetPosition(fX, fY, fZ);

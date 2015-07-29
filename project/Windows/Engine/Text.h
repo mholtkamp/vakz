@@ -18,6 +18,8 @@ public:
     void SetScale(float fX,
                   float fY);
 
+    void SetLineSpacing(float fLineSpacing);
+
     void SetText(const char* pText);
 
     void SetBufferSize(int nSize);
@@ -45,6 +47,8 @@ private:
     float m_fScaleX;
 
     float m_fScaleY;
+
+    float m_fLineSpacing;
 
     Font* m_pFont;
 
