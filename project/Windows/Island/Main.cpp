@@ -299,11 +299,11 @@ int main()
         {
             if (IsKeyDown(VKEY_Z))
             {
-                fTextScaleX -= 0.005;
+                fTextScaleX -= 0.005f;
             }
             else
             {
-                fTextScaleX += 0.005;
+                fTextScaleX += 0.005f;
             }
 
             pTestText->SetScale(fTextScaleX, fTextScaleY);
@@ -313,11 +313,11 @@ int main()
         {
             if (IsKeyDown(VKEY_Z))
             {
-                fTextScaleY -= 0.005;
+                fTextScaleY -= 0.005f;
             }
             else
             {
-                fTextScaleY += 0.005;
+                fTextScaleY += 0.005f;
             }
 
             pTestText->SetScale(fTextScaleX, fTextScaleY);
