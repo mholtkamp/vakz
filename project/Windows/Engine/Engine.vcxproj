@@ -68,7 +68,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AnimatedMesh.cpp" />
+    <ClCompile Include="BoxCollider.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Collider.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="Text.cpp" />
     <ClCompile Include="Timer.cpp" />
@@ -95,7 +97,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimatedMesh.h" />
+    <ClInclude Include="BoxCollider.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Collider.h" />
     <ClInclude Include="DefaultFont.h" />
     <ClInclude Include="DiffuseMaterial.h" />
     <ClInclude Include="DirectionalLight.h" />

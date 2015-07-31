@@ -87,6 +87,32 @@ void Matter::SetTexture(Texture* pTexture)
 }
 
 //*****************************************************************************
+// SetCollider
+//*****************************************************************************
+void Matter::SetCollider(Collider* pCollider)
+{
+    if(pCollider != 0)
+    {
+        m_pCollider = pCollider;
+        m_pCollider->SetPosition(m_fX, m_fY, m_fZ);
+        m_pCollider->SetRotation(m_fRotX, m_fRotY, m_fRotZ);
+        m_pCollider->SetScale(m_fScaleX, m_fScaleY, m_fScaleZ);
+    }
+    else
+    {
+        LogWarning("Denied attempt to set a null collider in Matter::SetCollider().");
+    }
+}
+
+//*****************************************************************************
+// GetCollider
+//*****************************************************************************
+Collider* Matter::GetCollider()
+{
+    return m_pCollider;
+}
+
+//*****************************************************************************
 // Render
 //*****************************************************************************
 void Matter::Render(void* pScene)
@@ -227,6 +253,11 @@ void Matter::SetPosition(float fX,
     m_fX = fX;
     m_fY = fY;
     m_fZ = fZ;
+
+    if (m_pCollider != 0)
+    {
+        m_pCollider->SetPosition(fX, fY, fZ);
+    }
 }
 
 //*****************************************************************************
@@ -239,6 +270,11 @@ void Matter::SetRotation(float fRotX,
     m_fRotX = fRotX;
     m_fRotY = fRotY;
     m_fRotZ = fRotZ;
+
+    if (m_pCollider != 0)
+    {
+        m_pCollider->SetRotation(fRotX, fRotY, fRotZ);
+    }
 }
 
 //*****************************************************************************
@@ -251,6 +287,11 @@ void Matter::SetScale(float fScaleX,
     m_fScaleX = fScaleX;
     m_fScaleY = fScaleY;
     m_fScaleZ = fScaleZ;
+
+    if (m_pCollider != 0)
+    {
+        m_pCollider->SetScale(fScaleX, fScaleY, fScaleZ);
+    }
 }
 
 //*****************************************************************************
@@ -427,5 +468,18 @@ void Matter::UpdateAnimation()
                 }
             }
         }
+    }
+}
+
+//*****************************************************************************
+// Overlaps
+//*****************************************************************************
+int Matter::Overlaps(Matter* pOther)
+{
+    if (pOther                != 0 &&
+        pOther->GetCollider() != 0 &&
+        m_pCollider           != 0)
+    {
+        return m_pCollider->Overlaps(pOther->GetCollider());
     }
 }

@@ -52,6 +52,8 @@ protected:
     float m_fRotX;
     float m_fRotY;
     float m_fRotZ;
+
+    float m_arRenderColor[4];
 };
 
 #endif

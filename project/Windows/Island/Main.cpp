@@ -7,6 +7,7 @@
 #include "Log.h"
 #include "Timer.h"
 #include "Matrix.h"
+#include "BoxCollider.h"
 #include "ResourceLibrary.h"
 #include "DiffuseMaterial.h"
 #include "DirectionalLight.h"
@@ -60,6 +61,11 @@ int main()
     pTestCube->SetMesh(reinterpret_cast<StaticMesh*>(pLibrary->GetPrimitive(PRIMITIVE_CUBE)));
     pTestCube->SetMaterial(pCubeMat2);
     pTestCube->SetPosition(5.0f, 0.0f, 0.0f);
+    BoxCollider* pCubeCollider = new BoxCollider();
+    pCubeCollider->SetExtents(-1.0f, 1.0f,
+                              -1.0f, 1.0f,
+                              -1.0f, 1.0f);
+    pTestCube->SetCollider(pCubeCollider);
 
     Matter* pTestMonkey = new Matter();
     StaticMesh* pMonkeyMesh = new StaticMesh();
@@ -68,6 +74,7 @@ int main()
     pTestMonkey->SetMaterial(pCubeMat);
     pTestMonkey->SetPosition(0.0f, 0.0f, 0.0f);
 
+    // Create TestAnim
     Matter* pTestAnim = new Matter();
     AnimatedMesh* pAnimMesh = new AnimatedMesh();
     pAnimMesh->Load("Druid_AM/druid.amf");
@@ -77,6 +84,12 @@ int main()
     pTestAnim->StartAnimation();
     pTestAnim->SetMaterial(pCubeMat);
     pTestAnim->SetPosition(-3.5f, 0.0f, 0.0f);
+    BoxCollider* pTestCollider = new BoxCollider();
+    pTestCollider->SetExtents(-0.706f, 0.706f,
+                               0.0f,   2.464f,
+                              -0.706f, 0.706f);
+    pTestAnim->SetCollider(pTestCollider);
+    pTestAnim->SetScale(0.25f, 0.25f, 0.25f);
 
     LogDebug("Loaded both meshes.");
 
@@ -108,6 +121,15 @@ int main()
     // Add text to screen
     pTestScene->AddGlyph(pTestText);
 
+    // Collision text
+    Text colText;
+    int nCollision = 0;
+    colText.SetColor(0.2f, 0.8f, 0.28f, 1.0f);
+    colText.SetPosition(0.5f, 0.8f);
+    colText.SetScale(0.6f, 0.8f);
+    colText.SetText("No Collision");
+    pTestScene->AddGlyph(&colText);
+
     float fSeconds = 0.0f;
     float fZ = 10.0f;
     float fY = 0.0f;
@@ -116,6 +138,9 @@ int main()
     float fRotY = 0.0f;
     float fRotZ = 0.0f;
     int nLock = 0;
+    float fBearX = -3.5f;
+    float fBearY = 0.0f;
+    float fBearZ = 0.0f;
     float fCube2Rot = 0.0f;
     float fAnimSpeed = 1.0f;
     Timer timer;
@@ -323,21 +348,75 @@ int main()
             pTestText->SetScale(fTextScaleX, fTextScaleY);
         }
 
+        if (IsKeyDown(VKEY_Z))
+        {
+            if (IsKeyDown(VKEY_C))
+            {
+                fBearX -= 0.01;
+            }
+            if (IsKeyDown(VKEY_V))
+            {
+                fBearY -= 0.01;
+            }
+            if (IsKeyDown(VKEY_B))
+            {
+                fBearZ -= 0.01;
+            }
+        }
+        else
+        {
+            if (IsKeyDown(VKEY_C))
+            {
+                fBearX += 0.01;
+            }
+            if (IsKeyDown(VKEY_V))
+            {
+                fBearY += 0.01;
+            }
+            if (IsKeyDown(VKEY_B))
+            {
+                fBearZ += 0.01;
+            }
+        }
+        pTestAnim->SetPosition(fBearX, fBearY, fBearZ);
+
+
+
         pCamera->SetPosition(fX, fY, fZ);
         pCamera->SetRotation(fRotX, fRotY, fRotZ);
 
         if (IsPointerDown())
         {
-            fCube2Rot += fSeconds * ROT_SPEED;
-            pTestMonkey->SetRotation(0.0f, fCube2Rot, 0.0f);
-            pTestCube->SetRotation(fCube2Rot, 0.0f, 0.0f);
-            pTestAnim->SetRotation(0.0f, -1.0f * fCube2Rot, 0.0f);
+            //fCube2Rot += fSeconds * ROT_SPEED;
+            //pTestMonkey->SetRotation(0.0f, fCube2Rot, 0.0f);
+            //pTestCube->SetRotation(fCube2Rot, 0.0f, 0.0f);
+            //pTestAnim->SetRotation(0.0f, -1.0f * fCube2Rot, 0.0f);
         }
 
+        if (pTestAnim->Overlaps(pTestCube))
+        {
+            if (nCollision == 0)
+            {
+                nCollision = 1;
+                colText.SetColor(0.8f, 0.2f, 0.28f, 1.0f);
+                colText.SetText("Collision!");
+            }
+        }
+        else
+        {
+            if (nCollision == 1)
+            {
+                nCollision = 0;
+                colText.SetColor(0.2f, 0.8f, 0.28f, 1.0f);
+                colText.SetText("No Collision");
+            }
+        }
         timer.Start();
         Render();
     }
 
+    delete pTestCollider;
+    delete pCubeCollider;
     delete pLibrary;
     delete pSun;
     delete pTestCube;

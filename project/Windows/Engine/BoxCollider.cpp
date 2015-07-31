@@ -38,9 +38,26 @@ void BoxCollider::Render()
 
 int BoxCollider::Overlaps(Collider* pOther)
 {
+    BoxCollider* pBox = 0;
+
     if (pOther->GetType() == COLLIDER_BOX)
     {
-        return 0;
+        pBox = reinterpret_cast<BoxCollider*>(pOther);
+        
+        if (pBox->GetMinX() > this->GetMaxX())
+            return 0;
+        if (pBox->GetMinY() > this->GetMaxY())
+            return 0;
+        if (pBox->GetMinZ() > this->GetMaxZ())
+            return 0;
+        if (pBox->GetMaxX() < this->GetMinX())
+            return 0;
+        if (pBox->GetMaxY() < this->GetMinY())
+            return 0;
+        if (pBox->GetMaxZ() < this->GetMinZ())
+            return 0;
+
+        return 1;
     }
     else if (pOther->GetType() == COLLIDER_MESH)
     {
@@ -50,30 +67,30 @@ int BoxCollider::Overlaps(Collider* pOther)
 
 float BoxCollider::GetMinX()
 {
-    return m_fMinX + m_fX;
+    return m_fMinX * m_fScaleX + m_fX;
 }
 
 float BoxCollider::GetMaxX()
 {
-    return m_fMaxX + m_fX;
+    return m_fMaxX * m_fScaleX + m_fX;
 }
 
 float BoxCollider::GetMinY()
 {
-    return m_fMinY + m_fY;
+    return m_fMinY * m_fScaleY + m_fY;
 }
 
 float BoxCollider::GetMaxY()
 {
-    return m_fMaxY + m_fY;
+    return m_fMaxY * m_fScaleY + m_fY;
 }
 
 float BoxCollider::GetMinZ()
 {
-    return m_fMinZ + m_fZ;
+    return m_fMinZ * m_fScaleZ + m_fZ;
 }
 
 float BoxCollider::GetMaxZ()
 {
-    return m_fMaxZ + m_fZ;
+    return m_fMaxZ * m_fScaleZ + m_fZ;
 }

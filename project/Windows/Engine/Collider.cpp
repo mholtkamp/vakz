@@ -1,5 +1,10 @@
 #include "Collider.h"
 
+#define DEFAULT_COLLIDER_COLOR_R 0.2f
+#define DEFAULT_COLLIDER_COLOR_G 0.8f
+#define DEFAULT_COLLIDER_COLOR_B 0.25f
+#define DEFAULT_COLLIDER_COLOR_A 0.3f
+
 Collider::Collider()
 {
     m_nType = COLLIDER_NO_TYPE;
@@ -13,6 +18,11 @@ Collider::Collider()
     m_fRotX = 0.0f;
     m_fRotY = 0.0f;
     m_fRotZ = 0.0f;
+
+    m_arRenderColor[0] = DEFAULT_COLLIDER_COLOR_R;
+    m_arRenderColor[1] = DEFAULT_COLLIDER_COLOR_G;
+    m_arRenderColor[2] = DEFAULT_COLLIDER_COLOR_B;
+    m_arRenderColor[3] = DEFAULT_COLLIDER_COLOR_A;
 }
 
 Collider::~Collider()
@@ -43,7 +53,7 @@ void Collider::SetScale(float fScaleX,
     m_fScaleZ = fScaleZ;
 }
 
-void Collider::SetPosition(float fRotX,
+void Collider::SetRotation(float fRotX,
                            float fRotY,
                            float fRotZ)
 {

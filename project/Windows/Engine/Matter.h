@@ -6,6 +6,7 @@
 #include "SkeletalMesh.h"
 #include "Texture.h"
 #include "Material.h"
+#include "Collider.h"
 #include "Matrix.h"
 
 class Matter
@@ -55,6 +56,29 @@ public:
     //## **********************************************************************
     void SetTexture(Texture* pTexture);
 
+    //## **********************************************************************
+    //## SetCollider
+    //##
+    //## Assigns a collider to the matter. A collider is used for detecting
+    //## and handling different matters overlapping.
+    //##
+    //## Input:
+    //##   pCollider - pointer to new collider.
+    //## **********************************************************************
+    void SetCollider(Collider* pCollider);
+
+    //## **********************************************************************
+    //## GetCollider
+    //##
+    //## Assigns a texture to the matter. This texture will be drawn onto
+    //## the Matter's mesh based on the UV cooridinates specificed in the mesh's
+    //## vertex attributes.
+    //##
+    //## Returns:
+    //##   Collider* - pointer to this Matter's currently assigned collider.
+    //## **********************************************************************
+    Collider* GetCollider();
+    
     //## **********************************************************************
     //## Render
     //##
@@ -168,6 +192,18 @@ public:
     //## **********************************************************************
     void SetAnimationSpeed(float fSpeed);
 
+    //## **********************************************************************
+    //## Overlaps
+    //##
+    //## Checks if two Matters overlap based on their colliders. If either
+    //## Matter has no collider attached, this function will return 0.
+    //## 
+    //## Returns:
+    //##   int - '1' if the Matters overlap.
+    //##       - '0' otherwise.
+    //## **********************************************************************
+    int Overlaps(Matter* pOther);
+
     enum MatterEnum
     {
         LOOP_NONE      = 0,
@@ -212,6 +248,9 @@ private:
 
     //## Texture pointer
     Texture* m_pTexture;
+    
+    //## Collider pointer
+    Collider* m_pCollider;
 
     //## Model matrix
     Matrix m_matModel;
