@@ -23,6 +23,8 @@ Collider::Collider()
     m_arRenderColor[1] = DEFAULT_COLLIDER_COLOR_G;
     m_arRenderColor[2] = DEFAULT_COLLIDER_COLOR_B;
     m_arRenderColor[3] = DEFAULT_COLLIDER_COLOR_A;
+
+    m_nRenderEnable = 0;
 }
 
 Collider::~Collider()
@@ -60,4 +62,30 @@ void Collider::SetRotation(float fRotX,
     m_fRotX = fRotX;
     m_fRotY = fRotY;
     m_fRotZ = fRotZ;
+}
+
+void Collider::SetColor(float fRed,
+                        float fGreen,
+                        float fBlue,
+                        float fAlpha)
+{
+    m_arRenderColor[0] = fRed;
+    m_arRenderColor[1] = fGreen;
+    m_arRenderColor[2] = fBlue;
+    m_arRenderColor[3] = fAlpha;
+}
+
+void Collider::EnableRendering()
+{
+    m_nRenderEnable = 1;
+}
+
+void Collider::DisableRendering()
+{
+    m_nRenderEnable = 0;
+}
+
+int Collider::IsRenderingEnabled()
+{
+    return m_nRenderEnable;
 }

@@ -9,7 +9,10 @@ enum ProgramEnum
     STATIC_DIFFUSE_PROGRAM          = 1,
     ANIMATED_DIFFUSE_PROGRAM        = 2,
     TEXT_PROGRAM                    = 3,
-    MAX_PROGRAMS                    = 4
+    STATIC_FULLBRIGHT_PROGRAM       = 4,
+    ANIMATED_FULLBRIGHT_PROGRAM     = 5,
+    MAX_PROGRAMS                    = 6
+
 };
 
 //## **************************************************************************

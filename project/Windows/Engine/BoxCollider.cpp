@@ -9,11 +9,18 @@ BoxCollider::BoxCollider()
     m_fMaxY =  1.0f;
     m_fMinZ = -1.0f;
     m_fMaxZ =  1.0f;
+
+    m_nRender    = 0;
+    m_arPosition = 0;
 }
 
 BoxCollider::~BoxCollider()
 {
-
+    if (m_arPosition != 0)
+    {
+        delete [] m_arPosition;
+        m_arPosition = 0;
+    }
 }
 
 void BoxCollider::SetExtents(float fMinX,
@@ -31,9 +38,15 @@ void BoxCollider::SetExtents(float fMinX,
     m_fMaxZ = fMaxZ;
 }
 
-void BoxCollider::Render()
+void BoxCollider::Render(Matrix* pMVP)
 {
+    if (m_nRender != 0)
+    {
+        if (m_arPosition == 0)
+        {
 
+        } 
+    }
 }
 
 int BoxCollider::Overlaps(Collider* pOther)
@@ -63,6 +76,8 @@ int BoxCollider::Overlaps(Collider* pOther)
     {
         return 0;
     }
+
+    return 0;
 }
 
 float BoxCollider::GetMinX()

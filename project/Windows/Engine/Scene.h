@@ -168,6 +168,11 @@ public:
 
 private:
 
+    void GenerateMVPMatrix(Matrix* pModel,
+                           Matrix* pView,
+                           Matrix* pProjection,
+                           Matrix* pMVP);
+
     //## Values that hold the maximum counts for each scene component.
     int m_nMaxMatters;
     int m_nMaxLights;

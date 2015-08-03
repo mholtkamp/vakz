@@ -89,11 +89,10 @@ Scene::~Scene()
 void Scene::Render()
 {
     int i = 0;
+    Matrix matMVP;
+
     m_pCamera->GenerateViewMatrix();
     m_pCamera->GenerateProjectionMatrix();
-
-    // Render screen glyphs last after 3D scene has rendered
-    //@@ Possibly render code to a RenderGlyphs() private helper function.
     
     // Render 3D Objects
     if (m_pCamera != 0)
@@ -103,9 +102,35 @@ void Scene::Render()
         {
             m_pMatters[i]->Render(this);
         }
+
+        // Render colliders for debugging if enabled
+        for (i = 0; i < m_nNumMatters; i++)
+        {
+            // Setup state for rendering translucent collision meshes
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            glEnable(GL_BLEND);
+            glEnable(GL_DEPTH_TEST);
+            glDepthMask(GL_FALSE);
+
+            if (m_pMatters[i]->GetCollider()                       != 0 && 
+                m_pMatters[i]->GetCollider()->IsRenderingEnabled() != 0)
+            {
+                GenerateMVPMatrix(m_pMatters[i]->GetModelMatrix(),
+                                  m_pCamera->GetViewMatrix(),
+                                  m_pCamera->GetProjectionMatrix(),
+                                  &matMVP);
+                m_pMatters[i]->GetCollider()->Render(&matMVP);
+            }
+
+            // Restore state
+            glDepthMask(GL_TRUE);
+            glDisable(GL_DEPTH_TEST);
+            glDisable(GL_BLEND);
+        }
     }
 
-    // Render glyphs
+    //@@ Possibly render code to a RenderGlyphs() private helper function.
+    // Render screen glyphs last after 3D scene has rendered
     glDisable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -286,4 +311,15 @@ void Scene::SetAmbientLight(float fRed,
 float* Scene::GetAmbientLight()
 {
     return m_arAmbientColor;
+}
+
+//*****************************************************************************
+// GenerateMVPMatrix
+//*****************************************************************************
+void Scene::GenerateMVPMatrix(Matrix* pModel,
+                              Matrix* pView,
+                              Matrix* pProjection,
+                              Matrix* pMVP)
+{
+    *pMVP = (*pProjection) * (*pView) * (*pModel);
 }

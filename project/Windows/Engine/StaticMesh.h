@@ -33,6 +33,8 @@ public:
     //## **********************************************************************
     int Load(const char* pFile);
 
+    void LoadGeometry(const char* pFile);
+
     //## **********************************************************************
     //## Set*Array
     //##
@@ -43,13 +45,12 @@ public:
     void SetNormalArray(float* pNormal);
 
     //## **********************************************************************
-    //## Get*Array
+    //## GetPositionArray
     //##
-    //## Returns pointer to specified vertex array.
+    //## Returns pointer to specified main memory position array for
+    //## non-primitives.
     //## **********************************************************************
     float* GetPositionArray();
-    float* GetTexCoordArray();
-    float* GetNormalArray();
 
     //## **********************************************************************
     //## SetRenderState
@@ -77,6 +78,9 @@ private:
     float* m_pClientPosition;
     float* m_pClientTexCoord;
     float* m_pClientNormal;
+
+    //## Position array stored in main memory.
+    float* m_arPosition;
 };
 
 #endif

@@ -127,6 +127,37 @@ void MeshLoader::GenerateVertexBuffer(int    nNumFaces,
 }
 
 //*****************************************************************************
+// GenerateVertexGeometryBuffer
+//*****************************************************************************
+void MeshLoader::GenerateVertexGeometryBuffer(int    nNumFaces,
+                                              float* pVertices,
+                                              int*   pFaces,
+                                              float* pVB)
+{
+    if (pVB != 0)
+    {
+	    //Add vertex data for each face	
+	    for(int i = 0; i < nNumFaces; i++)
+	    {
+		    //Vertex 1
+		    pVB[i*9 + 0] = pVertices[(pFaces[i*3 + 0]-1)*3 + 0];
+		    pVB[i*9 + 1] = pVertices[(pFaces[i*3 + 0]-1)*3 + 1];
+		    pVB[i*9 + 2] = pVertices[(pFaces[i*3 + 0]-1)*3 + 2];
+
+		    //Vertex 2
+		    pVB[i*9 + 3] = pVertices[(pFaces[i*3 + 1]-1)*3 + 0];
+		    pVB[i*9 + 4] = pVertices[(pFaces[i*3 + 1]-1)*3 + 1];
+		    pVB[i*9 + 5] = pVertices[(pFaces[i*3 + 1]-1)*3 + 2];
+
+		    //Vertex 3
+		    pVB[i*9 + 6] = pVertices[(pFaces[i*3 + 2]-1)*3 + 0];
+		    pVB[i*9 + 7] = pVertices[(pFaces[i*3 + 2]-1)*3 + 1];
+		    pVB[i*9 + 8] = pVertices[(pFaces[i*3 + 2]-1)*3 + 2];
+	    }
+    }
+}
+
+//*****************************************************************************
 // LoadOBJ
 //*****************************************************************************
 unsigned int MeshLoader::LoadOBJ(const char*   pFileName, 
@@ -260,7 +291,7 @@ unsigned int MeshLoader::LoadOBJ(const char*   pFileName,
                          pVertexBuffer);
 
     // Free arrays made to hold data.
-	delete [] pVertices;
+    delete [] pVertices;
     pVertices = 0;
 	delete [] pNormals;
     pNormals = 0;
@@ -284,6 +315,118 @@ unsigned int MeshLoader::LoadOBJ(const char*   pFileName,
 	return unVBO;
 }
 
+//*****************************************************************************
+// LoadOBJGeometry
+//*****************************************************************************
+float* MeshLoader::LoadOBJGeometry(const char*   pFileName, 
+                                   unsigned int& nFaces)
+{
+    int i = 0;
+    char* pStr     = 0;
+    char* pNewLine = 0;
+    int v = 0;
+    int n = 0;
+    int t = 0;
+    int f = 0;
+    unsigned int unVBO   = 0;
+    float* pVertexBuffer = 0;
+
+    int nNumVerts   = 0;
+	int nNumFaces   = 0;
+    int nNumNormals = 0;
+	int nNumUVs     = 0;
+
+    float* pVertices = 0;
+    int*   pFaces    = 0;
+
+    // Retrieve the counts for positions/UVs/normals/faces
+	GetCounts(pFileName,
+              nNumVerts,
+              nNumUVs,
+              nNumNormals,
+              nNumFaces);
+
+    // Set the number of faces output
+	nFaces = nNumFaces;
+
+    // Allocate arrays to store vertex data
+    pVertices = new float[nNumVerts   * 3];
+	pFaces    = new   int[nNumFaces   * 3];
+
+    // Set string pointer to beginning of file buffer
+    pStr = s_arFileBuffer;
+
+    // Loop until end of file, reading line by line.
+    while (1)
+    {
+        pNewLine = strchr(pStr, '\n');
+
+        if (pNewLine == 0)
+        {
+            break;
+        }
+
+        if (pStr[0] == 'v' &&
+            pStr[1] == ' ')
+        {
+            // Extract X/Y/Z coordinates
+            pStr = &pStr[2];
+            pStr = strtok(pStr, " ");
+            pVertices[v*3] = (float) atof(pStr);
+            pStr = strtok(0," ");
+            pVertices[v*3 + 1] = (float) atof(pStr);
+            pStr = strtok(0, " \n\r");
+            pVertices[v*3 + 2] = (float) atof(pStr);
+
+            // Increase the number of vertices
+            v++;
+        }
+        else if (pStr[0] == 'f')
+        {
+            pStr = &pStr[2];
+
+            // Parse and convert all 3 indices.
+            for (i = 0; i < 3; i++)
+            {
+                if (i == 0)
+                {
+                    pStr = strtok(pStr, " /\n\r");
+                }
+                else
+                {
+                    pStr = strtok(0, " /\n\r");
+                }
+                pFaces[f*3 + i] = atoi(pStr);
+            }
+
+            // Increase the face count
+            f++;
+        }
+
+        // Now move the pointer to the next line.
+        pStr = pNewLine + 1;
+    }
+
+    // From the separate arrays, create one big buffer
+    // that has the vertex data interleaved.
+	pVertexBuffer = new float[nNumFaces*9];
+    GenerateVertexGeometryBuffer(nNumFaces,
+                                 pVertices,
+                                 pFaces,
+                                 pVertexBuffer);
+
+    // Free arrays made to hold data.
+    delete [] pVertices;
+    pVertices = 0;
+	delete [] pFaces;
+    pFaces = 0;
+
+	return pVertexBuffer;
+}
+
+//*****************************************************************************
+// LoadAMF
+//*****************************************************************************
 void MeshLoader::LoadAMF(const char*     pFileName,
                          char***         pAnimationNames,
                          int*            pAnimationCount,
@@ -341,7 +484,7 @@ void MeshLoader::LoadAMF(const char*     pFileName,
 
         // Allocate the new string
         nNameLength = strlen(pBuffer);
-        if (nNameLength > MESH_LOADER__ANIMATION_NAME_SIZE_WARNING)
+        if (nNameLength > MESH_LOADER_ANIMATION_NAME_SIZE_WARNING)
         {
             // Log a warning to hint at incorrect file parsing.
             LogWarning("Animation name is very long in LoadAMF().");

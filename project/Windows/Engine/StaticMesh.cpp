@@ -15,6 +15,8 @@ StaticMesh::StaticMesh()
     m_pClientPosition = 0;
     m_pClientTexCoord = 0;
     m_pClientNormal   = 0;
+
+    m_arPosition = 0;
 }
 
 //*****************************************************************************
@@ -22,7 +24,11 @@ StaticMesh::StaticMesh()
 //*****************************************************************************
 StaticMesh::~StaticMesh()
 {
-
+    if (m_arPosition != 0)
+    {
+        delete [] m_arPosition;
+        m_arPosition = 0;
+    }
 }
 
 //*****************************************************************************
@@ -37,6 +43,18 @@ int StaticMesh::Load(const char* pFile)
     m_nVertexCount = unFaces * 3;
 
     return 1;
+}
+
+//*****************************************************************************
+// LoadGeometry
+//*****************************************************************************
+void StaticMesh::LoadGeometry(const char* pFile)
+{
+    unsigned int unFaces = 0;
+    m_arPosition = MeshLoader::LoadOBJGeometry(pFile, unFaces);
+
+    // Every face has 3 vertices.
+    m_nVertexCount = unFaces * 3;
 }
 
 //*****************************************************************************
@@ -68,23 +86,7 @@ void StaticMesh::SetNormalArray(float* pArray)
 //*****************************************************************************
 float* StaticMesh::GetPositionArray()
 {
-    return m_pClientPosition;
-}
-
-//*****************************************************************************
-// GetTexCoordArray
-//*****************************************************************************
-float* StaticMesh::GetTexCoordArray()
-{
-    return m_pClientTexCoord;
-}
-
-//*****************************************************************************
-// GetNormalArray
-//*****************************************************************************
-float* StaticMesh::GetNormalArray()
-{
-    return m_pClientNormal;
+    return m_arPosition;
 }
 
 //*****************************************************************************

@@ -226,6 +226,14 @@ void Matter::Render(void* pScene)
 //*****************************************************************************
 // GenerateModelMatrix
 //*****************************************************************************
+Matrix* Matter::GetModelMatrix()
+{
+    return &m_matModel;
+}
+
+//*****************************************************************************
+// GenerateModelMatrix
+//*****************************************************************************
 void Matter::GenerateModelMatrix()
 {
     // Reset the matrix
@@ -481,5 +489,9 @@ int Matter::Overlaps(Matter* pOther)
         m_pCollider           != 0)
     {
         return m_pCollider->Overlaps(pOther->GetCollider());
+    }
+    else
+    {
+        return 0;
     }
 }

@@ -72,6 +72,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="Font.cpp" />
+    <ClCompile Include="MeshCollider.cpp" />
     <ClCompile Include="Text.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="VakzWin.cpp" />
@@ -109,6 +110,7 @@
     <ClInclude Include="InputHandler.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
+    <ClInclude Include="MeshCollider.h" />
     <ClInclude Include="MeshLoader.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="Primitives.h" />

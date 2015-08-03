@@ -11,6 +11,7 @@
 #include "ResourceLibrary.h"
 #include "DiffuseMaterial.h"
 #include "DirectionalLight.h"
+#include "MeshCollider.h"
 #include "Text.h"
 
 #include <stdio.h>
@@ -50,16 +51,16 @@ int main()
     ResourceLibrary* pLibrary = new ResourceLibrary();
 
     // Create diffuse material
-    DiffuseMaterial* pCubeMat = new DiffuseMaterial();
-    pCubeMat->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
+    DiffuseMaterial* pWhiteMat = new DiffuseMaterial();
+    pWhiteMat->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
 
-    DiffuseMaterial* pCubeMat2 = new DiffuseMaterial();
-    pCubeMat2->SetColor(0.3f, 0.3f, 0.9f, 1.0f);
+    DiffuseMaterial* pBlueMat = new DiffuseMaterial();
+    pBlueMat->SetColor(0.3f, 0.3f, 0.9f, 1.0f);
 
-    // Create Matter
+    // Create Cube
     Matter* pTestCube = new Matter();
     pTestCube->SetMesh(reinterpret_cast<StaticMesh*>(pLibrary->GetPrimitive(PRIMITIVE_CUBE)));
-    pTestCube->SetMaterial(pCubeMat2);
+    pTestCube->SetMaterial(pBlueMat);
     pTestCube->SetPosition(5.0f, 0.0f, 0.0f);
     BoxCollider* pCubeCollider = new BoxCollider();
     pCubeCollider->SetExtents(-1.0f, 1.0f,
@@ -67,12 +68,22 @@ int main()
                               -1.0f, 1.0f);
     pTestCube->SetCollider(pCubeCollider);
 
-    Matter* pTestMonkey = new Matter();
-    StaticMesh* pMonkeyMesh = new StaticMesh();
-    pMonkeyMesh->Load("druid.obj");
-    pTestMonkey->SetMesh(pMonkeyMesh);
-    pTestMonkey->SetMaterial(pCubeMat);
-    pTestMonkey->SetPosition(0.0f, 0.0f, 0.0f);
+    // Create FlowerPot
+    Matter* pFlowerPot = new Matter();
+    StaticMesh* pFlowerPotStaticMesh = new StaticMesh();
+    pFlowerPotStaticMesh->Load("flowerpot.obj");
+    pFlowerPot->SetMesh(pFlowerPotStaticMesh);
+    pFlowerPot->SetMaterial(pWhiteMat);
+    pFlowerPot->SetPosition(0.0f, 0.0f, 0.0f);
+    Texture* pFlowerPotTexture = new Texture();
+    pFlowerPotTexture->LoadBMP("flowerpot_texture.bmp");
+    pFlowerPot->SetTexture(pFlowerPotTexture);
+    StaticMesh* pFlowerPotCollisionMesh = new StaticMesh();
+    pFlowerPotCollisionMesh->LoadGeometry("flowerpot_collider.obj");
+    MeshCollider* pFlowerPotCollider = new MeshCollider();
+    pFlowerPotCollider->AssignMesh(pFlowerPotCollisionMesh);
+    pFlowerPotCollider->EnableRendering();
+    pFlowerPot->SetCollider(pFlowerPotCollider);
 
     // Create TestAnim
     Matter* pTestAnim = new Matter();
@@ -82,7 +93,7 @@ int main()
     pTestAnim->SetLoopMode(Matter::LOOP_NONE);
     pTestAnim->SetAnimation("No");
     pTestAnim->StartAnimation();
-    pTestAnim->SetMaterial(pCubeMat);
+    pTestAnim->SetMaterial(pWhiteMat);
     pTestAnim->SetPosition(-3.5f, 0.0f, 0.0f);
     BoxCollider* pTestCollider = new BoxCollider();
     pTestCollider->SetExtents(-0.706f, 0.706f,
@@ -95,7 +106,6 @@ int main()
 
     Texture* pTestTexture = new Texture();
     pTestTexture->LoadBMP("trueform_base_color.bmp");
-    pTestMonkey->SetTexture(pTestTexture);
     pTestAnim->SetTexture(pTestTexture);
 
     // Create sun
@@ -115,7 +125,7 @@ int main()
 
     // Add the test cube to the scene
     pTestScene->AddMatter(pTestCube);
-    //pTestScene->AddMatter(pTestMonkey);
+    pTestScene->AddMatter(pFlowerPot);
     pTestScene->AddMatter(pTestAnim);
 
     // Add text to screen
@@ -352,30 +362,30 @@ int main()
         {
             if (IsKeyDown(VKEY_C))
             {
-                fBearX -= 0.01;
+                fBearX -= 0.01f;
             }
             if (IsKeyDown(VKEY_V))
             {
-                fBearY -= 0.01;
+                fBearY -= 0.01f;
             }
             if (IsKeyDown(VKEY_B))
             {
-                fBearZ -= 0.01;
+                fBearZ -= 0.01f;
             }
         }
         else
         {
             if (IsKeyDown(VKEY_C))
             {
-                fBearX += 0.01;
+                fBearX += 0.01f;
             }
             if (IsKeyDown(VKEY_V))
             {
-                fBearY += 0.01;
+                fBearY += 0.01f;
             }
             if (IsKeyDown(VKEY_B))
             {
-                fBearZ += 0.01;
+                fBearZ += 0.01f;
             }
         }
         pTestAnim->SetPosition(fBearX, fBearY, fBearZ);
@@ -421,10 +431,9 @@ int main()
     delete pSun;
     delete pTestCube;
     delete pTestAnim;
-    delete pTestMonkey;
-    delete pMonkeyMesh;
     delete pCamera;
-    delete pCubeMat;
+    delete pBlueMat;
+    delete pWhiteMat;
     delete pTestScene;
 
     exit(0);

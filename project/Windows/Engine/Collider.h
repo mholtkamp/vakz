@@ -33,9 +33,20 @@ public:
                      float fRotY,
                      float fRotZ);
 
-    virtual void Render() = 0;
+    void SetColor(float fRed,
+                  float fGreen,
+                  float fBlue,
+                  float fAlpha);
+
+    virtual void Render(Matrix* pMVP) = 0;
 
     virtual int Overlaps(Collider* pOther) = 0;
+
+    void EnableRendering();
+
+    void DisableRendering();
+
+    int IsRenderingEnabled();
 
 protected:
 
@@ -54,6 +65,8 @@ protected:
     float m_fRotZ;
 
     float m_arRenderColor[4];
+
+    int m_nRenderEnable;
 };
 
 #endif

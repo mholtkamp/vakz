@@ -791,6 +791,24 @@ int LoadShaders()
                                pTextFragmentShader);
     }
 
+    // Static Fullbright Shader
+    if (nStatus != 0)
+    {
+        LogDebug("Building StaticMesh Fullbright Shader");
+        nStatus = BuildProgram(STATIC_FULLBRIGHT_PROGRAM,
+                               pStaticMeshVertexShader,
+                               pFullbrightFragmentShader);
+    }
+
+    // Animated Fullbright Shader
+    if (nStatus != 0)
+    {
+        LogDebug("Building AnimatedMesh Fullbright Shader");
+        nStatus = BuildProgram(ANIMATED_FULLBRIGHT_PROGRAM,
+                               pAnimatedMeshVertexShader,
+                               pFullbrightFragmentShader);
+    }
+
     return nStatus;
 }
 

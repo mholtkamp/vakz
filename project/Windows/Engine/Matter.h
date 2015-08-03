@@ -204,6 +204,8 @@ public:
     //## **********************************************************************
     int Overlaps(Matter* pOther);
 
+    Matrix* GetModelMatrix();
+
     enum MatterEnum
     {
         LOOP_NONE      = 0,

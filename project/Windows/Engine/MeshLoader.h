@@ -9,7 +9,7 @@ public :
     enum MeshLoaderEnum
     {
         MESH_LOADER_MAX_FILE_SIZE = 1048576,
-        MESH_LOADER__ANIMATION_NAME_SIZE_WARNING = 32
+        MESH_LOADER_ANIMATION_NAME_SIZE_WARNING = 32
     };
 
     //## **********************************************************************
@@ -23,13 +23,17 @@ public :
     //##   pFileName - path to obj file to load.
     //##
     //## Output:
-    //##   nFaces - number of faces in mesh.
+    //##   nFaces     - number of faces in mesh.
+    //##   arPosition - array of vertex positions to keep on main RAM.
     //## 
     //## Returns:
     //##   unsigned int - handle to the newly created vertex buffer object.
     //## **********************************************************************
     static unsigned int LoadOBJ(const char*   pFileName,
                                 unsigned int& nFaces);
+
+    static float* LoadOBJGeometry(const char* pFileName,
+                                  unsigned int& nFaces);
 
     static void LoadAMF(const char*     pFileName,
                         char***         pAnimationNames,
@@ -57,6 +61,11 @@ private:
                                      float* pNormals,
                                      int*   pFaces,
                                      float* pVB);
+
+    static void GenerateVertexGeometryBuffer(int    nNumFaces,
+                                             float* pVertices,
+                                             int*   pFaces,
+                                             float* pVertexBuffer);
 
     //## Buffer to hold file contents.
     static char s_arFileBuffer[MESH_LOADER_MAX_FILE_SIZE];

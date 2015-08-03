@@ -19,7 +19,7 @@ public:
                     float fMinZ,
                     float fMaxZ);
 
-    void Render();
+    void Render(Matrix* pMVP);
 
     int Overlaps(Collider* pOther);
 
@@ -35,6 +35,10 @@ public:
 
     float GetMaxZ();
 
+    void EnableRendering();
+
+    void DisableRendering();
+
 private:
 
     //## Extents of axis aligned bounding box
@@ -45,6 +49,14 @@ private:
     float m_fMaxY;
     float m_fMinZ;
     float m_fMaxZ;
+
+    //## Flag to indicate whether the box should be rendered
+    //## for debugging purposes.
+    int m_nRender;
+
+    //## A position array used for rendering the box collider
+    //## if the enable has been set.
+    float* m_arPosition;
 };
 
 #endif

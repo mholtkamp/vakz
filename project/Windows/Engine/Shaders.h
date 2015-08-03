@@ -192,4 +192,26 @@ GLSL_VERSION_STRING
 "   gl_Position = uMatrixMVP * vec4(lPosition, 1.0);\n"
 "}\n";
 
+//## **************************************************************************
+//## Fullbright Fragment Shader
+//## **************************************************************************
+static const char* pFullbrightFragmentShader = 
+GLSL_VERSION_STRING
+"precision mediump float;"
+"in vec2 vTexCoord;\n"
+"out vec4 oFragColor;\n"
+"uniform vec4 uColor;\n"
+"uniform sampler2D uTexture;\n"
+"uniform int uTextureMode;\n"
+
+"void main()\n"
+"{\n"
+"   vec4  lObjectColor = uColor;\n"
+"   if (uTextureMode == 1)\n"
+"   {\n"
+"       lObjectColor.rgb = lObjectColor.rgb * texture(uTexture,  vTexCoord).rgb;\n"
+"   }\n"
+"   oFragColor = lObjectColor;\n"
+"}\n";
+
 #endif
