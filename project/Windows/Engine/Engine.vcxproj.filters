@@ -126,6 +126,9 @@
     <ClInclude Include="MeshCollider.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="TriangleBoxCollision.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Scene.cpp">
@@ -210,6 +213,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MeshCollider.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TriangleBoxCollision.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

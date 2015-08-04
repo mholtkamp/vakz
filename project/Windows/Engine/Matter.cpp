@@ -35,6 +35,13 @@ Matter::Matter()
     m_nPlay               = 0;
     m_nDirection          = DIRECTION_FORWARD;
     m_fSpeed              = 1.0f;
+
+    m_nPhysical = 0;
+    m_nRigid    = 0;
+
+    m_arVelocity[0] = 0.0f;
+    m_arVelocity[1] = 0.0f;
+    m_arVelocity[2] = 0.0f;
 }
 
 //*****************************************************************************
@@ -494,4 +501,20 @@ int Matter::Overlaps(Matter* pOther)
     {
         return 0;
     }
+}
+
+//*****************************************************************************
+// SetPhysical
+//*****************************************************************************
+void Matter::SetPhysical(int nPhysical)
+{
+    m_nPhysical = nPhysical;
+}
+
+//*****************************************************************************
+// SetRigid
+//*****************************************************************************
+void Matter::SetRigid(int nRigid)
+{
+    m_nRigid = nRigid;
 }

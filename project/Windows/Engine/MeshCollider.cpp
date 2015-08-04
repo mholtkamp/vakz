@@ -4,6 +4,7 @@
 
 MeshCollider::MeshCollider()
 {
+    m_nType = COLLIDER_MESH;
     m_arPosition = 0;
     m_nVertices  = 0;
 }
@@ -59,4 +60,30 @@ void MeshCollider::Render(Matrix* pMVP)
 int MeshCollider::Overlaps(Collider* pOther)
 {
     return 0;
+}
+
+int MeshCollider::GetVertexCount()
+{
+    return m_nVertices;
+}
+
+float* MeshCollider::GetPositionArray()
+{
+    return m_arPosition;
+}
+
+void MeshCollider::GetTriangle(int   nIndex,
+                               float arTriangle[3][3])
+{
+    arTriangle[0][0] = m_arPosition[nIndex*9 + 0];
+    arTriangle[0][1] = m_arPosition[nIndex*9 + 1];
+    arTriangle[0][2] = m_arPosition[nIndex*9 + 2];
+
+    arTriangle[1][0] = m_arPosition[nIndex*9 + 3];
+    arTriangle[1][1] = m_arPosition[nIndex*9 + 4];
+    arTriangle[1][2] = m_arPosition[nIndex*9 + 5];
+
+    arTriangle[2][0] = m_arPosition[nIndex*9 + 6];
+    arTriangle[2][1] = m_arPosition[nIndex*9 + 7];
+    arTriangle[2][2] = m_arPosition[nIndex*9 + 8];
 }

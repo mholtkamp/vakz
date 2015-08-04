@@ -403,7 +403,7 @@ int main()
             //pTestAnim->SetRotation(0.0f, -1.0f * fCube2Rot, 0.0f);
         }
 
-        if (pTestAnim->Overlaps(pTestCube))
+        if (pTestAnim->Overlaps(pFlowerPot))
         {
             if (nCollision == 0)
             {

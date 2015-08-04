@@ -204,6 +204,20 @@ public:
     //## **********************************************************************
     int Overlaps(Matter* pOther);
 
+    void SetPhysical(int nPhysical);
+
+    void SetRigid(int nRigid);
+
+    void SetVelocity(float fXVel,
+                     float fYVel,
+                     float fZVel);
+
+    void SetXVelocity(float fXVel);
+
+    void SetYVelocity(float fYVel);
+
+    void SetZVelocity(float fZVel);
+
     Matrix* GetModelMatrix();
 
     enum MatterEnum
@@ -277,6 +291,17 @@ private:
 
     //## Timer to record frame time
     Timer m_timerFrame;
+
+    //## Physical flag, let's engine know to apply physics on object.
+    int m_nPhysical;
+
+    //## Rigid flag, collider should be used for applying physics to 
+    //## physical matters. Rigid matters are also added to the octree
+    //## upon becoming rigid.
+    int m_nRigid;
+
+    //## The velocity of the matter, split into X/Y/Z components
+    float m_arVelocity[3];
 };
 
 #endif

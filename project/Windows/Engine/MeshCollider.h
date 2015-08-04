@@ -19,6 +19,13 @@ public:
 
     int Overlaps(Collider* pOther);
 
+    int GetVertexCount();
+
+    float* GetPositionArray();
+
+    void GetTriangle(int   nIndex,
+                     float arTriangle[3][3]);
+
 private:
 
     float* m_arPosition;

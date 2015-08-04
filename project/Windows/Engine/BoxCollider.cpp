@@ -1,4 +1,6 @@
 #include "BoxCollider.h"
+#include "MeshCollider.h"
+#include "TriangleBoxCollision.h"
 
 BoxCollider::BoxCollider()
 {
@@ -51,7 +53,11 @@ void BoxCollider::Render(Matrix* pMVP)
 
 int BoxCollider::Overlaps(Collider* pOther)
 {
-    BoxCollider* pBox = 0;
+    int i                  = 0;
+    int nTriangles         = 0;
+    BoxCollider*  pBox     = 0;
+    MeshCollider* pMesh    = 0;
+    float arTriangle[3][3] = {0};
 
     if (pOther->GetType() == COLLIDER_BOX)
     {
@@ -74,6 +80,28 @@ int BoxCollider::Overlaps(Collider* pOther)
     }
     else if (pOther->GetType() == COLLIDER_MESH)
     {
+        pMesh = reinterpret_cast<MeshCollider*>(pOther);
+
+        float arBoxCenter[3] = {(GetMinX() + GetMaxX())/2.0f,
+                                (GetMinY() + GetMaxY())/2.0f,
+                                (GetMinZ() + GetMaxZ())/2.0f};
+
+        float arBoxHalfSize[3] = {(GetMaxX() - GetMinX())/2.0f,
+                                  (GetMaxY() - GetMinY())/2.0f,
+                                  (GetMaxZ() - GetMinZ())/2.0f};
+
+        nTriangles = pMesh->GetVertexCount()/3;
+
+        for (i = 0; i < nTriangles; i++)
+        {
+            pMesh->GetTriangle(i, arTriangle);
+            if (triBoxOverlap(arBoxCenter,
+                              arBoxHalfSize,
+                              arTriangle) == 1)
+            {
+                return 1;
+            }
+        }
         return 0;
     }
 
