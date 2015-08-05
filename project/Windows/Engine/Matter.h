@@ -218,6 +218,9 @@ public:
 
     void SetZVelocity(float fZVel);
 
+    void UpdatePhysics(void* pScene,
+                       float fSeconds);
+
     Matrix* GetModelMatrix();
 
     enum MatterEnum

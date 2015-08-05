@@ -474,6 +474,12 @@ void Update()
             DispatchMessage(&msg);                 // Dispatch The Message
         }
     }
+
+    // Update the scene
+    if (s_pScene != 0)
+    {
+        s_pScene->Update();
+    }
 }
 
 unsigned char GetStatus()

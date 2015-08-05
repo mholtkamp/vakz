@@ -2,10 +2,12 @@
 #include "VGL.h"
 #include "Log.h"
 
-#define DEFAULT_AMBIENT_RED   0.12f;
-#define DEFAULT_AMBIENT_GREEN 0.12f;
-#define DEFAULT_AMBIENT_BLUE  0.12f;
-#define DEFAULT_AMBIENT_ALPHA 0.12f;
+#define DEFAULT_AMBIENT_RED   0.12f
+#define DEFAULT_AMBIENT_GREEN 0.12f
+#define DEFAULT_AMBIENT_BLUE  0.12f
+#define DEFAULT_AMBIENT_ALPHA 0.12f
+
+#define DEFAULT_GRAVITY 9.8f
 
 //*****************************************************************************
 // Constructor
@@ -47,6 +49,10 @@ Scene::Scene(int nMaxMatters,
     m_arAmbientColor[1] = DEFAULT_AMBIENT_GREEN;
     m_arAmbientColor[2] = DEFAULT_AMBIENT_BLUE;
     m_arAmbientColor[3] = DEFAULT_AMBIENT_ALPHA;
+
+    m_fGravity = DEFAULT_GRAVITY;
+
+    m_pPhysTimer = 0;
 }
 
 //*****************************************************************************
@@ -80,6 +86,12 @@ Scene::~Scene()
     {
         delete [] m_pEffects;
         m_pEffects = 0;
+    }
+
+    if (m_pPhysTimer != 0)
+    {
+        delete m_pPhysTimer;
+        m_pPhysTimer = 0;
     }
 }
 
@@ -322,4 +334,49 @@ void Scene::GenerateMVPMatrix(Matrix* pModel,
                               Matrix* pMVP)
 {
     *pMVP = (*pProjection) * (*pView) * (*pModel);
+}
+
+//*****************************************************************************
+// SetGravity
+//*****************************************************************************
+void Scene::SetGravity(float fGravity)
+{
+    m_fGravity = fGravity;
+}
+
+//*****************************************************************************
+// GetGravity
+//*****************************************************************************
+float Scene::GetGravity()
+{
+    return m_fGravity;
+}
+
+//*****************************************************************************
+// Update
+//*****************************************************************************
+void Scene::Update()
+{
+    int   i     = 0;
+    float fTime = 0.0f;
+
+    // If this is the first time hitting update, create the timer.
+    if (m_pPhysTimer == 0)
+    {
+        m_pPhysTimer = new Timer();
+        m_pPhysTimer->Start();
+    }
+    
+    // Get the frame time
+    m_pPhysTimer->Stop();
+    fTime = m_pPhysTimer->Time();
+
+    // Update physics
+    for (i = 0; i < m_nNumMatters; i++)
+    {
+        m_pMatters[i]->UpdatePhysics(this, fTime);
+    }
+
+    // Reset timer for next frame calculation
+    m_pPhysTimer->Start();
 }

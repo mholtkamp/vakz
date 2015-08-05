@@ -231,6 +231,28 @@ void Matter::Render(void* pScene)
 }
 
 //*****************************************************************************
+// UpdatePhysics
+//*****************************************************************************
+void Matter::UpdatePhysics(void* pScene,
+                           float fSeconds)
+{
+    Scene* pScn = reinterpret_cast<Scene*>(pScene);
+
+    if (m_nPhysical != 0)
+    {
+        m_arVelocity[1] += -1 * pScn->GetGravity() * fSeconds; 
+        m_fX += m_arVelocity[0] * fSeconds;
+        m_fY += m_arVelocity[1] * fSeconds;
+        m_fZ += m_arVelocity[2] * fSeconds;
+
+        if (m_pCollider != 0)
+        {
+            m_pCollider->SetPosition(m_fX, m_fY, m_fZ);
+        }
+    }
+}
+
+//*****************************************************************************
 // GenerateModelMatrix
 //*****************************************************************************
 Matrix* Matter::GetModelMatrix()
@@ -517,4 +539,40 @@ void Matter::SetPhysical(int nPhysical)
 void Matter::SetRigid(int nRigid)
 {
     m_nRigid = nRigid;
+}
+
+//*****************************************************************************
+// SetVelocity
+//*****************************************************************************
+void Matter::SetVelocity(float fXVel,
+                         float fYVel,
+                         float fZVel)
+{
+    m_arVelocity[0] = fXVel;
+    m_arVelocity[1] = fYVel;
+    m_arVelocity[2] = fZVel;
+}
+
+//*****************************************************************************
+// SetXVelocity
+//*****************************************************************************
+void Matter::SetXVelocity(float fXVel)
+{
+    m_arVelocity[0] = fXVel;
+}
+
+//*****************************************************************************
+// SetYVelocity
+//*****************************************************************************
+void Matter::SetYVelocity(float fYVel)
+{
+    m_arVelocity[1] = fYVel;
+}
+
+//*****************************************************************************
+// SetZVelocity
+//*****************************************************************************
+void Matter::SetZVelocity(float fZVel)
+{
+    m_arVelocity[2] = fZVel;
 }

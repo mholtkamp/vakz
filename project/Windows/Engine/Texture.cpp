@@ -69,7 +69,7 @@ void Texture::LoadBMP(const char* pFileName)
 
             for (i = 0; i < m_nWidth*m_nHeight*3; i += 3)
             {
-                // Swap the B and R byte because windows 
+                // Swap the B and R byte because windows bitmap format is in BGR
                 pData[i]     = pSrc[i + 2];
                 pData[i + 1] = pSrc[i + 1];
                 pData[i + 2] = pSrc[i];                  

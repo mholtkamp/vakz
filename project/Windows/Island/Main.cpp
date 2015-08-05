@@ -84,6 +84,7 @@ int main()
     pFlowerPotCollider->AssignMesh(pFlowerPotCollisionMesh);
     pFlowerPotCollider->EnableRendering();
     pFlowerPot->SetCollider(pFlowerPotCollider);
+    //pFlowerPot->SetRigid(1);
 
     // Create TestAnim
     Matter* pTestAnim = new Matter();
@@ -101,6 +102,7 @@ int main()
                               -0.706f, 0.706f);
     pTestAnim->SetCollider(pTestCollider);
     pTestAnim->SetScale(0.25f, 0.25f, 0.25f);
+    //pTestAnim->SetPhysical(1);
 
     LogDebug("Loaded both meshes.");
 
@@ -362,33 +364,46 @@ int main()
         {
             if (IsKeyDown(VKEY_C))
             {
-                fBearX -= 0.01f;
+                pTestAnim->SetXVelocity(-3.0f);
             }
             if (IsKeyDown(VKEY_V))
             {
-                fBearY -= 0.01f;
+                
             }
             if (IsKeyDown(VKEY_B))
             {
-                fBearZ -= 0.01f;
+                pTestAnim->SetZVelocity(-3.0f);
             }
         }
         else
         {
             if (IsKeyDown(VKEY_C))
             {
-                fBearX += 0.01f;
+                pTestAnim->SetXVelocity(3.0f);
             }
             if (IsKeyDown(VKEY_V))
             {
-                fBearY += 0.01f;
+                pTestAnim->SetYVelocity(8.0f);
             }
             if (IsKeyDown(VKEY_B))
             {
-                fBearZ += 0.01f;
+                pTestAnim->SetZVelocity(3.0f);
             }
         }
-        pTestAnim->SetPosition(fBearX, fBearY, fBearZ);
+
+        if (IsKeyDown(VKEY_C) == 0)
+        {
+            pTestAnim->SetXVelocity(0);
+        }
+        if (IsKeyDown(VKEY_V) == 0)
+        {
+
+        }
+        if (IsKeyDown(VKEY_B) == 0)
+        {
+            pTestAnim->SetZVelocity(0.0f);
+        }
+        //pTestAnim->SetPosition(fBearX, fBearY, fBearZ);
 
 
 

@@ -158,6 +158,12 @@ public:
     //## **********************************************************************
     int GetNumLights();
 
+    void SetGravity(float fGravity);
+
+    float GetGravity();
+
+    void Update();
+
     enum SceneEnum
     {
         DEFAULT_MAX_MATTERS = 1024,
@@ -197,8 +203,12 @@ private:
     //## Pointer to the directional light to light all of the scene.
     DirectionalLight* m_pDirectionalLight;
 
-    // Ambient light
+    //## Ambient light
     float m_arAmbientColor[4];
+    float m_fGravity;
+
+    //## Timer for physics
+    Timer* m_pPhysTimer;
 };
 
 #endif
