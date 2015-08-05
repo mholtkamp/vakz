@@ -77,9 +77,6 @@ private:
 
     //## Format of texture (ie. ALPHA, RGB, RGBA).
     int m_nFormat;
-
-    //## buffer to hold contents of .bmp file.
-    static char s_arFileBuffer[TEXTURE_MAX_SIZE*TEXTURE_MAX_SIZE*4 + 64];
 };
 
 #endif

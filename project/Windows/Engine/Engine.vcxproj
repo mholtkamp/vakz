@@ -72,7 +72,9 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="Font.cpp" />
+    <ClCompile Include="ImageLoader.cpp" />
     <ClCompile Include="MeshCollider.cpp" />
+    <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="Text.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="TriangleBoxCollision.cpp" />
@@ -108,9 +110,11 @@
     <ClInclude Include="Effect.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="Glyph.h" />
+    <ClInclude Include="ImageLoader.h" />
     <ClInclude Include="InputHandler.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
+    <ClInclude Include="Terrain.h" />
     <ClInclude Include="TriangleBoxCollision.h" />
     <ClInclude Include="MeshCollider.h" />
     <ClInclude Include="MeshLoader.h" />
