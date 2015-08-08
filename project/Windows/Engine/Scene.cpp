@@ -110,10 +110,16 @@ void Scene::Render()
     if (m_pCamera != 0)
     {
         // Render matter
+        glEnable(GL_CULL_FACE);
+        glFrontFace(GL_CCW);
+        glCullFace(GL_BACK);
+
         for (i = 0; i < m_nNumMatters; i++)
         {
             m_pMatters[i]->Render(this);
         }
+
+        glDisable(GL_CULL_FACE);
 
         // Render colliders for debugging if enabled
         for (i = 0; i < m_nNumMatters; i++)

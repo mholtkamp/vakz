@@ -21,6 +21,9 @@
 #define MOVE_SPEED 5.0f
 #define THRESH 0.4f
 
+#define FLOWER_BOX_SIZE 100.0f
+#define FLOWER_POT_COUNT 100
+
 int main()
 {
     SetWindowSize(1024,768);
@@ -57,34 +60,35 @@ int main()
     DiffuseMaterial* pBlueMat = new DiffuseMaterial();
     pBlueMat->SetColor(0.3f, 0.3f, 0.9f, 1.0f);
 
-    // Create Cube
-    Matter* pTestCube = new Matter();
-    pTestCube->SetMesh(reinterpret_cast<StaticMesh*>(pLibrary->GetPrimitive(PRIMITIVE_CUBE)));
-    pTestCube->SetMaterial(pBlueMat);
-    pTestCube->SetPosition(5.0f, 0.0f, 0.0f);
-    BoxCollider* pCubeCollider = new BoxCollider();
-    pCubeCollider->SetExtents(-1.0f, 1.0f,
-                              -1.0f, 1.0f,
-                              -1.0f, 1.0f);
-    pTestCube->SetCollider(pCubeCollider);
 
     // Create FlowerPot
-    Matter* pFlowerPot = new Matter();
+    Matter* pFlowerPots               = new Matter[FLOWER_POT_COUNT];
+    MeshCollider* pFlowerPotColliders = new MeshCollider[FLOWER_POT_COUNT];
+
     StaticMesh* pFlowerPotStaticMesh = new StaticMesh();
     pFlowerPotStaticMesh->Load("flowerpot.obj");
-    pFlowerPot->SetMesh(pFlowerPotStaticMesh);
-    pFlowerPot->SetMaterial(pWhiteMat);
-    pFlowerPot->SetPosition(0.0f, 0.0f, 0.0f);
-    Texture* pFlowerPotTexture = new Texture();
-    pFlowerPotTexture->LoadBMP("flowerpot_texture.bmp");
-    pFlowerPot->SetTexture(pFlowerPotTexture);
     StaticMesh* pFlowerPotCollisionMesh = new StaticMesh();
     pFlowerPotCollisionMesh->LoadGeometry("flowerpot_collider.obj");
-    MeshCollider* pFlowerPotCollider = new MeshCollider();
-    pFlowerPotCollider->AssignMesh(pFlowerPotCollisionMesh);
-    pFlowerPotCollider->EnableRendering();
-    pFlowerPot->SetCollider(pFlowerPotCollider);
-    //pFlowerPot->SetRigid(1);
+    Texture* pFlowerPotTexture = new Texture();
+    pFlowerPotTexture->LoadBMP("flowerpot_texture.bmp");
+
+    for (int fp = 0; fp < FLOWER_POT_COUNT; fp++)
+    {
+        pFlowerPots[fp].SetMesh(pFlowerPotStaticMesh);
+        pFlowerPots[fp].SetMaterial(pWhiteMat);
+        pFlowerPots[fp].SetPosition(fp % 10, fp / 10, - fp / 10);
+        pFlowerPots[fp].SetRotation(0.0f, 0.0f, 0.0f);
+
+        pFlowerPots[fp].SetTexture(pFlowerPotTexture);
+
+        pFlowerPotColliders[fp].AssignMesh(pFlowerPotCollisionMesh);
+        //pFlowerPotCollider->EnableRendering();
+        pFlowerPots[fp].SetCollider(&(pFlowerPotColliders[fp]));
+        //pFlowerPot->SetRigid(1);
+
+        // Add to scene
+        pTestScene->AddMatter(&(pFlowerPots[fp]));
+    }
 
     // Create TestAnim
     Matter* pTestAnim = new Matter();
@@ -102,7 +106,7 @@ int main()
                               -0.706f, 0.706f);
     pTestAnim->SetCollider(pTestCollider);
     pTestAnim->SetScale(0.25f, 0.25f, 0.25f);
-    //pTestAnim->SetPhysical(1);
+    pTestAnim->SetPhysical(1);
 
     LogDebug("Loaded both meshes.");
 
@@ -126,8 +130,6 @@ int main()
     pTestText->SetText("Animation:\nWave");
 
     // Add the test cube to the scene
-    pTestScene->AddMatter(pTestCube);
-    pTestScene->AddMatter(pFlowerPot);
     pTestScene->AddMatter(pTestAnim);
 
     // Add text to screen
@@ -142,6 +144,7 @@ int main()
     colText.SetText("No Collision");
     pTestScene->AddGlyph(&colText);
 
+    float fFlowerX = 0.0f;
     float fSeconds = 0.0f;
     float fZ = 10.0f;
     float fY = 0.0f;
@@ -418,38 +421,36 @@ int main()
             //pTestAnim->SetRotation(0.0f, -1.0f * fCube2Rot, 0.0f);
         }
 
-        if (pTestAnim->Overlaps(pFlowerPot))
-        {
-            if (nCollision == 0)
-            {
-                nCollision = 1;
-                colText.SetColor(0.8f, 0.2f, 0.28f, 1.0f);
-                colText.SetText("Collision!");
-            }
-        }
-        else
-        {
-            if (nCollision == 1)
-            {
-                nCollision = 0;
-                colText.SetColor(0.2f, 0.8f, 0.28f, 1.0f);
-                colText.SetText("No Collision");
-            }
-        }
+        //if (pTestAnim->Overlaps(pFlowerPot))
+        //{
+        //    if (nCollision == 0)
+        //    {
+        //        nCollision = 1;
+        //        colText.SetColor(0.8f, 0.2f, 0.28f, 1.0f);
+        //        colText.SetText("Collision!");
+        //    }
+        //}
+        //else
+        //{
+        //    if (nCollision == 1)
+        //    {
+        //        nCollision = 0;
+        //        colText.SetColor(0.2f, 0.8f, 0.28f, 1.0f);
+        //        colText.SetText("No Collision");
+        //    }
+        //}
         timer.Start();
         Render();
     }
 
     delete pTestCollider;
-    delete pCubeCollider;
     delete pLibrary;
     delete pSun;
-    delete pTestCube;
     delete pTestAnim;
     delete pCamera;
     delete pBlueMat;
     delete pWhiteMat;
     delete pTestScene;
-
+    delete [] pFlowerPots;
     exit(0);
 }

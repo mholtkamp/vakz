@@ -113,6 +113,12 @@ public:
 
     void Load(float* arValues);
 
+    void MultiplyVec3(float* arVec3,
+                      float* arRes);
+
+    void MultiplyVec4(float* arVec4,
+                      float* arRes);
+
     //## **********************************************************************
     //## Clear
     //##

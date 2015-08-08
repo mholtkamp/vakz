@@ -38,6 +38,10 @@ public:
                   float fBlue,
                   float fAlpha);
 
+    void SetMatter(void* pMatter);
+
+    void* GetMatter();
+
     virtual void Render(Matrix* pMVP) = 0;
 
     virtual int Overlaps(Collider* pOther) = 0;
@@ -67,6 +71,8 @@ protected:
     float m_arRenderColor[4];
 
     int m_nRenderEnable;
+
+    void* m_pMatter;
 };
 
 #endif

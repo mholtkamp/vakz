@@ -75,6 +75,16 @@ void Collider::SetColor(float fRed,
     m_arRenderColor[3] = fAlpha;
 }
 
+void Collider::SetMatter(void* pMatter)
+{
+    m_pMatter = pMatter;
+}
+
+void* Collider::GetMatter()
+{
+    return m_pMatter;
+}
+
 void Collider::EnableRendering()
 {
     m_nRenderEnable = 1;

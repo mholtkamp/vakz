@@ -28,6 +28,7 @@ Matter::Matter()
     m_pMesh     = 0;
     m_pMaterial = 0;
     m_pTexture  = 0;
+    m_pCollider = 0;
 
     m_nCurrentAnimation   = 0;
     m_fCurrentFrame       = 0.0f;
@@ -104,6 +105,7 @@ void Matter::SetCollider(Collider* pCollider)
         m_pCollider->SetPosition(m_fX, m_fY, m_fZ);
         m_pCollider->SetRotation(m_fRotX, m_fRotY, m_fRotZ);
         m_pCollider->SetScale(m_fScaleX, m_fScaleY, m_fScaleZ);
+        m_pCollider->SetMatter(this);
     }
     else
     {
@@ -257,6 +259,7 @@ void Matter::UpdatePhysics(void* pScene,
 //*****************************************************************************
 Matrix* Matter::GetModelMatrix()
 {
+    GenerateModelMatrix();
     return &m_matModel;
 }
 

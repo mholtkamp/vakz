@@ -393,6 +393,58 @@ void Matrix::Load(float* arValues)
 }
 
 //*****************************************************************************
+// MultiplyVec3
+//*****************************************************************************
+void Matrix::MultiplyVec3(float* arVec3,
+                          float* arRes)
+{
+    float arVec4[4] = {0.0f};
+    float arRes4[4]  = {0.0f};
+
+    if (arVec3 != 0)
+    {
+        // Add  an extra dimension to the vec3
+        arVec4[0] = arVec3[0];
+        arVec4[1] = arVec3[1];
+        arVec4[2] = arVec3[2];
+        arVec4[3] = 1.0f;
+
+        MultiplyVec4(arVec4, arRes4);
+
+        arRes[0] = arRes4[0];
+        arRes[1] = arRes4[1];
+        arRes[2] = arRes4[2];
+    }
+}
+
+//*****************************************************************************
+// MultiplyVec4
+//*****************************************************************************
+void Matrix::MultiplyVec4(float* arVec4,
+                          float* arRes)
+{
+    int i = 0;
+    int j = 0;
+
+    // Clear the result vector
+    arRes[0] = 0.0f;
+    arRes[1] = 0.0f;
+    arRes[2] = 0.0f;
+    arRes[3] = 0.0f;
+
+    if (arVec4 != 0)
+    {
+        for (i = 0; i < MATRIX_SIZE; i++)
+        {
+            for (j = 0; j < MATRIX_SIZE; j++)
+            {
+                arRes[i] += m_arValues[i + j*4] * arVec4[j];
+            }
+        }
+    }
+}
+
+//*****************************************************************************
 // Clear
 //*****************************************************************************
 void Matrix::Clear()

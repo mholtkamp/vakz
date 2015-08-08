@@ -1,6 +1,7 @@
 #include "BoxCollider.h"
 #include "MeshCollider.h"
 #include "TriangleBoxCollision.h"
+#include "Matter.h"
 
 BoxCollider::BoxCollider()
 {
@@ -54,10 +55,13 @@ void BoxCollider::Render(Matrix* pMVP)
 int BoxCollider::Overlaps(Collider* pOther)
 {
     int i                  = 0;
+    int nVert              = 0;
     int nTriangles         = 0;
     BoxCollider*  pBox     = 0;
     MeshCollider* pMesh    = 0;
-    float arTriangle[3][3] = {0};
+    Matrix*       pMatrixM = 0;
+    float arTriangle[3][3] = {0.0f};
+    float arTransTri[3][3] = {0.0f};
 
     if (pOther->GetType() == COLLIDER_BOX)
     {
@@ -80,6 +84,15 @@ int BoxCollider::Overlaps(Collider* pOther)
     }
     else if (pOther->GetType() == COLLIDER_MESH)
     {
+        // We need a pointer to the owner Matter so that we can 
+        // get the Matter's model matrix;
+        if (pOther->GetMatter() == 0)
+        {
+            return 0;
+        }
+
+        pMatrixM = reinterpret_cast<Matter*>(pOther->GetMatter())->GetModelMatrix();
+
         pMesh = reinterpret_cast<MeshCollider*>(pOther);
 
         float arBoxCenter[3] = {(GetMinX() + GetMaxX())/2.0f,
@@ -95,9 +108,17 @@ int BoxCollider::Overlaps(Collider* pOther)
         for (i = 0; i < nTriangles; i++)
         {
             pMesh->GetTriangle(i, arTriangle);
+
+            // Transform the points of the triangle
+            for (nVert = 0; nVert < 3; nVert++)
+            {
+                pMatrixM->MultiplyVec3(arTriangle[nVert],
+                                       arTransTri[nVert]);
+            }
+
             if (triBoxOverlap(arBoxCenter,
                               arBoxHalfSize,
-                              arTriangle) == 1)
+                              arTransTri) == 1)
             {
                 return 1;
             }
