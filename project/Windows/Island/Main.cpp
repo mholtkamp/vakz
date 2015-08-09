@@ -158,8 +158,11 @@ int main()
     float fBearZ = 0.0f;
     float fCube2Rot = 0.0f;
     float fAnimSpeed = 1.0f;
+    int nRenderCount = 0;
     Timer timer;
+    Timer timerRender;
     timer.Start();
+
 
     while ((GetStatus() & VAKZ_QUIT) == 0)
     {
@@ -440,7 +443,23 @@ int main()
         //    }
         //}
         timer.Start();
+        if (nRenderCount == 0)
+        {
+            timerRender.Start();
+        }
+
         Render();
+        nRenderCount++;
+
+        if(nRenderCount == 50)
+        {
+            char arMsg[32] = {0};
+            timerRender.Stop();
+            nRenderCount = 0;
+            float fRenderTime = timerRender.Time()/50.0f;
+            sprintf(arMsg, "Render Time: %f", fRenderTime);
+            LogDebug(arMsg);
+        }
     }
 
     delete pTestCollider;
