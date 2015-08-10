@@ -9,7 +9,7 @@
 //*****************************************************************************
 Quad::Quad()
 {
-    m_unTexture = 0;
+    m_pTexture  = 0;
     m_fWidth    = 1.0f;
     m_fHeight   = 1.0f;
     m_fTileS    = 1.0f;
@@ -73,9 +73,15 @@ void Quad::Render()
                               m_arTexCoord);
 
         // Set uniforms
-        glUniform1i(hType, (m_unTexture == 0) ? 0 : 1);
+        glUniform1i(hType, (m_pTexture == 0) ? 0 : 1);
         glUniform4fv(hColor, 1, m_arColor);
         glUniform1i(hTexture, 0);  // Set texture unit to 0.
+
+        // Bind texture
+        if (m_pTexture != 0)
+        {
+            m_pTexture->Bind();
+        }
 
         glDisable(GL_DEPTH_TEST);
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
@@ -161,20 +167,20 @@ void Quad::SetTiling(float fTileS,
 void Quad::GeneratePositionArray()
 {
     // Bottom left corner
-    m_arPosition[0] = (m_fX/g_nScreenWidth)*2.0f - 1.0f;
-    m_arPosition[1] = (m_fY/g_nScreenHeight)*2.0f - 1.0f;
+    m_arPosition[0] = m_fX;
+    m_arPosition[1] = m_fY;
 
     // Top left corner
-    m_arPosition[2] = (m_fX/g_nScreenWidth)*2.0f - 1.0f;
-    m_arPosition[3] = ((m_fY + m_fHeight)/g_nScreenHeight)*2.0f - 1.0f;
+    m_arPosition[2] = m_fX;
+    m_arPosition[3] = m_fY + m_fHeight;
 
     // Bottom right corner
-    m_arPosition[4] = ((m_fX + m_fWidth)/g_nScreenWidth)*2.0f - 1.0f;
-    m_arPosition[5] = (m_fY/g_nScreenHeight)*2.0f - 1.0f;
+    m_arPosition[4] = m_fX + m_fWidth;
+    m_arPosition[5] = m_fY;
 
     // Top right corner
-    m_arPosition[6] = ((m_fX + m_fWidth)/g_nScreenWidth)*2.0f - 1.0f;
-    m_arPosition[7] = ((m_fY + m_fHeight)/g_nScreenHeight)*2.0f - 1.0f;
+    m_arPosition[6] = m_fX + m_fWidth;
+    m_arPosition[7] = m_fY + m_fHeight;
 }
 
 //*****************************************************************************
@@ -197,4 +203,9 @@ void Quad::GenerateTexCoordArray()
     // Top right corner
     m_arTexCoord[6] = m_fTileS;
     m_arTexCoord[7] = m_fTileT;
+}
+
+void Quad::SetTexture(Texture* pTexture)
+{
+    m_pTexture = pTexture;
 }

@@ -334,6 +334,23 @@ void GetTouchPosition(int& nTouchX,
                       int  nTouch);
 
 //## **********************************************************************
+//## GetTouchPositionNormalized
+//## 
+//## Gets the position of a pointer in normalized screen coordinates. 
+//## Coordinate origin is at bottom left corner of the screen.
+//##
+//## Input:
+//##   nTouch - touch index to query.
+//##
+//## Output:
+//##   fTouchX - x coordinate of touch position.
+//##   fTouchY - y coordinate of touch position.
+//## **********************************************************************
+void GetTouchPositionNormalized(float& fTouchX,
+                                float& fTouchY,
+                                int    nTouch);
+
+//## **********************************************************************
 //## GetPointerPosition
 //## 
 //## Refer to GetTouchPosition. It is the same as that function except 
@@ -342,6 +359,16 @@ void GetTouchPosition(int& nTouchX,
 void GetPointerPosition(int& nPointerX,
                         int& nPointerY,
                         int  nPointer = 0);
+
+//## **********************************************************************
+//## GetPointerPosition
+//## 
+//## Refer to GetTouchPositionNormalized. It is the same as that function
+//##  except the touch index is defaulted to 0 (mouse index).
+//## **********************************************************************
+void GetPointerPositionNormalized(float& fPointerX,
+                                  float& fPointerY,
+                                  int  nPointer = 0);
 
 //## **********************************************************************
 //## SetMousePosition

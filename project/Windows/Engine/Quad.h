@@ -2,6 +2,7 @@
 #define QUAD_H
 
 #include "Glyph.h"
+#include "Texture.h"
 
 class Quad : public Glyph
 {
@@ -98,6 +99,16 @@ public:
     //## **********************************************************************
     virtual void SetTiling(float fTileS,
                            float fTileT);
+    //## **********************************************************************
+    //## SetTexture
+    //##
+    //## Sets the texture of the quad. If no texture is supplied, then the
+    //## quad will be rendered with uniform color.
+    //##
+    //## Input:
+    //##   pTexture - pointer to texture object.
+    //## **********************************************************************
+    virtual void SetTexture(Texture* pTexture);
 
     enum QuadEnum
     {
@@ -115,8 +126,8 @@ protected:
     //## send to the GPU based on tiling.
     virtual void GenerateTexCoordArray();
 
-    //## ID of texture to render.
-    unsigned int m_unTexture;
+    //## Texture object to sample color from
+    Texture* m_pTexture;
     
     //## Dimensions of quad.
     float m_fWidth;

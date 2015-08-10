@@ -1,5 +1,6 @@
 #include "VInput.h"
 #include "Log.h"
+#include "Settings.h"
 #include <string.h>
 
 static int s_arKeys[VINPUT_MAX_KEYS]       = {0};
@@ -194,6 +195,26 @@ void GetTouchPosition(int& nTouchX,
 }
 
 //*****************************************************************************
+// GetTouchPositionNormalized
+//*****************************************************************************
+void GetTouchPositionNormalized(float& fTouchX,
+                                float& fTouchY,
+                                int    nTouch)
+{
+    if (nTouch >= 0 &&
+        nTouch <  VINPUT_MAX_TOUCHES)
+    {
+        fTouchX = (s_arPointerX[nTouch] - (g_nScreenWidth/2.0f)) / (g_nScreenWidth/2.0f);
+        fTouchY = (s_arPointerY[nTouch] - (g_nScreenHeight/2.0f)) / (g_nScreenHeight/2.0f);
+    }
+    else
+    {
+        LogWarning("Invalid touch index queried in GetTouchPosition().");
+        return;
+    }
+}
+
+//*****************************************************************************
 // GetPointerPosition
 //*****************************************************************************
 void GetPointerPosition(int& nPointerX,
@@ -203,6 +224,18 @@ void GetPointerPosition(int& nPointerX,
     GetTouchPosition(nPointerX,
                      nPointerY,
                      nPointer);
+}
+
+//*****************************************************************************
+// GetPointerPositionNormalized
+//*****************************************************************************
+void GetPointerPositionNormalized(float& fPointerX,
+                                  float& fPointerY,
+                                  int  nPointer = 0)
+{
+    GetTouchPositionNormalized(fPointerX,
+                               fPointerY,
+                               nPointer);
 }
 
 //*****************************************************************************
