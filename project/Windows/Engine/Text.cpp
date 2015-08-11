@@ -48,41 +48,44 @@ void Text::Render()
     int hOrigin   = -1;
     int hScale    = -1;
 
-    glUseProgram(hProg);
-    hColor    = glGetUniformLocation(hProg, "uColor");
-    hOrigin   = glGetUniformLocation(hProg, "uOrigin");
-    hScale    = glGetUniformLocation(hProg, "uScale");
-    hPosition = glGetAttribLocation(hProg, "aPosition");
-    hTexCoord = glGetAttribLocation(hProg, "aTexCoord");
+    if (m_nVisible != 0)
+    {
+        glUseProgram(hProg);
+        hColor    = glGetUniformLocation(hProg, "uColor");
+        hOrigin   = glGetUniformLocation(hProg, "uOrigin");
+        hScale    = glGetUniformLocation(hProg, "uScale");
+        hPosition = glGetAttribLocation(hProg, "aPosition");
+        hTexCoord = glGetAttribLocation(hProg, "aTexCoord");
 
-    m_pFont->SetRenderState(hProg);
-    glUniform4fv(hColor, 1, m_arColor);
-    glUniform2f(hOrigin, m_fX, m_fY);
-    glUniform2f(hScale, m_fScaleX, m_fScaleY);
+        m_pFont->SetRenderState(hProg);
+        glUniform4fv(hColor, 1, m_arColor);
+        glUniform2f(hOrigin, m_fX, m_fY);
+        glUniform2f(hScale, m_fScaleX, m_fScaleY);
 
-    glBindBuffer(GL_ARRAY_BUFFER, m_hVBO);
+        glBindBuffer(GL_ARRAY_BUFFER, m_hVBO);
 
-    glEnableVertexAttribArray(hPosition);
-    glEnableVertexAttribArray(hTexCoord);
+        glEnableVertexAttribArray(hPosition);
+        glEnableVertexAttribArray(hTexCoord);
 
-    glVertexAttribPointer(hPosition,
-                          2,
-                          GL_FLOAT,
-                          GL_FALSE,
-                          (4 * sizeof(float)),
-                          0);
-    glVertexAttribPointer(hTexCoord,
-                          2,
-                          GL_FLOAT,
-                          GL_FALSE,
-                          (4 * sizeof(float)),
-                          (void*) (2 * sizeof(float)));
+        glVertexAttribPointer(hPosition,
+                              2,
+                              GL_FLOAT,
+                              GL_FALSE,
+                              (4 * sizeof(float)),
+                              0);
+        glVertexAttribPointer(hTexCoord,
+                              2,
+                              GL_FLOAT,
+                              GL_FALSE,
+                              (4 * sizeof(float)),
+                              (void*) (2 * sizeof(float)));
 
-    glDrawArrays(GL_TRIANGLES,
-                 0,
-                 TRIANGLES_PER_CHARACTER   * 
-                    VERTICES_PER_TRIANGLE  *
-                        m_nTextLength);
+        glDrawArrays(GL_TRIANGLES,
+                     0,
+                     TRIANGLES_PER_CHARACTER   * 
+                        VERTICES_PER_TRIANGLE  *
+                            m_nTextLength);
+    }
 }
 
 void Text::SetScale(float fX,

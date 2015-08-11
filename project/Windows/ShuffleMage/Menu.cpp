@@ -1,8 +1,8 @@
 #include "Menu.h"
 #include "Vakz.h"
 
-#define MAIN_BUTTON_X     0.6f
-#define MAIN_BUTTON_WIDTH 0.4f
+#define MAIN_BUTTON_X     0.55f
+#define MAIN_BUTTON_WIDTH 0.45f
 #define MAIN_BUTTON_HEIGHT 0.15f
 
 Menu::Menu()
@@ -37,11 +37,11 @@ Menu::Menu()
     m_btSettings.SetTextString("Settings");
     m_btSettings.AddToScene(m_scene);
 
-    m_btLogout.SetRectangle(-1.0f, -0.6f, 0.25f, MAIN_BUTTON_HEIGHT);
+    m_btLogout.SetRectangle(-1.0f, -0.6f, 0.35f, MAIN_BUTTON_HEIGHT);
     m_btLogout.SetTextString("Logout");
     m_btLogout.AddToScene(m_scene);
 
-    m_btExit.SetRectangle(-1.0f, -0.8f, 0.25f, MAIN_BUTTON_HEIGHT);
+    m_btExit.SetRectangle(-1.0f, -0.8f, 0.35, MAIN_BUTTON_HEIGHT);
     m_btExit.SetTextString("Exit");
     m_btExit.AddToScene(m_scene);
 
