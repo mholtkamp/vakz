@@ -74,7 +74,7 @@
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="ImageLoader.cpp" />
     <ClCompile Include="MeshCollider.cpp" />
-    <ClCompile Include="Rectangle.cpp" />
+    <ClCompile Include="Rect.cpp" />
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="Text.cpp" />
     <ClCompile Include="Timer.cpp" />
@@ -115,7 +115,7 @@
     <ClInclude Include="InputHandler.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
-    <ClInclude Include="Rectangle.h" />
+    <ClInclude Include="Rect.h" />
     <ClInclude Include="Terrain.h" />
     <ClInclude Include="TriangleBoxCollision.h" />
     <ClInclude Include="MeshCollider.h" />

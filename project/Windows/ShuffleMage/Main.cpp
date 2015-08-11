@@ -1,3 +1,4 @@
+// Vakz includes
 #include "Vakz.h"
 #include "Scene.h"
 #include "Quad.h"
@@ -14,8 +15,12 @@
 #include "MeshCollider.h"
 #include "Text.h"
 
+// C stdlib includes
 #include <stdio.h>
 #include <math.h>
+
+// Shuffle Mage includes
+#include "Menu.h"
 
 #define ROT_SPEED 70.0f
 #define MOVE_SPEED 5.0f
@@ -26,11 +31,25 @@
 
 Scene sceneMenu;
 Scene sceneBattle;
+Menu* pMenu;
+
+int nGameState;
 
 int main()
 {
     SetWindowSize(1024,768);
     Initialize();
+
+    pMenu = new Menu();
+    
+    pMenu->RegisterScene();
+    pMenu->SetState(MENU_STATE_MAIN);
+
+    while (1)
+    {
+        Update();
+        Render();
+    }
 
     exit(0);
 }

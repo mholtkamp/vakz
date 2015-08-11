@@ -102,13 +102,13 @@ void Scene::Render()
 {
     int i = 0;
     Matrix matMVP;
-
-    m_pCamera->GenerateViewMatrix();
-    m_pCamera->GenerateProjectionMatrix();
     
     // Render 3D Objects
     if (m_pCamera != 0)
     {
+        m_pCamera->GenerateViewMatrix();
+        m_pCamera->GenerateProjectionMatrix();
+
         // Render matter
         glEnable(GL_CULL_FACE);
         glFrontFace(GL_CCW);

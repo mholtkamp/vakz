@@ -1,9 +1,11 @@
 #ifndef SM_BUTTON_H
 #define SM_BUTTON_H
 
-#include "Rectangle.h"
+#include "Rect.h"
 #include "Texture.h"
 #include "Quad.h"
+#include "Text.h"
+#include "Scene.h"
 
 class Button
 {
@@ -22,11 +24,20 @@ public:
 
     void SetTexture(Texture* pTexture);
 
+    void SetTextString(const char* pText);
+
+    void AddToScene(Scene& scene);
+
+    void SetVisible(int nVisible);
+
 private:
 
-    Rectangle m_rect;
+    Rect m_rect;
     Quad m_quad;
+    Text m_text;
 
+    float m_fTextOffsetX;
+    float m_fTextOffsetY;
 };
 
 

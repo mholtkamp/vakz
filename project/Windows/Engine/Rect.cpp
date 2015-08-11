@@ -1,6 +1,6 @@
-#include "Rectangle.h"
+#include "Rect.h"
 
-Rectangle::Rectangle()
+Rect::Rect()
 {
     m_fX      = 0.0f;
     m_fY      = 0.0f;
@@ -8,12 +8,12 @@ Rectangle::Rectangle()
     m_fHeight = 1.0f;
 }
 
-Rectangle::~Rectangle()
+Rect::~Rect()
 {
 
 }
 
-int Rectangle::Overlaps(Rectangle* pOther)
+int Rect::Overlaps(Rect* pOther)
 {
     if (pOther->m_fX < m_fX)
     {
@@ -35,8 +35,8 @@ int Rectangle::Overlaps(Rectangle* pOther)
     return 1;
 }
 
-int Rectangle::Contains(float fX,
-                        float fY)
+int Rect::Contains(float fX,
+                   float fY)
 {
     if ((fX <= m_fX + m_fWidth)  &&
         (fX >= m_fX)             &&

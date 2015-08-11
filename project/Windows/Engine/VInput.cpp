@@ -231,7 +231,7 @@ void GetPointerPosition(int& nPointerX,
 //*****************************************************************************
 void GetPointerPositionNormalized(float& fPointerX,
                                   float& fPointerY,
-                                  int  nPointer = 0)
+                                  int  nPointer)
 {
     GetTouchPositionNormalized(fPointerX,
                                fPointerY,

@@ -1,15 +1,15 @@
 #ifndef RECTANGLE_H
 #define RECTANGLE_H
 
-class Rectangle
+class Rect
 {
 public:
 
-    Rectangle();
+    Rect();
 
-    ~Rectangle();
+    ~Rect();
 
-    int Overlaps(Rectangle* pOther);
+    int Overlaps(Rect* pOther);
 
     int Contains(float fX,
                  float fY);
