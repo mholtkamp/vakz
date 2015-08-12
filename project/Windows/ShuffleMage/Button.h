@@ -17,10 +17,10 @@ public:
 
     int IsTouched();
 
-    void SetRectangle(float fX,
-                      float fY,
-                      float fWidth,
-                      float fHeight);
+    void SetRect(float fX,
+                 float fY,
+                 float fWidth,
+                 float fHeight);
 
     void SetTexture(Texture* pTexture);
 

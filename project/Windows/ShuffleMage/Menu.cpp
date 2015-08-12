@@ -8,40 +8,40 @@
 Menu::Menu()
 {
     // Setup Login State
-    m_btLogin.SetRectangle(0.3f, 0.2f, 0.25f, 0.15f);
+    m_btLogin.SetRect(0.3f, 0.2f, 0.25f, 0.15f);
     m_btLogin.SetTextString("Login");
     m_btLogin.AddToScene(m_scene);
 
-    m_btRegister.SetRectangle(0.6f, 0.2f, 0.25f, 0.15f);
+    m_btRegister.SetRect(0.6f, 0.2f, 0.25f, 0.15f);
     m_btRegister.SetTextString("Register");
     m_btRegister.AddToScene(m_scene);
 
     // Setup Main State
-    m_btPlay.SetRectangle(MAIN_BUTTON_X, 0.8f, MAIN_BUTTON_WIDTH, MAIN_BUTTON_HEIGHT);
+    m_btPlay.SetRect(MAIN_BUTTON_X, 0.8f, MAIN_BUTTON_WIDTH, MAIN_BUTTON_HEIGHT);
     m_btPlay.SetTextString("Play");
     m_btPlay.AddToScene(m_scene);
 
-    m_btDeck.SetRectangle(MAIN_BUTTON_X, 0.6f, MAIN_BUTTON_WIDTH, MAIN_BUTTON_HEIGHT);
+    m_btDeck.SetRect(MAIN_BUTTON_X, 0.6f, MAIN_BUTTON_WIDTH, MAIN_BUTTON_HEIGHT);
     m_btDeck.SetTextString("Deck");
     m_btDeck.AddToScene(m_scene);
 
-    m_btShop.SetRectangle(MAIN_BUTTON_X, 0.4f, MAIN_BUTTON_WIDTH, MAIN_BUTTON_HEIGHT);
+    m_btShop.SetRect(MAIN_BUTTON_X, 0.4f, MAIN_BUTTON_WIDTH, MAIN_BUTTON_HEIGHT);
     m_btShop.SetTextString("Shop");
     m_btShop.AddToScene(m_scene);
 
-    m_btPractice.SetRectangle(MAIN_BUTTON_X, 0.2f, MAIN_BUTTON_WIDTH, MAIN_BUTTON_HEIGHT);
+    m_btPractice.SetRect(MAIN_BUTTON_X, 0.2f, MAIN_BUTTON_WIDTH, MAIN_BUTTON_HEIGHT);
     m_btPractice.SetTextString("Practice");
     m_btPractice.AddToScene(m_scene);
 
-    m_btSettings.SetRectangle(MAIN_BUTTON_X, 0.0f, MAIN_BUTTON_WIDTH, MAIN_BUTTON_HEIGHT);
+    m_btSettings.SetRect(MAIN_BUTTON_X, 0.0f, MAIN_BUTTON_WIDTH, MAIN_BUTTON_HEIGHT);
     m_btSettings.SetTextString("Settings");
     m_btSettings.AddToScene(m_scene);
 
-    m_btLogout.SetRectangle(-1.0f, -0.6f, 0.35f, MAIN_BUTTON_HEIGHT);
+    m_btLogout.SetRect(-1.0f, -0.6f, 0.35f, MAIN_BUTTON_HEIGHT);
     m_btLogout.SetTextString("Logout");
     m_btLogout.AddToScene(m_scene);
 
-    m_btExit.SetRectangle(-1.0f, -0.8f, 0.35f, MAIN_BUTTON_HEIGHT);
+    m_btExit.SetRect(-1.0f, -0.8f, 0.35f, MAIN_BUTTON_HEIGHT);
     m_btExit.SetTextString("Exit");
     m_btExit.AddToScene(m_scene);
 

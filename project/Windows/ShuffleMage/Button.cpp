@@ -34,10 +34,10 @@ int Button::IsTouched()
     return IsPointerDown(0) && m_rect.Contains(fTouchX, fTouchY);
 }
 
-void Button::SetRectangle(float fX,
-                          float fY,
-                          float fWidth,
-                          float fHeight)
+void Button::SetRect(float fX,
+                     float fY,
+                     float fWidth,
+                     float fHeight)
 {
      m_rect.m_fX      = fX;
      m_rect.m_fY      = fY;
