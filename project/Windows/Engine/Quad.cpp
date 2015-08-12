@@ -17,6 +17,18 @@ Quad::Quad()
 
     GeneratePositionArray();
     GenerateTexCoordArray();
+
+    //## Border enable
+    m_nBorderEnable = 0;
+
+    //## Border color
+    m_arBorderColor[0] = 0.0f;
+    m_arBorderColor[1] = 0.0f;
+    m_arBorderColor[2] = 0.0f;
+    m_arBorderColor[3] = 1.0f;
+
+    //## Border line width
+    m_fBorderWidth = 1.0f;
 }
 
 //*****************************************************************************
@@ -84,8 +96,25 @@ void Quad::Render()
         }
 
         glDisable(GL_DEPTH_TEST);
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
         glEnable(GL_DEPTH_TEST);
+
+        // If the border is enabled, draw a border.
+        if (m_nBorderEnable != 0)
+        {
+            // Disable any texture features as the border
+            // cannot be rendered with a texture... or at least
+            // it shouldn't be.
+            glUniform1i(hType, 0);
+            glBindTexture(GL_TEXTURE_2D, 0);
+            glUniform4fv(hColor, 1, m_arBorderColor);
+            glLineWidth(m_fBorderWidth);
+
+            glDrawArrays(GL_LINE_LOOP, 0, 4);
+
+            // Reset the line width
+            glLineWidth(1.0f);
+        }
     }
 }
 
@@ -174,13 +203,13 @@ void Quad::GeneratePositionArray()
     m_arPosition[2] = m_fX;
     m_arPosition[3] = m_fY + m_fHeight;
 
-    // Bottom right corner
-    m_arPosition[4] = m_fX + m_fWidth;
-    m_arPosition[5] = m_fY;
-
     // Top right corner
+    m_arPosition[4] = m_fX + m_fWidth;
+    m_arPosition[5] = m_fY + m_fHeight;
+
+    // Bottom right corner
     m_arPosition[6] = m_fX + m_fWidth;
-    m_arPosition[7] = m_fY + m_fHeight;
+    m_arPosition[7] = m_fY;
 }
 
 //*****************************************************************************
@@ -196,16 +225,37 @@ void Quad::GenerateTexCoordArray()
     m_arTexCoord[2] = 0.0f;
     m_arTexCoord[3] = m_fTileT;
 
-    // Bottom right corner
-    m_arTexCoord[4] = m_fTileS;
-    m_arTexCoord[5] = 0.0f;
-
     // Top right corner
+    m_arTexCoord[4] = m_fTileS;
+    m_arTexCoord[5] = m_fTileT;
+
+    // Bottom right corner
     m_arTexCoord[6] = m_fTileS;
-    m_arTexCoord[7] = m_fTileT;
+    m_arTexCoord[7] = 0.0f;
 }
 
 void Quad::SetTexture(Texture* pTexture)
 {
     m_pTexture = pTexture;
+}
+
+void Quad::SetBorderColor(float fRed,
+                          float fGreen,
+                          float fBlue,
+                          float fAlpha)
+{
+    m_arBorderColor[0] = fRed;
+    m_arBorderColor[1] = fGreen;
+    m_arBorderColor[2] = fBlue;
+    m_arBorderColor[3] = fAlpha;
+}
+
+void Quad::SetBorderWidth (float fWidth)
+{
+    m_fBorderWidth = fWidth;
+}
+
+void Quad::EnableBorder(int nEnable)
+{
+    m_nBorderEnable = nEnable;
 }

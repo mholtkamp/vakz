@@ -110,6 +110,15 @@ public:
     //## **********************************************************************
     virtual void SetTexture(Texture* pTexture);
 
+    void SetBorderColor(float fRed,
+                        float fGreen,
+                        float fBlue,
+                        float fAlpha);
+
+    void SetBorderWidth (float fWidth);
+
+    void EnableBorder(int nEnable);
+
     enum QuadEnum
     {
         POSITION_ARRAY_SIZE = 8,
@@ -141,6 +150,14 @@ protected:
     float m_arPosition[POSITION_ARRAY_SIZE];
     float m_arTexCoord[TEXCOORD_ARRAY_SIZE];
 
+    //## Border enable
+    int m_nBorderEnable;
+
+    //## Border color
+    float m_arBorderColor[4];
+
+    //## Border line width
+    float m_fBorderWidth;
 };
 
 #endif

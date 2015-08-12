@@ -9,6 +9,9 @@ Button::Button()
     m_quad.SetVisible(0);
     m_text.SetVisible(0);
     m_quad.SetColor(0.7f, 0.2f, 0.22f, 1.0f);
+    m_quad.EnableBorder(1);
+    m_quad.SetBorderColor(1.0f, 1.0f, 1.0f, 1.0f);
+    m_quad.SetBorderWidth(2.0f);
     m_text.SetColor(1.0f, 1.0f, 1.0f, 1.0f);
     m_fTextOffsetX = DEFAULT_X_OFFSET;
     m_fTextOffsetY = DEFAULT_Y_OFFSET;

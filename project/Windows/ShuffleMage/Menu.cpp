@@ -41,7 +41,7 @@ Menu::Menu()
     m_btLogout.SetTextString("Logout");
     m_btLogout.AddToScene(m_scene);
 
-    m_btExit.SetRectangle(-1.0f, -0.8f, 0.35, MAIN_BUTTON_HEIGHT);
+    m_btExit.SetRectangle(-1.0f, -0.8f, 0.35f, MAIN_BUTTON_HEIGHT);
     m_btExit.SetTextString("Exit");
     m_btExit.AddToScene(m_scene);
 

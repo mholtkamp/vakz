@@ -40,6 +40,8 @@ int main()
     SetWindowSize(1024,768);
     Initialize();
 
+    SetClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+
     pMenu = new Menu();
     
     pMenu->RegisterScene();
