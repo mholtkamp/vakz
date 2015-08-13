@@ -221,23 +221,23 @@ void Text::GenerateVertexArray(float** pArray,
         pVertexArray[i*24 + 23] = 1.0f - CHAR_UNIT * (yIndex+1.0f);
 
         // Position
-        pVertexArray[i*24 + 0] = m_fX + nCharOffX*fCharWidth;
-        pVertexArray[i*24 + 1] = m_fY + fCharOffY;
+        pVertexArray[i*24 + 0] = nCharOffX*fCharWidth;
+        pVertexArray[i*24 + 1] = fCharOffY;
 
-        pVertexArray[i*24 + 4] = m_fX + nCharOffX*fCharWidth;
-        pVertexArray[i*24 + 5] = m_fY + fCharHeight + fCharOffY;
+        pVertexArray[i*24 + 4] = nCharOffX*fCharWidth;
+        pVertexArray[i*24 + 5] = fCharHeight + fCharOffY;
 
-        pVertexArray[i*24 + 8] = m_fX + fCharWidth + nCharOffX*fCharWidth;
-        pVertexArray[i*24 + 9] = m_fY + fCharHeight + fCharOffY;
+        pVertexArray[i*24 + 8] = fCharWidth + nCharOffX*fCharWidth;
+        pVertexArray[i*24 + 9] = fCharHeight + fCharOffY;
 
-        pVertexArray[i*24 + 12] = m_fX + nCharOffX*fCharWidth;
-        pVertexArray[i*24 + 13] = m_fY + fCharOffY;
+        pVertexArray[i*24 + 12] = nCharOffX*fCharWidth;
+        pVertexArray[i*24 + 13] = fCharOffY;
 
-        pVertexArray[i*24 + 16] = m_fX + fCharWidth + nCharOffX*fCharWidth;
-        pVertexArray[i*24 + 17] = m_fY + fCharHeight + fCharOffY;
+        pVertexArray[i*24 + 16] = fCharWidth + nCharOffX*fCharWidth;
+        pVertexArray[i*24 + 17] = fCharHeight + fCharOffY;
 
-        pVertexArray[i*24 + 20] = m_fX + fCharWidth + nCharOffX*fCharWidth;
-        pVertexArray[i*24 + 21] = m_fY + fCharOffY;
+        pVertexArray[i*24 + 20] = fCharWidth + nCharOffX*fCharWidth;
+        pVertexArray[i*24 + 21] = fCharOffY;
 
         if (target == '\n')
         {

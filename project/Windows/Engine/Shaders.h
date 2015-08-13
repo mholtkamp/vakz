@@ -83,7 +83,7 @@ GLSL_VERSION_STRING
 "void main()\n"
 "{\n"
 "   vTexCoord = aTexCoord;\n"
-"   vec2 lPosition = (aPosition - uOrigin) * uScale + uOrigin;\n"
+"   vec2 lPosition = aPosition * uScale + uOrigin;\n"
 "   gl_Position = vec4(lPosition, 0.0, 1.0);\n"
 "}\n";
 

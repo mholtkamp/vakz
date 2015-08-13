@@ -17,7 +17,7 @@ Menu::Menu()
     m_btRegister.SetTextString("Register");
     m_btRegister.AddToScene(m_scene);
 
-    m_tfUsername.SetRect(0.25f, 0.75, 0.65f, 0.15f);
+    m_tfUsername.SetRect(0.25f, 0.75f, 0.65f, 0.15f);
     m_tfUsername.SetMaxSize(16);
     m_tfUsername.SetTextScale(0.85f, 1.0f);
     m_tfUsername.AddToScene(m_scene);
@@ -26,6 +26,16 @@ Menu::Menu()
     m_tfPassword.SetMaxSize(16);
     m_tfPassword.SetTextScale(0.85f, 1.0f);
     m_tfPassword.AddToScene(m_scene);
+
+    m_txUsername.SetText("User:");
+    m_txUsername.SetPosition(0.0f, 0.8f);
+    m_txUsername.SetColor(1.0f, 1.0f, 1.0f, 1.0f);
+    m_scene.AddGlyph(&m_txUsername);
+
+    m_txPassword.SetText("Pass:");
+    m_txPassword.SetPosition(0.0f, 0.58f);
+    m_txPassword.SetColor(1.0f, 1.0f, 1.0f, 1.0f);
+    m_scene.AddGlyph(&m_txPassword);
 
     // Setup Main State
     m_btPlay.SetRect(MAIN_BUTTON_X, 0.8f, MAIN_BUTTON_WIDTH, MAIN_BUTTON_HEIGHT);
@@ -169,6 +179,8 @@ void Menu::EnableLogin(int nEnable)
     m_btRegister.SetVisible(nEnable);
     m_tfUsername.SetVisible(nEnable);
     m_tfPassword.SetVisible(nEnable);
+    m_txUsername.SetVisible(nEnable);
+    m_txPassword.SetVisible(nEnable);
 }
 
 void Menu::EnableMain(int nEnable)
