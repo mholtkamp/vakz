@@ -45,11 +45,12 @@ int main()
     pMenu = new Menu();
     
     pMenu->RegisterScene();
-    pMenu->SetState(MENU_STATE_MAIN);
+    pMenu->SetState(MENU_STATE_LOGIN);
 
     while ((GetStatus() & VAKZ_QUIT) == 0)
     {
         Update();
+        pMenu->Update();
         Render();
     }
 

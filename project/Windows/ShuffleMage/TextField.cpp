@@ -50,6 +50,12 @@ TextField::TextField()
 
     m_pTextString = new char[m_nBufferSize];
     memset(m_pTextString, 0, m_nBufferSize);
+
+    // Disable select, sets the colors in quad/text
+    SetSelect(0);
+
+    // Enable the border for the quad
+    m_quad.EnableBorder(1);
 }
 
 TextField::~TextField()
@@ -135,6 +141,11 @@ void TextField::SetRect(float fX,
                   fHeight);
     m_text.SetPosition(fX + m_fTextOffsetX,
                        fY + m_fTextOffsetY);
+    
+    m_rect.m_fX      = fX;
+    m_rect.m_fY      = fY;
+    m_rect.m_fWidth  = fWidth;
+    m_rect.m_fHeight = fHeight;
 }
 
 void TextField::SetSelect(int nSelect)
@@ -147,10 +158,10 @@ void TextField::SetSelect(int nSelect)
                         m_arSelBackColor[1],
                         m_arSelBackColor[2],
                         m_arSelBackColor[3]);
-        m_quad.SetColor(m_arSelBorderColor[0],
-                        m_arSelBorderColor[1],
-                        m_arSelBorderColor[2],
-                        m_arSelBorderColor[3]);
+        m_quad.SetBorderColor(m_arSelBorderColor[0],
+                              m_arSelBorderColor[1],
+                              m_arSelBorderColor[2],
+                              m_arSelBorderColor[3]);
         m_text.SetColor(m_arSelTextColor[0],
                         m_arSelTextColor[1],
                         m_arSelTextColor[2],
@@ -162,10 +173,10 @@ void TextField::SetSelect(int nSelect)
                         m_arBackColor[1],
                         m_arBackColor[2],
                         m_arBackColor[3]);
-        m_quad.SetColor(m_arBorderColor[0],
-                        m_arBorderColor[1],
-                        m_arBorderColor[2],
-                        m_arBorderColor[3]);
+        m_quad.SetBorderColor(m_arBorderColor[0],
+                              m_arBorderColor[1],
+                              m_arBorderColor[2],
+                              m_arBorderColor[3]);
         m_text.SetColor(m_arTextColor[0],
                         m_arTextColor[1],
                         m_arTextColor[2],
@@ -201,23 +212,32 @@ void TextField::Update(int nMouseDown,
                 // Make sure the key wasn't down last frame
                 if (arKeyDown[i] == 0)
                 {
-                    // Check if backspace is pressed
-                    if (i == VKEY_BACKSPACE)
-                    {
-                        RemoveChar();
-                        arKeyDown[i] = 1;
-                        return;
-                    }
-
                     // Otherwise, attempt to place a char into the textfield.
                     AddChar(ResolveChar(i));
                     arKeyDown[i] = 1;
+                    m_text.SetText(m_pTextString);
                 }
             }
             else
             {
                 arKeyDown[i] = 0;
             }
+        }
+
+        // Check if backspace is pressed
+        if (IsKeyDown(VKEY_BACKSPACE))
+        {
+            if (arKeyDown[VKEY_BACKSPACE] == 0)
+            {
+                RemoveChar();
+                arKeyDown[VKEY_BACKSPACE] = 1;
+                m_text.SetText(m_pTextString);
+                return;
+            }
+        }
+        else
+        {
+            arKeyDown[VKEY_BACKSPACE] = 0;
         }
     }
 }
@@ -297,4 +317,22 @@ void TextField::SetMaxSize(int nMaxSize)
     }
     
     m_nMaxSize = nMaxSize;
+}
+
+void TextField::AddToScene(Scene& scene)
+{
+    scene.AddGlyph(&m_quad);
+    scene.AddGlyph(&m_text);
+}
+
+void TextField::SetVisible(int nVisible)
+{
+    m_quad.SetVisible(nVisible);
+    m_text.SetVisible(nVisible);
+}
+
+void TextField::SetTextScale(float fScaleX,
+                             float fScaleY)
+{
+    m_text.SetScale(fScaleX, fScaleY);
 }

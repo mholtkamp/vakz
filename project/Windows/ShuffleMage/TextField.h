@@ -4,6 +4,7 @@
 #include "Quad.h"
 #include "Text.h"
 #include "Rect.h"
+#include "Scene.h"
 
 class TextField
 {
@@ -65,6 +66,13 @@ public:
     char* GetText();
 
     void SetMaxSize(int nMaxSize);
+
+    void AddToScene(Scene& scene);
+
+    void SetVisible(int nVisible);
+
+    void SetTextScale(float fScaleX,
+                      float fScaleY);
     
 
 private:

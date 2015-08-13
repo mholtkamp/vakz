@@ -1,5 +1,6 @@
 #include "Menu.h"
 #include "Vakz.h"
+#include "VInput.h"
 
 #define MAIN_BUTTON_X     0.55f
 #define MAIN_BUTTON_WIDTH 0.45f
@@ -8,13 +9,23 @@
 Menu::Menu()
 {
     // Setup Login State
-    m_btLogin.SetRect(0.3f, 0.2f, 0.25f, 0.15f);
+    m_btLogin.SetRect(0.1f, 0.2f, 0.28f, 0.15f);
     m_btLogin.SetTextString("Login");
     m_btLogin.AddToScene(m_scene);
 
-    m_btRegister.SetRect(0.6f, 0.2f, 0.25f, 0.15f);
+    m_btRegister.SetRect(0.48f, 0.2f, 0.42f, 0.15f);
     m_btRegister.SetTextString("Register");
     m_btRegister.AddToScene(m_scene);
+
+    m_tfUsername.SetRect(0.25f, 0.75, 0.65f, 0.15f);
+    m_tfUsername.SetMaxSize(16);
+    m_tfUsername.SetTextScale(0.85f, 1.0f);
+    m_tfUsername.AddToScene(m_scene);
+
+    m_tfPassword.SetRect(0.25f, 0.53f, 0.65f, 0.15f);
+    m_tfPassword.SetMaxSize(16);
+    m_tfPassword.SetTextScale(0.85f, 1.0f);
+    m_tfPassword.AddToScene(m_scene);
 
     // Setup Main State
     m_btPlay.SetRect(MAIN_BUTTON_X, 0.8f, MAIN_BUTTON_WIDTH, MAIN_BUTTON_HEIGHT);
@@ -44,7 +55,6 @@ Menu::Menu()
     m_btExit.SetRect(-1.0f, -0.8f, 0.35f, MAIN_BUTTON_HEIGHT);
     m_btExit.SetTextString("Exit");
     m_btExit.AddToScene(m_scene);
-
 }
 
 Menu::~Menu()
@@ -94,9 +104,43 @@ void Menu::SetState(int nState)
 }
 
 
+void Menu::Update()
+{
+    if (m_nState == MENU_STATE_LOGIN)
+    {
+        UpdateLogin();
+    }
+    else if (m_nState == MENU_STATE_MAIN)
+    {
+        UpdateMain();
+    }
+    else if (m_nState == MENU_STATE_QUEUE)
+    {
+        UpdateQueue();
+    }
+    else if (m_nState == MENU_STATE_DECK)
+    {
+        UpdateDeck();
+    }
+    else if (m_nState == MENU_STATE_SHOP)
+    {
+        UpdateShop();
+    }
+}
+
 void Menu::UpdateLogin()
 {
-
+    float fX = 0.0f;
+    float fY = 0.0f;
+    int nMouseDown = IsPointerDown();
+    GetPointerPositionNormalized(fX, fY);
+    
+    m_tfUsername.Update(nMouseDown,
+                        fX,
+                        fY);
+    m_tfPassword.Update(nMouseDown,
+                        fX,
+                        fY);
 }
 
 void Menu::UpdateMain()
@@ -123,6 +167,8 @@ void Menu::EnableLogin(int nEnable)
 {
     m_btLogin.SetVisible(nEnable);
     m_btRegister.SetVisible(nEnable);
+    m_tfUsername.SetVisible(nEnable);
+    m_tfPassword.SetVisible(nEnable);
 }
 
 void Menu::EnableMain(int nEnable)

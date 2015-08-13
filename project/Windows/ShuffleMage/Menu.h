@@ -2,6 +2,7 @@
 #define SM_MENU_H
 
 #include "Button.h"
+#include "TextField.h"
 #include "Scene.h"
 
 enum MenuStateEnum
@@ -51,6 +52,10 @@ private:
     // Login State
     Button m_btLogin;
     Button m_btRegister;
+    TextField m_tfUsername;
+    TextField m_tfPassword;
+    Text m_txUsername;
+    Text m_txPassword;
 
     // Main State
     Button m_btPlay;
