@@ -18,6 +18,12 @@
 // C stdlib includes
 #include <stdio.h>
 #include <math.h>
+#include <stdlib.h>
+
+// OS includes
+#if defined (ANDROID)
+#include <android_native_app_glue.h>
+#endif
 
 // Shuffle Mage includes
 #include "Menu.h"
@@ -35,12 +41,19 @@ Menu* pMenu;
 
 int nGameState;
 
+#if defined (ANDROID)
+void android_main(struct android_app* state)
+{
+    app_dummy();
+    Initialize(state);
+#else
 int main()
 {
     SetWindowSize(1024,768);
     Initialize();
+#endif
 
-    SetClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+    SetClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
     pMenu = new Menu();
     

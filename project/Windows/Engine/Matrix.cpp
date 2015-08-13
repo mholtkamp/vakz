@@ -268,10 +268,10 @@ void Matrix::Inverse()
         // This row number will be called nTarget.
         for (i = j; i < MATRIX_SIZE; i++)
         {
-            if (abs(arMat[i + 4*j]) > fMax)
+            if (fabs(arMat[i + 4*j]) > fMax)
             {
                 nTarget = i;
-                fMax    = abs(arMat[i + 4*j]);
+                fMax    = fabs(arMat[i + 4*j]);
             }
         }
 

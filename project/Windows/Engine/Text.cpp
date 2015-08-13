@@ -22,6 +22,8 @@ Text::Text()
     m_pFont = reinterpret_cast<Font*>(ResourceLibrary::GetDefaultFont());
 
     memset(m_pText, 0, m_nBufferSize);
+
+    m_hVBO = 0;
 }
 
 Text::~Text()

@@ -10,7 +10,7 @@ TextField::TextField()
     m_nSelected = 0;
 
     // Set default colors
-    m_arBackColor[0] = 0.4f;
+    m_arBackColor[0] = 0.2f;
     m_arBackColor[1] = 0.1f;
     m_arBackColor[2] = 0.1f;
     m_arBackColor[3] = 1.0f;
@@ -25,7 +25,7 @@ TextField::TextField()
     m_arTextColor[2] = 0.9f;
     m_arTextColor[3] = 1.0f;
     
-    m_arSelBackColor[0] = 0.4f;
+    m_arSelBackColor[0] = 0.2f;
     m_arSelBackColor[1] = 0.1f;
     m_arSelBackColor[2] = 0.1f;
     m_arSelBackColor[3] = 1.0f;
