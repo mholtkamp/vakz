@@ -29,25 +29,29 @@
 #include <unistd.h>
 #include <sys/time.h>
 
-#include "Log.h"
 #include "Vakz.h"
+#include "Scene.h"
 #include "Quad.h"
-#include "Text.h"
 #include "VGL.h"
 #include "VInput.h"
 #include "VMath.h"
+#include "Log.h"
 #include "Timer.h"
 #include "Matrix.h"
+#include "BoxCollider.h"
 #include "ResourceLibrary.h"
 #include "DiffuseMaterial.h"
 #include "DirectionalLight.h"
-
-#include "Camera.h"
-#include "Scene.h"
+#include "MeshCollider.h"
+#include "Text.h"
 
 #define ROT_SPEED 70.0f
 #define MOVE_SPEED 5.0f
 #define THRESH 0.4f
+
+#define FLOWER_BOX_SIZE 100.0f
+#define FLOWER_POT_COUNT 100
+
 int animating = 1;
 
 void android_main(struct android_app* state) {
@@ -59,6 +63,20 @@ void android_main(struct android_app* state) {
 
     // Make sure glue isn't stripped.
     app_dummy();
+
+
+    //@@ DEBUG INVERSE TEST
+    float arValues[16] = {2.0f,  6.0f, -1.0f,  3.0f,
+                          3.0f,  0.0f,  3.0f, -2.0f,
+                          8.0f, -3.0f,  2.0f, -4.0f,
+                          5.0f,  2.0f, -1.0f,  4.0f};
+    Matrix matTest;
+    matTest.Load(arValues);
+    matTest.Inverse();
+
+    matTest.Load(arValues);
+    matTest.Transpose();
+    //@@ END
 
     Scene* pTestScene = new Scene();
     SetScene(pTestScene);
@@ -72,25 +90,43 @@ void android_main(struct android_app* state) {
     ResourceLibrary* pLibrary = new ResourceLibrary();
 
     // Create diffuse material
-    DiffuseMaterial* pCubeMat = new DiffuseMaterial();
-    pCubeMat->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
+    DiffuseMaterial* pWhiteMat = new DiffuseMaterial();
+    pWhiteMat->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
 
-    DiffuseMaterial* pCubeMat2 = new DiffuseMaterial();
-    pCubeMat2->SetColor(0.3f, 0.3f, 0.9f, 1.0f);
+    DiffuseMaterial* pBlueMat = new DiffuseMaterial();
+    pBlueMat->SetColor(0.3f, 0.3f, 0.9f, 1.0f);
 
-    // Create Matter
-    Matter* pTestCube = new Matter();
-    pTestCube->SetMesh(reinterpret_cast<StaticMesh*>(pLibrary->GetPrimitive(PRIMITIVE_CUBE)));
-    pTestCube->SetMaterial(pCubeMat2);
-    pTestCube->SetPosition(5.0f, 0.0f, 0.0f);
 
-    Matter* pTestMonkey = new Matter();
-    StaticMesh* pMonkeyMesh = new StaticMesh();
-    pMonkeyMesh->Load("druid.obj");
-    pTestMonkey->SetMesh(pMonkeyMesh);
-    pTestMonkey->SetMaterial(pCubeMat);
-    pTestMonkey->SetPosition(0.0f, 0.0f, 0.0f);
+    // Create FlowerPot
+    Matter* pFlowerPots               = new Matter[FLOWER_POT_COUNT];
+    MeshCollider* pFlowerPotColliders = new MeshCollider[FLOWER_POT_COUNT];
 
+    StaticMesh* pFlowerPotStaticMesh = new StaticMesh();
+    pFlowerPotStaticMesh->Load("flowerpot.obj");
+    StaticMesh* pFlowerPotCollisionMesh = new StaticMesh();
+    pFlowerPotCollisionMesh->LoadGeometry("flowerpot_collider.obj");
+    Texture* pFlowerPotTexture = new Texture();
+    pFlowerPotTexture->LoadBMP("flowerpot_texture.bmp");
+
+    for (int fp = 0; fp < FLOWER_POT_COUNT; fp++)
+    {
+        pFlowerPots[fp].SetMesh(pFlowerPotStaticMesh);
+        pFlowerPots[fp].SetMaterial(pWhiteMat);
+        pFlowerPots[fp].SetPosition(fp % 10, fp / 10, - fp / 10);
+        pFlowerPots[fp].SetRotation(0.0f, 0.0f, 0.0f);
+
+        pFlowerPots[fp].SetTexture(pFlowerPotTexture);
+
+        pFlowerPotColliders[fp].AssignMesh(pFlowerPotCollisionMesh);
+        //pFlowerPotCollider->EnableRendering();
+        pFlowerPots[fp].SetCollider(&(pFlowerPotColliders[fp]));
+        //pFlowerPot->SetRigid(1);
+
+        // Add to scene
+        pTestScene->AddMatter(&(pFlowerPots[fp]));
+    }
+
+    // Create TestAnim
     Matter* pTestAnim = new Matter();
     AnimatedMesh* pAnimMesh = new AnimatedMesh();
     pAnimMesh->Load("Druid_AM/druid.amf");
@@ -98,14 +134,20 @@ void android_main(struct android_app* state) {
     pTestAnim->SetLoopMode(Matter::LOOP_NONE);
     pTestAnim->SetAnimation("No");
     pTestAnim->StartAnimation();
-    pTestAnim->SetMaterial(pCubeMat);
+    pTestAnim->SetMaterial(pWhiteMat);
     pTestAnim->SetPosition(-3.5f, 0.0f, 0.0f);
+    BoxCollider* pTestCollider = new BoxCollider();
+    pTestCollider->SetExtents(-0.706f, 0.706f,
+                               0.0f,   2.464f,
+                              -0.706f, 0.706f);
+    pTestAnim->SetCollider(pTestCollider);
+    pTestAnim->SetScale(0.25f, 0.25f, 0.25f);
+    pTestAnim->SetPhysical(1);
 
     LogDebug("Loaded both meshes.");
 
     Texture* pTestTexture = new Texture();
     pTestTexture->LoadBMP("trueform_base_color.bmp");
-    pTestMonkey->SetTexture(pTestTexture);
     pTestAnim->SetTexture(pTestTexture);
 
     // Create sun
@@ -116,19 +158,29 @@ void android_main(struct android_app* state) {
 
     // Create some screen text
     Text* pTestText = new Text();
+    float fTextScaleX = 0.6f;
+    float fTextScaleY = 0.8f;
     pTestText->SetPosition(-0.9f, 0.8f);
-    pTestText->SetColor(1.0f, 0.0f, 0.0f, 0.8f);
-    pTestText->SetScale(0.45f, 0.8f);
-    pTestText->SetText("Beep");
+    pTestText->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
+    pTestText->SetScale(fTextScaleX, fTextScaleY);
+    pTestText->SetText("Animation:\nWave");
 
     // Add the test cube to the scene
-    pTestScene->AddMatter(pTestCube);
-    //pTestScene->AddMatter(pTestMonkey);
     pTestScene->AddMatter(pTestAnim);
 
     // Add text to screen
     pTestScene->AddGlyph(pTestText);
 
+    // Collision text
+    Text colText;
+    int nCollision = 0;
+    colText.SetColor(0.2f, 0.8f, 0.28f, 1.0f);
+    colText.SetPosition(0.5f, 0.8f);
+    colText.SetScale(0.6f, 0.8f);
+    colText.SetText("No Collision");
+    pTestScene->AddGlyph(&colText);
+
+    float fFlowerX = 0.0f;
     float fSeconds = 0.0f;
     float fZ = 10.0f;
     float fY = 0.0f;
@@ -137,10 +189,16 @@ void android_main(struct android_app* state) {
     float fRotY = 0.0f;
     float fRotZ = 0.0f;
     int nLock = 0;
+    float fBearX = -3.5f;
+    float fBearY = 0.0f;
+    float fBearZ = 0.0f;
     float fCube2Rot = 0.0f;
     float fAnimSpeed = 1.0f;
+    int nRenderCount = 0;
     Timer timer;
+    Timer timerRender;
     timer.Start();
+
 
     while ((GetStatus() & VAKZ_QUIT) == 0)
     {
@@ -204,14 +262,14 @@ void android_main(struct android_app* state) {
             if (IsControllerButtonDown(VCONT_A, 0))
             {
                 pTestAnim->SetAnimation("Wave");
-                pTestText->SetText("Animation: Wave");
+                pTestText->SetText("Animation:\nWave");
                 pTestAnim->ResetAnimation();
             }
 
             if (IsControllerButtonDown(VCONT_B, 0))
             {
                 pTestAnim->SetAnimation("No");
-                pTestText->SetText("Animation: No");
+                pTestText->SetText("Animation:\nNo");
                 pTestAnim->ResetAnimation();
             }
         }
@@ -268,17 +326,6 @@ void android_main(struct android_app* state) {
             fY -= fSeconds * MOVE_SPEED;
         }
 
-        if (IsButtonDown(VBUTTON_LEFT))
-        {
-            int nX = 0;
-            int nY = 0;
-            GetMousePosition(nX,nY);
-            printf("X: %d   Y: %d\n", nX, nY);
-        }
-        if (IsButtonDown(VBUTTON_RIGHT))
-        {
-            printf("Right Mouse Down\n");
-        }
         if (IsButtonDown(VBUTTON_MIDDLE))
         {
             pTestAnim->SetLoopMode(Matter::LOOP_PING_PONG);
@@ -316,42 +363,150 @@ void android_main(struct android_app* state) {
         if (IsKeyDown(VKEY_1))
         {
             pTestAnim->SetAnimation("Wave");
-            pTestText->SetText("Animation: Wave");
+            pTestText->SetText("Animation:\nWave");
             pTestAnim->ResetAnimation();
         }
 
         if (IsKeyDown(VKEY_2))
         {
             pTestAnim->SetAnimation("No");
-            pTestText->SetText("Animation: No");
+            pTestText->SetText("Animation:\nNo");
             pTestAnim->ResetAnimation();
         }
+
+        if (IsKeyDown(VKEY_N))
+        {
+            if (IsKeyDown(VKEY_Z))
+            {
+                fTextScaleX -= 0.005f;
+            }
+            else
+            {
+                fTextScaleX += 0.005f;
+            }
+
+            pTestText->SetScale(fTextScaleX, fTextScaleY);
+        }
+
+        if (IsKeyDown(VKEY_M))
+        {
+            if (IsKeyDown(VKEY_Z))
+            {
+                fTextScaleY -= 0.005f;
+            }
+            else
+            {
+                fTextScaleY += 0.005f;
+            }
+
+            pTestText->SetScale(fTextScaleX, fTextScaleY);
+        }
+
+        if (IsKeyDown(VKEY_Z))
+        {
+            if (IsKeyDown(VKEY_C))
+            {
+                pTestAnim->SetXVelocity(-3.0f);
+            }
+            if (IsKeyDown(VKEY_V))
+            {
+
+            }
+            if (IsKeyDown(VKEY_B))
+            {
+                pTestAnim->SetZVelocity(-3.0f);
+            }
+        }
+        else
+        {
+            if (IsKeyDown(VKEY_C))
+            {
+                pTestAnim->SetXVelocity(3.0f);
+            }
+            if (IsKeyDown(VKEY_V))
+            {
+                pTestAnim->SetYVelocity(8.0f);
+            }
+            if (IsKeyDown(VKEY_B))
+            {
+                pTestAnim->SetZVelocity(3.0f);
+            }
+        }
+
+        if (IsKeyDown(VKEY_C) == 0)
+        {
+            pTestAnim->SetXVelocity(0);
+        }
+        if (IsKeyDown(VKEY_V) == 0)
+        {
+
+        }
+        if (IsKeyDown(VKEY_B) == 0)
+        {
+            pTestAnim->SetZVelocity(0.0f);
+        }
+        //pTestAnim->SetPosition(fBearX, fBearY, fBearZ);
+
+
 
         pCamera->SetPosition(fX, fY, fZ);
         pCamera->SetRotation(fRotX, fRotY, fRotZ);
 
         if (IsPointerDown())
         {
-            fCube2Rot += fSeconds * ROT_SPEED;
-            pTestMonkey->SetRotation(0.0f, fCube2Rot, 0.0f);
-            pTestCube->SetRotation(fCube2Rot, 0.0f, 0.0f);
-            pTestAnim->SetRotation(0.0f, -1.0f * fCube2Rot, 0.0f);
+            //fCube2Rot += fSeconds * ROT_SPEED;
+            //pTestMonkey->SetRotation(0.0f, fCube2Rot, 0.0f);
+            //pTestCube->SetRotation(fCube2Rot, 0.0f, 0.0f);
+            //pTestAnim->SetRotation(0.0f, -1.0f * fCube2Rot, 0.0f);
         }
 
+        //if (pTestAnim->Overlaps(pFlowerPot))
+        //{
+        //    if (nCollision == 0)
+        //    {
+        //        nCollision = 1;
+        //        colText.SetColor(0.8f, 0.2f, 0.28f, 1.0f);
+        //        colText.SetText("Collision!");
+        //    }
+        //}
+        //else
+        //{
+        //    if (nCollision == 1)
+        //    {
+        //        nCollision = 0;
+        //        colText.SetColor(0.2f, 0.8f, 0.28f, 1.0f);
+        //        colText.SetText("No Collision");
+        //    }
+        //}
         timer.Start();
+        if (nRenderCount == 0)
+        {
+            timerRender.Start();
+        }
+
         Render();
+        nRenderCount++;
+
+        if(nRenderCount == 50)
+        {
+            char arMsg[32] = {0};
+            timerRender.Stop();
+            nRenderCount = 0;
+            float fRenderTime = timerRender.Time()/50.0f;
+            sprintf(arMsg, "Render Time: %f", fRenderTime);
+            LogDebug(arMsg);
+        }
     }
 
+    delete pTestCollider;
     delete pLibrary;
     delete pSun;
-    delete pTestCube;
     delete pTestAnim;
-    delete pTestMonkey;
-    delete pMonkeyMesh;
     delete pCamera;
-    delete pCubeMat;
+    delete pBlueMat;
+    delete pWhiteMat;
     delete pTestScene;
-
+    delete [] pFlowerPots;
     exit(0);
-}
 
+}

@@ -23,17 +23,11 @@
 // OS includes
 #if defined (ANDROID)
 #include <android_native_app_glue.h>
+#include <unistd.h>
 #endif
 
 // Shuffle Mage includes
 #include "Menu.h"
-
-#define ROT_SPEED 70.0f
-#define MOVE_SPEED 5.0f
-#define THRESH 0.4f
-
-#define FLOWER_BOX_SIZE 100.0f
-#define FLOWER_POT_COUNT 100
 
 Scene sceneMenu;
 Scene sceneBattle;
@@ -46,6 +40,7 @@ void android_main(struct android_app* state)
 {
     app_dummy();
     Initialize(state);
+    usleep(50000);
 #else
 int main()
 {

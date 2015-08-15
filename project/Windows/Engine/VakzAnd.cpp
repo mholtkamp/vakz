@@ -17,6 +17,7 @@ typedef struct VakzData
                {
                     struct android_app* state;
                     ANativeWindow* window;
+                    ANativeActivity* activity;
                     int animating;
                     EGLDisplay display;
                     EGLSurface surface;
@@ -240,28 +241,13 @@ static int HandleInput(struct android_app* app, AInputEvent* event)
     int nContIndex = 0;
 
     nDevice = AInputEvent_getDeviceId(event);
-    nSource = AInputEvent_getSource(event);
-
-    //@@ DEBUG
-    char arMsg[32] = {0};
-
-    sprintf(arMsg, "Device: %d", nDevice);
-    LogDebug(arMsg);
-    memset(arMsg, 0, 32);
-    sprintf(arMsg, "Source: %d", nSource);
-    LogDebug(arMsg);
-    //@@ END
+    nSource = AInputEvent_getSource(event) & 0xffffff00;
 
     if (AInputEvent_getType(event) == AINPUT_EVENT_TYPE_MOTION)
     {
         nAction  = AMotionEvent_getAction(event);
         nPointer = 0xff00 & nAction;
         nAction  = 0x00ff & nAction;
-
-        memset(arMsg, 0, 32);
-        sprintf(arMsg, "Action: %d", nAction);
-        LogDebug(arMsg);
-
 
         if (nAction == AMOTION_EVENT_ACTION_DOWN)
         {
@@ -333,6 +319,7 @@ static int HandleInput(struct android_app* app, AInputEvent* event)
         if (nAction == AKEY_EVENT_ACTION_DOWN)
         {
             nKey = AKeyEvent_getKeyCode(event);
+
             if (nSource & AINPUT_SOURCE_GAMEPAD)
             {
                 nContIndex = GetControllerIndex(nDevice);
@@ -377,6 +364,8 @@ int Initialize(void* pData)
     // Assign the app state
     vakzData.state = pState;
     vakzData.window = pState->window;
+    vakzData.activity = pState->activity;
+    SetNativeActivity(vakzData.activity);
 
     // Set the command handler
     pState->onAppCmd = HandleCommand;

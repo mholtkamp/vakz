@@ -1,6 +1,7 @@
 #include "Menu.h"
 #include "Vakz.h"
 #include "VInput.h"
+#include "Log.h"
 
 #define MAIN_BUTTON_X     0.55f
 #define MAIN_BUTTON_WIDTH 0.45f
@@ -8,6 +9,8 @@
 
 Menu::Menu()
 {
+    m_nState = MENU_STATE_LOGIN;
+
     // Setup Login State
     m_btLogin.SetRect(0.1f, 0.2f, 0.28f, 0.15f);
     m_btLogin.SetTextString("Login");
@@ -116,6 +119,12 @@ void Menu::SetState(int nState)
 
 void Menu::Update()
 {
+    // Handle back button, why not.
+    if (IsKeyDown(VKEY_BACK))
+    {
+        HideSoftKeyboard();
+    }
+
     if (m_nState == MENU_STATE_LOGIN)
     {
         UpdateLogin();
@@ -144,7 +153,7 @@ void Menu::UpdateLogin()
     float fY = 0.0f;
     int nMouseDown = IsPointerDown();
     GetPointerPositionNormalized(fX, fY);
-    
+
     m_tfUsername.Update(nMouseDown,
                         fX,
                         fY);

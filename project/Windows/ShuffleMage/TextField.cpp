@@ -1,5 +1,6 @@
 #include "TextField.h"
 #include "VInput.h"
+#include "Log.h"
 #include <string.h>
 
 #define DEFAULT_X_OFFSET 0.01f
@@ -195,6 +196,7 @@ void TextField::Update(int nMouseDown,
         if (m_rect.Contains(fX,fY))
         {
             SetSelect(1);
+            ShowSoftKeyboard();
         }
         else
         {

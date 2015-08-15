@@ -6,6 +6,8 @@
 #if defined(WINDOWS)
 enum VakzKeyEnum
 {
+    VKEY_BACK = 10,
+
     VKEY_0 = 48,
     VKEY_1 = 49,
     VKEY_2 = 50,
@@ -70,6 +72,9 @@ enum VakzButtonEnum
 #elif defined(ANDROID)
 enum VakzKeyEnum
 {
+
+    VKEY_BACK            = 4,
+
     VKEY_0               = 7,
     VKEY_1               = 8,
     VKEY_2               = 9,
@@ -419,5 +424,11 @@ int GetControllerIndex(int nInputDevice);
 void AssignController(int nInputDevice);
 
 int IsControllerConnected(int nIndex);
+
+void SetNativeActivity(void* pActivity);
+
+void ShowSoftKeyboard();
+
+void HideSoftKeyboard();
 
 #endif
