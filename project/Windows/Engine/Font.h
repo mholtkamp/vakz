@@ -19,6 +19,8 @@ public:
 
     void SetRenderState(unsigned int hProg);
 
+    void SetFiltering(int nFilterType);
+
     enum FontEnum
     {
         LEGACY_TYPE   = 0,
@@ -30,7 +32,7 @@ private:
 
     int m_nType;
 
-    Texture m_pTexture;
+    Texture m_texture;
 };
 
 #endif

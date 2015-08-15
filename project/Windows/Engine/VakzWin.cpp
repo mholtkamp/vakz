@@ -269,7 +269,7 @@ int SetTitle(char* szTitle)
     if (szTitle != 0)
     {
         memcpy(szWindowTitle, szTitle, 255);
-        szWindowTitle[256] = 0;
+        szWindowTitle[255] = 0;
         return 1;
     }
     
@@ -414,6 +414,8 @@ int Initialize(void* pData)
         return FALSE;                                  // Return FALSE
     }
 
+    InitializeSoftKeyboard();
+
     return TRUE;                                       // Success
 }
 
@@ -428,7 +430,7 @@ int Render()
             s_ucStatus |= VAKZ_QUIT;           // ESC Signalled A Quit
         }
         else                                   // Not Time To Quit, Update Screen
-        {
+       {
             DrawGLScene();                     // Draw The Scene
             SwapBuffers(hDC);                  // Swap Buffers (Double Buffering)
         }

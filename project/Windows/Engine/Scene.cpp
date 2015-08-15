@@ -1,6 +1,7 @@
 #include "Scene.h"
 #include "VGL.h"
 #include "Log.h"
+#include "VInput.h"
 
 #define DEFAULT_AMBIENT_RED   0.12f
 #define DEFAULT_AMBIENT_GREEN 0.12f
@@ -156,6 +157,13 @@ void Scene::Render()
     {
         m_pGlyphs[i]->Render();
     }
+
+    // If the soft keyboard is enabled, render it
+    if (IsSoftKeyboardEnabled() != 0)
+    {
+        RenderSoftKeyboard();
+    }
+
     glDisable(GL_BLEND);
     glEnable(GL_DEPTH_TEST);
 

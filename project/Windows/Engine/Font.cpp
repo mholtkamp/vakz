@@ -14,7 +14,7 @@ Font::~Font()
 
 void Font::LoadBMP(const char* pFileName)
 {
-    m_pTexture.LoadBMP(pFileName);
+    m_texture.LoadBMP(pFileName);
 }
 
 void Font::LoadArray(const unsigned char* pData,
@@ -25,7 +25,7 @@ void Font::LoadArray(const unsigned char* pData,
     // a few symbols.
     if (nType == LEGACY_TYPE)
     {
-        m_pTexture.LoadArray(pData,
+        m_texture.LoadArray(pData,
                              Texture::TEXTURE_ALPHA,
                              LEGACY_WIDTH,
                              LEGACY_HEIGHT);
@@ -40,5 +40,11 @@ void Font::SetRenderState(unsigned int hProg)
 {
     int hTexture = glGetUniformLocation(hProg, "uTexture");
     glUniform1i(hTexture, 0);
-    m_pTexture.Bind();
+    m_texture.Bind();
+}
+
+
+void Font::SetFiltering(int nFilterType)
+{
+    m_texture.SetFiltering(nFilterType);
 }

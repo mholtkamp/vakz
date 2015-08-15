@@ -70,5 +70,6 @@ unsigned char* ImageLoader::LoadBMP(const char* pFileName,
     else
     {
         LogWarning("Failed to load null file name in Texture::LoadBMP.");
+        return 0;
     }
 }

@@ -1,6 +1,7 @@
 #include "VInput.h"
 #include "Log.h"
 #include "Settings.h"
+#include "Keyboard.h"
 #include <string.h>
 
 static int s_arKeys[VINPUT_MAX_KEYS]       = {0};
@@ -12,6 +13,9 @@ static int s_arPointerY[VINPUT_MAX_TOUCHES] = {0};
 
 static Controller s_arControllers[VINPUT_MAX_CONTROLLERS];
 static int s_nNumControllers = 0;
+
+static Keyboard* s_pKeyboard = 0;
+static int s_nKeyboardEnable = 0;
 
 //*****************************************************************************
 // SetKey
@@ -404,20 +408,37 @@ int IsControllerConnected(int nIndex)
     }
 }
 
-void SetNativeActivity(void* pActivity)
-{
-#if defined (ANDROID)
-    s_pActivity = pActivity;
-#endif
-}
-
 void ShowSoftKeyboard()
 {
-
+    s_nKeyboardEnable = 1;
 }
 
 void HideSoftKeyboard()
 {
-
+    s_nKeyboardEnable = 0;
 }
 
+void InitializeSoftKeyboard()
+{
+    if (s_pKeyboard == 0)
+    {
+        s_pKeyboard = new Keyboard();
+    }
+}
+
+int IsSoftKeyboardEnabled()
+{
+    return s_nKeyboardEnable;
+}
+
+void RenderSoftKeyboard()
+{
+    if (s_pKeyboard != 0)
+    {
+        s_pKeyboard->Render();
+    }
+    else
+    {
+        LogWarning("Soft Keyboard not initialized.");
+    }
+}

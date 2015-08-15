@@ -429,4 +429,10 @@ void ShowSoftKeyboard();
 
 void HideSoftKeyboard();
 
+void InitializeSoftKeyboard();
+
+int IsSoftKeyboardEnabled();
+
+void RenderSoftKeyboard();
+
 #endif

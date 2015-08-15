@@ -54,6 +54,8 @@ public:
     //## **********************************************************************
     void Bind();
 
+    void SetFiltering(int nFilterType);
+
     enum TextureEnum
     {
         TEXTURE_MAX_SIZE        = 2048,
@@ -62,6 +64,9 @@ public:
         TEXTURE_RGB   = 0,
         TEXTURE_RGBA  = 1,
         TEXTURE_ALPHA = 2,
+
+        NEAREST = 0,
+        LINEAR  = 1
     };
 
 private:

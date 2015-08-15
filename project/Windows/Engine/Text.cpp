@@ -164,12 +164,12 @@ void Text::SetText(const char* pText)
 void Text::GenerateVertexArray(float** pArray,
                                int     nTextLength)
 {
-    int i               = 0;
-    float* pVertexArray = *pArray;
-    float fCharWidth    = DEFAULT_CHAR_WIDTH;
-    float fCharHeight   = DEFAULT_CHAR_HEIGHT;
-    int nCharOffX = 0;
-    float fCharOffY = 0.0f;
+    int i                = 0;
+    float* pVertexArray  = *pArray;
+    float  fCharWidth    = DEFAULT_CHAR_WIDTH;
+    float  fCharHeight   = DEFAULT_CHAR_HEIGHT;
+    int    nCharOffX     = 0;
+    float  fCharOffY     = 0.0f;
 
     for (i = 0; i < nTextLength; i++)
     {

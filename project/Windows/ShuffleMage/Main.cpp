@@ -32,6 +32,7 @@
 Scene sceneMenu;
 Scene sceneBattle;
 Menu* pMenu;
+char* pTestBuffer = 0;
 
 int nGameState;
 
@@ -50,6 +51,7 @@ int main()
 
     SetClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
+    pTestBuffer = new char[32000];
     pMenu = new Menu();
     
     pMenu->RegisterScene();

@@ -442,7 +442,7 @@ int main()
         //        colText.SetText("No Collision");
         //    }
         //}
-5        timer.Start();
+        timer.Start();
         if (nRenderCount == 0)
         {
             timerRender.Start();

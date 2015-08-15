@@ -55,6 +55,11 @@ GLSL_VERSION_STRING
 "       oFragColor = texture(uTexture, vTexCoord) * uColor;\n"
 "   }\n"
 
+"   if (oFragColor.a < 0.003)\n"
+"   {\n"
+"       discard;\n"
+"   }\n"
+
 "}\n";
 
 

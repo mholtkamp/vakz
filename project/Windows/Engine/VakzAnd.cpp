@@ -365,7 +365,6 @@ int Initialize(void* pData)
     vakzData.state = pState;
     vakzData.window = pState->window;
     vakzData.activity = pState->activity;
-    SetNativeActivity(vakzData.activity);
 
     // Set the command handler
     pState->onAppCmd = HandleCommand;
@@ -393,6 +392,8 @@ int Initialize(void* pData)
 
     // Set the asset manager where it is needed
     SetAssetManager(pState->activity->assetManager);
+
+    InitializeSoftKeyboard();
 
     return 0;
 }
