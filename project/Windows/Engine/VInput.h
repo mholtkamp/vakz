@@ -425,8 +425,6 @@ void AssignController(int nInputDevice);
 
 int IsControllerConnected(int nIndex);
 
-void SetNativeActivity(void* pActivity);
-
 void ShowSoftKeyboard();
 
 void HideSoftKeyboard();

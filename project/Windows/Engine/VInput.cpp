@@ -3,10 +3,6 @@
 #include "Settings.h"
 #include <string.h>
 
-#if defined (ANDROID)
-#include <android/native_activity.h>
-#endif
-
 static int s_arKeys[VINPUT_MAX_KEYS]       = {0};
 static int s_arButtons[VINPUT_MAX_BUTTONS] = {0};
 static int s_arTouches[VINPUT_MAX_TOUCHES] = {0};
@@ -16,8 +12,6 @@ static int s_arPointerY[VINPUT_MAX_TOUCHES] = {0};
 
 static Controller s_arControllers[VINPUT_MAX_CONTROLLERS];
 static int s_nNumControllers = 0;
-
-static void* s_pActivity = 0;
 
 //*****************************************************************************
 // SetKey
@@ -419,19 +413,11 @@ void SetNativeActivity(void* pActivity)
 
 void ShowSoftKeyboard()
 {
-    if (s_pActivity != 0)
-    {
-        ANativeActivity_showSoftInput(reinterpret_cast<ANativeActivity*>(s_pActivity),
-                                      ANATIVEACTIVITY_SHOW_SOFT_INPUT_IMPLICIT);
-    }
+
 }
 
 void HideSoftKeyboard()
 {
-    if (s_pActivity != 0)
-    {
-        ANativeActivity_showSoftInput(reinterpret_cast<ANativeActivity*>(s_pActivity),
-                                      ANATIVEACTIVITY_HIDE_SOFT_INPUT_IMPLICIT_ONLY);
-    }
+
 }
 
