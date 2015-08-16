@@ -13,6 +13,8 @@
 #define KEY_WIDTH            0.12f
 #define KEY_HEIGHT           0.12f
 
+#define TEXT_OFFSET 0.015f
+
 static float s_arQuadPosition[8] = {-1.0f, -1.0f,
                                     -1.0f,  0.0f,
                                      1.0f,  0.0f,
@@ -21,30 +23,20 @@ static float s_arQuadPosition[8] = {-1.0f, -1.0f,
 Keyboard::Keyboard()
 {
     memset(m_arChars, 0, NUM_KEYS);
-    memset(m_arPosition,
-           0,
-           NUM_KEYS              *
-           TRIANGLES_PER_KEY     *
-           VERTICES_PER_TRIANGLE * 
-           FLOATS_PER_VERTEX     *
-           sizeof(float));
-    memset(m_arTexCoord,
-           0,
-           NUM_KEYS              *
-           TRIANGLES_PER_KEY     * 
-           VERTICES_PER_TRIANGLE *
-           FLOATS_PER_VERTEX     *
-           sizeof(float));
+
+    m_hPositionKeyVBO  = 0;
+    m_hPositionTextVBO = 0;
+    m_hTexCoordTextVBO = 0;
     
     // Default Colors
-    m_arBackColor[0] = 0.2f;
-    m_arBackColor[1] = 0.2f;
-    m_arBackColor[2] = 0.2f;
+    m_arBackColor[0] = 0.15f;
+    m_arBackColor[1] = 0.1f;
+    m_arBackColor[2] = 0.1f;
     m_arBackColor[3] = 1.0f;
 
-    m_arKeyColor[0] = 0.5f;
-    m_arKeyColor[1] = 0.5f;
-    m_arKeyColor[2] = 0.5f;
+    m_arKeyColor[0] = 0.7f;
+    m_arKeyColor[1] = 0.7f;
+    m_arKeyColor[2] = 0.7f;
     m_arKeyColor[3] = 1.0f;
 
     m_arTextColor[0] = 0.0f;
@@ -79,11 +71,10 @@ void Keyboard::Render()
 
     // Draw the background color quad first.
     glBindTexture(GL_TEXTURE_2D, 0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     glUniform4fv(hColor, 1, m_arBackColor);
     glUniform1i(hType, 0);
-
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     glEnableVertexAttribArray(hPosition);
     glVertexAttribPointer(hPosition,
@@ -99,13 +90,14 @@ void Keyboard::Render()
     glUniform4fv(hColor, 1, m_arKeyColor);
     glUniform1i(hType, 0);
 
+    glBindBuffer(GL_ARRAY_BUFFER, m_hPositionKeyVBO);
     glEnableVertexAttribArray(hPosition);
     glVertexAttribPointer(hPosition,
                           2,
                           GL_FLOAT,
                           GL_FALSE,
                           0,
-                          m_arPosition);
+                          0);
 
     glDrawArrays(GL_TRIANGLES, 0, NUM_KEYS * 6);
 
@@ -116,23 +108,32 @@ void Keyboard::Render()
     glUniform4fv(hColor, 1, m_arTextColor);
     glUniform1i(hType, 1);
 
+    glBindBuffer(GL_ARRAY_BUFFER, m_hPositionTextVBO);
     glEnableVertexAttribArray(hPosition);
-    glEnableVertexAttribArray(hTexCoord);
+    
     glVertexAttribPointer(hPosition,
                           2,
                           GL_FLOAT,
                           GL_FALSE,
                           0,
-                          m_arPosition);
+                          0);
+
+    glBindBuffer(GL_ARRAY_BUFFER, m_hTexCoordTextVBO);
+    glEnableVertexAttribArray(hTexCoord);
     glVertexAttribPointer(hTexCoord,
                           2,
                           GL_FLOAT,
                           GL_FALSE,
                           0,
-                          m_arTexCoord);
+                          0);
 
     glDrawArrays(GL_TRIANGLES, 0, NUM_KEYS * 6);
     m_pFont->SetFiltering(Texture::LINEAR);
+
+    // Render texts for special keys
+    m_txSpace.Render();
+    m_txBack.Render();
+    m_txEnter.Render();
 }
 
 void Keyboard::Update()
@@ -206,13 +207,76 @@ void Keyboard::GenerateRects()
 
         m_arChars[i + nLenRow1  + nLenRow2 + nLenRow3] = szRow4[i];
     }
+
+    
+    // Special keys
+    i = nLenRow1 + nLenRow2 + nLenRow3 + nLenRow4;
+
+    // Space
+    m_arRects[i].m_fX      = -0.25f;
+    m_arRects[i].m_fY      = -0.96f;
+    m_arRects[i].m_fWidth  = 0.5f;
+    m_arRects[i].m_fHeight = 0.16f;
+    m_arChars[i] = ' ';
+    m_txSpace.SetPosition(m_arRects[i].m_fX + 0.11f,
+                          m_arRects[i].m_fY + 0.05);
+    m_txSpace.SetText("Space");
+    i++;
+
+    // Backspace
+    m_arRects[i].m_fX      = 0.73f;
+    m_arRects[i].m_fY      = -0.24f;
+    m_arRects[i].m_fWidth  = 0.24f;
+    m_arRects[i].m_fHeight = 0.16f;
+    m_arChars[i] = ' ';
+    m_txBack.SetPosition(m_arRects[i].m_fX + 0.03f,
+                         m_arRects[i].m_fY + 0.05);
+    m_txBack.SetText("Back");
+    i++;
+
+    // Enter
+    m_arRects[i].m_fX      = 0.73f;
+    m_arRects[i].m_fY      = -0.565f;
+    m_arRects[i].m_fWidth  = 0.24f;
+    m_arRects[i].m_fHeight = 0.16f;
+    m_arChars[i] = ' ';
+    m_txEnter.SetPosition(m_arRects[i].m_fX + 0.03f,
+                          m_arRects[i].m_fY + 0.05);
+    m_txEnter.SetScale(0.75f, 1.0f);
+    m_txEnter.SetText("Enter");
+    i++;
 }
 
 void Keyboard::GenerateVertexArrays()
 {
-    int i               = 0;
-    float fCharWidth    = DEFAULT_CHAR_WIDTH;
-    float fCharHeight   = DEFAULT_CHAR_HEIGHT;
+    int i                 = 0;
+    float fCharWidth      = DEFAULT_CHAR_WIDTH;
+    float fCharHeight     = DEFAULT_CHAR_HEIGHT;
+    float* arPositionKey  = new float[NUM_KEYS * TRIANGLES_PER_KEY * VERTICES_PER_TRIANGLE * FLOATS_PER_VERTEX];
+    float* arPositionText = new float[NUM_KEYS * TRIANGLES_PER_KEY * VERTICES_PER_TRIANGLE * FLOATS_PER_VERTEX];
+    float* arTexCoordText = new float[NUM_KEYS * TRIANGLES_PER_KEY * VERTICES_PER_TRIANGLE * FLOATS_PER_VERTEX];
+
+    memset(arPositionKey,
+           0,
+           NUM_KEYS              *
+           TRIANGLES_PER_KEY     *
+           VERTICES_PER_TRIANGLE * 
+           FLOATS_PER_VERTEX     *
+           sizeof(float));
+    memset(arPositionText,
+           0,
+           NUM_KEYS              *
+           TRIANGLES_PER_KEY     *
+           VERTICES_PER_TRIANGLE * 
+           FLOATS_PER_VERTEX     *
+           sizeof(float));
+    memset(arTexCoordText,
+           0,
+           NUM_KEYS              *
+           TRIANGLES_PER_KEY     * 
+           VERTICES_PER_TRIANGLE *
+           FLOATS_PER_VERTEX     *
+           sizeof(float));
 
     for (i = 0; i < NUM_KEYS; i++)
     {
@@ -247,41 +311,89 @@ void Keyboard::GenerateVertexArrays()
         //    1  4--6
 
         // Texcoords
-        m_arTexCoord[i*12 + 0] = CHAR_UNIT * xIndex;
-        m_arTexCoord[i*12 + 1] = 1.0f - CHAR_UNIT * (yIndex+1.0f);
+        arTexCoordText[i*12 + 0] = CHAR_UNIT * xIndex;
+        arTexCoordText[i*12 + 1] = 1.0f - CHAR_UNIT * (yIndex+1.0f);
 
-        m_arTexCoord[i*12 + 2] = CHAR_UNIT * xIndex;
-        m_arTexCoord[i*12 + 3] = 1.0f - CHAR_UNIT * (yIndex) - TEXCOORD_BUFFER; 
+        arTexCoordText[i*12 + 2] = CHAR_UNIT * xIndex;
+        arTexCoordText[i*12 + 3] = 1.0f - CHAR_UNIT * (yIndex) - TEXCOORD_BUFFER; 
 
-        m_arTexCoord[i*12 + 4] = CHAR_UNIT * (xIndex+1.0f);
-        m_arTexCoord[i*12 + 5] = 1.0f - CHAR_UNIT * (yIndex) - TEXCOORD_BUFFER; 
+        arTexCoordText[i*12 + 4] = CHAR_UNIT * (xIndex+1.0f);
+        arTexCoordText[i*12 + 5] = 1.0f - CHAR_UNIT * (yIndex) - TEXCOORD_BUFFER; 
 
-        m_arTexCoord[i*12 + 6] = CHAR_UNIT * xIndex;
-        m_arTexCoord[i*12 + 7] = 1.0f - CHAR_UNIT * (yIndex+1.0f);
+        arTexCoordText[i*12 + 6] = CHAR_UNIT * xIndex;
+        arTexCoordText[i*12 + 7] = 1.0f - CHAR_UNIT * (yIndex+1.0f);
 
-        m_arTexCoord[i*12 + 8] = CHAR_UNIT * (xIndex+1.0f);
-        m_arTexCoord[i*12 + 9] = 1.0f - CHAR_UNIT * (yIndex) - TEXCOORD_BUFFER; 
+        arTexCoordText[i*12 + 8] = CHAR_UNIT * (xIndex+1.0f);
+        arTexCoordText[i*12 + 9] = 1.0f - CHAR_UNIT * (yIndex) - TEXCOORD_BUFFER; 
 
-        m_arTexCoord[i*12 + 10] = CHAR_UNIT * (xIndex+1.0f);
-        m_arTexCoord[i*12 + 11] = 1.0f - CHAR_UNIT * (yIndex+1.0f);
+        arTexCoordText[i*12 + 10] = CHAR_UNIT * (xIndex+1.0f);
+        arTexCoordText[i*12 + 11] = 1.0f - CHAR_UNIT * (yIndex+1.0f);
 
         // Position
-        m_arPosition[i*12 + 0] = m_arRects[i].m_fX;
-        m_arPosition[i*12 + 1] = m_arRects[i].m_fY;
+        arPositionKey[i*12 + 0] = m_arRects[i].m_fX;
+        arPositionKey[i*12 + 1] = m_arRects[i].m_fY;
+       
+        arPositionKey[i*12 + 2] = m_arRects[i].m_fX;
+        arPositionKey[i*12 + 3] = m_arRects[i].m_fY + m_arRects[i].m_fHeight;
 
-        m_arPosition[i*12 + 2] = m_arRects[i].m_fX;
-        m_arPosition[i*12 + 3] = m_arRects[i].m_fY + m_arRects[i].m_fHeight;
+        arPositionKey[i*12 + 4] = m_arRects[i].m_fX + m_arRects[i].m_fWidth;
+        arPositionKey[i*12 + 5] = m_arRects[i].m_fY + m_arRects[i].m_fHeight;
 
-        m_arPosition[i*12 + 4] = m_arRects[i].m_fX + m_arRects[i].m_fWidth;
-        m_arPosition[i*12 + 5] = m_arRects[i].m_fY + m_arRects[i].m_fHeight;
+        arPositionKey[i*12 + 6] = m_arRects[i].m_fX;
+        arPositionKey[i*12 + 7] = m_arRects[i].m_fY;
 
-        m_arPosition[i*12 + 6] = m_arRects[i].m_fX;
-        m_arPosition[i*12 + 7] = m_arRects[i].m_fY;
+        arPositionKey[i*12 + 8] = m_arRects[i].m_fX + m_arRects[i].m_fWidth;
+        arPositionKey[i*12 + 9] = m_arRects[i].m_fY + m_arRects[i].m_fHeight;
 
-        m_arPosition[i*12 + 8] = m_arRects[i].m_fX + m_arRects[i].m_fWidth;
-        m_arPosition[i*12 + 9] = m_arRects[i].m_fY + m_arRects[i].m_fHeight;
+        arPositionKey[i*12 + 10] = m_arRects[i].m_fX + m_arRects[i].m_fWidth;
+        arPositionKey[i*12 + 11] = m_arRects[i].m_fY;
 
-        m_arPosition[i*12 + 10] = m_arRects[i].m_fX + m_arRects[i].m_fWidth;
-        m_arPosition[i*12 + 11] = m_arRects[i].m_fY;
+        // Text Positions
+        arPositionText[i*12 + 0] = m_arRects[i].m_fX + TEXT_OFFSET;
+        arPositionText[i*12 + 1] = m_arRects[i].m_fY + TEXT_OFFSET;
+       
+        arPositionText[i*12 + 2] = m_arRects[i].m_fX + TEXT_OFFSET;
+        arPositionText[i*12 + 3] = m_arRects[i].m_fY + m_arRects[i].m_fHeight - TEXT_OFFSET;
+
+        arPositionText[i*12 + 4] = m_arRects[i].m_fX + m_arRects[i].m_fWidth - TEXT_OFFSET;
+        arPositionText[i*12 + 5] = m_arRects[i].m_fY + m_arRects[i].m_fHeight - TEXT_OFFSET;
+
+        arPositionText[i*12 + 6] = m_arRects[i].m_fX + TEXT_OFFSET;
+        arPositionText[i*12 + 7] = m_arRects[i].m_fY + TEXT_OFFSET;
+
+        arPositionText[i*12 + 8] = m_arRects[i].m_fX + m_arRects[i].m_fWidth - TEXT_OFFSET;
+        arPositionText[i*12 + 9] = m_arRects[i].m_fY + m_arRects[i].m_fHeight - TEXT_OFFSET;
+
+        arPositionText[i*12 + 10] = m_arRects[i].m_fX + m_arRects[i].m_fWidth - TEXT_OFFSET;
+        arPositionText[i*12 + 11] = m_arRects[i].m_fY + TEXT_OFFSET;
     }
+
+    // Create the vertex buffers
+    glGenBuffers(1, &m_hPositionKeyVBO);
+    glGenBuffers(1, &m_hPositionTextVBO);
+    glGenBuffers(1, &m_hTexCoordTextVBO);
+
+    // Fill the new vertex buffer objects
+    glBindBuffer(GL_ARRAY_BUFFER, m_hPositionKeyVBO);
+    glBufferData(GL_ARRAY_BUFFER,
+                 NUM_KEYS * TRIANGLES_PER_KEY * VERTICES_PER_TRIANGLE * FLOATS_PER_VERTEX * sizeof(float),
+                 arPositionKey,
+                 GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ARRAY_BUFFER, m_hPositionTextVBO);
+    glBufferData(GL_ARRAY_BUFFER,
+                 NUM_KEYS * TRIANGLES_PER_KEY * VERTICES_PER_TRIANGLE * FLOATS_PER_VERTEX * sizeof(float),
+                 arPositionText,
+                 GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ARRAY_BUFFER, m_hTexCoordTextVBO);
+    glBufferData(GL_ARRAY_BUFFER,
+                 NUM_KEYS * TRIANGLES_PER_KEY * VERTICES_PER_TRIANGLE * FLOATS_PER_VERTEX * sizeof(float),
+                 arTexCoordText,
+                 GL_STATIC_DRAW);
+
+    // Now destroy the arrays allocated on heap as they are now copied to VRAM
+    delete [] arPositionKey;
+    delete [] arPositionText;
+    delete [] arTexCoordText;
 }

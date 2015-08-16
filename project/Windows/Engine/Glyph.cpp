@@ -8,10 +8,11 @@ Glyph::Glyph()
     m_fX = 0.0f;
     m_fY = 0.0f;
 
-    m_arColor[0] = 0.0f;
-    m_arColor[1] = 0.0f;
-    m_arColor[2] = 0.0f;
-    m_arColor[3] = 0.0f;
+    // Default glyph color
+    m_arColor[0] = 1.0f;
+    m_arColor[1] = 1.0f;
+    m_arColor[2] = 1.0f;
+    m_arColor[3] = 1.0f;
 
     m_nVisible = 1;
 }

@@ -12,6 +12,12 @@
 
 Text::Text()
 {
+    // Overwrite default color
+    m_arColor[0] = 0.0f;
+    m_arColor[1] = 0.0f;
+    m_arColor[2] = 0.0f;
+    m_arColor[3] = 1.0f;
+
     m_nBufferSize  = DEFAULT_BUFFER_SIZE;
     m_pText        = new char[m_nBufferSize];
     m_nTextLength  = 0;
