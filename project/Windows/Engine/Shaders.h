@@ -42,8 +42,7 @@ GLSL_VERSION_STRING
 
 "void main()\n"
 "{\n"
-
-// Color Quad 
+// Color Quad
 "   if (uType == 0)\n"
 "   {\n"
 "       oFragColor = uColor;\n"
@@ -59,7 +58,6 @@ GLSL_VERSION_STRING
 "   {\n"
 "       discard;\n"
 "   }\n"
-
 "}\n";
 
 

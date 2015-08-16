@@ -1,7 +1,9 @@
 #include "Keyboard.h"
 #include "VGL.h"
+#include "Log.h"
 #include "ResourceLibrary.h"
 #include <string.h>
+#include <stdio.h>
 #include <ctype.h>
 
 #define DEFAULT_CHAR_WIDTH   0.05f
@@ -40,9 +42,9 @@ Keyboard::Keyboard()
     m_arBackColor[2] = 0.2f;
     m_arBackColor[3] = 1.0f;
 
-    m_arKeyColor[0] = 0.6f;
-    m_arKeyColor[1] = 0.6f;
-    m_arKeyColor[2] = 0.6f;
+    m_arKeyColor[0] = 0.5f;
+    m_arKeyColor[1] = 0.5f;
+    m_arKeyColor[2] = 0.5f;
     m_arKeyColor[3] = 1.0f;
 
     m_arTextColor[0] = 0.0f;
@@ -74,9 +76,10 @@ void Keyboard::Render()
     hType  = glGetUniformLocation(hProg, "uType");
     hPosition = glGetAttribLocation(hProg, "aPosition");
     hTexCoord = glGetAttribLocation(hProg, "aTexCoord");
-    
+
     // Draw the background color quad first.
     glBindTexture(GL_TEXTURE_2D, 0);
+
     glUniform4fv(hColor, 1, m_arBackColor);
     glUniform1i(hType, 0);
 
@@ -152,7 +155,7 @@ void Keyboard::GenerateRects()
 
     char* szRow1 = "1234567890";
     char* szRow2 = "QWERTYUIOP";
-    char* szRow3 = "ASDFGHJKL";
+    char* szRow3 = "ASDFGHJKL?";
     char* szRow4 = "ZXCVBNM,./";
 
     int nLenRow1 = strlen(szRow1);
@@ -175,7 +178,7 @@ void Keyboard::GenerateRects()
     for (i = 0; i < nLenRow2; i++)
     {
         m_arRects[i + nLenRow1].m_fX = -0.8f + 0.15f*i;
-        m_arRects[i + nLenRow1].m_fY = -0.4f;
+        m_arRects[i + nLenRow1].m_fY = -0.38f;
         m_arRects[i + nLenRow1].m_fWidth  = KEY_WIDTH;
         m_arRects[i + nLenRow1].m_fHeight = KEY_HEIGHT;
 
@@ -186,7 +189,7 @@ void Keyboard::GenerateRects()
     for (i = 0; i < nLenRow3; i++)
     {
         m_arRects[i + nLenRow1 + nLenRow2].m_fX = -0.8f + 0.15f*i;
-        m_arRects[i + nLenRow1 + nLenRow2].m_fY = -0.6f;
+        m_arRects[i + nLenRow1 + nLenRow2].m_fY = -0.56f;
         m_arRects[i + nLenRow1 + nLenRow2].m_fWidth  = KEY_WIDTH;
         m_arRects[i + nLenRow1 + nLenRow2].m_fHeight = KEY_HEIGHT;
 
@@ -197,7 +200,7 @@ void Keyboard::GenerateRects()
     for (i = 0; i < nLenRow4; i++)
     {
         m_arRects[i + nLenRow1 + nLenRow2 + nLenRow3].m_fX = -0.8f + 0.15f*i;
-        m_arRects[i + nLenRow1 + nLenRow2 + nLenRow3].m_fY = -0.8f;
+        m_arRects[i + nLenRow1 + nLenRow2 + nLenRow3].m_fY = -0.74f;
         m_arRects[i + nLenRow1 + nLenRow2 + nLenRow3].m_fWidth  = KEY_WIDTH;
         m_arRects[i + nLenRow1 + nLenRow2 + nLenRow3].m_fHeight = KEY_HEIGHT;
 

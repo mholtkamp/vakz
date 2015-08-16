@@ -21,7 +21,7 @@ public:
 
     enum KeyboardEnum
     {
-        NUM_KEYS              = 39,
+        NUM_KEYS              = 40,
         TRIANGLES_PER_KEY     = 2,
         VERTICES_PER_TRIANGLE = 3,
         FLOATS_PER_VERTEX     = 2

@@ -95,9 +95,7 @@ void Quad::Render()
             m_pTexture->Bind();
         }
 
-        glDisable(GL_DEPTH_TEST);
         glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
-        glEnable(GL_DEPTH_TEST);
 
         // If the border is enabled, draw a border.
         if (m_nBorderEnable != 0)
