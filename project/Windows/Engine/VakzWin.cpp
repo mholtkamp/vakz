@@ -482,6 +482,8 @@ void Update()
     {
         s_pScene->Update();
     }
+
+    UpdateSoftKeyboard();
 }
 
 unsigned char GetStatus()

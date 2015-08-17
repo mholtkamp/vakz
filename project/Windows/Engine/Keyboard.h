@@ -22,6 +22,13 @@ public:
     enum KeyboardEnum
     {
         NUM_KEYS              = 43,
+        NUM_NORMAL_KEYS       = 40,
+        NUM_SPECIAL_KEYS      = 3,
+
+        INDEX_SPACE_KEY       = 40,
+        INDEX_BACK_KEY        = 41,
+        INDEX_ENTER_KEY       = 42,
+
         TRIANGLES_PER_KEY     = 2,
         VERTICES_PER_TRIANGLE = 3,
         FLOATS_PER_VERTEX     = 2

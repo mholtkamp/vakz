@@ -3,6 +3,7 @@
 #include "Settings.h"
 #include "Keyboard.h"
 #include <string.h>
+#include <ctype.h>
 
 static int s_arKeys[VINPUT_MAX_KEYS]       = {0};
 static int s_arButtons[VINPUT_MAX_BUTTONS] = {0};
@@ -38,6 +39,19 @@ void ClearKey(int nKey)
         nKey <  VINPUT_MAX_KEYS)
     {
         s_arKeys[nKey] = 0;
+    }
+}
+
+//*****************************************************************************
+// ClearAllKeys
+//*****************************************************************************
+void ClearAllKeys()
+{
+    int i = 0;
+
+    for (i = 0; i < VINPUT_MAX_KEYS; i++)
+    {
+        s_arKeys[i] = 0;
     }
 }
 
@@ -128,10 +142,29 @@ void ClearTouch(int nTouch)
 //*****************************************************************************
 int IsTouchDown(int nTouch)
 {
+    float fX = 0.0f;
+    float fY = 0.0f;
+
     if (nTouch >= 0 &&
         nTouch <  VINPUT_MAX_TOUCHES)
     {
-        return s_arTouches[nTouch];
+
+        if (s_nKeyboardEnable != 0)
+        {
+            GetPointerPositionNormalized(fX, fY, nTouch);
+            if (fY > 0.0f)
+            {
+                return s_arTouches[nTouch];
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        else
+        {
+            return s_arTouches[nTouch];
+        }
     }
     else
     {
@@ -145,6 +178,9 @@ int IsTouchDown(int nTouch)
 //*****************************************************************************
 int IsPointerDown(int nPointer)
 {
+    float fX = 0.0f;
+    float fY = 0.0f;
+
     if (nPointer >= 0 &&
         nPointer <  VINPUT_MAX_TOUCHES)
     {
@@ -153,7 +189,23 @@ int IsPointerDown(int nPointer)
         if ((s_arButtons[VBUTTON_LEFT] != 0) ||
             (s_arTouches[nPointer]     != 0))
         {
-            return 1;
+            if (s_nKeyboardEnable != 0)
+            {
+                GetPointerPositionNormalized(fX, fY, nPointer);
+                if (fY > 0.0f)
+                {
+                    return 1;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            else
+            {
+                // Return true if down and no keyboard.
+                return 1;
+            }
         }
         else
         {
@@ -441,4 +493,60 @@ void RenderSoftKeyboard()
     {
         LogWarning("Soft Keyboard not initialized.");
     }
+}
+
+void UpdateSoftKeyboard()
+{
+    if (s_pKeyboard != 0)
+    {
+        s_pKeyboard->Update();
+    }
+}
+
+int IsPointerDownRaw(int nPointer)
+{
+    if (nPointer >= 0 &&
+        nPointer <  VINPUT_MAX_TOUCHES)
+    {
+        // If either the left mouse button is down or the specified
+        // touch index is down, then return 1.
+        if ((s_arButtons[VBUTTON_LEFT] != 0) ||
+            (s_arTouches[nPointer]     != 0))
+        {
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+int IsTouchDownRaw(int nTouch)
+{
+    if (nTouch >= 0 &&
+        nTouch <  VINPUT_MAX_TOUCHES)
+    {
+        return s_arTouches[nTouch];
+    }
+
+    return 0;
+}
+
+int CharToKey(char cTarget)
+{
+     cTarget = toupper(cTarget);
+
+#if defined (ANDROID)
+     if (cTarget >= '0' &&
+         cTarget <= '9')
+     {
+        return VKEY_0 + (cTarget - '0');
+     }
+     else if (cTarget >= 'A' &&
+              cTarget <= 'Z')
+     {
+        return VKEY_A + (cTarget - 'A');
+     }
+#elif defined (WINDOWS)
+    return static_cast<int>(cTarget);
+#endif
 }

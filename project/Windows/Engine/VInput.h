@@ -212,6 +212,8 @@ void SetKey(int nKey);
 //## **********************************************************************
 void ClearKey(int nKey);
 
+void ClearAllKeys();
+
 //## **********************************************************************
 //## IsKeyDown
 //##
@@ -434,5 +436,13 @@ void InitializeSoftKeyboard();
 int IsSoftKeyboardEnabled();
 
 void RenderSoftKeyboard();
+
+void UpdateSoftKeyboard();
+
+int IsPointerDownRaw(int nPointer = 0);
+
+int IsTouchDownRaw(int nTouch);
+
+int CharToKey(char cTarget);
 
 #endif

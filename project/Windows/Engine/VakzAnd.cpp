@@ -460,6 +460,14 @@ void Update()
             return;
         }
     }
+
+    // Update scene
+    if (s_pScene != 0)
+    {
+        s_pScene->Update();
+    }
+
+    UpdateSoftKeyboard();
 }
 
 unsigned char GetStatus()

@@ -1,6 +1,7 @@
 #include "Keyboard.h"
 #include "VGL.h"
 #include "Log.h"
+#include "VInput.h"
 #include "ResourceLibrary.h"
 #include <string.h>
 #include <stdio.h>
@@ -138,7 +139,72 @@ void Keyboard::Render()
 
 void Keyboard::Update()
 {
+    int i    = 0;
+    float fX = 0.0f;
+    float fY = 0.0f;
 
+    ClearAllKeys();
+    
+    // Check first pointer
+    if (IsPointerDownRaw(0))
+    {
+        GetPointerPositionNormalized(fX, fY, 0);
+
+        for (i = 0; i < NUM_NORMAL_KEYS; i++)
+        {
+            if (m_arRects[i].Contains(fX, fY))
+            {
+                // Set the key as down
+                SetKey(CharToKey(m_arChars[i]));
+            }
+        }
+
+        if (m_arRects[INDEX_SPACE_KEY].Contains(fX, fY))
+        {
+            SetKey(VKEY_SPACE);
+        }
+
+        if (m_arRects[INDEX_BACK_KEY].Contains(fX, fY))
+        {
+            SetKey(VKEY_BACKSPACE);
+        }
+
+        if (m_arRects[INDEX_ENTER_KEY].Contains(fX, fY))
+        {
+            SetKey(VKEY_ENTER);
+        }
+
+    }
+
+    // Check second pointer
+    if (IsTouchDownRaw(1))
+    {
+        GetPointerPositionNormalized(fX, fY, 1);
+
+        for (i = 0; i < NUM_NORMAL_KEYS; i++)
+        {
+            if (m_arRects[i].Contains(fX, fY))
+            {
+                // Set the key as down
+                SetKey(CharToKey(m_arChars[i]));
+            }
+        }
+
+        if (m_arRects[INDEX_SPACE_KEY].Contains(fX, fY))
+        {
+            SetKey(VKEY_SPACE);
+        }
+
+        if (m_arRects[INDEX_BACK_KEY].Contains(fX, fY))
+        {
+            SetKey(VKEY_BACKSPACE);
+        }
+
+        if (m_arRects[INDEX_ENTER_KEY].Contains(fX, fY))
+        {
+            SetKey(VKEY_ENTER);
+        }
+    }
 }
 
 void Keyboard::SetColors(float* arBackColor,
@@ -219,7 +285,7 @@ void Keyboard::GenerateRects()
     m_arRects[i].m_fHeight = 0.16f;
     m_arChars[i] = ' ';
     m_txSpace.SetPosition(m_arRects[i].m_fX + 0.11f,
-                          m_arRects[i].m_fY + 0.05);
+                          m_arRects[i].m_fY + 0.05f);
     m_txSpace.SetText("Space");
     i++;
 
@@ -230,7 +296,7 @@ void Keyboard::GenerateRects()
     m_arRects[i].m_fHeight = 0.16f;
     m_arChars[i] = ' ';
     m_txBack.SetPosition(m_arRects[i].m_fX + 0.03f,
-                         m_arRects[i].m_fY + 0.05);
+                         m_arRects[i].m_fY + 0.05f);
     m_txBack.SetText("Back");
     i++;
 
@@ -241,7 +307,7 @@ void Keyboard::GenerateRects()
     m_arRects[i].m_fHeight = 0.16f;
     m_arChars[i] = ' ';
     m_txEnter.SetPosition(m_arRects[i].m_fX + 0.03f,
-                          m_arRects[i].m_fY + 0.05);
+                          m_arRects[i].m_fY + 0.05f);
     m_txEnter.SetScale(0.75f, 1.0f);
     m_txEnter.SetText("Enter");
     i++;
