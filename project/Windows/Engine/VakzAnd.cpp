@@ -243,33 +243,53 @@ static int HandleInput(struct android_app* app, AInputEvent* event)
     nDevice = AInputEvent_getDeviceId(event);
     nSource = AInputEvent_getSource(event) & 0xffffff00;
 
+
     if (AInputEvent_getType(event) == AINPUT_EVENT_TYPE_MOTION)
     {
         nAction  = AMotionEvent_getAction(event);
-        nPointer = 0xff00 & nAction;
+        nPointer = (0xff00 & nAction) >> 8;
         nAction  = 0x00ff & nAction;
 
         if (nAction == AMOTION_EVENT_ACTION_DOWN)
         {
-            SetTouch(0);
-            SetTouchPosition(static_cast<int>(AMotionEvent_getX(event,0)),
-                            (g_nScreenHeight - 1) - static_cast<int>(AMotionEvent_getY(event,0)),
-                             0);
+            SetTouch(nPointer);
+            SetTouchPosition(static_cast<int>(AMotionEvent_getX(event, nPointer)),
+                            (g_nScreenHeight - 1) - static_cast<int>(AMotionEvent_getY(event, nPointer)),
+                            nPointer);
             return 1;
         }
         else if (nAction == AMOTION_EVENT_ACTION_UP)
         {
-            ClearTouch(0);
-            SetTouchPosition(static_cast<int>(AMotionEvent_getX(event,0)),
-                            (g_nScreenHeight - 1) - static_cast<int>(AMotionEvent_getY(event,0)),
-                             0);
+            ClearTouch(nPointer);
+            SetTouchPosition(static_cast<int>(AMotionEvent_getX(event, nPointer)),
+                            (g_nScreenHeight - 1) - static_cast<int>(AMotionEvent_getY(event, nPointer)),
+                            nPointer);
             return 1;
         }
-        else if (nAction = AMOTION_EVENT_ACTION_MOVE)
+        else if (nAction == AMOTION_EVENT_ACTION_POINTER_DOWN)
         {
-            SetTouchPosition(static_cast<int>(AMotionEvent_getX(event,0)),
-                            (g_nScreenHeight - 1) - static_cast<int>(AMotionEvent_getY(event,0)),
-                             0);
+            SetTouch(nPointer);
+            SetTouchPosition(static_cast<int>(AMotionEvent_getX(event, nPointer)),
+                            (g_nScreenHeight - 1) - static_cast<int>(AMotionEvent_getY(event, nPointer)),
+                            nPointer);
+            return 1;
+        }
+        else if (nAction == AMOTION_EVENT_ACTION_POINTER_UP)
+        {
+            ClearTouch(nPointer);
+            SetTouchPosition(static_cast<int>(AMotionEvent_getX(event, nPointer)),
+                            (g_nScreenHeight - 1) - static_cast<int>(AMotionEvent_getY(event, nPointer)),
+                            nPointer);
+            return 1;
+        }
+        else if (nAction == AMOTION_EVENT_ACTION_MOVE)
+        {
+            for (int nPtr = 0; nPtr < VINPUT_MAX_TOUCHES; nPtr++)
+            {
+                SetTouchPosition(static_cast<int>(AMotionEvent_getX(event, nPtr)),
+                                (g_nScreenHeight - 1) - static_cast<int>(AMotionEvent_getY(event, nPtr)),
+                                nPtr);
+            }
 
             if (nSource & AINPUT_SOURCE_JOYSTICK)
             {

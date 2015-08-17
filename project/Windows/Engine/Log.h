@@ -1,6 +1,13 @@
 #ifndef LOG_H
 #define LOG_H
 
+#if defined(ANDROID)
+#include <android/log.h>
+#define LogDebug(...) ((void)__android_log_print(ANDROID_LOG_INFO, "Vakz", __VA_ARGS__))
+#define LogWarning(...) ((void)__android_log_print(ANDROID_LOG_WARN, "Vakz", __VA_ARGS__))
+#define LogError(...) ((void)__android_log_print(ANDROID_LOG_WARN, "Vakz", __VA_ARGS__))
+#else
+
 //## **************************************************************************
 //## LogError
 //##
@@ -31,4 +38,5 @@ void LogWarning(const char* pWarning);
 //## **************************************************************************
 void LogDebug(const char* pDebug);
 
+#endif
 #endif

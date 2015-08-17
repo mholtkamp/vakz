@@ -142,7 +142,7 @@ enum VInputEnum
 {
     VINPUT_MAX_KEYS        = 256,
     VINPUT_MAX_BUTTONS     = 16,
-    VINPUT_MAX_TOUCHES     = 16,
+    VINPUT_MAX_TOUCHES     = 4,
     VINPUT_MAX_CONTROLLERS = 4,
     VINPUT_CONT_BUTTONS    = 14,
     VINPUT_CONT_AXES       = 18

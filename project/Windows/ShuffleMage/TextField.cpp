@@ -196,7 +196,9 @@ void TextField::Update(int nMouseDown,
         if (m_rect.Contains(fX,fY))
         {
             SetSelect(1);
+#if defined(ANDROID)
             ShowSoftKeyboard();
+#endif
         }
         else
         {

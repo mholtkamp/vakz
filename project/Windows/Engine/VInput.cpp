@@ -49,10 +49,16 @@ void ClearAllKeys()
 {
     int i = 0;
 
+    // Do not clear hardware keys
+    int nBack = s_arKeys[VKEY_BACK];
+
     for (i = 0; i < VINPUT_MAX_KEYS; i++)
     {
         s_arKeys[i] = 0;
     }
+
+    // Restore hardware keys
+    s_arKeys[VKEY_BACK] = nBack;
 }
 
 //*****************************************************************************
@@ -122,6 +128,10 @@ void SetTouch(int nTouch)
         nTouch <  VINPUT_MAX_TOUCHES)
     {
         s_arTouches[nTouch] = 1;
+    }
+    else
+    {
+        LogWarning("Invalid touch index in SetTouch()");
     }
 }
 
@@ -485,7 +495,8 @@ int IsSoftKeyboardEnabled()
 
 void RenderSoftKeyboard()
 {
-    if (s_pKeyboard != 0)
+    if (s_pKeyboard       != 0 &&
+        s_nKeyboardEnable != 0)
     {
         s_pKeyboard->Render();
     }
@@ -497,7 +508,8 @@ void RenderSoftKeyboard()
 
 void UpdateSoftKeyboard()
 {
-    if (s_pKeyboard != 0)
+    if (s_pKeyboard       != 0 &&
+        s_nKeyboardEnable != 0)
     {
         s_pKeyboard->Update();
     }
@@ -549,4 +561,6 @@ int CharToKey(char cTarget)
 #elif defined (WINDOWS)
     return static_cast<int>(cTarget);
 #endif
+
+    return 0;
 }
