@@ -24,7 +24,6 @@ public :
     //##
     //## Output:
     //##   nFaces     - number of faces in mesh.
-    //##   arPosition - array of vertex positions to keep on main RAM.
     //## 
     //## Returns:
     //##   unsigned int - handle to the newly created vertex buffer object.
@@ -32,9 +31,47 @@ public :
     static unsigned int LoadOBJ(const char*   pFileName,
                                 unsigned int& nFaces);
 
+    //## **********************************************************************
+    //## LoadOBJGeometry
+    //##
+    //## Loads an wavefront .obj file from disk and constructs a position
+    //## vertex array. The vertex array array is stored in system RAM, and not
+    //## uploaded to VRAM. The purpose of this is to load meshes for collision
+    //## purposes.
+    //##
+    //## Input:
+    //##   pFileName - path to obj file to load.
+    //##
+    //## Output:
+    //##   nFaces     - number of faces in mesh.
+    //## 
+    //## Returns:
+    //##   float* - pointer to the vertex buffer in main memory.
+    //## **********************************************************************
     static float* LoadOBJGeometry(const char* pFileName,
                                   unsigned int& nFaces);
 
+    //## **********************************************************************
+    //## LoadAMF
+    //##
+    //## Loads a .amf animated mesh file.
+    //##
+    //## Input:
+    //##   pFileName - path to amf file to load.
+    //##
+    //## Output:
+    //##   pAnimationNames - pointer to a 2D char array. Allocated in function.
+    //##   pAnimationCount - pointer to int to store the number of animations.
+    //##   pFramesPerSecond - pointer to int to store the framerate.
+    //##   pKeyFrameCounts - pointer to array of keyframes per animation. 
+    //##                     Allocated within function.
+    //##   pKeyFrameStates - pointer to 2D array of start frames for each 
+    //##                     keyframe for each animation. Allocated in function.
+    //##   pFaces          - pointer to an array of face counts per keyframe per
+    //##                     animation. Allocated in this function.
+    //##   pVBO            - pointer to VBO handle array for each keyframe per
+    //##                     animation. Allocated in this function.
+    //## **********************************************************************
     static void LoadAMF(const char*     pFileName,
                         char***         pAnimationNames,
                         int*            pAnimationCount,
@@ -62,6 +99,7 @@ private:
                                      int*   pFaces,
                                      float* pVB);
 
+    //## Generates a vertex buffer that stores position only.
     static void GenerateVertexGeometryBuffer(int    nNumFaces,
                                              float* pVertices,
                                              int*   pFaces,

@@ -204,23 +204,78 @@ public:
     //## **********************************************************************
     int Overlaps(Matter* pOther);
 
+    //## **********************************************************************
+    //## SetPhysical
+    //##
+    //## Flag the matter as "physical". Physical objects are affected by 
+    //## gravity, collisions with rigid matter, and terrain.
+    //## 
+    //## Input:
+    //##   nPhysical - physical flag. 
+    //##               '0' to mark as non-physical. 
+    //##               '1' to mark as physical.
+    //## **********************************************************************
     void SetPhysical(int nPhysical);
 
+    //## **********************************************************************
+    //## SetRigid
+    //##
+    //## Flag the matter as "rigid". Rigid matter cannot be moved and is
+    //## stored in an octree for collision detection purposes.
+    //##
+    //## Input:
+    //##   nRigid - rigid flag.
+    //##            '0' to mark as non-rigid.
+    //##            '1' to mark as rigid.
+    //## **********************************************************************
     void SetRigid(int nRigid);
 
+    //## **********************************************************************
+    //## SetVelocity
+    //## 
+    //## Sets the velocity of the matter. Velocity will cause the position of
+    //## the object to change during the UpdatePhysics() function.
+    //##
+    //## Input:
+    //##  fXVel - x component of the velocity in units per second.
+    //##  fYVel - y component of the velocity in units per second.
+    //##  fZVel - z component of the velocity in units per second.
+    //## **********************************************************************
     void SetVelocity(float fXVel,
                      float fYVel,
                      float fZVel);
 
+    //## **********************************************************************
+    //## Set*Velocity
+    //## 
+    //## Sets one component of the matter's velocity (X/Y/Z).
+    //## **********************************************************************
     void SetXVelocity(float fXVel);
-
     void SetYVelocity(float fYVel);
-
     void SetZVelocity(float fZVel);
 
+    //## **********************************************************************
+    //## UpdatePhysics
+    //##
+    //## Updates the position of the matter based on physical factors. 
+    //## Collision detection and handling is performed for physical matters.
+    //## Terrain collision and handling is performed for physical matters.
+    //##
+    //## Input:
+    //##   pScene   - pointer to current scene.
+    //##   fSeconds - time elapsed in seconds since last frame 
+    //## **********************************************************************
     void UpdatePhysics(void* pScene,
                        float fSeconds);
 
+    //## **********************************************************************
+    //## GetModelMatrix
+    //## 
+    //## Generates and returns a pointer to the Matter's model matrix.
+    //##
+    //## Returns:
+    //##   Matrix* - pointer to the matter's model matrix.
+    //## **********************************************************************
     Matrix* GetModelMatrix();
 
     enum MatterEnum

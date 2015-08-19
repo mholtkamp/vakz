@@ -90,6 +90,12 @@ public:
     //## **********************************************************************
     void* GetPrimitive(int nPrimitiveType);
 
+    //## **********************************************************************
+    //## GetDefaultFont
+    //##
+    //## Returns:
+    //##   void* - a pointer to the default font.
+    //## **********************************************************************
     static void* GetDefaultFont();
 
     enum ResourceLibraryEnum

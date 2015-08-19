@@ -110,13 +110,42 @@ public:
     //## **********************************************************************
     virtual void SetTexture(Texture* pTexture);
 
+    //## **********************************************************************
+    //## SetBorderColor
+    //##
+    //## Sets the color of the border around the quad. The border is rendered
+    //## only if enabled for this individual quad.
+    //##
+    //## Input:
+    //##   fRed   - red component of border color.
+    //##   fGreen - green component of border color.
+    //##   fBlue  - blue component of border color.
+    //##   fAlpha - alpha component of border color.
+    //## **********************************************************************
     void SetBorderColor(float fRed,
                         float fGreen,
                         float fBlue,
                         float fAlpha);
 
+    //## **********************************************************************
+    //## SetBorderWidth
+    //##
+    //## Sets the width of the border in pixels. Border must be enabled in 
+    //## order to be rendered.
+    //##
+    //## Input:
+    //##   fWidth - width of the border in pixels.
+    //## **********************************************************************
     void SetBorderWidth (float fWidth);
 
+    //## **********************************************************************
+    //## EnableBorder
+    //## 
+    //## Enables a border around the quad.
+    //## 
+    //## Input:
+    //##   nEnable - flag to enable border rendering.
+    //## **********************************************************************
     void EnableBorder(int nEnable);
 
     enum QuadEnum

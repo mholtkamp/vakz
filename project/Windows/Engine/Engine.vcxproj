@@ -144,6 +144,7 @@
     <ClInclude Include="Shaders.h" />
     <ClInclude Include="Vakz.h" />
     <ClInclude Include="VGL.h" />
+    <ClInclude Include="VSocket.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

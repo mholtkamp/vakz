@@ -107,15 +107,37 @@ public:
                float fNear,
                float fFar);
 
+    //## **********************************************************************
+    //## Inverse
+    //## 
+    //## Calculates the inverse of the current matrix and replaces the matrix
+    //## data with the newly solved inverse. The Gauss-Jorden elimination
+    //## method is used to determine the inverse. If no inverse exists, the 
+    //## matrix is left unchanged.
+    //## **********************************************************************
     void Inverse();
 
+    //## **********************************************************************
+    //## Transpose
+    //## 
+    //## Transposes the current matrix.
+    //## **********************************************************************
     void Transpose();
 
+    //## **********************************************************************
+    //## Constructor
+    //## **********************************************************************
     void Load(float* arValues);
 
+    //## **********************************************************************
+    //## Constructor
+    //## **********************************************************************
     void MultiplyVec3(float* arVec3,
                       float* arRes);
 
+    //## **********************************************************************
+    //## Constructor
+    //## **********************************************************************
     void MultiplyVec4(float* arVec4,
                       float* arRes);
 

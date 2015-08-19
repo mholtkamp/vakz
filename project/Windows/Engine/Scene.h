@@ -158,10 +158,31 @@ public:
     //## **********************************************************************
     int GetNumLights();
 
+    //## **********************************************************************
+    //## SetGravity
+    //##
+    //## Sets the gravity of the scene. Gravity is applied to all Matters that
+    //## are flagged as physical.
+    //##
+    //## Input:
+    //##   fGravity - gravity in units per second per second
+    //## **********************************************************************
     void SetGravity(float fGravity);
 
+    //## **********************************************************************
+    //## GetGravity
+    //##
+    //## Returns:
+    //##   fGravity - gravity in units per second per second
+    //## **********************************************************************
     float GetGravity();
 
+    //## **********************************************************************
+    //## Update
+    //##
+    //## Performs all regular, framely updates. This includes any physics
+    //## updates.
+    //## **********************************************************************
     void Update();
 
     enum SceneEnum
@@ -173,7 +194,9 @@ public:
     };
 
 private:
-
+    
+    //## From the provided pModel, pView, and pProjection matrices,
+    //## returns the resultant matrix 
     void GenerateMVPMatrix(Matrix* pModel,
                            Matrix* pView,
                            Matrix* pProjection,
