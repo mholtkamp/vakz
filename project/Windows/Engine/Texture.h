@@ -54,6 +54,15 @@ public:
     //## **********************************************************************
     void Bind();
 
+    //## **********************************************************************
+    //## SetFiltering
+    //##
+    //## Sets the texture filtering for this texture to either linear or 
+    //## nearest. The texture is bound by this function.
+    //##
+    //## Input:
+    //##    nFilterType - NEAREST or LINEAR (refer to TextureEnum)
+    //## **********************************************************************
     void SetFiltering(int nFilterType);
 
     enum TextureEnum

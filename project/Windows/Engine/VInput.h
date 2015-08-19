@@ -405,44 +405,181 @@ void SetTouchPosition(int nTouchX,
                       int nTouchY,
                       int nTouch = 0);
 
+//## **********************************************************************
+//## SetControllerButton
+//## 
+//## Registers a controller button being pressed down.
+//##
+//## Input:
+//##   nControllerButton - button enum value
+//##   nControllerNumber - controller index
+//## **********************************************************************
 void SetControllerButton(int nControllerButton,
                          int nControllerNumber);
 
+//## **********************************************************************
+//## ClearControllerButton
+//## 
+//## Registers a controller button being released.
+//##
+//## Input:
+//##   nControllerButton - button enum value
+//##   nControllerNumber - controller index
+//## **********************************************************************
 void ClearControllerButton(int nControllerButton,
                            int nControllerNumber);
 
+//## **********************************************************************
+//## IsControllerButtonDown
+//## 
+//## Queries the state of a controller button.
+//##
+//## Input:
+//##   nControllerButton - button enum value
+//##   nControllerNumber - controller index
+//##
+//## Returns:
+//##   int - '1' if button is down.
+//##         '0' otherwise.
+//## **********************************************************************
 int IsControllerButtonDown(int nControllerButton,
                            int nControllerNumber);
 
+//## **********************************************************************
+//## SetControllerAxisValue
+//## 
+//## Sets the value of analog axis.
+//##
+//## Input:
+//##   nControllerAxis   - axis enum value
+//##   fAxisValue        - current value of axis.
+//##   nControllerNumber - controller index
+//## **********************************************************************
 void SetControllerAxisValue(int   nControllerAxis,
                             float fAxisValue,
                             int   nControllerNumber);
 
+//## **********************************************************************
+//## GetControllerAxisValue
+//##
+//## Input:
+//##   nControllerAxis   - axis enum value
+//##   nControllerNumber - controller index
+//##
+//## Returns:
+//##   float - value of analog axis.
+//## **********************************************************************
 float GetControllerAxisValue(int nControllerAxis,
                              int nControllerNumber);
-
+//## **********************************************************************
+//## GetControllerIndex
+//##
+//## Input:
+//##   nInputDevice - device identification number assigned by OS.
+//##
+//## Returns:
+//##   int - controller index
+//## **********************************************************************
 int GetControllerIndex(int nInputDevice);
 
+//## **********************************************************************
+//## AssignController
+//##
+//## Based on the input device ID, assign a controller to the Vakz engine.
+//##
+//## Input:
+//##   nInputDevice   - axis enum value
+//## **********************************************************************
 void AssignController(int nInputDevice);
 
+//## **********************************************************************
+//## IsControllerConnected
+//##
+//## Check if a controller has been connected. (Player1, Player2, etc).
+//##
+//## Input:
+//##   nIndex - controller index
+//##
+//## Returns:
+//##   int - '1' if controller has been connected/registered.
+//##         '0'
+//## **********************************************************************
 int IsControllerConnected(int nIndex);
 
+//## **********************************************************************
+//## ShowSoftKeyboard
+//##
+//## Enable the on-screen keyboard for providing keyboard input.
+//## **********************************************************************
 void ShowSoftKeyboard();
 
+//## **********************************************************************
+//## HideSoftKeyboard
+//##
+//## Disable the on-screen keyboard for providing keyboard input.
+//## **********************************************************************
 void HideSoftKeyboard();
 
+//## **********************************************************************
+//## InitializeSoftKeyboard
+//##
+//## Used internally to initialize the on-screen keyboard.
+//## **********************************************************************
 void InitializeSoftKeyboard();
 
+//## **********************************************************************
+//## IsSoftKeyboardEnabled
+//##
+//## Returns:
+//##   int - '1' if on-screen keyboard is enabled.
+//##         '0' otherwise.
+//## **********************************************************************
 int IsSoftKeyboardEnabled();
 
+//## **********************************************************************
+//## RenderSoftKeyboard
+//##
+//## Used internally to render the on-screen keyboard to the screen if
+//## it has been enabled.
+//## **********************************************************************
 void RenderSoftKeyboard();
 
+//## **********************************************************************
+//## UpdateSoftKeyboard
+//##
+//## Used internally to check what keys are being pressed on the on-screen
+//## keyboard if the on-screen keyboard has been enabled.
+//## **********************************************************************
 void UpdateSoftKeyboard();
 
+//## **********************************************************************
+//## IsPointerDownRaw
+//##
+//## Same as IsPointerDown, but returns true even if the pointer is down
+//## on the on-screen keyboard.
+//## **********************************************************************
 int IsPointerDownRaw(int nPointer = 0);
 
+//## **********************************************************************
+//## IsTouchDownRaw
+//##
+//## Same as IsTouchDown, but returns true even if the pointer is down
+//## on the on-screen keyboard.
+//## **********************************************************************
 int IsTouchDownRaw(int nTouch);
 
+//## **********************************************************************
+//## CharToKey
+//##
+//## Converts an ascii character to the key that corresponds with it.
+//## Example: CharToKey('A') will return VKEY_A.
+//##
+//## Input:
+//##   cTarget - character to convert.
+//##
+//## Returns:
+//##   int - Key enum value
+//## **********************************************************************
 int CharToKey(char cTarget);
 
 #endif
