@@ -2,6 +2,9 @@
 #include "MeshLoader.h"
 #include "VGL.h"
 
+//*****************************************************************************
+// Constructor
+//*****************************************************************************
 MeshCollider::MeshCollider()
 {
     m_nType = COLLIDER_MESH;
@@ -9,6 +12,9 @@ MeshCollider::MeshCollider()
     m_nVertices  = 0;
 }
 
+//*****************************************************************************
+// Destructor
+//*****************************************************************************
 MeshCollider::~MeshCollider()
 {
     if (m_arPosition != 0)
@@ -18,12 +24,18 @@ MeshCollider::~MeshCollider()
     }
 }
 
+//*****************************************************************************
+// AssignMesh
+//*****************************************************************************
 void MeshCollider::AssignMesh(StaticMesh* pStaticMesh)
 {
     m_arPosition = pStaticMesh->GetPositionArray();
     m_nVertices  = pStaticMesh->GetVertexCount();
 }
 
+//*****************************************************************************
+// Render
+//*****************************************************************************
 void MeshCollider::Render(Matrix* pMVP)
 {
     int hProg = GetShaderProgram(STATIC_FULLBRIGHT_PROGRAM);
@@ -57,32 +69,47 @@ void MeshCollider::Render(Matrix* pMVP)
     glDrawArrays(GL_TRIANGLES, 0, m_nVertices);
 }
 
+//*****************************************************************************
+// Overlaps
+//*****************************************************************************
 int MeshCollider::Overlaps(Collider* pOther)
 {
     return 0;
 }
 
+//*****************************************************************************
+// GetVertexCount
+//*****************************************************************************
 int MeshCollider::GetVertexCount()
 {
     return m_nVertices;
 }
 
+//*****************************************************************************
+// GetPositionArray
+//*****************************************************************************
 float* MeshCollider::GetPositionArray()
 {
     return m_arPosition;
 }
 
+//*****************************************************************************
+// GetTriangle
+//*****************************************************************************
 void MeshCollider::GetTriangle(int   nIndex,
                                float arTriangle[3][3])
 {
+    // Vertex 1
     arTriangle[0][0] = m_arPosition[nIndex*9 + 0];
     arTriangle[0][1] = m_arPosition[nIndex*9 + 1];
     arTriangle[0][2] = m_arPosition[nIndex*9 + 2];
-
+    
+    // Vertex 2
     arTriangle[1][0] = m_arPosition[nIndex*9 + 3];
     arTriangle[1][1] = m_arPosition[nIndex*9 + 4];
     arTriangle[1][2] = m_arPosition[nIndex*9 + 5];
 
+    // Vertex 3
     arTriangle[2][0] = m_arPosition[nIndex*9 + 6];
     arTriangle[2][1] = m_arPosition[nIndex*9 + 7];
     arTriangle[2][2] = m_arPosition[nIndex*9 + 8];

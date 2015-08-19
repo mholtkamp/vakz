@@ -2,6 +2,9 @@
 #include "ImageLoader.h"
 #include "Log.h"
 
+//*****************************************************************************
+// Constructor
+//*****************************************************************************
 Terrain::Terrain()
 {
     m_nSize        = 0;
@@ -12,6 +15,9 @@ Terrain::Terrain()
     m_arHeights    = 0;
 }
 
+//*****************************************************************************
+// Destructor
+//*****************************************************************************
 Terrain::~Terrain()
 {
     if (m_arHeights != 0)
@@ -22,6 +28,9 @@ Terrain::~Terrain()
 
 }
 
+//*****************************************************************************
+// LoadBMP
+//*****************************************************************************
 void Terrain::LoadBMP(const char* pFileName)
 {
     int i         = 0;
@@ -74,6 +83,9 @@ void Terrain::LoadBMP(const char* pFileName)
     GenerateVertexArrays();
 }
 
+//*****************************************************************************
+// GenerateVertexArrays
+//*****************************************************************************
 void Terrain::GenerateVertexArrays()
 {
     int i = 0;
@@ -101,4 +113,3 @@ void Terrain::GenerateVertexArrays()
     delete [] arTexCoord;
     delete [] arNormal;
 }
-

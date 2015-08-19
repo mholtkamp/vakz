@@ -4,6 +4,9 @@
 
 char ImageLoader::s_arFileBuffer[BMP_MAX_SIZE*BMP_MAX_SIZE*4 + 64];
 
+//*****************************************************************************
+// LoadBMP
+//*****************************************************************************
 unsigned char* ImageLoader::LoadBMP(const char* pFileName,
                                     int&        nWidth,
                                     int&        nHeight,
@@ -63,6 +66,11 @@ unsigned char* ImageLoader::LoadBMP(const char* pFileName,
         else if (sBPP == 32)
         {
             LogError("32 bit BMPs not supported yet.");
+            return 0;
+        }
+        else
+        {
+            LogError("Unsupported Bits Per Pixel.");
             return 0;
         }
         

@@ -232,11 +232,17 @@ void Quad::GenerateTexCoordArray()
     m_arTexCoord[7] = 0.0f;
 }
 
+//*****************************************************************************
+// SetTexture
+//*****************************************************************************
 void Quad::SetTexture(Texture* pTexture)
 {
     m_pTexture = pTexture;
 }
 
+//*****************************************************************************
+// SetBorderColor
+//*****************************************************************************
 void Quad::SetBorderColor(float fRed,
                           float fGreen,
                           float fBlue,
@@ -248,11 +254,17 @@ void Quad::SetBorderColor(float fRed,
     m_arBorderColor[3] = fAlpha;
 }
 
+//*****************************************************************************
+// SetBorderWidth
+//*****************************************************************************
 void Quad::SetBorderWidth (float fWidth)
 {
     m_fBorderWidth = fWidth;
 }
 
+//*****************************************************************************
+// EnableBorder
+//*****************************************************************************
 void Quad::EnableBorder(int nEnable)
 {
     m_nBorderEnable = nEnable;

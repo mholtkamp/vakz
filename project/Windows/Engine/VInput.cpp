@@ -428,6 +428,9 @@ float GetControllerAxisValue(int nControllerAxis,
     return 0.0f;
 }
 
+//*****************************************************************************
+// GetControllerIndex
+//*****************************************************************************
 int GetControllerIndex(int nInputDevice)
 {
     int i = 0;
@@ -449,6 +452,9 @@ int GetControllerIndex(int nInputDevice)
     return -1;
 }
 
+//*****************************************************************************
+// AssignController
+//*****************************************************************************
 void AssignController(int nInputDevice)
 {
     if (s_nNumControllers < VINPUT_MAX_CONTROLLERS)
@@ -458,6 +464,9 @@ void AssignController(int nInputDevice)
     }
 }
 
+//*****************************************************************************
+// IsControllerConnected
+//*****************************************************************************
 int IsControllerConnected(int nIndex)
 {
     if (nIndex < s_nNumControllers)
@@ -470,16 +479,25 @@ int IsControllerConnected(int nIndex)
     }
 }
 
+//*****************************************************************************
+// ShowSoftKeyboard
+//*****************************************************************************
 void ShowSoftKeyboard()
 {
     s_nKeyboardEnable = 1;
 }
 
+//*****************************************************************************
+// HideSoftKeyboard
+//*****************************************************************************
 void HideSoftKeyboard()
 {
     s_nKeyboardEnable = 0;
 }
 
+//*****************************************************************************
+// InitializeSoftKeyboard
+//*****************************************************************************
 void InitializeSoftKeyboard()
 {
     if (s_pKeyboard == 0)
@@ -488,11 +506,17 @@ void InitializeSoftKeyboard()
     }
 }
 
+//*****************************************************************************
+// IsSoftKeyboardEnabled
+//*****************************************************************************
 int IsSoftKeyboardEnabled()
 {
     return s_nKeyboardEnable;
 }
 
+//*****************************************************************************
+// RenderSoftKeyboard
+//*****************************************************************************
 void RenderSoftKeyboard()
 {
     if (s_pKeyboard       != 0 &&
@@ -506,6 +530,9 @@ void RenderSoftKeyboard()
     }
 }
 
+//*****************************************************************************
+// UpdateSoftKeyboard
+//*****************************************************************************
 void UpdateSoftKeyboard()
 {
     if (s_pKeyboard       != 0 &&
@@ -515,6 +542,9 @@ void UpdateSoftKeyboard()
     }
 }
 
+//*****************************************************************************
+// IsPointerDownRaw
+//*****************************************************************************
 int IsPointerDownRaw(int nPointer)
 {
     if (nPointer >= 0 &&
@@ -532,6 +562,9 @@ int IsPointerDownRaw(int nPointer)
     return 0;
 }
 
+//*****************************************************************************
+// IsTouchDownRaw
+//*****************************************************************************
 int IsTouchDownRaw(int nTouch)
 {
     if (nTouch >= 0 &&
@@ -543,6 +576,9 @@ int IsTouchDownRaw(int nTouch)
     return 0;
 }
 
+//*****************************************************************************
+// CharToKey
+//*****************************************************************************
 int CharToKey(char cTarget)
 {
      cTarget = toupper(cTarget);

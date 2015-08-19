@@ -3,6 +3,9 @@
 #include "TriangleBoxCollision.h"
 #include "Matter.h"
 
+//*****************************************************************************
+// Constructor
+//*****************************************************************************
 BoxCollider::BoxCollider()
 {
     m_nType = COLLIDER_BOX;
@@ -17,6 +20,9 @@ BoxCollider::BoxCollider()
     m_arPosition = 0;
 }
 
+//*****************************************************************************
+// Destructor
+//*****************************************************************************
 BoxCollider::~BoxCollider()
 {
     if (m_arPosition != 0)
@@ -26,6 +32,9 @@ BoxCollider::~BoxCollider()
     }
 }
 
+//*****************************************************************************
+// SetExtents
+//*****************************************************************************
 void BoxCollider::SetExtents(float fMinX,
                              float fMaxX,
                              float fMinY,
@@ -41,17 +50,23 @@ void BoxCollider::SetExtents(float fMinX,
     m_fMaxZ = fMaxZ;
 }
 
+//*****************************************************************************
+// Render
+//*****************************************************************************
 void BoxCollider::Render(Matrix* pMVP)
 {
     if (m_nRender != 0)
     {
         if (m_arPosition == 0)
         {
-
+            //@@ TODO
         } 
     }
 }
 
+//*****************************************************************************
+// Overlaps
+//*****************************************************************************
 int BoxCollider::Overlaps(Collider* pOther)
 {
     int i                  = 0;
@@ -129,31 +144,29 @@ int BoxCollider::Overlaps(Collider* pOther)
     return 0;
 }
 
+//*****************************************************************************
+// GetExtents
+//*****************************************************************************
 float BoxCollider::GetMinX()
 {
     return m_fMinX * m_fScaleX + m_fX;
 }
-
 float BoxCollider::GetMaxX()
 {
     return m_fMaxX * m_fScaleX + m_fX;
 }
-
 float BoxCollider::GetMinY()
 {
     return m_fMinY * m_fScaleY + m_fY;
 }
-
 float BoxCollider::GetMaxY()
 {
     return m_fMaxY * m_fScaleY + m_fY;
 }
-
 float BoxCollider::GetMinZ()
 {
     return m_fMinZ * m_fScaleZ + m_fZ;
 }
-
 float BoxCollider::GetMaxZ()
 {
     return m_fMaxZ * m_fScaleZ + m_fZ;
