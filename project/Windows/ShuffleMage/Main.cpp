@@ -14,6 +14,7 @@
 #include "DirectionalLight.h"
 #include "MeshCollider.h"
 #include "Text.h"
+#include "VSocket.h"
 
 // C stdlib includes
 #include <stdio.h>
@@ -57,11 +58,71 @@ int main()
     pMenu->RegisterScene();
     pMenu->SetState(MENU_STATE_LOGIN);
 
+    Text MsgText;
+    MsgText.SetPosition(0.0f, 0.0f);
+    MsgText.SetColor(1.0f, 1.0f, 1.0f, 1.0f);
+    MsgText.SetText("Waiting");
+    pMenu->GetScene()->AddGlyph(&MsgText);
+
+    Socket serverSocket;
+    Socket* servclientSocket = 0;
+
+    Socket clientSocket;
+
+    char pBuffer[256] = {0};
+
+
+    int nServer    = 1;
+    int nConnected = 0;
+
+    if (nServer != 0)
+    {
+        LogDebug("Opening Server Socket");
+        serverSocket.Open(0, 27772);
+    }
+    else
+    {
+        //LogDebug("Connecting to server.");
+        clientSocket.Connect(0, "192.168.2.7", 27772);
+    }
+
+    char arWord[4] = {0};
+
     while ((GetStatus() & VAKZ_QUIT) == 0)
     {
+
         Update();
         pMenu->Update();
         Render();
+
+        if (nServer)
+        {
+            if (nConnected == 0)
+            {
+                //LogDebug("Waiting on Connection");
+                servclientSocket = serverSocket.Accept();
+                if (servclientSocket != 0)
+                {
+                    LogDebug("Connection received!");
+                    nConnected = 1;
+                }
+            }
+            else
+            {
+                int nBytes = servclientSocket->Receive(pBuffer, 256);
+                if (nBytes > 0)
+                {
+                    MsgText.SetText(pBuffer);
+                    memset(pBuffer, 0, 256);
+                }
+            }
+        }
+
+        if (nServer == 0)
+        {
+            
+        }
+
     }
 
     exit(0);

@@ -19,6 +19,7 @@
 #include "Settings.h"
 #include "Log.h"
 #include "VInput.h"
+#include "VSocket.h"
 
 // Pointer to the scene object used during rendering.
 static           Scene* s_pScene    = 0;
@@ -415,6 +416,8 @@ int Initialize(void* pData)
     }
 
     InitializeSoftKeyboard();
+
+    Socket::Initialize();
 
     return TRUE;                                       // Success
 }

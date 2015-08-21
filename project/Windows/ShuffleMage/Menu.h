@@ -31,6 +31,8 @@ public:
 
     void SetState(int nState);
 
+    Scene* GetScene();
+
 private:
 
     void UpdateLogin();

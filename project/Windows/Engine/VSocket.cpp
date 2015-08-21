@@ -1,5 +1,6 @@
 #include "VSocket.h"
 #include "Log.h"
+#include <stdio.h>
 
 Socket::Socket()
 {
@@ -42,16 +43,27 @@ void Socket::Shutdown()
 
 }
 
+void Socket::SetBlocking(int nEnable)
+{
+    unsigned long lEnable = static_cast<unsigned long>(!nEnable);
+
+    if(ioctlsocket(m_sock, FIONBIO, &lEnable) == SOCKET_ERROR)
+    {
+        LogError("Socket could not be set to blocking/nonblocking.");
+    }
+}
+
 void Socket::Connect(int         nProtocol,
                      const char* pIPAddress,
                      int         nPort)
 {
     SOCKADDR_IN sinTarget;
 
+    m_nType = TYPE_CLIENT;
+
     sinTarget.sin_family = AF_INET;
     sinTarget.sin_port   = htons(nPort);
 
-    m_nType = TYPE_CLIENT;
     sinTarget.sin_addr.s_addr = inet_addr (pIPAddress);
     m_sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 
@@ -67,6 +79,9 @@ void Socket::Connect(int         nProtocol,
         LogError("Could not connect to IP/Port.");
         return;
     }
+
+    // Set the default block mode to non-blocking
+    SetBlocking(0);
 }
 
 void Socket::Open(int nProtocol,
@@ -75,8 +90,10 @@ void Socket::Open(int nProtocol,
     SOCKADDR_IN sinTarget;
 
     m_nType = TYPE_SERVER;
+
+    sinTarget.sin_family = AF_INET;
     sinTarget.sin_addr.s_addr = htonl (INADDR_ANY);
-    m_sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    m_sock = socket(AF_INET, SOCK_STREAM, 0);
 
     if (m_sock == INVALID_SOCKET)
     {
@@ -87,8 +104,12 @@ void Socket::Open(int nProtocol,
     if (bind (m_sock, (LPSOCKADDR) &sinTarget, sizeof(sinTarget)) == SOCKET_ERROR)
     {
         LogError("Socket could not be bound to specified port.");
+        printf("Error code: %d\n", WSAGetLastError());
         return;
     }
+    
+    // Set the default block mode to non-blocking
+    SetBlocking(0);
 }
 
 Socket* Socket::Accept()
@@ -100,16 +121,16 @@ Socket* Socket::Accept()
     {
         if (listen(m_sock, 1) == SOCKET_ERROR)
         {
-            LogError("Cannot listen on server socket.");
-            return;
+            // No connections
+            return 0;
         }
 
         newSock = accept(m_sock, NULL, NULL);
 
         if (newSock == INVALID_SOCKET)
         {
-            LogError("Failed to accept connection on server socket.");
-            return;
+            // No incoming connections, so return 0.
+            return 0;
         }
 
         retSock = new Socket();
@@ -117,6 +138,11 @@ Socket* Socket::Accept()
         LogDebug("Client connected!");
 
         return retSock;
+    }
+    else
+    {
+        LogError("Cannot accept connection on client socket.");
+        return 0;
     }
 }
 
@@ -131,4 +157,16 @@ void Socket::Close()
 void Socket::SetSocketHandle(int nSocketHandle)
 {
     m_sock = nSocketHandle;
+}
+
+void Socket::Send(char* pBuffer,
+                  int   nLength)
+{
+    send(m_sock, pBuffer, nLength, 0);
+}
+
+int Socket::Receive(char* pBuffer,
+                    int   nLength)
+{
+    return recv(m_sock, pBuffer, nLength, 0);
 }

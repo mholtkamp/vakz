@@ -9,6 +9,9 @@
 
 class Socket
 {
+
+public:
+
     Socket();
 
     ~Socket();
@@ -16,6 +19,8 @@ class Socket
     static void Initialize();
 
     static void Shutdown();
+
+    void SetBlocking(int nEnable);
 
     void Connect(int         nProtocol,
                  const char* pIPAddress,

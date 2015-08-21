@@ -220,3 +220,8 @@ void Menu::EnableShop(int nEnable)
     m_btBackShop.SetVisible(nEnable);
     m_btBuy.SetVisible(nEnable);
 }
+
+Scene* Menu::GetScene()
+{
+    return &m_scene;
+}
