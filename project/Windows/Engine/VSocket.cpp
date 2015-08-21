@@ -93,6 +93,7 @@ void Socket::Open(int nProtocol,
 
     sinTarget.sin_family = AF_INET;
     sinTarget.sin_addr.s_addr = htonl (INADDR_ANY);
+    sinTarget.sin_port = htons(nPort);
     m_sock = socket(AF_INET, SOCK_STREAM, 0);
 
     if (m_sock == INVALID_SOCKET)
