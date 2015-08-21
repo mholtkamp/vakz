@@ -5,6 +5,8 @@
 #include <winsock.h>
 #elif defined(ANDROID)
 #include <sys/socket.h>
+#include <netdb.h>
+#include <sys/ioctl.h>
 #endif
 
 class Socket
@@ -44,7 +46,10 @@ public:
     enum SocketEnum
     {
         TYPE_SERVER = 1,
-        TYPE_CLIENT = 2
+        TYPE_CLIENT = 2,
+
+        TCP = 1,
+        UDP = 2
     };
 
 private:
@@ -57,7 +62,7 @@ private:
 #if defined (WINDOWS)
     SOCKET m_sock;
 #elif defined(ANDROID)
-
+    int m_sock;
 #endif
 
 };

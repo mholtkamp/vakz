@@ -42,7 +42,6 @@ void android_main(struct android_app* state)
 {
     app_dummy();
     Initialize(state);
-    usleep(50000);
 #else
 int main()
 {
@@ -52,7 +51,6 @@ int main()
 
     SetClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-    pTestBuffer = new char[32000];
     pMenu = new Menu();
     
     pMenu->RegisterScene();
@@ -82,8 +80,8 @@ int main()
     }
     else
     {
-        //LogDebug("Connecting to server.");
-        clientSocket.Connect(0, "192.168.2.7", 27772);
+        LogDebug("Connecting to server.");
+        clientSocket.Connect(0, "192.168.2.4", 27772);
     }
 
     char arWord[4] = {0};
