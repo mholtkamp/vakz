@@ -70,7 +70,7 @@ unsigned char* ImageLoader::LoadBMP(const char* pFileName,
         }
         else
         {
-            LogError("Unsupported Bits Per Pixel.");
+            LogError("Unsupported bits per pixel.");
             return 0;
         }
         
