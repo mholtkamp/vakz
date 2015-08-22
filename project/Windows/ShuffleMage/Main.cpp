@@ -72,7 +72,7 @@ int main()
     char pBuffer[256] = {0};
 
 
-    int nServer    = 0;
+    int nServer    = 1;
     int nConnected = 0;
 
     if (nServer != 0)

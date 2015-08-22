@@ -15,6 +15,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ShuffleMage", "ShuffleMage\
 		{E8E61552-1D55-4307-AB68-E6485A321210} = {E8E61552-1D55-4307-AB68-E6485A321210}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ShuffleMageServer", "ShuffleMageServer\ShuffleMageServer.vcxproj", "{B364B4E1-90EB-4967-9B27-58E7E99841EE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -33,6 +35,10 @@ Global
 		{4459DC67-FC4B-4AAC-A30C-4906A3CFEE3C}.Debug|Win32.Build.0 = Debug|Win32
 		{4459DC67-FC4B-4AAC-A30C-4906A3CFEE3C}.Release|Win32.ActiveCfg = Release|Win32
 		{4459DC67-FC4B-4AAC-A30C-4906A3CFEE3C}.Release|Win32.Build.0 = Release|Win32
+		{B364B4E1-90EB-4967-9B27-58E7E99841EE}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B364B4E1-90EB-4967-9B27-58E7E99841EE}.Debug|Win32.Build.0 = Debug|Win32
+		{B364B4E1-90EB-4967-9B27-58E7E99841EE}.Release|Win32.ActiveCfg = Release|Win32
+		{B364B4E1-90EB-4967-9B27-58E7E99841EE}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
