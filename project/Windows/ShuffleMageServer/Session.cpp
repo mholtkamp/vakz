@@ -1,4 +1,7 @@
 #include "Session.h"
+#include "Log.h"
+
+#include "Message.h"
 
 char Session::s_arMsgBuffer[MSG_BUFFER_SIZE] = {0};
 
@@ -41,9 +44,33 @@ void Session::Update()
 
             while (pBuffer < nSize + s_arMsgBuffer)
             {
-                ProcessMessage(pBuffer);
+                ProcessMessage(pBuffer, nSize);
             }
         }
     }
 }
 
+void Session::ProcessMessage(char* pBuffer,
+                             int   nLimit)
+{
+    int nMsgID = 0;
+
+    if (pBuffer != 0 &&
+        pBuffer < nLimit + s_arMsgBuffer)
+    {
+        nMsgID = reinterpret_cast<int*>(pBuffer)[0];
+
+        if (nMsgID & SESSION_MSG_FLAG)
+        {
+            
+        }
+        else if (nMsgID & GAME_MSG_FLAG)
+        {
+        
+        }
+        else
+        {
+            LogError ("Game/Session flag missing");
+        }
+    }
+}

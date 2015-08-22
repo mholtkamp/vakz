@@ -21,7 +21,8 @@ public:
 
 private:
 
-    void ProcessMessage(char* pBuffer);
+    void ProcessMessage(char* pBuffer,
+                        int   nLimit);
 
     int m_nActive;
     int m_nLoggedIn;
