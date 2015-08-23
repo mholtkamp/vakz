@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Messages">
+      <UniqueIdentifier>{9e7f0b74-1dae-4820-a8d4-a4b4e81a67a0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -20,6 +23,12 @@
     </ClCompile>
     <ClCompile Include="Session.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ShuffleMage\Message.cpp">
+      <Filter>Messages</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ShuffleMage\MsgLogin.cpp">
+      <Filter>Messages</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -29,8 +38,11 @@
     <ClInclude Include="PlayerData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Message.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\ShuffleMage\MsgLogin.h">
+      <Filter>Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ShuffleMage\Message.h">
+      <Filter>Messages</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

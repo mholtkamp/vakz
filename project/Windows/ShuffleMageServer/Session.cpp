@@ -60,17 +60,13 @@ void Session::ProcessMessage(char* pBuffer,
     {
         nMsgID = reinterpret_cast<int*>(pBuffer)[0];
 
-        if (nMsgID & SESSION_MSG_FLAG)
+        if (nMsgID < 100)
         {
             
         }
-        else if (nMsgID & GAME_MSG_FLAG)
-        {
-        
-        }
         else
         {
-            LogError ("Game/Session flag missing");
+        
         }
     }
 }
