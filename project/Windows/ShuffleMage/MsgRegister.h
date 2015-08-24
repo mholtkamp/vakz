@@ -1,14 +1,14 @@
-#ifndef MSG_LOGIN_H
-#define MSG_LOGIN_H
+#ifndef MSG_REGISTER_H
+#define MSG_REGISTER_H
 
 #include "Message.h"
 
-class MsgLogin : public Message
+class MsgRegister : public Message
 {
 public:
 
-    MsgLogin();
-    ~MsgLogin();
+    MsgRegister();
+    ~MsgRegister();
 
     void Read(char* pBuffer);
 
@@ -18,7 +18,6 @@ public:
 
     char m_arUser[USER_BUFFER_SIZE];
     char m_arPass[PASS_BUFFER_SIZE];
-
 };
 
 #endif

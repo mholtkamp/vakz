@@ -62,11 +62,21 @@ void Session::ProcessMessage(char* pBuffer,
 
         if (nMsgID < 100)
         {
-            
+            switch (nMsgID)
+            {
+            case MSG_LOGIN:
+                //ProcLogin(pBuffer);
+                break;
+            default:
+                break;
+            }
         }
         else
         {
-        
+            if(m_pGame != 0)
+            {
+                // Send to game to process message.
+            }
         }
     }
 }

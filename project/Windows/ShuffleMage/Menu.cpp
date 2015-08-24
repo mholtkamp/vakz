@@ -10,6 +10,8 @@
 Menu::Menu()
 {
     m_nState = MENU_STATE_LOGIN;
+    m_nTouchDown   = 0;
+    m_nJustTouched = 0;
 
     // Setup Login State
     m_btLogin.SetRect(0.1f, 0.2f, 0.28f, 0.15f);
@@ -119,6 +121,19 @@ void Menu::SetState(int nState)
 
 void Menu::Update()
 {
+    // Check if "just-touched"
+    int nDown = IsPointerDown();
+    if (m_nTouchDown == 0 &&
+        nDown        != 0)
+    {
+        m_nJustTouched = 1;
+    }
+    else
+    {
+        m_nJustTouched = 0;
+    }
+    m_nTouchDown = nDown;
+
     // Handle back button, why not.
     if (IsKeyDown(VKEY_BACK))
     {
@@ -151,15 +166,23 @@ void Menu::UpdateLogin()
 {
     float fX = 0.0f;
     float fY = 0.0f;
-    int nMouseDown = IsPointerDown();
+
     GetPointerPositionNormalized(fX, fY);
 
-    m_tfUsername.Update(nMouseDown,
+    m_tfUsername.Update(m_nJustTouched,
                         fX,
                         fY);
-    m_tfPassword.Update(nMouseDown,
+    m_tfPassword.Update(m_nJustTouched,
                         fX,
                         fY);
+    
+    if (m_nJustTouched)
+    {
+        if (m_btRegister.IsTouched())
+        {
+
+        }
+    }
 }
 
 void Menu::UpdateMain()

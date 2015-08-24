@@ -79,6 +79,7 @@
   <ItemGroup>
     <ClInclude Include="Button.h" />
     <ClInclude Include="Menu.h" />
+    <ClInclude Include="Message.h" />
     <ClInclude Include="MsgLogin.h" />
     <ClInclude Include="TextField.h" />
   </ItemGroup>

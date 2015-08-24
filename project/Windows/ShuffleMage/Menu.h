@@ -49,6 +49,9 @@ private:
 
     int m_nState;
 
+    int m_nTouchDown;
+    int m_nJustTouched;
+
     Scene m_scene;
 
     // Login State

@@ -50,5 +50,8 @@
     <ClInclude Include="MsgLogin.h">
       <Filter>Messages</Filter>
     </ClInclude>
+    <ClInclude Include="Message.h">
+      <Filter>Messages</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
