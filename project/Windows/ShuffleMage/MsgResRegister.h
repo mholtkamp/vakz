@@ -15,6 +15,8 @@ public:
 
     void Write(char* pBuffer);
 
+    int Size();
+
     void Clear();
 
     int  m_nSuccess;

@@ -3,6 +3,8 @@
 #include "VInput.h"
 #include "Log.h"
 
+#include "NetworkManager.h"
+
 #define MAIN_BUTTON_X     0.55f
 #define MAIN_BUTTON_WIDTH 0.45f
 #define MAIN_BUTTON_HEIGHT 0.15f
@@ -15,6 +17,7 @@ Menu::Menu()
     m_nState = MENU_STATE_LOGIN;
     m_nTouchDown   = 0;
     m_nJustTouched = 0;
+    m_nLoginStatus = LOGIN_STATUS_NONE;
 
     // Setup Login State
     m_btLogin.SetRect(0.1f, 0.2f, 0.28f, 0.15f);
@@ -163,6 +166,14 @@ void Menu::Update()
     {
         UpdateShop();
     }
+    else if (m_nState == MENU_STATE_WAIT_LOGIN)
+    {
+        if (m_nLoginStatus == LOGIN_STATUS_OK)
+        {
+            LogDebug("Login successful!");
+            m_nState = MENU_STATE_MAIN;
+        }
+    }
 }
 
 void Menu::UpdateLogin()
@@ -184,6 +195,9 @@ void Menu::UpdateLogin()
         if (m_btRegister.IsTouched())
         {
             m_nState = MENU_STATE_WAIT_LOGIN;
+            memcpy(m_msgRegister.m_arUser, m_tfUsername.GetText(), USER_BUFFER_SIZE);
+            memcpy(m_msgRegister.m_arPass, m_tfPassword.GetText(), PASS_BUFFER_SIZE);
+            reinterpret_cast<NetworkManager*>(m_pNetworkManager)->Send(m_msgLogin);
         }
     }
 }

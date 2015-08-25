@@ -47,7 +47,9 @@ public:
 
     virtual void Write(char* pBuffer) = 0;
 
-    virtual void Clear();
+    virtual int Size() = 0;
+
+    virtual void Clear() = 0;
 
     int m_nID;
 

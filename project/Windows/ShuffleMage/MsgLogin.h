@@ -14,11 +14,12 @@ public:
 
     void Write(char* pBuffer);
 
+    int Size();
+
     void Clear();
 
     char m_arUser[USER_BUFFER_SIZE];
     char m_arPass[PASS_BUFFER_SIZE];
-
 };
 
 #endif

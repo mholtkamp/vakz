@@ -63,3 +63,12 @@ void NetworkManager::ProcResRegister()
 {
 
 }
+
+void NetworkManager::Send(Message& msg)
+{
+    msg.Write(s_arMsgBuffer);
+    if (m_pSocket != 0)
+    {
+        m_pSocket->Send(s_arMsgBuffer, msg.Size());
+    }
+}

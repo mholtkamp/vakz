@@ -24,6 +24,8 @@ public:
 
     void ProcResRegister();
 
+    void Send(Message& msg);
+
     void* m_pMenu;
     void* m_pGame;
 

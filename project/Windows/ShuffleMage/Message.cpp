@@ -9,8 +9,3 @@ Message::~Message()
 {
     
 }
-
-void Message::Clear()
-{
-    m_nID   = 0;
-}

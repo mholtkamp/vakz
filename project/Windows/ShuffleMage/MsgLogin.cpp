@@ -39,3 +39,8 @@ void MsgLogin::Write(char* pBuffer)
            m_arPass,
            PASS_BUFFER_SIZE);
 }
+
+int MsgLogin::Size()
+{
+    return MSG_LOGIN_SIZE;
+}

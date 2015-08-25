@@ -30,3 +30,8 @@ void MsgRegister::Clear()
     memset(m_arUser, 0, USER_BUFFER_SIZE);
     memset(m_arPass, 0, PASS_BUFFER_SIZE);
 }
+
+int MsgRegister::Size()
+{
+    return MSG_REGISTER_SIZE;
+}

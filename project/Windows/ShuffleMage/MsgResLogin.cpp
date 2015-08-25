@@ -46,3 +46,8 @@ void MsgResLogin::Clear()
     memset(m_arDeck2, 0, DECK_SIZE * sizeof(int));
     memset(m_arDeck3, 0, DECK_SIZE * sizeof(int));
 }
+
+int MsgResLogin::Size()
+{
+    return MSG_RES_LOGIN_SIZE;
+}
