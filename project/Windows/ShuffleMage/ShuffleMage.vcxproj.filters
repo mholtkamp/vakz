@@ -45,6 +45,9 @@
     <ClCompile Include="MsgRegister.cpp">
       <Filter>Messages</Filter>
     </ClCompile>
+    <ClCompile Include="NetworkManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Menu.h">

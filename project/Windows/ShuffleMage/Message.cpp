@@ -2,7 +2,7 @@
 
 Message::Message()
 {
-    Clear();
+
 }
 
 Message::~Message()

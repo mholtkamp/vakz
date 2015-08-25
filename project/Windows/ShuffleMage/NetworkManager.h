@@ -4,6 +4,7 @@
 #include "PlayerData.h"
 #include "VSocket.h"
 #include "Timer.h"
+#include "Message.h"
 
 #define MSG_BUFFER_SIZE 0xffff
 

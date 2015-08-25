@@ -6,6 +6,11 @@
 #include "PlayerData.h"
 #include "VSocket.h"
 
+// Message Includes
+#include "Message.h"
+#include "MsgLogin.h"
+#include "MsgRegister.h"
+
 class Session
 {
 
@@ -19,10 +24,15 @@ public:
 
     void Update();
 
+    void Activate(Socket* pSocket);
+
+    // Commands
+    void Register();
+
 private:
 
-    void ProcessMessage(char* pBuffer,
-                        int   nLimit);
+    char* ProcessMessage(char* pBuffer,
+                         int   nLimit);
 
     int m_nActive;
     int m_nLoggedIn;
@@ -35,6 +45,11 @@ private:
     void* m_pGame;
 
     static char s_arMsgBuffer[MSG_BUFFER_SIZE];
+
+
+    // Message
+    MsgLogin    m_msgLogin;
+    MsgRegister m_msgRegister;
 };
 
 #endif

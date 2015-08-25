@@ -18,6 +18,7 @@ Menu::Menu()
     m_nTouchDown   = 0;
     m_nJustTouched = 0;
     m_nLoginStatus = LOGIN_STATUS_NONE;
+    m_pPlayerData  = 0;
 
     // Setup Login State
     m_btLogin.SetRect(0.1f, 0.2f, 0.28f, 0.15f);
@@ -171,7 +172,7 @@ void Menu::Update()
         if (m_nLoginStatus == LOGIN_STATUS_OK)
         {
             LogDebug("Login successful!");
-            m_nState = MENU_STATE_MAIN;
+            SetState(MENU_STATE_MAIN);
         }
     }
 }
@@ -190,14 +191,15 @@ void Menu::UpdateLogin()
                         fX,
                         fY);
     
-    if (m_nJustTouched)
+    if (m_nJustTouched != 0)
     {
         if (m_btRegister.IsTouched())
         {
-            m_nState = MENU_STATE_WAIT_LOGIN;
+            reinterpret_cast<NetworkManager*>(m_pNetworkManager)->Connect();
+            SetState(MENU_STATE_WAIT_LOGIN);
             memcpy(m_msgRegister.m_arUser, m_tfUsername.GetText(), USER_BUFFER_SIZE);
             memcpy(m_msgRegister.m_arPass, m_tfPassword.GetText(), PASS_BUFFER_SIZE);
-            reinterpret_cast<NetworkManager*>(m_pNetworkManager)->Send(m_msgLogin);
+            reinterpret_cast<NetworkManager*>(m_pNetworkManager)->Send(m_msgRegister);
         }
     }
 }

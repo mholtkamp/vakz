@@ -76,6 +76,7 @@ private:
     int m_nLoginStatus;
 
     Scene m_scene;
+    PlayerData* m_pPlayerData;
 
     // Login State
     Button m_btLogin;

@@ -1,8 +1,11 @@
 #include "Session.h"
 #include "Log.h"
+#include <stdio.h>
+#include <string.h>
 
 #include "Message.h"
 
+#define DATABASE_PATH "C:/ShuffleMage/"
 char Session::s_arMsgBuffer[MSG_BUFFER_SIZE] = {0};
 
 Session::Session()
@@ -44,14 +47,14 @@ void Session::Update()
 
             while (pBuffer < nSize + s_arMsgBuffer)
             {
-                ProcessMessage(pBuffer, nSize);
+                pBuffer = ProcessMessage(pBuffer, nSize);
             }
         }
     }
 }
 
-void Session::ProcessMessage(char* pBuffer,
-                             int   nLimit)
+char* Session::ProcessMessage(char* pBuffer,
+                              int   nLimit)
 {
     int nMsgID = 0;
 
@@ -67,9 +70,18 @@ void Session::ProcessMessage(char* pBuffer,
             case MSG_LOGIN:
                 //ProcLogin(pBuffer);
                 break;
+            case MSG_REGISTER:
+            {
+                m_msgRegister.Read(pBuffer);
+                Register();
+                pBuffer += m_msgRegister.Size() + HEADER_SIZE;
+                break;
+            }
             default:
                 break;
             }
+
+            return pBuffer;
         }
         else
         {
@@ -77,6 +89,32 @@ void Session::ProcessMessage(char* pBuffer,
             {
                 // Send to game to process message.
             }
+            return pBuffer;
         }
+    }
+}
+
+
+void Session::Activate(Socket* pSocket)
+{
+    m_pSocket = pSocket;
+    m_nActive = 1;
+}
+
+void Session::Register()
+{
+    FILE* pFile = 0;
+    char arPath[128] = {0};
+    memcpy(arPath, DATABASE_PATH, strlen(DATABASE_PATH));
+    memcpy(arPath + strlen(DATABASE_PATH), m_msgRegister.m_arUser, USER_BUFFER_SIZE);
+    pFile = fopen(arPath, "rb");
+
+    if (pFile == 0)
+    {
+        // Okay, register the user!
+    }
+    else
+    {
+        // Return an error message. Make sure it has the proper status message.
     }
 }

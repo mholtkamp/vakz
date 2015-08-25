@@ -36,8 +36,6 @@ void MsgResRegister::Write(char* pBuffer)
 
 void MsgResRegister::Clear()
 {
-    Message::Clear();
-    
     m_nSuccess = 0;
     m_nPlayerID = 0;
     m_nGold = 0;

@@ -26,7 +26,6 @@ void MsgRegister::Write(char* pBuffer)
 
 void MsgRegister::Clear()
 {
-    Message::Clear();
     memset(m_arUser, 0, USER_BUFFER_SIZE);
     memset(m_arPass, 0, PASS_BUFFER_SIZE);
 }
