@@ -175,6 +175,13 @@ void Menu::Update()
             LogDebug("Login successful!");
             SetState(MENU_STATE_MAIN);
         }
+        else if (m_nLoginStatus == LOGIN_STATUS_REGISTRATION_FAILED)
+        {
+            LogError("Failed to create account.");
+            SetState(MENU_STATE_LOGIN);
+            m_tfUsername.ClearText();
+            m_tfPassword.ClearText();
+        }
     }
 }
 
@@ -267,4 +274,17 @@ void Menu::EnableShop(int nEnable)
 Scene* Menu::GetScene()
 {
     return &m_scene;
+}
+
+void Menu::SetPlayerData(PlayerData* pData)
+{
+    m_pPlayerData = pData;
+    memcpy(m_pPlayerData->m_arUser, m_tfUsername.GetText(), USER_BUFFER_SIZE);
+    memcpy(m_pPlayerData->m_arPass, m_tfPassword.GetText(), PASS_BUFFER_SIZE);
+    m_pPlayerData->PrintData();
+}
+
+void Menu::SetLoginStatus(int nStatus)
+{
+    m_nLoginStatus = nStatus;
 }

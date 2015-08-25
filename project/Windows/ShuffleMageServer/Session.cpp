@@ -6,7 +6,7 @@
 #include "Message.h"
 #include "Constants.h"
 
-#define DATABASE_PATH "C:/ShuffleMage/"
+#define DATABASE_PATH "C:/Users/mholt_000/ShuffleMage/"
 char Session::s_arMsgBuffer[MSG_BUFFER_SIZE] = {0};
 
 MsgLogin          s_msgLogin;
@@ -160,6 +160,7 @@ void Session::Register()
     }
     else
     {
+        fclose(pFile);
         // Return an error message. Make sure it has the proper status message.
         s_msgResRegister.Clear();
         s_msgResRegister.m_nSuccess = LOGIN_STATUS_REGISTRATION_FAILED;

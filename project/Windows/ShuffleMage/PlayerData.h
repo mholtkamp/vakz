@@ -2,6 +2,7 @@
 #define PLAYER_DATA_H
 
 #include <string.h>
+#include <stdio.h>
 
 #define PLAYER_USER_SIZE 15
 #define PLAYER_PASS_SIZE 15
@@ -51,6 +52,45 @@ public:
         memcpy(m_arDeck1, s_arStartingCollection, sizeof(s_arStartingCollection));
         memcpy(m_arDeck2, s_arStartingCollection, sizeof(s_arStartingCollection));
         memcpy(m_arDeck3, s_arStartingCollection, sizeof(s_arStartingCollection));
+    }
+
+    void PlayerData::PrintData()
+    {
+#if defined WINDOWS
+        printf("User: %s\n", m_arUser);
+        printf("Pass: %s\n", m_arPass);
+        printf("Gold: %d\n", m_nGold);
+
+        printf ("Collection: ");
+        for (int i = 0; i < COLLECTION_SIZE; i++)
+        {
+            printf("%d, ", m_arCollection[i]);
+        }
+        printf("\n");
+
+        printf ("Deck1: ");
+        for (int i = 0; i < DECK_SIZE; i++)
+        {
+            printf("%d, ", m_arDeck1[i]);
+        }
+        printf("\n");
+
+        printf ("Deck2: ");
+        for (int i = 0; i < DECK_SIZE; i++)
+        {
+            printf("%d, ", m_arDeck2[i]);
+        }
+        printf("\n");
+
+        printf ("Deck3: ");
+        for (int i = 0; i < DECK_SIZE; i++)
+        {
+            printf("%d, ", m_arDeck3[i]);
+        }
+        printf("\n");
+#elif defined
+
+#endif
     }
 };
 

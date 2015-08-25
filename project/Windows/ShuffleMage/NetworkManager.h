@@ -23,7 +23,9 @@ public:
 
     void Update();
 
-    void ProcResRegister();
+    char* ProcessMessage(char* pBuffere, int nLimit);
+
+    void ResRegister();
 
     void Send(Message& msg);
 

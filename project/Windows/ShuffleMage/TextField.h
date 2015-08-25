@@ -73,6 +73,8 @@ public:
 
     void SetTextScale(float fScaleX,
                       float fScaleY);
+
+    void ClearText();
     
 
 private:

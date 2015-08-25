@@ -31,8 +31,8 @@ enum MessageSizes
     MSG_LOGIN_SIZE     = 32,
     MSG_REGISTER_SIZE  = 32,
 
-    MSG_RES_LOGIN_SIZE    = 2420,
-    MSG_RES_REGISTER_SIZE = 2420
+    MSG_RES_LOGIN_SIZE    = 2424,
+    MSG_RES_REGISTER_SIZE = 2424
 
 };
 

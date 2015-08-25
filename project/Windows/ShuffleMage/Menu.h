@@ -42,7 +42,9 @@ public:
 
     Scene* GetScene();
 
-    void SetPlayerData(PlayerData* pPlayerData);
+    void SetLoginStatus(int nStatus);
+
+    void SetPlayerData(PlayerData* pData);
 
     void* m_pNetworkManager;
     void* m_pGame;

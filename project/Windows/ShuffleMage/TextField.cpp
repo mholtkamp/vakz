@@ -251,6 +251,12 @@ int TextField::GetSelected()
     return m_nSelected;
 }
 
+void TextField::ClearText()
+{
+    memset(m_pTextString, 0, m_nBufferSize);
+    m_text.SetText(m_pTextString);
+}
+
 char* TextField::GetText()
 {
     return m_pTextString;
