@@ -3,7 +3,6 @@
 
 #include "Message.h"
 
-
 class MsgResRegister : public Message
 {
 public:

@@ -11,6 +11,10 @@
 #include "MsgLogin.h"
 #include "MsgRegister.h"
 
+// Response Message Includes
+#include "MsgResLogin.h"
+#include "MsgResRegister.h"
+
 class Session
 {
 
@@ -25,6 +29,8 @@ public:
     void Update();
 
     void Activate(Socket* pSocket);
+
+    void Send(Message& msg);
 
     // Commands
     void Register();
@@ -45,11 +51,6 @@ private:
     void* m_pGame;
 
     static char s_arMsgBuffer[MSG_BUFFER_SIZE];
-
-
-    // Message
-    MsgLogin    m_msgLogin;
-    MsgRegister m_msgRegister;
 };
 
 #endif

@@ -81,8 +81,8 @@
     <ClCompile Include="TextField.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\ShuffleMageServer\PlayerData.h" />
     <ClInclude Include="Button.h" />
+    <ClInclude Include="Constants.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Message.h" />
     <ClInclude Include="MsgLogin.h" />
@@ -90,6 +90,7 @@
     <ClInclude Include="MsgResLogin.h" />
     <ClInclude Include="MsgResRegister.h" />
     <ClInclude Include="NetworkManager.h" />
+    <ClInclude Include="PlayerData.h" />
     <ClInclude Include="TextField.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -10,6 +10,8 @@
 #include "MsgLogin.h"
 #include "MsgRegister.h"
 
+#include "MsgResRegister.h" // For LOGIN_STATUS
+
 enum MenuStateEnum
 {
     MENU_STATE_LOADING    = 0,
@@ -23,15 +25,6 @@ enum MenuStateEnum
     MENU_STATE_WAIT_LOGIN = 8,
     MENU_STATE_WAIT_BUY   = 9,
     MENU_MAX_STATES       = 10
-};
-
-enum MenuEnum
-{
-    LOGIN_STATUS_NONE                = 0,
-    LOGIN_STATUS_OK                  = 1,
-    LOGIN_STATUS_INVALID_PASS        = 2,
-    LOGIN_STATUS_USER_NOT_FOUND      = 3,
-    LOGIN_STATUS_REGISTRATION_FAILED = 4
 };
 
 class Menu

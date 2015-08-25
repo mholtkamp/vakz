@@ -77,7 +77,10 @@
     <ClInclude Include="MsgRegister.h">
       <Filter>Messages</Filter>
     </ClInclude>
-    <ClInclude Include="..\ShuffleMageServer\PlayerData.h">
+    <ClInclude Include="PlayerData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Constants.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

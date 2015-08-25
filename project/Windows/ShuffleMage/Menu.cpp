@@ -4,6 +4,7 @@
 #include "Log.h"
 
 #include "NetworkManager.h"
+#include "Constants.h"
 
 #define MAIN_BUTTON_X     0.55f
 #define MAIN_BUTTON_WIDTH 0.45f
