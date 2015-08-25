@@ -30,18 +30,33 @@
     <ClCompile Include="..\ShuffleMage\MsgLogin.cpp">
       <Filter>Messages</Filter>
     </ClCompile>
+    <ClCompile Include="..\ShuffleMage\MsgResLogin.cpp">
+      <Filter>Messages</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ShuffleMage\MsgResRegister.cpp">
+      <Filter>Messages</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ShuffleMage\MsgRegister.cpp">
+      <Filter>Messages</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Session.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerData.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\ShuffleMage\MsgLogin.h">
       <Filter>Messages</Filter>
     </ClInclude>
     <ClInclude Include="..\ShuffleMage\Message.h">
+      <Filter>Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ShuffleMage\MsgResLogin.h">
+      <Filter>Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ShuffleMage\MsgResRegister.h">
+      <Filter>Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ShuffleMage\MsgRegister.h">
       <Filter>Messages</Filter>
     </ClInclude>
   </ItemGroup>

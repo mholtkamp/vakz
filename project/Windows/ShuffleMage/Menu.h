@@ -4,18 +4,21 @@
 #include "Button.h"
 #include "TextField.h"
 #include "Scene.h"
+#include "PlayerData.h"
 
 enum MenuStateEnum
 {
-    MENU_STATE_LOADING  = 0,
-    MENU_STATE_MAIN     = 1,
-    MENU_STATE_REGISTER = 2,
-    MENU_STATE_LOGIN    = 3,
-    MENU_STATE_DECK     = 4,
-    MENU_STATE_QUEUE    = 5,
-    MENU_STATE_SHOP     = 6,
-    MENU_STATE_SETTINGS = 7,
-    MENU_MAX_STATES     = 8
+    MENU_STATE_LOADING    = 0,
+    MENU_STATE_MAIN       = 1,
+    MENU_STATE_REGISTER   = 2,
+    MENU_STATE_LOGIN      = 3,
+    MENU_STATE_DECK       = 4,
+    MENU_STATE_QUEUE      = 5,
+    MENU_STATE_SHOP       = 6,
+    MENU_STATE_SETTINGS   = 7,
+    MENU_STATE_WAIT_LOGIN = 8,
+    MENU_STATE_WAIT_BUY   = 9,
+    MENU_MAX_STATES       = 10
 };
 
 class Menu
@@ -32,6 +35,11 @@ public:
     void SetState(int nState);
 
     Scene* GetScene();
+
+    void SetPlayerData(PlayerData* pPlayerData);
+
+    void* m_pNetworkManager;
+    void* m_pGame;
 
 private:
 

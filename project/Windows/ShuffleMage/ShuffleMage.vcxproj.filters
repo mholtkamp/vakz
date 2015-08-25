@@ -36,6 +36,15 @@
     <ClCompile Include="MsgLogin.cpp">
       <Filter>Messages</Filter>
     </ClCompile>
+    <ClCompile Include="MsgResLogin.cpp">
+      <Filter>Messages</Filter>
+    </ClCompile>
+    <ClCompile Include="MsgResRegister.cpp">
+      <Filter>Messages</Filter>
+    </ClCompile>
+    <ClCompile Include="MsgRegister.cpp">
+      <Filter>Messages</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Menu.h">
@@ -52,6 +61,21 @@
     </ClInclude>
     <ClInclude Include="Message.h">
       <Filter>Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="NetworkManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MsgResLogin.h">
+      <Filter>Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="MsgResRegister.h">
+      <Filter>Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="MsgRegister.h">
+      <Filter>Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ShuffleMageServer\PlayerData.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

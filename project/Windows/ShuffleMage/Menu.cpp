@@ -9,6 +9,9 @@
 
 Menu::Menu()
 {
+    m_pNetworkManager = 0;
+    m_pGame           = 0;
+
     m_nState = MENU_STATE_LOGIN;
     m_nTouchDown   = 0;
     m_nJustTouched = 0;
@@ -180,7 +183,7 @@ void Menu::UpdateLogin()
     {
         if (m_btRegister.IsTouched())
         {
-
+            m_nState = MENU_STATE_WAIT_LOGIN;
         }
     }
 }
