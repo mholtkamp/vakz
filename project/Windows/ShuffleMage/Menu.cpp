@@ -172,12 +172,26 @@ void Menu::Update()
     {
         if (m_nLoginStatus == LOGIN_STATUS_OK)
         {
+            m_pPlayerData->PrintData();
             LogDebug("Login successful!");
             SetState(MENU_STATE_MAIN);
         }
-        else if (m_nLoginStatus == LOGIN_STATUS_REGISTRATION_FAILED)
+        else if (m_nLoginStatus > LOGIN_STATUS_OK)
         {
-            LogError("Failed to create account.");
+            if (m_nLoginStatus == LOGIN_STATUS_REGISTRATION_FAILED)
+            {
+                LogError("Registration failed.");
+            }
+            else if (m_nLoginStatus == LOGIN_STATUS_INVALID_PASS)
+            {
+                LogError("Invalid password.");
+            }
+            else if (m_nLoginStatus == LOGIN_STATUS_USER_NOT_FOUND)
+            {
+                LogError("Username not found.");
+            }
+
+            m_nLoginStatus = LOGIN_STATUS_NONE;
             SetState(MENU_STATE_LOGIN);
             m_tfUsername.ClearText();
             m_tfPassword.ClearText();
@@ -201,6 +215,15 @@ void Menu::UpdateLogin()
     
     if (m_nJustTouched != 0)
     {
+        if (m_btLogin.IsTouched())
+        {
+            reinterpret_cast<NetworkManager*>(m_pNetworkManager)->Connect();
+            SetState(MENU_STATE_WAIT_LOGIN);
+            memcpy(m_msgLogin.m_arUser, m_tfUsername.GetText(), USER_BUFFER_SIZE);
+            memcpy(m_msgLogin.m_arPass, m_tfPassword.GetText(), PASS_BUFFER_SIZE);
+            reinterpret_cast<NetworkManager*>(m_pNetworkManager)->Send(m_msgLogin);
+        }
+
         if (m_btRegister.IsTouched())
         {
             reinterpret_cast<NetworkManager*>(m_pNetworkManager)->Connect();
@@ -281,7 +304,6 @@ void Menu::SetPlayerData(PlayerData* pData)
     m_pPlayerData = pData;
     memcpy(m_pPlayerData->m_arUser, m_tfUsername.GetText(), USER_BUFFER_SIZE);
     memcpy(m_pPlayerData->m_arPass, m_tfPassword.GetText(), PASS_BUFFER_SIZE);
-    m_pPlayerData->PrintData();
 }
 
 void Menu::SetLoginStatus(int nStatus)

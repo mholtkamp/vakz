@@ -33,6 +33,7 @@ public:
     void Send(Message& msg);
 
     // Commands
+    void Login();
     void Register();
 
 private:

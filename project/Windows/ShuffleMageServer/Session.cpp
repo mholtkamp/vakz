@@ -76,7 +76,9 @@ char* Session::ProcessMessage(char* pBuffer,
             pBuffer += MSG_KEEPALIVE_SIZE + HEADER_SIZE;
             break;
         case MSG_LOGIN:
-            //ProcLogin(pBuffer);
+            s_msgLogin.Read(pBuffer);
+            Login();
+            pBuffer += s_msgLogin.Size() + HEADER_SIZE;
             break;
         case MSG_REGISTER:
         {
@@ -113,7 +115,51 @@ void Session::Send(Message& msg)
     msg.Write(s_arMsgBuffer);
     if (m_pSocket != 0)
     {
-        m_pSocket->Send(s_arMsgBuffer, msg.Size());
+        m_pSocket->Send(s_arMsgBuffer, msg.Size() + HEADER_SIZE);
+    }
+}
+
+void Session::Login()
+{
+    FILE* pFile = 0;
+    char arPath[128] = {0};
+    memcpy(arPath, DATABASE_PATH, strlen(DATABASE_PATH));
+    memcpy(arPath + strlen(DATABASE_PATH), s_msgLogin.m_arUser, USER_BUFFER_SIZE);
+    pFile = fopen(arPath, "rb");
+
+    if (pFile == 0)
+    {
+        // File not found, report a user not found error.
+        LogDebug("User not found.");
+        s_msgResLogin.Clear();
+        s_msgResLogin.m_nSuccess = LOGIN_STATUS_USER_NOT_FOUND;
+        Send(s_msgResLogin);
+    }
+    else
+    {
+        fread(&m_playerdata, sizeof(m_playerdata), 1, pFile);
+        fclose(pFile);
+        if (strcmp(s_msgLogin.m_arPass, m_playerdata.m_arPass) == 0)
+        {
+            // Passwords match, login successful!
+            LogDebug("User has successfully logged in!");
+            s_msgResLogin.m_nSuccess     = LOGIN_STATUS_OK;
+            s_msgResLogin.m_nPlayerID    = m_playerdata.m_nPlayerID;
+            s_msgResLogin.m_nGold        = m_playerdata.m_nGold;
+            memcpy(s_msgResLogin.m_arCollection, m_playerdata.m_arCollection, sizeof(m_playerdata.m_arCollection));
+            memcpy(s_msgResLogin.m_arDeck1, m_playerdata.m_arDeck1, sizeof(m_playerdata.m_arDeck1));
+            memcpy(s_msgResLogin.m_arDeck2, m_playerdata.m_arDeck2, sizeof(m_playerdata.m_arDeck2));
+            memcpy(s_msgResLogin.m_arDeck3, m_playerdata.m_arDeck3, sizeof(m_playerdata.m_arDeck3));
+            Send(s_msgResLogin);
+        }
+        else
+        {
+            // Passwords do not match. Reject login attempt.
+            LogDebug("User attempted to log in with invalid password.");
+            s_msgResLogin.Clear();
+            s_msgResLogin.m_nSuccess = LOGIN_STATUS_INVALID_PASS;
+            Send(s_msgResLogin);
+        }
     }
 }
 

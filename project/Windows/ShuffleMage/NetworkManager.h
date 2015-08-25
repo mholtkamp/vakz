@@ -25,9 +25,11 @@ public:
 
     char* ProcessMessage(char* pBuffere, int nLimit);
 
-    void ResRegister();
-
     void Send(Message& msg);
+
+    // Message handling functions
+    void ResLogin();
+    void ResRegister();
 
     void* m_pMenu;
     void* m_pGame;

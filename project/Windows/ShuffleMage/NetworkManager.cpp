@@ -104,7 +104,9 @@ char* NetworkManager::ProcessMessage(char* pBuffer,
         switch (nMsgID)
         {
         case MSG_RES_LOGIN:
-            //ResLogin();
+            s_msgResLogin.Read(pBuffer);
+            ResLogin();
+            pBuffer += s_msgResLogin.Size() + HEADER_SIZE;
             break;
         case MSG_RES_REGISTER:
         {
@@ -129,9 +131,22 @@ char* NetworkManager::ProcessMessage(char* pBuffer,
     }
 }
 
+void NetworkManager::ResLogin()
+{
+    reinterpret_cast<Menu*>(m_pMenu)->SetLoginStatus(s_msgResLogin.m_nSuccess);
+    m_player.m_nPlayerID = s_msgResLogin.m_nPlayerID;
+    m_player.m_nGold     = s_msgResLogin.m_nGold;
+    memcpy(m_player.m_arCollection, s_msgResLogin.m_arCollection, COLLECTION_SIZE * sizeof(int));
+    memcpy(m_player.m_arDeck1, s_msgResLogin.m_arDeck1, DECK_SIZE * sizeof(int));
+    memcpy(m_player.m_arDeck2, s_msgResLogin.m_arDeck2, DECK_SIZE * sizeof(int));
+    memcpy(m_player.m_arDeck3, s_msgResLogin.m_arDeck3, DECK_SIZE * sizeof(int));
+
+    // Set the player data in the menu, the menu will add the user/pass to the playerdata
+    reinterpret_cast<Menu*>(m_pMenu)->SetPlayerData(&m_player);
+}
+
 void NetworkManager::ResRegister()
 {
-    // TODO: Confirm size of ResRegister msg
     reinterpret_cast<Menu*>(m_pMenu)->SetLoginStatus(s_msgResRegister.m_nSuccess);
     m_player.m_nPlayerID = s_msgResRegister.m_nPlayerID;
     m_player.m_nGold     = s_msgResRegister.m_nGold;
@@ -149,6 +164,6 @@ void NetworkManager::Send(Message& msg)
     msg.Write(s_arMsgBuffer);
     if (m_pSocket != 0)
     {
-        m_pSocket->Send(s_arMsgBuffer, msg.Size());
+        m_pSocket->Send(s_arMsgBuffer, msg.Size() + HEADER_SIZE);
     }
 }
