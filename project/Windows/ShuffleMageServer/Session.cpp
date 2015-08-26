@@ -119,6 +119,11 @@ void Session::Send(Message& msg)
     }
 }
 
+PlayerData* Session::GetPlayerData()
+{
+    return &m_playerdata;
+}
+
 void Session::Login()
 {
     FILE* pFile = 0;

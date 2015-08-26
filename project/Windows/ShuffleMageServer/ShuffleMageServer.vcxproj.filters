@@ -39,6 +39,12 @@
     <ClCompile Include="..\ShuffleMage\MsgRegister.cpp">
       <Filter>Messages</Filter>
     </ClCompile>
+    <ClCompile Include="ServerGame.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MatchQueue.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Session.h">
@@ -58,6 +64,15 @@
     </ClInclude>
     <ClInclude Include="..\ShuffleMage\MsgRegister.h">
       <Filter>Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="ServerGame.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MatchQueue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ServerConstants.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

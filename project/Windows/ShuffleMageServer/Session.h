@@ -32,6 +32,8 @@ public:
 
     void Send(Message& msg);
 
+    PlayerData* GetPlayerData();
+
     // Commands
     void Login();
     void Register();
