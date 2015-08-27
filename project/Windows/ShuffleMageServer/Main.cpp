@@ -1,5 +1,7 @@
 #include "VSocket.h"
 #include "Session.h"
+#include "MatchQueue.h"
+#include "ServerGame.h"
 
 #define MAX_SESSIONS 64
 #define MAX_GAMES 32
@@ -9,9 +11,15 @@ int main()
 {
     Socket::Initialize();
     Session arSessions[MAX_SESSIONS];
+    ServerGame arGames[MAX_GAMES];
+    MatchQueue matchQueue;
+
+    matchQueue.SetGameArray(arGames);
+    Session::SetMatchQueue();
 
     Socket serverSocket;
-
+    
+    
     serverSocket.Open(Socket::TCP, SERVER_PORT);
 
     while (1)

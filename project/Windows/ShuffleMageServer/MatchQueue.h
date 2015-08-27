@@ -5,6 +5,8 @@
 
 class MatchQueue
 {
+public:
+
     MatchQueue();
     ~MatchQueue();
 
