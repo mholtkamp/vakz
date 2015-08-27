@@ -34,6 +34,8 @@ public:
 
     PlayerData* GetPlayerData();
 
+    static void SetMatchQueue(void* pMatchQueue);
+
     // Commands
     void Login();
     void Register();
@@ -54,6 +56,8 @@ private:
     void* m_pGame;
 
     static char s_arMsgBuffer[MSG_BUFFER_SIZE];
+
+    static void* s_pMatchQueue;
 };
 
 #endif

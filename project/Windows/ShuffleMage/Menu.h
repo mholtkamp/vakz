@@ -9,8 +9,7 @@
 // Messages
 #include "MsgLogin.h"
 #include "MsgRegister.h"
-
-#include "MsgResRegister.h" // For LOGIN_STATUS
+#include "MsgQueue.h"
 
 enum MenuStateEnum
 {
@@ -107,6 +106,7 @@ private:
 
     // Messages
     MsgLogin    m_msgLogin;
+    MsgQueue    m_msgQueue;
     MsgRegister m_msgRegister;
 
 };

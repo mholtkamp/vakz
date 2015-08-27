@@ -71,8 +71,10 @@
   <ItemGroup>
     <ClCompile Include="..\ShuffleMage\Message.cpp" />
     <ClCompile Include="..\ShuffleMage\MsgLogin.cpp" />
+    <ClCompile Include="..\ShuffleMage\MsgQueue.cpp" />
     <ClCompile Include="..\ShuffleMage\MsgRegister.cpp" />
     <ClCompile Include="..\ShuffleMage\MsgResLogin.cpp" />
+    <ClCompile Include="..\ShuffleMage\MsgResQueue.cpp" />
     <ClCompile Include="..\ShuffleMage\MsgResRegister.cpp" />
     <ClCompile Include="MatchQueue.cpp" />
     <ClCompile Include="ServerGame.cpp" />
@@ -82,8 +84,10 @@
   <ItemGroup>
     <ClInclude Include="..\ShuffleMage\Message.h" />
     <ClInclude Include="..\ShuffleMage\MsgLogin.h" />
+    <ClInclude Include="..\ShuffleMage\MsgQueue.h" />
     <ClInclude Include="..\ShuffleMage\MsgRegister.h" />
     <ClInclude Include="..\ShuffleMage\MsgResLogin.h" />
+    <ClInclude Include="..\ShuffleMage\MsgResQueue.h" />
     <ClInclude Include="..\ShuffleMage\MsgResRegister.h" />
     <ClInclude Include="MatchQueue.h" />
     <ClInclude Include="ServerConstants.h" />

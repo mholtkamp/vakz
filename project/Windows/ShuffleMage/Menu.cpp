@@ -237,7 +237,20 @@ void Menu::UpdateLogin()
 
 void Menu::UpdateMain()
 {
+    float fX = 0.0f;
+    float fY = 0.0f;
 
+    GetPointerPositionNormalized(fX, fY);
+
+    if (m_nJustTouched != 0)
+    {
+        if (m_btPlay.IsTouched())
+        {
+            SetState(MENU_STATE_QUEUE);
+            m_msgQueue.m_nQueueType = QUEUE_TYPE_SOLO;
+            reinterpret_cast<NetworkManager*>(m_pNetworkManager)->Send(m_msgQueue);
+        }
+    }
 }
 
 void Menu::UpdateQueue()

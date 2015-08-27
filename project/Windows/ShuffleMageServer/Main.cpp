@@ -15,7 +15,7 @@ int main()
     MatchQueue matchQueue;
 
     matchQueue.SetGameArray(arGames);
-    Session::SetMatchQueue();
+    Session::SetMatchQueue(&matchQueue);
 
     Socket serverSocket;
     

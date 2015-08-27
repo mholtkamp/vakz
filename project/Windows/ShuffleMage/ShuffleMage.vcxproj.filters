@@ -48,6 +48,12 @@
     <ClCompile Include="NetworkManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MsgQueue.cpp">
+      <Filter>Messages</Filter>
+    </ClCompile>
+    <ClCompile Include="MsgResQueue.cpp">
+      <Filter>Messages</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Menu.h">
@@ -82,6 +88,12 @@
     </ClInclude>
     <ClInclude Include="Constants.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MsgQueue.h">
+      <Filter>Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="MsgResQueue.h">
+      <Filter>Messages</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

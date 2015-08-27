@@ -74,8 +74,10 @@
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Message.cpp" />
     <ClCompile Include="MsgLogin.cpp" />
+    <ClCompile Include="MsgQueue.cpp" />
     <ClCompile Include="MsgRegister.cpp" />
     <ClCompile Include="MsgResLogin.cpp" />
+    <ClCompile Include="MsgResQueue.cpp" />
     <ClCompile Include="MsgResRegister.cpp" />
     <ClCompile Include="NetworkManager.cpp" />
     <ClCompile Include="TextField.cpp" />
@@ -86,8 +88,10 @@
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Message.h" />
     <ClInclude Include="MsgLogin.h" />
+    <ClInclude Include="MsgQueue.h" />
     <ClInclude Include="MsgRegister.h" />
     <ClInclude Include="MsgResLogin.h" />
+    <ClInclude Include="MsgResQueue.h" />
     <ClInclude Include="MsgResRegister.h" />
     <ClInclude Include="NetworkManager.h" />
     <ClInclude Include="PlayerData.h" />

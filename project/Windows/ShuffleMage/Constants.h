@@ -13,4 +13,12 @@
 #define GAME_STATE_ACTIVE   2
 #define GAME_STATE_OVER     3
 
+#define QUEUE_TYPE_NONE 0
+#define QUEUE_TYPE_SOLO 1
+
+#define QUEUE_STATUS_NONE        0
+#define QUEUE_STATUS_MATCH_FOUND 1
+#define QUEUE_STATUS_FULL        2
+#define QUEUE_STATUS_ERROR       3
+
 #endif

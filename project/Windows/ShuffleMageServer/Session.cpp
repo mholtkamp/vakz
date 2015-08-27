@@ -8,6 +8,7 @@
 
 #define DATABASE_PATH "C:/Users/mholt_000/ShuffleMage/"
 char Session::s_arMsgBuffer[MSG_BUFFER_SIZE] = {0};
+void* Session::s_pMatchQueue = 0;
 
 MsgLogin          s_msgLogin;
 MsgRegister       s_msgRegister;
@@ -122,6 +123,11 @@ void Session::Send(Message& msg)
 PlayerData* Session::GetPlayerData()
 {
     return &m_playerdata;
+}
+
+void Session::SetMatchQueue(void* pMatchQueue)
+{
+
 }
 
 void Session::Login()
