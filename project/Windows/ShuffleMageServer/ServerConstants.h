@@ -4,5 +4,6 @@
 #define MAX_SESSIONS 64
 #define MAX_GAMES    32
 #define SERVER_PORT 2000
+#define MATCH_QUEUE_SIZE 10
 
 #endif

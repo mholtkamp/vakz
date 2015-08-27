@@ -3,6 +3,11 @@
 #include "Log.h"
 #include "Session.h"
 
+// Response Messages
+#include "MsgResQueue.h"
+
+static MsgResQueue s_msgResQueue;
+
 ServerGame::ServerGame()
 {
     m_nGameState = GAME_STATE_INACTIVE;
@@ -35,6 +40,11 @@ void ServerGame::SetSessions(void* pSession1,
 
         m_arPlayerData[SESSION_1] = reinterpret_cast<Session*>(m_arSessions[SESSION_1])->GetPlayerData();
         m_arPlayerData[SESSION_2] = reinterpret_cast<Session*>(m_arSessions[SESSION_2])->GetPlayerData();
+
+        // Set the state to
+        m_nGameState = GAME_STATE_WAITING;
+        s_msgResQueue.m_nSuccess = QUEUE_STATUS_MATCH_FOUND;
+        Send(s_msgResQueue, SESSION_ALL);
     }
     else
     {
@@ -75,4 +85,9 @@ void ServerGame::Send(Message& msg, int nSession)
     {
         LogError("Invalid session index to send message to in ServerGame::Send().");
     }
+}
+
+int ServerGame::GetGameState()
+{
+    return m_nGameState;
 }

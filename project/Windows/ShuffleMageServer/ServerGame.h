@@ -9,9 +9,7 @@ enum ServerGameEnum
     SESSION_1     = 0,
     SESSION_2     = 1,
     SESSION_COUNT = 2,
-    SESSION_ALL   = SESSION_COUNT,
-
-    
+    SESSION_ALL   = SESSION_COUNT
 };
 
 class ServerGame
@@ -23,6 +21,8 @@ public:
     ~ServerGame();
 
     void Update();
+
+    int GetGameState();
 
     void SetSessions(void* pSession1,
                      void* pSession2);
