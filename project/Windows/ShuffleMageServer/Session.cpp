@@ -5,15 +5,28 @@
 
 #include "Message.h"
 #include "Constants.h"
+#include "MatchQueue.h"
+
+// Message Includes
+#include "MsgLogin.h"
+#include "MsgQueue.h"
+#include "MsgRegister.h"
+
+// Response Message Includes
+#include "MsgResLogin.h"
+#include "MsgResQueue.h"
+#include "MsgResRegister.h"
 
 #define DATABASE_PATH "C:/Users/mholt_000/ShuffleMage/"
 char Session::s_arMsgBuffer[MSG_BUFFER_SIZE] = {0};
 void* Session::s_pMatchQueue = 0;
 
 MsgLogin          s_msgLogin;
+MsgQueue          s_msgQueue;
 MsgRegister       s_msgRegister;
 
 MsgResLogin       s_msgResLogin;
+MsgResQueue       s_msgResQueue;
 MsgResRegister    s_msgResRegister;
 
 Session::Session()
@@ -80,6 +93,11 @@ char* Session::ProcessMessage(char* pBuffer,
             s_msgLogin.Read(pBuffer);
             Login();
             pBuffer += s_msgLogin.Size() + HEADER_SIZE;
+            break;
+        case MSG_QUEUE:
+            s_msgQueue.Read(pBuffer);
+            Queue();
+            pBuffer += s_msgQueue.Size() + HEADER_SIZE;
             break;
         case MSG_REGISTER:
         {
@@ -171,6 +189,35 @@ void Session::Login()
             s_msgResLogin.m_nSuccess = LOGIN_STATUS_INVALID_PASS;
             Send(s_msgResLogin);
         }
+    }
+}
+
+void Session::Queue()
+{
+    int nSuccess = 0;
+
+    if (s_msgQueue.m_nQueueType == QUEUE_TYPE_SOLO)
+    {
+        nSuccess = reinterpret_cast<MatchQueue*>(s_pMatchQueue)->AddSession(this);
+        
+        // If the player couldnt be added to the queue, for some reason,
+        // immediately send back a ResQueue message.
+        if (nSuccess == 0)
+        {
+            s_msgResQueue.m_nSuccess = QUEUE_STATUS_ERROR;
+            Send(s_msgResQueue);
+        }
+        else
+        {
+            // Queue was successful, wait until the MatchQueue matches two sessions,
+            // the newly activated game will send the MsgResQueue to the clients.
+            LogDebug("New player is in queue for match!");
+        }
+    }
+    else if (s_msgQueue.m_nQueueType == QUEUE_TYPE_NONE)
+    {
+        // Remove this session from the match queue
+        reinterpret_cast<MatchQueue*>(s_pMatchQueue)->RemoveSession(this);
     }
 }
 

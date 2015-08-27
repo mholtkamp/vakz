@@ -5,15 +5,7 @@
 
 #include "PlayerData.h"
 #include "VSocket.h"
-
-// Message Includes
 #include "Message.h"
-#include "MsgLogin.h"
-#include "MsgRegister.h"
-
-// Response Message Includes
-#include "MsgResLogin.h"
-#include "MsgResRegister.h"
 
 class Session
 {
@@ -38,6 +30,7 @@ public:
 
     // Commands
     void Login();
+    void Queue();
     void Register();
 
 private:
