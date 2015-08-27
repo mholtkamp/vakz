@@ -145,7 +145,7 @@ PlayerData* Session::GetPlayerData()
 
 void Session::SetMatchQueue(void* pMatchQueue)
 {
-
+    s_pMatchQueue = pMatchQueue;
 }
 
 void Session::Login()

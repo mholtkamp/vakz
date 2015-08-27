@@ -29,6 +29,7 @@ public:
 
     // Message handling functions
     void ResLogin();
+    void ResQueue();
     void ResRegister();
 
     void* m_pMenu;

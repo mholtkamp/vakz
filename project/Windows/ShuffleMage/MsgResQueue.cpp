@@ -12,7 +12,7 @@ MsgResQueue::~MsgResQueue()
 
 void MsgResQueue::Read(char* pBuffer)
 {
-
+    m_nSuccess = *reinterpret_cast<int*>(pBuffer + HEADER_SIZE);
 }
 
 void MsgResQueue::Write(char* pBuffer)

@@ -50,6 +50,9 @@ int main()
                 arSessions[i].Update();
             }
         }
+
+        // Next, update the match queue to create new games
+        matchQueue.Update();
     }
     return 0;
 }

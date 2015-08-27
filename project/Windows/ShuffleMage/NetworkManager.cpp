@@ -2,10 +2,13 @@
 #include "Message.h"
 #include "Log.h"
 #include "Menu.h"
+#include "Constants.h"
 
 // Response messages
 #include "MsgResLogin.h"
+#include "MsgResQueue.h"
 #include "MsgResRegister.h"
+
 
 #define MASTER_SEREVER_IP "192.168.2.3"
 #define SERVER_PORT 2000
@@ -14,7 +17,9 @@
 char NetworkManager::s_arMsgBuffer[MSG_BUFFER_SIZE] = {0};
 
 static MsgResLogin        s_msgResLogin;
+static MsgResQueue        s_msgResQueue;
 static MsgResRegister     s_msgResRegister;
+
 
 NetworkManager::NetworkManager()
 {
@@ -108,14 +113,18 @@ char* NetworkManager::ProcessMessage(char* pBuffer,
             ResLogin();
             pBuffer += s_msgResLogin.Size() + HEADER_SIZE;
             break;
+        case MSG_RES_QUEUE:
+            s_msgResQueue.Read(pBuffer);
+            ResQueue();
+            pBuffer += s_msgResQueue.Size() + HEADER_SIZE;
+            break;
         case MSG_RES_REGISTER:
-        {
             s_msgResRegister.Read(pBuffer);
             ResRegister();
             pBuffer += s_msgResRegister.Size() + HEADER_SIZE;
             break;
-        }
         default:
+            LogError("Unknown Session message received.");
             break;
         }
 
@@ -143,6 +152,26 @@ void NetworkManager::ResLogin()
 
     // Set the player data in the menu, the menu will add the user/pass to the playerdata
     reinterpret_cast<Menu*>(m_pMenu)->SetPlayerData(&m_player);
+}
+
+void NetworkManager::ResQueue()
+{
+    if (s_msgResQueue.m_nSuccess == QUEUE_STATUS_ERROR)
+    {
+        LogError("Error joining queue.");
+    }
+    else if (s_msgResQueue.m_nSuccess == QUEUE_STATUS_FULL)
+    {
+        LogError("Could not join queue because it is full.");
+    }
+    else if (s_msgResQueue.m_nSuccess == QUEUE_STATUS_MATCH_FOUND)
+    {
+        LogDebug("Match has been found!");
+    }
+    else
+    {
+        LogDebug("Unknown queue status received in NetworkManager::ResQueue().");
+    }
 }
 
 void NetworkManager::ResRegister()
