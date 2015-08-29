@@ -3,11 +3,11 @@
 
 enum Resources
 {
-    TEXTURE_RESOURCE       = 0,
-    STATIC_MESH_RESOURCE   = 1,
-    ANIMATED_MESH_RESOURCE = 2,
-    SKELETAL_MESH_RESOURCE = 3,
-    SOUND_RESOURCE         = 4
+    RESOURCE_TEXTURE       = 0,
+    RESOURCE_STATIC_MESH   = 1,
+    RESOURCE_ANIMATED_MESH = 2,
+    RESOURCE_SKELETAL_MESH = 3,
+    RESOURCE_SOUND         = 4
 };
 
 enum PrimitiveResource

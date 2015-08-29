@@ -123,6 +123,7 @@
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="Rect.h" />
     <ClInclude Include="Terrain.h" />
+    <ClInclude Include="Toast.h" />
     <ClInclude Include="TriangleBoxCollision.h" />
     <ClInclude Include="MeshCollider.h" />
     <ClInclude Include="MeshLoader.h" />

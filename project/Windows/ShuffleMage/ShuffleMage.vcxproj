@@ -80,11 +80,15 @@
     <ClCompile Include="MsgResQueue.cpp" />
     <ClCompile Include="MsgResRegister.cpp" />
     <ClCompile Include="NetworkManager.cpp" />
+    <ClCompile Include="Pawn.cpp" />
+    <ClCompile Include="Resources.cpp" />
     <ClCompile Include="TextField.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Button.h" />
     <ClInclude Include="Constants.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="Pawn.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Message.h" />
     <ClInclude Include="MsgLogin.h" />
@@ -95,6 +99,7 @@
     <ClInclude Include="MsgResRegister.h" />
     <ClInclude Include="NetworkManager.h" />
     <ClInclude Include="PlayerData.h" />
+    <ClInclude Include="Resources.h" />
     <ClInclude Include="TextField.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

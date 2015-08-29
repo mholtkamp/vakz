@@ -247,8 +247,87 @@ ResourceLibrary::~ResourceLibrary()
 int ResourceLibrary::LoadResource(int nResourceType,
                                   const char* pFile)
 {
-    LogWarning("LoadResource not implemented yet.");
-    return 0;
+    Texture**      arTextures       = reinterpret_cast<Texture**>(m_arTextures);
+    StaticMesh**   arStaticMeshes   = reinterpret_cast<StaticMesh**>(m_arStaticMeshes);
+    AnimatedMesh** arAnimatedMeshes = reinterpret_cast<AnimatedMesh**>(m_arAnimatedMeshes);
+    SkeletalMesh** arSkeletalMeshes = reinterpret_cast<SkeletalMesh**>(m_arSkeletalMeshes);
+    Sound**        arSound          = reinterpret_cast<Sound**>(m_arSounds);
+
+    int nReturn = 0;
+    int nStrLen = 0;
+
+    switch (nResourceType)
+    {
+    case RESOURCE_TEXTURE:
+        if (m_nNumTextures < m_nMaxTextures)
+        {
+            // Load the resource
+            arTextures[m_nNumTextures] = new Texture();
+            arTextures[m_nNumTextures]->LoadBMP(pFile);
+
+            // Save the string
+            nStrLen = strlen(pFile);
+            m_arTextureStrings[m_nNumTextures] = new char[nStrLen + 1];
+            memcpy(m_arTextureStrings[m_nNumTextures], pFile, nStrLen);
+            m_arTextureStrings[m_nNumTextures][nStrLen] = 0;
+
+            // Increment counter and set return status
+            m_nNumTextures++;
+            nReturn = 1;
+        }
+        break;
+
+    case RESOURCE_STATIC_MESH:
+        if (m_nNumStaticMeshes < m_nMaxStaticMeshes)
+        {
+            // Load the resource
+            arStaticMeshes[m_nNumStaticMeshes] = new StaticMesh();
+            arStaticMeshes[m_nNumStaticMeshes]->Load(pFile);
+
+            // Save the string
+            nStrLen = strlen(pFile);
+            m_arStaticMeshStrings[m_nNumStaticMeshes] = new char[nStrLen + 1];
+            memcpy(m_arStaticMeshStrings[m_nNumStaticMeshes], pFile, nStrLen);
+            m_arStaticMeshStrings[m_nNumStaticMeshes][nStrLen] = 0;
+
+            // Increment counter and set return status
+            m_nNumStaticMeshes++;
+            nReturn = 1;
+        }
+        break;
+
+    case RESOURCE_ANIMATED_MESH:
+        if (m_nNumAnimatedMeshes < m_nMaxAnimatedMeshes)
+        {
+            // Load the resource
+            arAnimatedMeshes[m_nNumAnimatedMeshes] = new AnimatedMesh();
+            arAnimatedMeshes[m_nNumAnimatedMeshes]->Load(pFile);
+
+            // Save the string
+            nStrLen = strlen(pFile);
+            m_arAnimatedMeshStrings[m_nNumAnimatedMeshes] = new char[nStrLen + 1];
+            memcpy(m_arAnimatedMeshStrings[m_nNumAnimatedMeshes], pFile, nStrLen);
+            m_arAnimatedMeshStrings[m_nNumAnimatedMeshes][nStrLen] = 0;
+
+            // Increment counter and set return status
+            m_nNumAnimatedMeshes++;
+            nReturn = 1;
+        }
+        break;
+
+    case RESOURCE_SKELETAL_MESH:
+        LogWarning("Skeletal Mesh loading not supported in ResourceLibrary.");
+        break;
+
+    case RESOURCE_SOUND:
+        LogWarning("Sound loading is not supported in ResourceLibrary yet.");
+        break;
+
+    default:
+        break;
+    }
+
+    return nReturn;
 }
 
 //*****************************************************************************
@@ -257,8 +336,60 @@ int ResourceLibrary::LoadResource(int nResourceType,
 void* ResourceLibrary::GetResource(int nResourceType,
                                    const char* pFile)
 {
-    LogWarning("GetResource not implemented yet.");
-    return 0;
+    int i = 0;
+    char** arStrings = 0;
+    int nCount = 0;
+    void** arRes = 0;
+
+    switch (nResourceType)
+    {
+    case RESOURCE_TEXTURE:
+        arStrings = m_arTextureStrings;
+        nCount = m_nNumTextures;
+        arRes = m_arTextures;
+        break;
+    case RESOURCE_STATIC_MESH:
+        arStrings = m_arStaticMeshStrings;
+        nCount = m_nNumStaticMeshes;
+        arRes = m_arStaticMeshes;
+        break;
+    case RESOURCE_ANIMATED_MESH:
+        arStrings = m_arAnimatedMeshStrings;
+        nCount = m_nNumAnimatedMeshes;
+        arRes = m_arAnimatedMeshes;
+        break;
+    case RESOURCE_SKELETAL_MESH:
+        arStrings = m_arSkeletalMeshStrings;
+        nCount = m_nNumSkeletalMeshes;
+        arRes = m_arSkeletalMeshes;
+        break;
+    case RESOURCE_SOUND:
+        arStrings = m_arSoundStrings;
+        nCount = m_nNumSounds;
+        arRes = m_arSounds;
+        break;
+    default:
+        break;
+    }
+
+    if (arStrings != 0)
+    {
+        for (i = 0; i < nCount; i++)
+        {
+            if (strcmp(pFile, arStrings[i]) == 0)
+            {
+                return arRes[i];
+            }
+        }
+        
+        // No matching string was found.
+        LogWarning("ResourceLibrary could not find requested resource.");
+        return 0;
+    }
+    else
+    {
+        return 0;
+    }
 }
 
 //*****************************************************************************

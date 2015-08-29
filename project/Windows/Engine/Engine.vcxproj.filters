@@ -144,6 +144,9 @@
     <ClInclude Include="VSocket.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Toast.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Scene.cpp">
