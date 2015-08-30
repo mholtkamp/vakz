@@ -37,6 +37,10 @@ int Tile::GetTileType()
 void Tile::SetOwner(int nOwner)
 {
     m_nOwner = nOwner;
+    
+    // This function needs to be updated so that the proper texture is used,
+    // not just the "Normal" texture.
+    m_matter.SetTexture((m_nOwner == SIDE_1) ? g_pRedTileTex : g_pBlueTileTex);
 }
 
 void Tile::SetPosition(int nX,

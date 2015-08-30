@@ -7,35 +7,16 @@
 
 Pawn::Pawn()
 {
-
+    m_nVisible = 1;
+    m_nHealth  = PAWN_DEFAULT_HEALTH;
+    m_fSpeed   = PAWN_DEFAULT_SPEED;
 }
 
 Pawn::Pawn(int nSide)
 {
-    m_nSide = nSide;
-    if (nSide == 0)
-    {
-        SetPosition(1, 1);
-        m_matter.SetRotation(0.0f, 90.0f, 0.0f);
-        m_matter.SetMesh(g_pMageMesh);
-        m_matter.SetTexture(g_pBlueMageTex);
-        m_matter.SetMaterial(g_pDiffuseMaterial);
-    }
-    else
-    {
-        m_nX = 4;
-        m_nZ = 1;
 
-        SetPosition(4, 1);
-        m_matter.SetRotation(0.0f, -90.0f, 0.0f);
-        m_matter.SetMesh(g_pMageMesh);
-        m_matter.SetTexture(g_pRedMageTex);
-        m_matter.SetMaterial(g_pDiffuseMaterial);
-    }
-
-    m_nVisible = 1;
-    m_nHealth  = PAWN_DEFAULT_HEALTH;
-    m_fSpeed   = PAWN_DEFAULT_SPEED;
+    Pawn();
+    SetSide(nSide);
 }
 
 Pawn::~Pawn()
@@ -76,4 +57,28 @@ void Pawn::SetVisible(int nVisible)
 void Pawn::SetSpeed(float fSpeed)
 {
     m_fSpeed = fSpeed;
+}
+
+void Pawn::SetSide(int nSide)
+{
+    m_nSide = nSide;
+    if (nSide == 0)
+    {
+        SetPosition(1, 1);
+        m_matter.SetRotation(0.0f, 90.0f, 0.0f);
+        m_matter.SetMesh(g_pMageMesh);
+        m_matter.SetTexture(g_pBlueMageTex);
+        m_matter.SetMaterial(g_pDiffuseMaterial);
+    }
+    else
+    {
+        m_nX = 4;
+        m_nZ = 1;
+
+        SetPosition(4, 1);
+        m_matter.SetRotation(0.0f, -90.0f, 0.0f);
+        m_matter.SetMesh(g_pMageMesh);
+        m_matter.SetTexture(g_pRedMageTex);
+        m_matter.SetMaterial(g_pDiffuseMaterial);
+    }
 }

@@ -2,7 +2,7 @@
 
 #define DEFAULT_PLAYER_HEALTH 500
 
-Mage::Mage(int nSide) : Pawn(nSide)
+Mage::Mage()
 {
     m_nHealth = DEFAULT_PLAYER_HEALTH;
 
@@ -13,6 +13,11 @@ Mage::Mage(int nSide) : Pawn(nSide)
     m_nInvincible = 0;
     m_nStunned    = 0;
     m_nRooted     = 0;
+}
+
+Mage::Mage(int nSide) : Pawn(nSide)
+{
+    Mage();
 }
 
 Mage::~Mage()

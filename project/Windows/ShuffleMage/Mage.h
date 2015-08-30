@@ -7,6 +7,7 @@ class Mage : public Pawn
 {
 public:
 
+    Mage();
     Mage(int nSide);
     ~Mage();
 

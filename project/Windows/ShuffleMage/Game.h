@@ -19,15 +19,22 @@ public:
     };
 
     Game();
+    Game(int nSide);
     ~Game();
 
     void Update();
 
-    void SetScene();
+    void RegisterScene();
+
+    void SetupCamera();
 
 private:
 
+    int m_nPlayerSide;
+
     Scene m_scene;
+    Camera m_camera;
+    DirectionalLight m_light;
     Mage m_arMages[NUM_MAGES];
     Tile m_arTiles[GRID_HEIGHT][GRID_WIDTH];
 

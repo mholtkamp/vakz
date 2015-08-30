@@ -22,6 +22,8 @@ public:
 
     virtual void SetVisible(int nVisible);
     virtual void SetSpeed(float fSpeed);
+
+    void SetSide(int nSide);
     
 protected:
 
