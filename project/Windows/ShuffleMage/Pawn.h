@@ -1,5 +1,5 @@
-#ifndef MAGE_H
-#define MAGE_H
+#ifndef PAWN_H
+#define PAWN_H
 
 #include "Scene.h"
 #include "Matter.h"
@@ -8,7 +8,8 @@ class Pawn
 {
 public:
 
-    Pawn(int nPlayerNum);
+    Pawn();
+    Pawn(int nSide);
     virtual ~Pawn();
 
     virtual void Register(Scene* pScene);
@@ -25,6 +26,8 @@ public:
 protected:
 
     Matter m_matter;
+
+    int m_nSide;
 
     int m_nX;
     int m_nZ;

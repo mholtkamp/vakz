@@ -1,27 +1,36 @@
-#ifndef PAWN_H
-#define PAWN_H
-
 #include "Pawn.h"
 #include "Resources.h"
+#include "Constants.h"
 
 #define PAWN_DEFAULT_HEALTH 100
 #define PAWN_DEFAULT_SPEED 0.3f
 
-Pawn::Pawn(int nPlayerNum)
+Pawn::Pawn()
 {
-    if (nPlayerNum == 0)
-    {
-        m_nX = 1;
-        m_nZ = 1;
 
+}
+
+Pawn::Pawn(int nSide)
+{
+    m_nSide = nSide;
+    if (nSide == 0)
+    {
+        SetPosition(1, 1);
         m_matter.SetRotation(0.0f, 90.0f, 0.0f);
         m_matter.SetMesh(g_pMageMesh);
         m_matter.SetTexture(g_pBlueMageTex);
+        m_matter.SetMaterial(g_pDiffuseMaterial);
     }
     else
     {
         m_nX = 4;
         m_nZ = 1;
+
+        SetPosition(4, 1);
+        m_matter.SetRotation(0.0f, -90.0f, 0.0f);
+        m_matter.SetMesh(g_pMageMesh);
+        m_matter.SetTexture(g_pRedMageTex);
+        m_matter.SetMaterial(g_pDiffuseMaterial);
     }
 
     m_nVisible = 1;
@@ -44,6 +53,8 @@ void Pawn::SetPosition(int nX,
 {
     m_nX = nX;
     m_nZ = nZ;
+
+    m_matter.SetPosition(m_nX * TILE_WIDTH, 0.0f, m_nZ * TILE_HEIGHT);
 }
 
 void Pawn::Damage(int nDamage)
@@ -66,5 +77,3 @@ void Pawn::SetSpeed(float fSpeed)
 {
     m_fSpeed = fSpeed;
 }
-
-#endif

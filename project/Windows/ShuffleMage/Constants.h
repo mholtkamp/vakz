@@ -21,4 +21,20 @@
 #define QUEUE_STATUS_FULL        2
 #define QUEUE_STATUS_ERROR       3
 
+#define GRID_WIDTH  6
+#define GRID_HEIGHT 3
+
+#define TILE_WIDTH  1.5f
+#define TILE_HEIGHT 1.0f
+
+#define TILE_TYPE_NORMAL      0
+#define TILE_TYPE_CRACKED     1
+#define TILE_TYPE_EMPTY       2
+#define TILE_TYPE_LAVA        3
+#define TILE_TYPE_ICE         4
+#define TILE_TYPE_HEAL        5
+
+#define SIDE_1 0
+#define SIDE_2 1
+
 #endif
