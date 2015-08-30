@@ -12,10 +12,8 @@ Pawn::Pawn()
     m_fSpeed   = PAWN_DEFAULT_SPEED;
 }
 
-Pawn::Pawn(int nSide)
+Pawn::Pawn(int nSide) : Pawn()
 {
-
-    Pawn();
     SetSide(nSide);
 }
 

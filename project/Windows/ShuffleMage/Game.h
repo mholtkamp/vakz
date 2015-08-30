@@ -36,7 +36,7 @@ private:
     Camera m_camera;
     DirectionalLight m_light;
     Mage m_arMages[NUM_MAGES];
-    Tile m_arTiles[GRID_HEIGHT][GRID_WIDTH];
+    Tile m_arTiles[GRID_WIDTH][GRID_HEIGHT];
 
 
 };

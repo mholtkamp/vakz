@@ -2,6 +2,9 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
+#define GAME_STATE_MENU 0
+#define GAME_STATE_GAME 1
+
 #define LOGIN_STATUS_NONE                 0
 #define LOGIN_STATUS_OK                   1
 #define LOGIN_STATUS_INVALID_PASS         2

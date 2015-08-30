@@ -28,17 +28,21 @@
 #endif
 
 // Shuffle Mage includes
+#include "Constants.h"
 #include "Menu.h"
+#include "Game.h"
 #include "NetworkManager.h"
+#include "Resources.h"
 
 Scene sceneMenu;
 Scene sceneBattle;
-Menu* pMenu;
-NetworkManager* pNetworkManager;
+Menu* pMenu = 0;
+Game* pGame = 0;
+NetworkManager* pNetworkManager = 0;
 
 char* pTestBuffer = 0;
 
-int nGameState;
+int nGameState = GAME_STATE_MENU;
 
 #if defined (ANDROID)
 void android_main(struct android_app* state)
@@ -51,6 +55,8 @@ int main()
     SetWindowSize(1024,768);
     Initialize();
 #endif
+
+    LoadResources();
 
     SetClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
@@ -67,11 +73,29 @@ int main()
     {
 
         Update();
-        pMenu->Update();
+        if (nGameState == GAME_STATE_MENU)
+        {
+            pMenu->Update();
+        }
+        else if (nGameState == GAME_STATE_GAME)
+        {
+            pGame->Update();
+        }
+        
         pNetworkManager->Update();
         Render();
 
     }
 
     exit(0);
+}
+
+void SetGameState(int nState)
+{
+    nGameState = nState;
+}
+
+void SetGame(void* pNewGame)
+{
+    pGame =  reinterpret_cast<Game*>(pNewGame);
 }

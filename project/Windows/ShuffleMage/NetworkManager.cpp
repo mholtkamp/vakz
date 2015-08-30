@@ -2,6 +2,7 @@
 #include "Message.h"
 #include "Log.h"
 #include "Menu.h"
+#include "Game.h"
 #include "Constants.h"
 
 // Response messages
@@ -20,6 +21,9 @@ static MsgResLogin        s_msgResLogin;
 static MsgResQueue        s_msgResQueue;
 static MsgResRegister     s_msgResRegister;
 
+// Declaration of functions in Main.cpp
+void SetGameState(int nState);
+void SetGame(void* pNewGame);
 
 NetworkManager::NetworkManager()
 {
@@ -167,6 +171,14 @@ void NetworkManager::ResQueue()
     else if (s_msgResQueue.m_nSuccess == QUEUE_STATUS_MATCH_FOUND)
     {
         LogDebug("Match has been found!");
+        if (m_pGame == 0)
+        {
+            m_pGame = new Game(SIDE_1);
+            reinterpret_cast<Game*>(m_pGame)->RegisterScene();
+            SetGameState(GAME_STATE_GAME);
+            SetGame(m_pGame);
+        }
+        
     }
     else
     {

@@ -2,6 +2,7 @@
 #include "Constants.h"
 #include "Vakz.h"
 #include "VInput.h"
+#include "Resources.h"
 
 Game::Game()
 {
@@ -41,10 +42,8 @@ Game::Game()
 
 }
 
-Game::Game(int nSide)
+Game::Game(int nSide) : Game()
 {
-    Game();
-
     m_nPlayerSide = nSide;
     SetupCamera();
 }

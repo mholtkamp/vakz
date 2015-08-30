@@ -23,23 +23,23 @@ void LoadResources()
 
         // Textures
         g_pRedMageTex = new Texture();
-        g_pRedMageTex->LoadBMP("mage_red.bmp");
+        g_pRedMageTex->LoadBMP("Textures/mage_red.bmp");
 
         g_pBlueMageTex = new Texture();
-        g_pBlueMageTex->LoadBMP("mage_blue.bmp");
+        g_pBlueMageTex->LoadBMP("Textures/mage_blue.bmp");
 
         g_pRedTileTex = new Texture();
-        g_pRedTileTex->LoadBMP("tile_red.bmp");
+        g_pRedTileTex->LoadBMP("Textures/tile_red.bmp");
 
         g_pBlueTileTex = new Texture();
-        g_pBlueTileTex->LoadBMP("tile_blue.bmp");
+        g_pBlueTileTex->LoadBMP("Textures/tile_blue.bmp");
 
         // Meshes
         g_pMageMesh = new StaticMesh();
-        g_pMageMesh->Load("mage.obj");
+        g_pMageMesh->Load("Meshes/mage.obj");
 
         g_pTileMesh = new StaticMesh();
-        g_pTileMesh->Load("tile.obj");
+        g_pTileMesh->Load("Meshes/tile.obj");
 
         // Set flag to indicate resources have been loaded
         g_pDiffuseMaterial = new DiffuseMaterial();

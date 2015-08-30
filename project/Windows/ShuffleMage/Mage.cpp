@@ -17,7 +17,15 @@ Mage::Mage()
 
 Mage::Mage(int nSide) : Pawn(nSide)
 {
-    Mage();
+    m_nHealth = DEFAULT_PLAYER_HEALTH;
+
+    m_nConfused   = 0;
+    m_nPoisoned   = 0;
+    m_nFloating   = 0;
+    m_nInvisible  = 0;
+    m_nInvincible = 0;
+    m_nStunned    = 0;
+    m_nRooted     = 0;
 }
 
 Mage::~Mage()
