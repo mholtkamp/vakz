@@ -56,7 +56,9 @@ int main()
     Initialize();
 #endif
 
+    LogDebug("Loading resources...");
     LoadResources();
+    LogDebug("Finished Loading resources");
 
     SetClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 

@@ -8,6 +8,22 @@
 
 Pawn::Pawn()
 {
+    Construct();
+}
+
+Pawn::Pawn(int nSide)
+{
+    Construct();
+    SetSide(nSide);
+}
+
+Pawn::~Pawn()
+{
+
+}
+
+void Pawn::Construct()
+{
     m_nSide = SIDE_1;
     m_nX = 0;
     m_nZ = 0;
@@ -15,16 +31,6 @@ Pawn::Pawn()
     m_nVisible = 1;
     m_nHealth  = PAWN_DEFAULT_HEALTH;
     m_fSpeed   = PAWN_DEFAULT_SPEED;
-}
-
-Pawn::Pawn(int nSide) : Pawn()
-{
-    SetSide(nSide);
-}
-
-Pawn::~Pawn()
-{
-
 }
 
 void Pawn::Register(Scene* pScene)

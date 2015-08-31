@@ -22,6 +22,8 @@ public:
     Game(int nSide);
     ~Game();
 
+    void Construct();
+
     void Update();
 
     void RegisterScene();

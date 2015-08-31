@@ -7,6 +7,23 @@
 
 Game::Game()
 {
+    Construct();
+}
+
+Game::Game(int nSide)
+{
+    Construct();
+    m_nPlayerSide = nSide;
+    SetupCamera();
+}
+
+Game::~Game()
+{
+
+}
+
+void Game::Construct()
+{
     int i = 0;
     int j = 0;
 
@@ -52,17 +69,6 @@ Game::Game()
     // Set Game/Tiles for mages
     m_arMages[MAGE_1].SetGame(this);
     m_arMages[MAGE_2].SetGame(this);
-}
-
-Game::Game(int nSide) : Game()
-{
-    m_nPlayerSide = nSide;
-    SetupCamera();
-}
-
-Game::~Game()
-{
-
 }
 
 void Game::Update()

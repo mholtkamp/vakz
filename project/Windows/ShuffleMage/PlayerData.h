@@ -45,7 +45,7 @@ public:
         Clear();
     }
 
-    void PlayerData::GenerateNewPlayer()
+    void GenerateNewPlayer()
     {
         m_nGold = 100;
         memcpy(m_arCollection, s_arStartingCollection, sizeof(s_arStartingCollection));
@@ -54,7 +54,7 @@ public:
         memcpy(m_arDeck3, s_arStartingCollection, sizeof(s_arStartingCollection));
     }
 
-    void PlayerData::PrintData()
+    void PrintData()
     {
 #if defined WINDOWS
         printf("User: %s\n", m_arUser);
@@ -88,7 +88,7 @@ public:
             printf("%d, ", m_arDeck3[i]);
         }
         printf("\n");
-#elif defined
+#elif defined(ANDROID)
 
 #endif
     }

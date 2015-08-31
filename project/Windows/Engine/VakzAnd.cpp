@@ -412,7 +412,7 @@ int Initialize(void* pData)
     }
 
     // Set window flag to keep screen on
-    ANativeActivity_setWindowFlags(vakzData.activity, AWINDOW_FLAG_KEEP_SCREEN_ON, 0);
+    //ANativeActivity_setWindowFlags(vakzData.activity, AWINDOW_FLAG_KEEP_SCREEN_ON, 0);
 
     // Set the asset manager where it is needed
     SetAssetManager(pState->activity->assetManager);

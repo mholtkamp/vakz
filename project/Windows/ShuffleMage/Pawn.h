@@ -13,6 +13,8 @@ public:
     Pawn(int nSide);
     virtual ~Pawn();
 
+    void Construct();
+
     virtual void Register(Scene* pScene);
 
     virtual void SetPosition(int nX,
