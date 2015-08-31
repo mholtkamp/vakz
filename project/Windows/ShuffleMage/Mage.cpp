@@ -1,10 +1,9 @@
 #include "Mage.h"
-
-#define DEFAULT_PLAYER_HEALTH 500
+#include "Constants.h"
 
 Mage::Mage()
 {
-    m_nHealth = DEFAULT_PLAYER_HEALTH;
+    m_nHealth = DEFAULT_MAGE_HEALTH;
 
     m_nConfused   = 0;
     m_nPoisoned   = 0;
@@ -13,11 +12,13 @@ Mage::Mage()
     m_nInvincible = 0;
     m_nStunned    = 0;
     m_nRooted     = 0;
+
+    m_matter.SetScale(MAGE_SCALE_XYZ, MAGE_SCALE_XYZ, MAGE_SCALE_XYZ);
 }
 
 Mage::Mage(int nSide) : Pawn(nSide)
 {
-    m_nHealth = DEFAULT_PLAYER_HEALTH;
+    m_nHealth = DEFAULT_MAGE_HEALTH;
 
     m_nConfused   = 0;
     m_nPoisoned   = 0;
@@ -26,6 +27,8 @@ Mage::Mage(int nSide) : Pawn(nSide)
     m_nInvincible = 0;
     m_nStunned    = 0;
     m_nRooted     = 0;
+    
+    m_matter.SetScale(MAGE_SCALE_XYZ, MAGE_SCALE_XYZ, MAGE_SCALE_XYZ);
 }
 
 Mage::~Mage()
@@ -90,4 +93,11 @@ void Mage::SetStunned(int nStunned)
 void Mage::SetRooted(int nRooted)
 {
     m_nRooted = nRooted;
+}
+
+void Mage::SetPosition(int nX,
+                       int nZ)
+{
+    Pawn::SetPosition(nX, nZ);
+    m_matter.Translate(0.0f, MAGE_Y_OFFSET, 0.0f);
 }

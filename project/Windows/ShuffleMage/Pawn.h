@@ -3,6 +3,7 @@
 
 #include "Scene.h"
 #include "Matter.h"
+#include "Tile.h"
 
 class Pawn
 {
@@ -17,6 +18,9 @@ public:
     virtual void SetPosition(int nX,
                              int nZ);
 
+    virtual void Move(int nX,
+                      int nZ);
+
     virtual void Damage(int nDamage);
     virtual void Heal(int nHealth);
 
@@ -24,6 +28,8 @@ public:
     virtual void SetSpeed(float fSpeed);
 
     void SetSide(int nSide);
+
+    void SetGame(void* pGame);
     
 protected:
 
@@ -37,6 +43,8 @@ protected:
     int m_nVisible;
     int m_nHealth;
     float m_fSpeed;
+
+    void* m_pGame;
 };
 
 #endif

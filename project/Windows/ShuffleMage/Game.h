@@ -28,6 +28,8 @@ public:
 
     void SetupCamera();
 
+    Tile m_arTiles[GRID_WIDTH][GRID_HEIGHT];
+
 private:
 
     int m_nPlayerSide;
@@ -36,8 +38,15 @@ private:
     Camera m_camera;
     DirectionalLight m_light;
     Mage m_arMages[NUM_MAGES];
-    Tile m_arTiles[GRID_WIDTH][GRID_HEIGHT];
+    
 
+    int m_nTouchDown;
+    int m_nJustTouched;
+    int m_nJustUp;
+    float m_fTouchDownX;
+    float m_fTouchDownY;
+    float m_fTouchUpX;
+    float m_fTouchUpY;
 
 };
 

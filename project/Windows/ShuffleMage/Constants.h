@@ -40,4 +40,9 @@
 #define SIDE_1 0
 #define SIDE_2 1
 
+#define MAGE_SCALE_XYZ 1.75f
+#define MAGE_Y_OFFSET 0.5f
+
+#define DEFAULT_MAGE_HEALTH 500
+
 #endif

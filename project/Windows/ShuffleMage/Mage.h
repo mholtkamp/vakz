@@ -11,6 +11,9 @@ public:
     Mage(int nSide);
     ~Mage();
 
+    void SetPosition(int nX,
+                     int nZ);
+
     // Status Getters
     int IsConfused();
     int IsPoisoned();

@@ -335,6 +335,23 @@ void Matter::SetScale(float fScaleX,
 }
 
 //*****************************************************************************
+// Translate
+//*****************************************************************************
+void Matter::Translate(float fTransX,
+                       float fTransY,
+                       float fTransZ)
+{
+    m_fX += fTransX;
+    m_fY += fTransY;
+    m_fZ += fTransZ;
+
+    if (m_pCollider != 0)
+    {
+        m_pCollider->SetPosition(m_fX, m_fY, m_fZ);
+    }
+}
+
+//*****************************************************************************
 // SetAnimation
 //*****************************************************************************
 void Matter::SetAnimation(const char* pAnimation)

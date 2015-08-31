@@ -132,6 +132,20 @@ public:
                   float fScaleZ);
 
     //## **********************************************************************
+    //## Translate
+    //##
+    //## Translate the matter in respect to its current position.
+    //##
+    //## Input:
+    //##   fTransX - x translation.
+    //##   fTransY - y translation.
+    //##   fTransZ - z translation.
+    //## **********************************************************************
+    void Translate(float fTransX,
+                   float fTransY,
+                   float fTransZ);
+
+    //## **********************************************************************
     //## SetAnimation
     //##
     //## If the matter has a bound mesh with animation data, then this 
