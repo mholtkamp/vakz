@@ -19,6 +19,7 @@ public:
     void Clear();
 
     int m_nSuccess;
+    int m_nSide;
 };
 
 #endif

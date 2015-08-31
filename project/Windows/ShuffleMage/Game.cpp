@@ -128,7 +128,7 @@ void Game::Update()
             // Most displacement happened in Y direction, so move player in Z direction.
             if (fDispY < 0.0f)
             {
-                m_arMages[m_nPlayerSide].Move(0, 1 + 2*m_nPlayerSide);
+                m_arMages[m_nPlayerSide].Move(0, 1 - 2*m_nPlayerSide);
             }
             else if (fDispY > 0.0f)
             {
@@ -158,7 +158,7 @@ void Game::SetupCamera()
     }
     else
     {
-        m_camera.SetPosition(3.5f, 7.0f, -7.5f);
+        m_camera.SetPosition(3.8f, 6.5f, -6.5f);
         m_camera.SetRotation(-40.0f, 180.0f, 0.0f);
     }
 

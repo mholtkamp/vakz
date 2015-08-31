@@ -43,8 +43,16 @@ void ServerGame::SetSessions(void* pSession1,
 
         // Set the state to
         m_nGameState = GAME_STATE_WAITING;
+
+        // Send message to first player
         s_msgResQueue.m_nSuccess = QUEUE_STATUS_MATCH_FOUND;
-        Send(s_msgResQueue, SESSION_ALL);
+        s_msgResQueue.m_nSide    = SIDE_1;
+        Send(s_msgResQueue, SESSION_1);
+
+        // Send message to second player
+        s_msgResQueue.m_nSuccess = QUEUE_STATUS_MATCH_FOUND;
+        s_msgResQueue.m_nSide = SIDE_2;
+        Send(s_msgResQueue, SESSION_2);
     }
     else
     {

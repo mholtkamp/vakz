@@ -173,7 +173,7 @@ void NetworkManager::ResQueue()
         LogDebug("Match has been found!");
         if (m_pGame == 0)
         {
-            m_pGame = new Game(SIDE_1);
+            m_pGame = new Game(s_msgResQueue.m_nSide);
             reinterpret_cast<Game*>(m_pGame)->RegisterScene();
             SetGameState(GAME_STATE_GAME);
             SetGame(m_pGame);
