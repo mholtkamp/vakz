@@ -76,6 +76,7 @@
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Message.cpp" />
     <ClCompile Include="MsgLogin.cpp" />
+    <ClCompile Include="MsgPosition.cpp" />
     <ClCompile Include="MsgQueue.cpp" />
     <ClCompile Include="MsgRegister.cpp" />
     <ClCompile Include="MsgResLogin.cpp" />
@@ -91,6 +92,7 @@
     <ClInclude Include="Button.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="MsgPosition.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="Mage.h" />
     <ClInclude Include="Pawn.h" />
