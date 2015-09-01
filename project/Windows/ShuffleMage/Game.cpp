@@ -193,6 +193,6 @@ void Game::UpdatePosition(int nPlayer,
     if (nPlayer >= MAGE_1 &&
         nPlayer <= MAGE_2)
     {
-        m_arMages[nPlayer].SetPosition(nX, nZ);
+        m_arMages[nPlayer].UpdatePosition(nX, nZ);
     }
 }

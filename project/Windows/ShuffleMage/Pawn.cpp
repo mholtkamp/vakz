@@ -58,6 +58,17 @@ void Pawn::SetPosition(int nX,
 
 }
 
+void Pawn::UpdatePosition(int nX,
+                          int nZ)
+{
+    m_nX = nX;
+    m_nZ = nZ;
+
+#ifdef SM_CLIENT
+    m_matter.SetPosition(m_nX * TILE_WIDTH, 0.0f, m_nZ * TILE_HEIGHT);
+#endif
+}
+
 void Pawn::Move(int nX,
                 int nZ)
 {

@@ -6,7 +6,8 @@
 #include "Timer.h"
 #include "Message.h"
 
-#define MSG_BUFFER_SIZE 0xffff
+#define RECV_BUFFER_SIZE 0xffff
+#define SEND_BUFFER_SIZE 0x1000
 
 class NetworkManager
 {
@@ -43,7 +44,8 @@ private:
 
     Timer m_timKeepAlive;
 
-    static char s_arMsgBuffer[MSG_BUFFER_SIZE];
+    static char s_arRecvBuffer[RECV_BUFFER_SIZE];
+    static char s_arSendBuffer[SEND_BUFFER_SIZE];
 
 };
 

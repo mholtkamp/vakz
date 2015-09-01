@@ -14,6 +14,9 @@ public:
     void SetPosition(int nX,
                      int nZ);
 
+    void UpdatePosition(int nX,
+                        int nZ);
+
     // Status Getters
     int IsConfused();
     int IsPoisoned();

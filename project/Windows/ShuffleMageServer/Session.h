@@ -2,6 +2,8 @@
 #define SESSION_H
 
 #define MSG_BUFFER_SIZE 0xffff
+#define RECV_BUFFER_SIZE 0xffff
+#define SEND_BUFFER_SIZE 0x1000
 
 #include "PlayerData.h"
 #include "VSocket.h"
@@ -48,7 +50,8 @@ private:
 
     Socket* m_pSocket;
 
-    static char s_arMsgBuffer[MSG_BUFFER_SIZE];
+    static char s_arRecvBuffer[RECV_BUFFER_SIZE];
+    static char s_arSendBuffer[SEND_BUFFER_SIZE];
 
     static void* s_pMatchQueue;
 };

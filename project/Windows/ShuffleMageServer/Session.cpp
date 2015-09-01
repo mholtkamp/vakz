@@ -19,7 +19,9 @@
 #include "MsgResRegister.h"
 
 #define DATABASE_PATH "C:/Users/mholt_000/ShuffleMage/"
-char Session::s_arMsgBuffer[MSG_BUFFER_SIZE] = {0};
+char Session::s_arRecvBuffer[RECV_BUFFER_SIZE] = {0};
+char Session::s_arSendBuffer[SEND_BUFFER_SIZE] = {0};
+
 void* Session::s_pMatchQueue = 0;
 
 MsgLogin          s_msgLogin;
@@ -59,15 +61,15 @@ void Session::Update()
         m_pSocket != 0)
     {
         
-        nSize = m_pSocket->Receive(s_arMsgBuffer, MSG_BUFFER_SIZE);
+        nSize = m_pSocket->Receive(s_arRecvBuffer, MSG_BUFFER_SIZE);
         if (nSize > 0)
         {
             // Set pointer to beginning of the static buffer.
             // The pointer location will be updated after each message
             // has been processed.
-            pBuffer = s_arMsgBuffer;
+            pBuffer = s_arRecvBuffer;
 
-            while (pBuffer < nSize + s_arMsgBuffer &&
+            while (pBuffer < nSize + s_arRecvBuffer &&
                    pBuffer != 0)
             {
                 pBuffer = ProcessMessage(pBuffer, nSize);
@@ -144,10 +146,10 @@ void Session::Activate(Socket* pSocket)
 
 void Session::Send(Message& msg)
 {
-    msg.Write(s_arMsgBuffer);
+    msg.Write(s_arSendBuffer);
     if (m_pSocket != 0)
     {
-        m_pSocket->Send(s_arMsgBuffer, msg.Size() + HEADER_SIZE);
+        m_pSocket->Send(s_arSendBuffer, msg.Size() + HEADER_SIZE);
     }
 }
 

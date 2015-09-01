@@ -157,7 +157,7 @@ void ServerGame::UpdatePosition(int nPlayer,
 {
     if (nPlayer == SESSION_1)
     {
-        m_arMages[SESSION_1].SetPosition(nX, nZ);
+        m_arMages[SESSION_1].UpdatePosition(nX, nZ);
 
         s_msgPosition.m_nPlayer = MAGE_1;
         s_msgPosition.m_nX      = nX;
@@ -167,7 +167,7 @@ void ServerGame::UpdatePosition(int nPlayer,
     }
     else if (nPlayer == SESSION_2)
     {
-        m_arMages[SESSION_2].SetPosition(nX, nZ);
+        m_arMages[SESSION_2].UpdatePosition(nX, nZ);
 
         s_msgPosition.m_nPlayer = MAGE_2;
         s_msgPosition.m_nX      = nX;

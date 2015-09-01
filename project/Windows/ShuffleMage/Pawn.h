@@ -19,7 +19,9 @@ public:
 
     virtual void SetPosition(int nX,
                              int nZ);
-
+    
+    virtual void UpdatePosition(int nX,
+                                int nZ);
     virtual void Move(int nX,
                       int nZ);
 

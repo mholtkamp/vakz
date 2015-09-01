@@ -18,7 +18,8 @@
 #define SERVER_PORT 2000
 #define KEEP_ALIVE_PERIOD 20.0f
 
-char NetworkManager::s_arMsgBuffer[MSG_BUFFER_SIZE] = {0};
+char NetworkManager::s_arRecvBuffer[RECV_BUFFER_SIZE] = {0};
+char NetworkManager::s_arSendBuffer[SEND_BUFFER_SIZE] = {0};
 
 static MsgResLogin        s_msgResLogin;
 static MsgResQueue        s_msgResQueue;
@@ -78,21 +79,21 @@ void NetworkManager::Update()
         if ( m_timKeepAlive.Time() > KEEP_ALIVE_PERIOD)
         {
             // Send keepalive message
-            reinterpret_cast<int*>(s_arMsgBuffer)[0] = MSG_KEEPALIVE;
-            m_pSocket->Send(s_arMsgBuffer, HEADER_SIZE);
+            reinterpret_cast<int*>(s_arSendBuffer)[0] = MSG_KEEPALIVE;
+            m_pSocket->Send(s_arSendBuffer, HEADER_SIZE);
 
             m_timKeepAlive.Start();
         }
 
         // Read any messages from the server
-        pBuffer = s_arMsgBuffer;
+        pBuffer = s_arRecvBuffer;
 
-        nSize = m_pSocket->Receive(s_arMsgBuffer, sizeof(s_arMsgBuffer));
+        nSize = m_pSocket->Receive(s_arRecvBuffer, sizeof(s_arRecvBuffer));
 
         // There are messages to read!
         if (nSize > 0)
         {
-            while (pBuffer < nSize + s_arMsgBuffer)
+            while (pBuffer < nSize + s_arRecvBuffer)
             {
                 pBuffer = ProcessMessage(pBuffer, nSize);
             }
@@ -229,9 +230,9 @@ void NetworkManager::ResRegister()
 
 void NetworkManager::Send(Message& msg)
 {
-    msg.Write(s_arMsgBuffer);
+    msg.Write(s_arSendBuffer);
     if (m_pSocket != 0)
     {
-        m_pSocket->Send(s_arMsgBuffer, msg.Size() + HEADER_SIZE);
+        m_pSocket->Send(s_arSendBuffer, msg.Size() + HEADER_SIZE);
     }
 }
