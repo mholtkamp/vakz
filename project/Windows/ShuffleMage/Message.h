@@ -22,7 +22,17 @@ enum MessageIDs
     MSG_RES_BUY       = 9,
     MSG_RES_DECK      = 10,
     MSG_RES_REGISTER  = 11,
-    MSG_DISCONNECT    = 12
+    MSG_DISCONNECT    = 12,
+
+
+
+    MSG_POSITION      = 101,
+    MSG_CARD          = 102,
+    MSG_HEALTH        = 103,
+    MSG_DRAW          = 104,
+    MSG_READY         = 105,
+    MSG_START         = 106,
+    MSG_END           = 109
 };
 
 enum MessageSizes
@@ -31,6 +41,8 @@ enum MessageSizes
     MSG_LOGIN_SIZE     = 32,
     MSG_QUEUE_SIZE     = 4,
     MSG_REGISTER_SIZE  = 32,
+    
+    MSG_POSITION_SIZE  = 12,
 
     MSG_RES_LOGIN_SIZE    = 2424,
     MSG_RES_QUEUE_SIZE    = 8,
