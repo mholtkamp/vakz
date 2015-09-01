@@ -4,6 +4,7 @@
 #include "VInput.h"
 #include "Resources.h"
 #include <math.h>
+#include "NetworkManager.h"
 
 Game::Game()
 {
@@ -33,6 +34,10 @@ void Game::Construct()
     m_light.SetColor(1.0f, 1.0f, 1.0f, 1.0f);
     m_light.SetDirectionVector(0.0f, -1.0f, 0.0f);
     m_scene.AddLight(&m_light);
+
+    // Set Game/Tiles for mages
+    m_arMages[MAGE_1].SetGame(this);
+    m_arMages[MAGE_2].SetGame(this);
 
     m_arMages[MAGE_1].SetSide(SIDE_1);
     m_arMages[MAGE_2].SetSide(SIDE_2);
@@ -66,9 +71,7 @@ void Game::Construct()
     m_fTouchUpX     = 0.0f;
     m_fTouchUpY     = 0.0f;
 
-    // Set Game/Tiles for mages
-    m_arMages[MAGE_1].SetGame(this);
-    m_arMages[MAGE_2].SetGame(this);
+    m_pNetworkManager = 0;
 }
 
 void Game::Update()
@@ -169,4 +172,27 @@ void Game::SetupCamera()
 void Game::RegisterScene()
 {
     SetScene(&m_scene);
+}
+
+void Game::SendPosition(int nPlayer, int nX, int nZ)
+{
+    if (m_pNetworkManager != 0)
+    {
+        m_msgPosition.m_nPlayer = nPlayer;
+        m_msgPosition.m_nX      = nX;
+        m_msgPosition.m_nZ      = nZ;
+
+        reinterpret_cast<NetworkManager*>(m_pNetworkManager)->Send(m_msgPosition);
+    }
+}
+
+void Game::UpdatePosition(int nPlayer,
+                          int nX,
+                          int nZ)
+{
+    if (nPlayer >= MAGE_1 &&
+        nPlayer <= MAGE_2)
+    {
+        m_arMages[nPlayer].SetPosition(nX, nZ);
+    }
 }

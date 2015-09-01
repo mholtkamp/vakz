@@ -5,11 +5,16 @@
 
 // Response Messages
 #include "MsgResQueue.h"
+#include "MsgPosition.h"
 
 static MsgResQueue s_msgResQueue;
+static MsgPosition s_msgPosition;
 
 ServerGame::ServerGame()
 {
+    int i = 0;
+    int j = 0;
+
     m_nGameState = GAME_STATE_INACTIVE;
 
     m_arSessions[SESSION_1] = 0;
@@ -17,6 +22,28 @@ ServerGame::ServerGame()
 
     m_arPlayerData[SESSION_1] = 0;
     m_arPlayerData[SESSION_2] = 0;
+
+    m_arMages[SESSION_1].SetSide(SIDE_1);
+    m_arMages[SESSION_2].SetSide(SIDE_2);
+
+    for (i = 0; i < GRID_HEIGHT; i++)
+    {
+        for (j = 0; j < GRID_WIDTH; j++)
+        {
+            if (j < GRID_WIDTH / 2)
+            {
+                m_arTiles[j][i].SetOwner(SIDE_1);
+            }
+            else
+            {
+                m_arTiles[j][i].SetOwner(SIDE_2);
+            }
+        }
+    }
+
+    // Set Game/Tiles for mages
+    m_arMages[MAGE_1].SetGame(this);
+    m_arMages[MAGE_2].SetGame(this);
 }
 
 ServerGame::~ServerGame()
@@ -98,4 +125,54 @@ void ServerGame::Send(Message& msg, int nSession)
 int ServerGame::GetGameState()
 {
     return m_nGameState;
+}
+
+char* ServerGame::ProcessMessage(char* pBuffer,
+                                 int   nLimit)
+{
+    int nMsgID = 0;
+
+    nMsgID = reinterpret_cast<int*>(pBuffer)[0];
+
+    switch(nMsgID)
+    {
+    case MSG_POSITION:
+        s_msgPosition.Read(pBuffer);
+        UpdatePosition(s_msgPosition.m_nPlayer,
+                       s_msgPosition.m_nX,
+                       s_msgPosition.m_nZ);
+        pBuffer += s_msgPosition.Size() + HEADER_SIZE;
+        break;
+    default:
+        pBuffer = 0;
+        break;
+    }
+
+    return pBuffer;
+}
+
+void ServerGame::UpdatePosition(int nPlayer,
+                                int nX,
+                                int nZ)
+{
+    if (nPlayer == SESSION_1)
+    {
+        m_arMages[SESSION_1].SetPosition(nX, nZ);
+
+        s_msgPosition.m_nPlayer = MAGE_1;
+        s_msgPosition.m_nX      = nX;
+        s_msgPosition.m_nZ      = nZ;
+
+        Send(s_msgPosition, SESSION_2);
+    }
+    else if (nPlayer == SESSION_2)
+    {
+        m_arMages[SESSION_2].SetPosition(nX, nZ);
+
+        s_msgPosition.m_nPlayer = MAGE_2;
+        s_msgPosition.m_nX      = nX;
+        s_msgPosition.m_nZ      = nZ;
+
+        Send(s_msgPosition, SESSION_1);
+    }
 }

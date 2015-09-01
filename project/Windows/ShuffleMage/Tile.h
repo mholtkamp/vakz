@@ -31,7 +31,9 @@ private:
     int m_nOwner;
     int m_nType;
 
+#ifdef SM_CLIENT
     Matter m_matter;
+#endif SM_CLIENT
 };
 
 #endif

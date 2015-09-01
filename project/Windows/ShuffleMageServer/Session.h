@@ -33,6 +33,8 @@ public:
     void Queue();
     void Register();
 
+    void* m_pGame;
+
 private:
 
     char* ProcessMessage(char* pBuffer,
@@ -45,8 +47,6 @@ private:
     PlayerData m_playerdata;
 
     Socket* m_pSocket;
-
-    void* m_pGame;
 
     static char s_arMsgBuffer[MSG_BUFFER_SIZE];
 

@@ -6,6 +6,7 @@
 #include "Message.h"
 #include "Constants.h"
 #include "MatchQueue.h"
+#include "ServerGame.h"
 
 // Message Includes
 #include "MsgLogin.h"
@@ -66,7 +67,8 @@ void Session::Update()
             // has been processed.
             pBuffer = s_arMsgBuffer;
 
-            while (pBuffer < nSize + s_arMsgBuffer)
+            while (pBuffer < nSize + s_arMsgBuffer &&
+                   pBuffer != 0)
             {
                 pBuffer = ProcessMessage(pBuffer, nSize);
             }
@@ -81,7 +83,8 @@ char* Session::ProcessMessage(char* pBuffer,
 
     nMsgID = reinterpret_cast<int*>(pBuffer)[0];
 
-    if (nMsgID < 100)
+    if (nMsgID > 0 &&
+        nMsgID < 100)
     {
         switch (nMsgID)
         {
@@ -107,17 +110,27 @@ char* Session::ProcessMessage(char* pBuffer,
             break;
         }
         default:
+            LogDebug("Unknown message ID received.");
+            pBuffer = 0;
             break;
         }
 
         return pBuffer;
     }
-    else
+    else if (nMsgID > 100 &&
+             nMsgID < 200)
     {
         if(m_pGame != 0)
         {
             // Send to game to process message.
+            pBuffer = reinterpret_cast<ServerGame*>(m_pGame)->ProcessMessage(pBuffer, nLimit);
         }
+        return pBuffer;
+    } 
+    else
+    {
+        LogError("Unkown message received.");
+        pBuffer = 0;
         return pBuffer;
     }
 }

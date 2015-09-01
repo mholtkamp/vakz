@@ -7,6 +7,8 @@
 #include "Mage.h"
 #include "Tile.h"
 
+#include "MsgPosition.h"
+
 class Game
 {
 public:
@@ -30,7 +32,17 @@ public:
 
     void SetupCamera();
 
+    void SendPosition(int nPlayer,
+                      int nX,
+                      int nZ);
+
+    void UpdatePosition(int nPlayer,
+                        int nX,
+                        int nZ);
+
     Tile m_arTiles[GRID_WIDTH][GRID_HEIGHT];
+
+    void* m_pNetworkManager;
 
 private:
 
@@ -49,6 +61,9 @@ private:
     float m_fTouchDownY;
     float m_fTouchUpX;
     float m_fTouchUpY;
+
+    // Messages
+    MsgPosition m_msgPosition;
 
 };
 

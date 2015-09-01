@@ -3,6 +3,8 @@
 
 #include "PlayerData.h"
 #include "Message.h"
+#include "Mage.h"
+#include "Tile.h"
 
 enum ServerGameEnum
 {
@@ -33,7 +35,26 @@ public:
     void Send(Message& msg,
               int nSession);
 
+    char* ProcessMessage(char* pBuffer,
+                         int   nLimit);
+
+    // Message Actions
+    void UpdatePosition(int nPlayer,
+                        int nX,
+                        int nZ);
+
+    enum ServerGameEnum
+    {
+        MAGE_1    = 0,
+        MAGE_2    = 1,
+        NUM_MAGES = 2
+    };
+
+    Tile m_arTiles[GRID_WIDTH][GRID_HEIGHT];
+
 private:
+
+    Mage m_arMages[NUM_MAGES];
 
     int m_nGameState;
 

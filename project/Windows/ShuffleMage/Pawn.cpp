@@ -2,6 +2,11 @@
 #include "Resources.h"
 #include "Constants.h"
 #include "Game.h"
+#include "NetworkManager.h"
+
+#if defined SM_SERVER
+#include "../ShuffleMageServer/ServerGame.h"
+#endif
 
 #define PAWN_DEFAULT_HEALTH 100
 #define PAWN_DEFAULT_SPEED 0.3f
@@ -35,7 +40,9 @@ void Pawn::Construct()
 
 void Pawn::Register(Scene* pScene)
 {
+#ifdef SM_CLIENT
     pScene->AddMatter(&m_matter);
+#endif
 }
 
 void Pawn::SetPosition(int nX,
@@ -44,7 +51,11 @@ void Pawn::SetPosition(int nX,
     m_nX = nX;
     m_nZ = nZ;
 
+#ifdef SM_CLIENT
     m_matter.SetPosition(m_nX * TILE_WIDTH, 0.0f, m_nZ * TILE_HEIGHT);
+    reinterpret_cast<Game*>(m_pGame)->SendPosition(m_nSide, m_nX, m_nZ);
+#endif
+
 }
 
 void Pawn::Move(int nX,
@@ -52,7 +63,14 @@ void Pawn::Move(int nX,
 {
     int nNewX = m_nX + nX;
     int nNewZ = m_nZ + nZ;
-    Game* pGame = reinterpret_cast<Game*>(m_pGame);
+
+#ifdef SM_CLIENT
+        Game* pGame = reinterpret_cast<Game*>(m_pGame);
+#endif
+
+#ifdef SM_SERVER
+        ServerGame* pGame = reinterpret_cast<ServerGame*>(m_pGame);
+#endif
 
     if (nNewX >= 0          &&
         nNewX < GRID_WIDTH  &&
@@ -95,10 +113,13 @@ void Pawn::SetSide(int nSide)
     if (nSide == 0)
     {
         SetPosition(1, 1);
+
+#ifdef SM_CLIENT
         m_matter.SetRotation(0.0f, -90.0f, 0.0f);
         m_matter.SetMesh(g_pMageMesh);
         m_matter.SetTexture(g_pRedMageTex);
         m_matter.SetMaterial(g_pDiffuseMaterial);
+#endif
     }
     else
     {
@@ -106,10 +127,13 @@ void Pawn::SetSide(int nSide)
         m_nZ = 1;
 
         SetPosition(4, 1);
+
+#ifdef SM_CLIENT
         m_matter.SetRotation(0.0f, 90.0f, 0.0f);
         m_matter.SetMesh(g_pMageMesh);
         m_matter.SetTexture(g_pBlueMageTex);
         m_matter.SetMaterial(g_pDiffuseMaterial);
+#endif
     }
 }
 

@@ -35,7 +35,9 @@ public:
     
 protected:
 
+#if defined(SM_CLIENT)
     Matter m_matter;
+#endif
 
     int m_nSide;
 

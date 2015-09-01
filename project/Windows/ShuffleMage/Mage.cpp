@@ -13,7 +13,9 @@ Mage::Mage()
     m_nStunned    = 0;
     m_nRooted     = 0;
 
-    m_matter.SetScale(MAGE_SCALE_XYZ, MAGE_SCALE_XYZ, MAGE_SCALE_XYZ);
+#ifdef SM_CLIENT
+        m_matter.SetScale(MAGE_SCALE_XYZ, MAGE_SCALE_XYZ, MAGE_SCALE_XYZ);
+#endif
 }
 
 Mage::Mage(int nSide) : Pawn(nSide)
@@ -28,7 +30,9 @@ Mage::Mage(int nSide) : Pawn(nSide)
     m_nStunned    = 0;
     m_nRooted     = 0;
     
-    m_matter.SetScale(MAGE_SCALE_XYZ, MAGE_SCALE_XYZ, MAGE_SCALE_XYZ);
+#ifdef SM_CLIENT
+        m_matter.SetScale(MAGE_SCALE_XYZ, MAGE_SCALE_XYZ, MAGE_SCALE_XYZ);
+#endif
 }
 
 Mage::~Mage()
@@ -99,5 +103,8 @@ void Mage::SetPosition(int nX,
                        int nZ)
 {
     Pawn::SetPosition(nX, nZ);
-    m_matter.Translate(0.0f, MAGE_Y_OFFSET, 0.0f);
+
+#ifdef SM_CLIENT
+        m_matter.Translate(0.0f, MAGE_Y_OFFSET, 0.0f);
+#endif
 }

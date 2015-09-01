@@ -47,7 +47,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>WINDOWS;_CRT_SECURE_NO_WARNINGS;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>SM_SERVER;WINDOWS;_CRT_SECURE_NO_WARNINGS;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -69,6 +69,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\ShuffleMage\Mage.cpp" />
     <ClCompile Include="..\ShuffleMage\Message.cpp" />
     <ClCompile Include="..\ShuffleMage\MsgLogin.cpp" />
     <ClCompile Include="..\ShuffleMage\MsgPosition.cpp" />
@@ -77,6 +78,8 @@
     <ClCompile Include="..\ShuffleMage\MsgResLogin.cpp" />
     <ClCompile Include="..\ShuffleMage\MsgResQueue.cpp" />
     <ClCompile Include="..\ShuffleMage\MsgResRegister.cpp" />
+    <ClCompile Include="..\ShuffleMage\Pawn.cpp" />
+    <ClCompile Include="..\ShuffleMage\Tile.cpp" />
     <ClCompile Include="MatchQueue.cpp" />
     <ClCompile Include="ServerGame.cpp" />
     <ClCompile Include="Main.cpp" />

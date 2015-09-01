@@ -5,10 +5,13 @@
 #include "Game.h"
 #include "Constants.h"
 
-// Response messages
+// Session Response messages
 #include "MsgResLogin.h"
 #include "MsgResQueue.h"
 #include "MsgResRegister.h"
+
+// Game Response Messages
+#include "MsgPosition.h"
 
 
 #define MASTER_SEREVER_IP "192.168.2.3"
@@ -20,6 +23,8 @@ char NetworkManager::s_arMsgBuffer[MSG_BUFFER_SIZE] = {0};
 static MsgResLogin        s_msgResLogin;
 static MsgResQueue        s_msgResQueue;
 static MsgResRegister     s_msgResRegister;
+
+static MsgPosition        s_msgPosition;
 
 // Declaration of functions in Main.cpp
 void SetGameState(int nState);
@@ -102,7 +107,8 @@ char* NetworkManager::ProcessMessage(char* pBuffer,
 
     nMsgID = reinterpret_cast<int*>(pBuffer)[0];
 
-    if (nMsgID < 100)
+    if (nMsgID > 0 &&
+        nMsgID < 100)
     {
         if (m_pMenu == 0)
         {
@@ -134,12 +140,32 @@ char* NetworkManager::ProcessMessage(char* pBuffer,
 
         return pBuffer;
     }
-    else
+    else if (nMsgID > 100 &&
+             nMsgID < 200)
     {
         if(m_pGame != 0)
         {
-            // Send to game to process message.
+            switch (nMsgID)
+            {
+            case MSG_POSITION:
+                s_msgPosition.Read(pBuffer);
+                reinterpret_cast<Game*>(m_pGame)->UpdatePosition(s_msgPosition.m_nPlayer,
+                                                                 s_msgPosition.m_nX,
+                                                                 s_msgPosition.m_nZ);
+                pBuffer += s_msgPosition.Size() + HEADER_SIZE;
+                break;
+            default:
+                LogError("Unknown Game message received.");
+                pBuffer = 0;
+                break;
+            }
         }
+        return pBuffer;
+    }
+    else
+    {
+        LogError("Unkown message received.");
+        pBuffer = 0;
         return pBuffer;
     }
 }
@@ -174,6 +200,7 @@ void NetworkManager::ResQueue()
         if (m_pGame == 0)
         {
             m_pGame = new Game(s_msgResQueue.m_nSide);
+            reinterpret_cast<Game*>(m_pGame)->m_pNetworkManager = this;
             reinterpret_cast<Game*>(m_pGame)->RegisterScene();
             SetGameState(GAME_STATE_GAME);
             SetGame(m_pGame);

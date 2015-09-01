@@ -16,6 +16,9 @@
     <Filter Include="Messages">
       <UniqueIdentifier>{9e7f0b74-1dae-4820-a8d4-a4b4e81a67a0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Client">
+      <UniqueIdentifier>{6c122c33-e96d-44c2-895f-85f241be2290}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -53,6 +56,15 @@
     </ClCompile>
     <ClCompile Include="..\ShuffleMage\MsgPosition.cpp">
       <Filter>Messages</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ShuffleMage\Mage.cpp">
+      <Filter>Client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ShuffleMage\Pawn.cpp">
+      <Filter>Client</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ShuffleMage\Tile.cpp">
+      <Filter>Client</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
