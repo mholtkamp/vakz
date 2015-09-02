@@ -16,6 +16,9 @@
     <Filter Include="Messages">
       <UniqueIdentifier>{1639a8b8-dabf-4165-8c95-8c94c5386cd8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Cards">
+      <UniqueIdentifier>{32f5f542-bf48-4813-b9a5-91d8bafecaad}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -71,6 +74,9 @@
     </ClCompile>
     <ClCompile Include="MsgPosition.cpp">
       <Filter>Messages</Filter>
+    </ClCompile>
+    <ClCompile Include="CardBullet.cpp">
+      <Filter>Cards</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -130,6 +136,15 @@
     </ClInclude>
     <ClInclude Include="MsgPosition.h">
       <Filter>Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="Deck.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Card.h">
+      <Filter>Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="CardBullet.h">
+      <Filter>Cards</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

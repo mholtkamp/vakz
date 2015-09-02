@@ -3,11 +3,8 @@
 
 #include <string.h>
 #include <stdio.h>
+#include "Constants.h"
 
-#define PLAYER_USER_SIZE 15
-#define PLAYER_PASS_SIZE 15
-#define DECK_SIZE 30
-#define COLLECTION_SIZE 512
 
 static int s_arStartingCollection[DECK_SIZE] = {1,1,1, 2,2,2, 3,3,3,
                                                 4,4,4, 5,5,5, 6,6,6,

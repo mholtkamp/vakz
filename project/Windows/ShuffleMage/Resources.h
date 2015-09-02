@@ -22,6 +22,9 @@ extern AnimatedMesh* g_pMageAnimatedMesh;
 // Materials
 extern DiffuseMaterial* g_pDiffuseMaterial;
 
+// Card Textures
+extern Texture* g_pCardBulletTex;
+
 void LoadResources();
 
 void DeleteResources();

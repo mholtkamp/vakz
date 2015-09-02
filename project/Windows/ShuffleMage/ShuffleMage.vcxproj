@@ -70,6 +70,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Button.cpp" />
+    <ClCompile Include="CardBullet.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Mage.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -90,7 +91,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Button.h" />
+    <ClInclude Include="Card.h" />
+    <ClInclude Include="CardBullet.h" />
     <ClInclude Include="Constants.h" />
+    <ClInclude Include="Deck.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="MsgPosition.h" />
     <ClInclude Include="Tile.h" />

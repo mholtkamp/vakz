@@ -15,7 +15,10 @@ StaticMesh* g_pTileMesh = 0;
 AnimatedMesh* g_pMageAnimatedMesh = 0;
 
 // Materials
-DiffuseMaterial* g_pDiffuseMaterial;
+DiffuseMaterial* g_pDiffuseMaterial = 0;
+
+// Card Textures
+Texture* g_pCardBulletTex = 0;
 
 static int s_nLoaded = 0;
 
@@ -52,6 +55,10 @@ void LoadResources()
         g_pDiffuseMaterial = new DiffuseMaterial();
         g_pDiffuseMaterial->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
 
+        // Card Textures
+        g_pCardBulletTex = new Texture();
+        g_pCardBulletTex->LoadBMP("Textures/Cards/CardBullet.bmp");
+
         s_nLoaded = 1;
     }
 }
@@ -66,8 +73,17 @@ void DeleteResources()
         delete g_pRedTileTex;
         delete g_pBlueTileTex;
 
-        // Meshes
+        // Static Meshes
         delete g_pMageMesh;
         delete g_pTileMesh;
+
+        // Animated Meshes
+        delete g_pMageAnimatedMesh;
+        
+        // Materials
+        delete g_pDiffuseMaterial;
+
+        // Card Textures
+        delete g_pCardBulletTex;
     }
 }

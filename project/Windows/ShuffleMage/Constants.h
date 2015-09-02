@@ -5,6 +5,11 @@
 #define GAME_STATE_MENU 0
 #define GAME_STATE_GAME 1
 
+#define PLAYER_USER_SIZE 15
+#define PLAYER_PASS_SIZE 15
+#define DECK_SIZE 30
+#define COLLECTION_SIZE 512
+
 #define LOGIN_STATUS_NONE                 0
 #define LOGIN_STATUS_OK                   1
 #define LOGIN_STATUS_INVALID_PASS         2
@@ -44,5 +49,10 @@
 #define MAGE_Y_OFFSET 0.5f
 
 #define DEFAULT_MAGE_HEALTH 500
+
+#define RARITY_COMMON   0
+#define RARITY_UNCOMMON 1
+#define RARITY_RARE     2
+#define RARITY_EPIC     3
 
 #endif
