@@ -1,16 +1,16 @@
-#ifndef CARD_BULLET_H
-#define CARD_BULLET_H
+#ifndef CARD_BOMB_H
+#define CARD_BOMB_H
 
 #include "Constants.h"
 
 #include "Card.h"
 
-class CardBullet : public Card
+class CardBomb : public Card
 {
 public:
 
-    CardBullet();
-    ~CardBullet();
+    CardBomb();
+    ~CardBomb();
 
     Texture* GetTexture();
     char* GetName();

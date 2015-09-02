@@ -2,6 +2,7 @@
 
 #define CARD_BULLET_TEXTURE g_pCardBulletTex
 #define CARD_BULLET_NAME "BULLET"
+#define CARD_BULLET_DESCRIPTION "Fires bullet that damages first enemy it hits"
 #define CARD_BULLET_MANA 30
 #define CARD_BULLET_RARITY RARITY_COMMON
 
@@ -24,6 +25,11 @@ Texture* CardBullet::GetTexture()
 char* CardBullet::GetName()
 {
     return CARD_BULLET_NAME;
+}
+
+char* CardBullet::GetDescription()
+{
+    return CARD_BULLET_DESCRIPTION;
 }
 
 int CardBullet::GetID()

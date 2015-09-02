@@ -1,16 +1,16 @@
-#ifndef CARD_BULLET_H
-#define CARD_BULLET_H
+#ifndef CARD_SHOCKWAVE_H
+#define CARD_SHOCKWAVE_H
 
 #include "Constants.h"
 
 #include "Card.h"
 
-class CardBullet : public Card
+class CardShockwave : public Card
 {
 public:
 
-    CardBullet();
-    ~CardBullet();
+    CardShockwave();
+    ~CardShockwave();
 
     Texture* GetTexture();
     char* GetName();

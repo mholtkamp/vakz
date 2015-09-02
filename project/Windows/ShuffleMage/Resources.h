@@ -24,6 +24,16 @@ extern DiffuseMaterial* g_pDiffuseMaterial;
 
 // Card Textures
 extern Texture* g_pCardBulletTex;
+extern Texture* g_pCardLaserTex;
+extern Texture* g_pCardHealTex;
+extern Texture* g_pCardInvisTex;
+extern Texture* g_pCardShockwaveTex;
+extern Texture* g_pCardBombTex;
+extern Texture* g_pCardSpearsTex;
+extern Texture* g_pCardBubbleTex;
+extern Texture* g_pCardSwipeTex;
+extern Texture* g_pCardAreaGrabTex;
+
 
 void LoadResources();
 

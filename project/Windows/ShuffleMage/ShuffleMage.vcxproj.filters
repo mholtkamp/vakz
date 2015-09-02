@@ -78,6 +78,33 @@
     <ClCompile Include="CardBullet.cpp">
       <Filter>Cards</Filter>
     </ClCompile>
+    <ClCompile Include="CardLaser.cpp">
+      <Filter>Cards</Filter>
+    </ClCompile>
+    <ClCompile Include="CardHeal.cpp">
+      <Filter>Cards</Filter>
+    </ClCompile>
+    <ClCompile Include="CardInvis.cpp">
+      <Filter>Cards</Filter>
+    </ClCompile>
+    <ClCompile Include="CardShockwave.cpp">
+      <Filter>Cards</Filter>
+    </ClCompile>
+    <ClCompile Include="CardBomb.cpp">
+      <Filter>Cards</Filter>
+    </ClCompile>
+    <ClCompile Include="CardSpears.cpp">
+      <Filter>Cards</Filter>
+    </ClCompile>
+    <ClCompile Include="CardBubble.cpp">
+      <Filter>Cards</Filter>
+    </ClCompile>
+    <ClCompile Include="CardSwipe.cpp">
+      <Filter>Cards</Filter>
+    </ClCompile>
+    <ClCompile Include="CardAreaGrab.cpp">
+      <Filter>Cards</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Menu.h">
@@ -144,6 +171,36 @@
       <Filter>Cards</Filter>
     </ClInclude>
     <ClInclude Include="CardBullet.h">
+      <Filter>Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="CardLaser.h">
+      <Filter>Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="CardTemplate.h">
+      <Filter>Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="CardHeal.h">
+      <Filter>Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="CardInvis.h">
+      <Filter>Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="CardShockwave.h">
+      <Filter>Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="CardBomb.h">
+      <Filter>Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="CardSpears.h">
+      <Filter>Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="CardBubble.h">
+      <Filter>Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="CardSwipe.h">
+      <Filter>Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="CardAreaGrab.h">
       <Filter>Cards</Filter>
     </ClInclude>
   </ItemGroup>
