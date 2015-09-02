@@ -11,6 +11,9 @@ Texture* g_pBlueTileTex = 0;
 StaticMesh* g_pMageMesh = 0;
 StaticMesh* g_pTileMesh = 0;
 
+// Animated Mesh Resources
+AnimatedMesh* g_pMageAnimatedMesh = 0;
+
 // Materials
 DiffuseMaterial* g_pDiffuseMaterial;
 
@@ -34,12 +37,16 @@ void LoadResources()
         g_pBlueTileTex = new Texture();
         g_pBlueTileTex->LoadBMP("Textures/tile_blue.bmp");
 
-        // Meshes
+        // Static Meshes
         g_pMageMesh = new StaticMesh();
         g_pMageMesh->Load("Meshes/mage.obj");
 
         g_pTileMesh = new StaticMesh();
         g_pTileMesh->Load("Meshes/tile.obj");
+        
+        // Animated Meshes
+        g_pMageAnimatedMesh = new AnimatedMesh();
+        g_pMageAnimatedMesh->Load("Meshes/Mage_AM/mage.amf");
 
         // Set flag to indicate resources have been loaded
         g_pDiffuseMaterial = new DiffuseMaterial();

@@ -16,6 +16,9 @@ extern Texture* g_pBlueTileTex;
 extern StaticMesh* g_pMageMesh;
 extern StaticMesh* g_pTileMesh;
 
+// Animated Mesh Resources
+extern AnimatedMesh* g_pMageAnimatedMesh;
+
 // Materials
 extern DiffuseMaterial* g_pDiffuseMaterial;
 

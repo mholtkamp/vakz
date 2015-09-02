@@ -127,7 +127,6 @@ void Pawn::SetSide(int nSide)
 
 #ifdef SM_CLIENT
         m_matter.SetRotation(0.0f, -90.0f, 0.0f);
-        m_matter.SetMesh(g_pMageMesh);
         m_matter.SetTexture(g_pRedMageTex);
         m_matter.SetMaterial(g_pDiffuseMaterial);
 #endif
@@ -141,7 +140,6 @@ void Pawn::SetSide(int nSide)
 
 #ifdef SM_CLIENT
         m_matter.SetRotation(0.0f, 90.0f, 0.0f);
-        m_matter.SetMesh(g_pMageMesh);
         m_matter.SetTexture(g_pBlueMageTex);
         m_matter.SetMaterial(g_pDiffuseMaterial);
 #endif

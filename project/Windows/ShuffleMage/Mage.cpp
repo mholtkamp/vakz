@@ -1,5 +1,6 @@
 #include "Mage.h"
 #include "Constants.h"
+#include "Resources.h"
 
 Mage::Mage()
 {
@@ -14,7 +15,11 @@ Mage::Mage()
     m_nRooted     = 0;
 
 #ifdef SM_CLIENT
-        m_matter.SetScale(MAGE_SCALE_XYZ, MAGE_SCALE_XYZ, MAGE_SCALE_XYZ);
+    m_matter.SetMesh(g_pMageAnimatedMesh);
+    m_matter.SetLoopMode(Matter::LOOP_PING_PONG);
+    m_matter.SetAnimation("Idle");
+    m_matter.StartAnimation();
+    m_matter.SetScale(MAGE_SCALE_XYZ, MAGE_SCALE_XYZ, MAGE_SCALE_XYZ);
 #endif
 }
 
@@ -31,7 +36,11 @@ Mage::Mage(int nSide) : Pawn(nSide)
     m_nRooted     = 0;
     
 #ifdef SM_CLIENT
-        m_matter.SetScale(MAGE_SCALE_XYZ, MAGE_SCALE_XYZ, MAGE_SCALE_XYZ);
+    m_matter.SetMesh(g_pMageAnimatedMesh);
+    m_matter.SetLoopMode(Matter::LOOP_PING_PONG);
+    m_matter.SetAnimation("Idle");
+    m_matter.StartAnimation();
+    m_matter.SetScale(MAGE_SCALE_XYZ, MAGE_SCALE_XYZ, MAGE_SCALE_XYZ);
 #endif
 }
 
