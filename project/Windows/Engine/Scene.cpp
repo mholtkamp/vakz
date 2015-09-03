@@ -12,9 +12,10 @@
 #define DEFAULT_GRAVITY 9.8f
 
 int Scene::s_nFBOInitialized = 0;
-unsigned int Scene::s_hFBO          = 0;
-unsigned int Scene::s_hColorAttach  = 0;
-unsigned int Scene::s_hDepthAttach  = 0;
+unsigned int Scene::s_hFBO               = 0;
+unsigned int Scene::s_hColorAttach       = 0;
+unsigned int Scene::s_hDepthAttach       = 0;
+unsigned int Scene::s_hEffectColorAttach = 0;
 
 //*****************************************************************************
 // Constructor
@@ -115,6 +116,11 @@ void Scene::Render()
 
     // Bind the FBO
     glBindFramebuffer(GL_FRAMEBUFFER, s_hFBO);
+    glFramebufferTexture2D(GL_FRAMEBUFFER,
+                           GL_COLOR_ATTACHMENT0,
+                           GL_TEXTURE_2D,
+                           s_hColorAttach,
+                           0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // Render 3D Objects
@@ -174,19 +180,34 @@ void Scene::Render()
     // Render effects if they are enabled
     if (m_nNumEffects        > 0)
     {
-        //// Render to screen buffer
+        // Render to screen buffer
         //glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        for (i = 0; i < m_nNumEffects; i++)
+        {
+            if (m_pEffects[i]->IsEnabled())
+            {
+                glFramebufferTexture2D(GL_FRAMEBUFFER,
+                                        GL_COLOR_ATTACHMENT0,
+                                        GL_TEXTURE_2D,
+                                        s_hEffectColorAttach,
+                                        0);
+                break;
+            }
+        }
 
-        //for (i = 0; i < m_nNumEffects; i++)
-        //{
-        //    if (m_pEffects[i]->IsEnabled() != 0)
-        //    {
-        //        m_pEffects[i]->Render(this,
-        //                              s_hFBO,
-        //                              s_hColorAttach,
-        //                              s_hDepthAttach);
-        //    }
-        //}
+        for (i = 0; i < m_nNumEffects; i++)
+        {
+
+
+            if (m_pEffects[i]->IsEnabled() != 0)
+            {
+                m_pEffects[i]->Render(this,
+                                      s_hFBO,
+                                      s_hColorAttach,
+                                      s_hDepthAttach);
+            }
+
+        }
     }
 
     // If the soft keyboard is enabled, render it
@@ -502,6 +523,27 @@ void Scene::InitializeFBO()
 
         // Set the new drawing viewport
         glViewport(0,0, g_nResolutionX, g_nResolutionY);
+
+        // Create effect texture
+        glGenTextures(1, &s_hEffectColorAttach);
+        glBindTexture(GL_TEXTURE_2D, s_hEffectColorAttach);
+
+        glTexImage2D(GL_TEXTURE_2D,
+                     0,
+                     GL_RGB,
+                     g_nResolutionX,
+                     g_nResolutionY,
+                     0,
+                     GL_RGB,
+                     GL_UNSIGNED_BYTE,
+                     0);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+        glBindTexture(GL_TEXTURE_2D, 0);
 
         s_nFBOInitialized = 1;
     }

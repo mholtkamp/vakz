@@ -244,10 +244,13 @@ private:
     //## Static flag to indicate whether effect processing is ready
     static int s_nFBOInitialized;
 
-    //## Handles for Effect-related opengl objects.
+    //## Handles for FBO
     static unsigned int s_hFBO;
     static unsigned int s_hColorAttach;
     static unsigned int s_hDepthAttach;
+
+    //## Handles for effect FBO
+    static unsigned int s_hEffectColorAttach;
 };
 
 #endif
