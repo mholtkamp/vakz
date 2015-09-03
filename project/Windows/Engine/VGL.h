@@ -11,7 +11,8 @@ enum ProgramEnum
     TEXT_PROGRAM                    = 3,
     STATIC_FULLBRIGHT_PROGRAM       = 4,
     ANIMATED_FULLBRIGHT_PROGRAM     = 5,
-    MAX_PROGRAMS                    = 6
+    BLUR_EFFECT_PROGRAM             = 6,
+    MAX_PROGRAMS                    = 7
 
 };
 

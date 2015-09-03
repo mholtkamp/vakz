@@ -809,6 +809,14 @@ int LoadShaders()
                                pFullbrightFragmentShader);
     }
 
+    if (nStatus != 0)
+    {
+        LogDebug("Building BlurEffect Shader");
+        nStatus = BuildProgram(BLUR_EFFECT_PROGRAM,
+                               pEffectVertexShader,
+                               pBlurFragmentShader);
+    }
+
     return nStatus;
 }
 

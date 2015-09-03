@@ -33,7 +33,7 @@ GLSL_VERSION_STRING
 
 static const char* pQuadFragmentShader = 
 GLSL_VERSION_STRING
-"precision mediump float;"
+"precision mediump float;\n"
 "uniform int uType;\n"
 "uniform vec4 uColor;\n"
 "uniform sampler2D uTexture;\n"
@@ -92,7 +92,7 @@ GLSL_VERSION_STRING
 
 static const char* pTextFragmentShader = 
 GLSL_VERSION_STRING
-"precision mediump float;"
+"precision mediump float;\n"
 "uniform vec4 uColor;\n"
 "uniform sampler2D uTexture;\n"
 "in vec2 vTexCoord;\n"
@@ -135,7 +135,7 @@ GLSL_VERSION_STRING
 //## **************************************************************************
 static const char* pDiffuseFragmentShader = 
 GLSL_VERSION_STRING
-"precision mediump float;"
+"precision mediump float;\n"
 "in vec2 vTexCoord;\n"
 "in vec3 vNormal;\n"
 "out vec4 oFragColor;\n"
@@ -200,7 +200,7 @@ GLSL_VERSION_STRING
 //## **************************************************************************
 static const char* pFullbrightFragmentShader = 
 GLSL_VERSION_STRING
-"precision mediump float;"
+"precision mediump float;\n"
 "in vec2 vTexCoord;\n"
 "out vec4 oFragColor;\n"
 "uniform vec4 uColor;\n"
@@ -215,6 +215,51 @@ GLSL_VERSION_STRING
 "       lObjectColor.rgb = lObjectColor.rgb * texture(uTexture,  vTexCoord).rgb;\n"
 "   }\n"
 "   oFragColor = lObjectColor;\n"
+"}\n";
+
+//## **************************************************************************
+//## Effect Vertex Shader
+//## **************************************************************************
+static const char* pEffectVertexShader = 
+GLSL_VERSION_STRING
+"in vec2 aPosition;\n"
+"in vec2 aTexCoord;\n"
+"out vec2 vTexCoord;\n"
+
+"void main()\n"
+"{\n"
+"   vTexCoord = aTexCoord;\n"
+"   gl_Position = vec4(aPosition, 0.0, 1.0);\n"
+"}\n";
+
+//## **************************************************************************
+//## Blur Fragment Shader
+//## **************************************************************************
+static const char* pBlurFragmentShader =
+GLSL_VERSION_STRING
+"precision mediump float;\n"
+"uniform vec2 uDimensions;\n"
+"uniform int uBlurFactor;\n"
+"uniform int uSampleDistance;\n"
+"uniform sampler2D uTexture;\n"
+"in vec2 vTexCoord;\n"
+"out vec4 oFragColor;\n"
+
+"void main()\n"
+"{\n"
+"   vec4 lSum = vec4(0.0, 0.0, 0.0, 0.0);\n"
+"   float lSampleDistance = float(uSampleDistance);"
+"   float lIncX = 1.0f/uDimensions.x;\n"
+"   float lIncY = 1.0f/uDimensions.y;\n"
+"   float lCount = pow(float(uBlurFactor)*2.0 + 1.0, 2.0);\n"
+"   for (int x = -uBlurFactor; x <= uBlurFactor; x++)\n"
+"   {\n"
+"       for (int y = -uBlurFactor; y <= uBlurFactor; y++)\n"
+"       {\n"
+"           lSum += texture(uTexture, vec2(vTexCoord.x + float(x) * lSampleDistance * lIncX, vTexCoord.y + float(y) * lIncY * lSampleDistance)) / lCount;\n"
+"       }\n"
+"   }\n"
+"   oFragColor = lSum;\n"
 "}\n";
 
 #endif
