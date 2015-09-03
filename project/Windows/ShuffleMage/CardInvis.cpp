@@ -22,12 +22,12 @@ Texture* CardInvis::GetTexture()
     return CARD_INVIS_TEXTURE;
 }
 
-char* CardInvis::GetName()
+const char* CardInvis::GetName()
 {
     return CARD_INVIS_NAME;
 }
 
-char* CardInvis::GetDescription()
+const char* CardInvis::GetDescription()
 {
     return CARD_INVIS_DESCRIPTION;
 }

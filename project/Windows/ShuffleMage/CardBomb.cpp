@@ -22,12 +22,12 @@ Texture* CardBomb::GetTexture()
     return CARD_BOMB_TEXTURE;
 }
 
-char* CardBomb::GetName()
+const char* CardBomb::GetName()
 {
     return CARD_BOMB_NAME;
 }
 
-char* CardBomb::GetDescription()
+const char* CardBomb::GetDescription()
 {
     return CARD_BOMB_DESCRIPTION;
 }

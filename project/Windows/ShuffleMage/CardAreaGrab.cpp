@@ -22,12 +22,12 @@ Texture* CardAreaGrab::GetTexture()
     return CARD_AREAGRAB_TEXTURE;
 }
 
-char* CardAreaGrab::GetName()
+const char* CardAreaGrab::GetName()
 {
     return CARD_AREAGRAB_NAME;
 }
 
-char* CardAreaGrab::GetDescription()
+const char* CardAreaGrab::GetDescription()
 {
     return CARD_AREAGRAB_DESCRIPTION;
 }

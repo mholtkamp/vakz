@@ -22,12 +22,12 @@ Texture* CardLaser::GetTexture()
     return CARD_LASER_TEXTURE;
 }
 
-char* CardLaser::GetName()
+const char* CardLaser::GetName()
 {
     return CARD_LASER_NAME;
 }
 
-char* CardLaser::GetDescription()
+const char* CardLaser::GetDescription()
 {
     return CARD_LASER_DESCRIPTION;
 }

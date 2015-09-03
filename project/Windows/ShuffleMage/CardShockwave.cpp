@@ -22,12 +22,12 @@ Texture* CardShockwave::GetTexture()
     return CARD_SHOCKWAVE_TEXTURE;
 }
 
-char* CardShockwave::GetName()
+const char* CardShockwave::GetName()
 {
     return CARD_SHOCKWAVE_NAME;
 }
 
-char* CardShockwave::GetDescription()
+const char* CardShockwave::GetDescription()
 {
     return CARD_SHOCKWAVE_DESCRIPTION;
 }

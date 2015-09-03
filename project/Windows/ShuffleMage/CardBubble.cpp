@@ -22,12 +22,12 @@ Texture* CardBubble::GetTexture()
     return CARD_BUBBLE_TEXTURE;
 }
 
-char* CardBubble::GetName()
+const char* CardBubble::GetName()
 {
     return CARD_BUBBLE_NAME;
 }
 
-char* CardBubble::GetDescription()
+const char* CardBubble::GetDescription()
 {
     return CARD_BUBBLE_DESCRIPTION;
 }

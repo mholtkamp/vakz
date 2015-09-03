@@ -13,8 +13,8 @@ public:
     ~CardAreaGrab();
 
     Texture* GetTexture();
-    char* GetName();
-    char* GetDescription();
+    const char* GetName();
+    const char* GetDescription();
     int GetID();
     int GetManaCost();
     int GetRarity();

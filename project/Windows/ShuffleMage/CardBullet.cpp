@@ -22,12 +22,12 @@ Texture* CardBullet::GetTexture()
     return CARD_BULLET_TEXTURE;
 }
 
-char* CardBullet::GetName()
+const char* CardBullet::GetName()
 {
     return CARD_BULLET_NAME;
 }
 
-char* CardBullet::GetDescription()
+const char* CardBullet::GetDescription()
 {
     return CARD_BULLET_DESCRIPTION;
 }

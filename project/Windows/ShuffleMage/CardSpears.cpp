@@ -22,12 +22,12 @@ Texture* CardSpears::GetTexture()
     return CARD_SPEARS_TEXTURE;
 }
 
-char* CardSpears::GetName()
+const char* CardSpears::GetName()
 {
     return CARD_SPEARS_NAME;
 }
 
-char* CardSpears::GetDescription()
+const char* CardSpears::GetDescription()
 {
     return CARD_SPEARS_DESCRIPTION;
 }

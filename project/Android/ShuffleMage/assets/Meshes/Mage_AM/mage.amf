@@ -1,0 +1,14 @@
+animationcount 2
+framespersecond 60
+
+animation Idle
+keyframecount 2
+keyframe 0 mage_idle_1.obj
+keyframe 40 mage_idle_2.obj
+end 40
+
+animation Cast
+keyframecount 2
+keyframe 0 mage_cast_1.obj
+keyframe 16 mage_cast_2.obj
+end 16

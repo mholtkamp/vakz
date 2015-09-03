@@ -22,12 +22,12 @@ Texture* CardSwipe::GetTexture()
     return CARD_SWIPE_TEXTURE;
 }
 
-char* CardSwipe::GetName()
+const char* CardSwipe::GetName()
 {
     return CARD_SWIPE_NAME;
 }
 
-char* CardSwipe::GetDescription()
+const char* CardSwipe::GetDescription()
 {
     return CARD_SWIPE_DESCRIPTION;
 }

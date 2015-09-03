@@ -28,12 +28,12 @@ Texture* CardXCARD::GetTexture()
     return CARD_DCARD_TEXTURE;
 }
 
-char* CardXCARD::GetName()
+const char* CardXCARD::GetName()
 {
     return CARD_DCARD_NAME;
 }
 
-char* CardXCARD::GetDescription()
+const char* CardXCARD::GetDescription()
 {
     return CARD_DCARD_DESCRIPTION;
 }

@@ -22,12 +22,12 @@ Texture* CardHeal::GetTexture()
     return CARD_HEAL_TEXTURE;
 }
 
-char* CardHeal::GetName()
+const char* CardHeal::GetName()
 {
     return CARD_HEAL_NAME;
 }
 
-char* CardHeal::GetDescription()
+const char* CardHeal::GetDescription()
 {
     return CARD_HEAL_DESCRIPTION;
 }
