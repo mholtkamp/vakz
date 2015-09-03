@@ -195,7 +195,7 @@ void Camera::GenerateProjectionMatrix()
         }
         else
         {
-            fAspectRatio = ((float) g_nScreenWidth)/ ((float) g_nScreenHeight);
+            fAspectRatio = ((float) g_nResolutionX)/ ((float) g_nResolutionY);
             fWidth = fHeight * fAspectRatio;
         }
 

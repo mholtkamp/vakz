@@ -11,7 +11,7 @@
 
 #define DEFAULT_GRAVITY 9.8f
 
-int Scene::s_nEffectProcessing = 0;
+int Scene::s_nFBOInitialized = 0;
 unsigned int Scene::s_hFBO          = 0;
 unsigned int Scene::s_hColorAttach  = 0;
 unsigned int Scene::s_hDepthAttach  = 0;
@@ -60,6 +60,8 @@ Scene::Scene(int nMaxMatters,
     m_fGravity = DEFAULT_GRAVITY;
 
     m_pPhysTimer = 0;
+
+    InitializeFBO();
 }
 
 //*****************************************************************************
@@ -111,33 +113,10 @@ void Scene::Render()
     int nEffectOn = 0;
     Matrix matMVP;
 
-    // Bind FBO if scene has effects
-    if (m_nNumEffects        > 0 &&
-        s_nEffectProcessing != 0)
-    {
-        for (i = 0; i < m_nNumEffects; i++)
-        {
-            if(m_pEffects[i]->IsEnabled() != 0)
-            {
-                nEffectOn = 1;
-                break;
-            }
-        }
+    // Bind the FBO
+    glBindFramebuffer(GL_FRAMEBUFFER, s_hFBO);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        if (nEffectOn != 0)
-        {
-            // At least one effect is in use, bind the FBO.
-            glBindFramebuffer(GL_FRAMEBUFFER, s_hFBO);
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        }
-        else
-        {
-            // No effects in use, render straight to screen.
-            glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        }
-        
-    }
-    
     // Render 3D Objects
     if (m_pCamera != 0)
     {
@@ -193,22 +172,21 @@ void Scene::Render()
     }
 
     // Render effects if they are enabled
-    if (m_nNumEffects        > 0 &&
-        s_nEffectProcessing != 0)
+    if (m_nNumEffects        > 0)
     {
-        // Render to screen buffer
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        //// Render to screen buffer
+        //glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-        for (i = 0; i < m_nNumEffects; i++)
-        {
-            if (m_pEffects[i]->IsEnabled() != 0)
-            {
-                m_pEffects[i]->Render(this,
-                                      s_hFBO,
-                                      s_hColorAttach,
-                                      s_hDepthAttach);
-            }
-        }
+        //for (i = 0; i < m_nNumEffects; i++)
+        //{
+        //    if (m_pEffects[i]->IsEnabled() != 0)
+        //    {
+        //        m_pEffects[i]->Render(this,
+        //                              s_hFBO,
+        //                              s_hColorAttach,
+        //                              s_hDepthAttach);
+        //    }
+        //}
     }
 
     // If the soft keyboard is enabled, render it
@@ -220,7 +198,19 @@ void Scene::Render()
     glDisable(GL_BLEND);
     glEnable(GL_DEPTH_TEST);
 
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, s_hFBO);
 
+    glBlitFramebuffer(0,
+                      0,
+                      g_nResolutionX,
+                      g_nResolutionY,
+                      0,
+                      0,
+                      g_nScreenWidth,
+                      g_nScreenHeight,
+                      GL_COLOR_BUFFER_BIT,
+                      GL_NEAREST);
 }
 
 //*****************************************************************************
@@ -310,11 +300,6 @@ void Scene::AddEffect(Effect* pEffect)
         {
             m_pEffects[m_nNumEffects] = pEffect;
             m_nNumEffects++;
-
-            if (s_nEffectProcessing == 0)
-            {
-                InitializeEffectProcessing();
-            }
         }
         else
         {
@@ -456,62 +441,68 @@ void Scene::Update()
 //*****************************************************************************
 // InitializeEffectProcessing
 //*****************************************************************************
-void Scene::InitializeEffectProcessing()
+void Scene::InitializeFBO()
 {
     int nStatus = 0;
 
-    // First create the framebuffer to work with
-    glGenFramebuffers(1, &s_hFBO);
-    glBindFramebuffer(GL_FRAMEBUFFER, s_hFBO);
-
-    // Next create the color attachment (Texture)
-    glGenTextures(1, &s_hColorAttach);
-    glBindTexture(GL_TEXTURE_2D, s_hColorAttach);
-
-    glTexImage2D(GL_TEXTURE_2D,
-                 0,
-                 GL_RGB,
-                 g_nScreenWidth,
-                 g_nScreenHeight,
-                 0,
-                 GL_RGB,
-                 GL_UNSIGNED_BYTE,
-                 0);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-    // Attach the color attachment texture to the FBO
-    glFramebufferTexture2D(GL_FRAMEBUFFER,
-                           GL_COLOR_ATTACHMENT0,
-                           GL_TEXTURE_2D,
-                           s_hColorAttach,
-                           0);
-
-    // The depth attachment will be attached next.
-    // A Renderbuffer will be used for the depth attachment.
-    glGenRenderbuffers(1, &s_hDepthAttach);
-    glBindRenderbuffer(GL_RENDERBUFFER, s_hDepthAttach);
-    glRenderbufferStorage(GL_RENDERBUFFER,
-                          GL_DEPTH24_STENCIL8,
-                          g_nScreenWidth,
-                          g_nScreenHeight);
-
-    // Attach it to the FBO
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER,
-                              GL_DEPTH_STENCIL_ATTACHMENT,
-                              GL_RENDERBUFFER,
-                              s_hDepthAttach);
-
-    // Lastly, check if the FBO is ready to be used.
-    nStatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-
-    if (nStatus != GL_FRAMEBUFFER_COMPLETE)
+    if (s_nFBOInitialized == 0)
     {
-        LogError("Framebuffer is not complete.");
-    }
+        // First create the framebuffer to work with
+        glGenFramebuffers(1, &s_hFBO);
+        glBindFramebuffer(GL_FRAMEBUFFER, s_hFBO);
 
-    s_nEffectProcessing = 1;
+        // Next create the color attachment (Texture)
+        glGenTextures(1, &s_hColorAttach);
+        glBindTexture(GL_TEXTURE_2D, s_hColorAttach);
+
+        glTexImage2D(GL_TEXTURE_2D,
+                     0,
+                     GL_RGB,
+                     g_nResolutionX,
+                     g_nResolutionY,
+                     0,
+                     GL_RGB,
+                     GL_UNSIGNED_BYTE,
+                     0);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+        // Attach the color attachment texture to the FBO
+        glFramebufferTexture2D(GL_FRAMEBUFFER,
+                               GL_COLOR_ATTACHMENT0,
+                               GL_TEXTURE_2D,
+                               s_hColorAttach,
+                               0);
+
+        // The depth attachment will be attached next.
+        // A Renderbuffer will be used for the depth attachment.
+        glGenRenderbuffers(1, &s_hDepthAttach);
+        glBindRenderbuffer(GL_RENDERBUFFER, s_hDepthAttach);
+        glRenderbufferStorage(GL_RENDERBUFFER,
+                              GL_DEPTH24_STENCIL8,
+                              g_nResolutionX,
+                              g_nResolutionY);
+
+        // Attach it to the FBO
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER,
+                                  GL_DEPTH_STENCIL_ATTACHMENT,
+                                  GL_RENDERBUFFER,
+                                  s_hDepthAttach);
+
+        // Lastly, check if the FBO is ready to be used.
+        nStatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+
+        if (nStatus != GL_FRAMEBUFFER_COMPLETE)
+        {
+            LogError("Framebuffer is not complete.");
+        }
+
+        // Set the new drawing viewport
+        glViewport(0,0, g_nResolutionX, g_nResolutionY);
+
+        s_nFBOInitialized = 1;
+    }
 }

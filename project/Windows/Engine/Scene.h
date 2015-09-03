@@ -186,12 +186,12 @@ public:
     void Update();
 
     //## **********************************************************************
-    //## InitializeEffectProcessing
+    //## InitializeFBO
     //##
-    //## Creates a framebuffer object and the render targets needed for 
-    //## using post-processing effects.
+    //## Creates a framebuffer object and the render targets needed for effects
+    //## and for resolution scaling.
     //## **********************************************************************
-    static void InitializeEffectProcessing();
+    static void InitializeFBO();
 
     enum SceneEnum
     {
@@ -242,7 +242,7 @@ private:
     Timer* m_pPhysTimer;
 
     //## Static flag to indicate whether effect processing is ready
-    static int s_nEffectProcessing;
+    static int s_nFBOInitialized;
 
     //## Handles for Effect-related opengl objects.
     static unsigned int s_hFBO;

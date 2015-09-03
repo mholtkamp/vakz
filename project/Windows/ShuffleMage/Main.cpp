@@ -34,8 +34,6 @@
 #include "NetworkManager.h"
 #include "Resources.h"
 
-Scene sceneMenu;
-Scene sceneBattle;
 Menu* pMenu = 0;
 Game* pGame = 0;
 NetworkManager* pNetworkManager = 0;
@@ -48,11 +46,13 @@ int nGameState = GAME_STATE_MENU;
 void android_main(struct android_app* state)
 {
     app_dummy();
+    SetResolution(800, 480);
     Initialize(state);
 #else
 int main()
 {
-    SetWindowSize(1024,768);
+    SetWindowSize(1024, 768);
+    SetResolution(1024, 768);
     Initialize();
 #endif
 

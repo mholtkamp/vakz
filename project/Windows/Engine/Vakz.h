@@ -21,6 +21,21 @@ int SetWindowSize(int nWidth,
                   int nHeight);
 
 //## **************************************************************************
+//## SetResolution
+//## 
+//## Sets resolution of game, to be rendered on entirety of window.
+//##
+//## Input:
+//##   nResX - x resolution in pixels.
+//##   nResY - y resolution in pixels.
+//##
+//## Returns:
+//##   int - 1 if successful, otherwise 0.
+//## **************************************************************************
+int SetResolution(int nResX,
+                  int nResY);
+
+//## **************************************************************************
 //## Initialize
 //##
 //## Initializes the Vakz Engine

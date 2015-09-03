@@ -54,8 +54,8 @@ void BlurEffect::Render(void*         pScene,
     glUniform1i(hBlurFactor, 6);
     glUniform1i(hSampleDistance, m_nSampleDistance);
     glUniform2f(hDimensions,
-                static_cast<float>(g_nScreenWidth),
-                static_cast<float>(g_nScreenHeight));
+                static_cast<float>(g_nResolutionX),
+                static_cast<float>(g_nResolutionY));
 
     glEnableVertexAttribArray(hPosition);
     glEnableVertexAttribArray(hTexCoord);

@@ -59,6 +59,21 @@ int SetWindowSize(int nWidth,
     return 0;
 }
 
+// Sets resolution
+int SetResolution(int nResX,
+                  int nResY)
+{
+    if (nResX > 0 &&
+        nResY > 0)
+    {
+        g_nResolutionX = nResX;
+        g_nResolutionY = nResY;
+        return 1;
+    }
+
+    return 0;
+}
+
 int InitializeGraphics(ANativeWindow* pWindow)
 {
     // initialize OpenGL ES and EGL
