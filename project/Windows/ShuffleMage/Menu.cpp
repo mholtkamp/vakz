@@ -78,6 +78,8 @@ Menu::Menu()
     m_btExit.SetRect(-1.0f, -0.8f, 0.35f, MAIN_BUTTON_HEIGHT);
     m_btExit.SetTextString("Exit");
     m_btExit.AddToScene(m_scene);
+
+    m_scene.AddEffect(&m_blur);
 }
 
 Menu::~Menu()

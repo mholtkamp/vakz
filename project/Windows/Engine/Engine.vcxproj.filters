@@ -147,6 +147,9 @@
     <ClInclude Include="Toast.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="BlurEffect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Scene.cpp">
@@ -249,6 +252,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="VSocket.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Effect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BlurEffect.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

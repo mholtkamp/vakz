@@ -185,6 +185,14 @@ public:
     //## **********************************************************************
     void Update();
 
+    //## **********************************************************************
+    //## InitializeEffectProcessing
+    //##
+    //## Creates a framebuffer object and the render targets needed for 
+    //## using post-processing effects.
+    //## **********************************************************************
+    static void InitializeEffectProcessing();
+
     enum SceneEnum
     {
         DEFAULT_MAX_MATTERS = 1024,
@@ -232,6 +240,14 @@ private:
 
     //## Timer for physics
     Timer* m_pPhysTimer;
+
+    //## Static flag to indicate whether effect processing is ready
+    static int s_nEffectProcessing;
+
+    //## Handles for Effect-related opengl objects.
+    static unsigned int s_hFBO;
+    static unsigned int s_hColorAttach;
+    static unsigned int s_hDepthAttach;
 };
 
 #endif

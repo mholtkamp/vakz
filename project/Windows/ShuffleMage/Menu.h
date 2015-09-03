@@ -5,6 +5,7 @@
 #include "TextField.h"
 #include "Scene.h"
 #include "PlayerData.h"
+#include "BlurEffect.h"
 
 // Messages
 #include "MsgLogin.h"
@@ -108,6 +109,9 @@ private:
     MsgLogin    m_msgLogin;
     MsgQueue    m_msgQueue;
     MsgRegister m_msgRegister;
+
+    // Blur effect
+    BlurEffect m_blur;
 
 };
 

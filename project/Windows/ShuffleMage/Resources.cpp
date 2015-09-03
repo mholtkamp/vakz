@@ -35,7 +35,6 @@ void LoadResources()
 {
     if (s_nLoaded == 0)
     {
-
         // Textures
         g_pRedMageTex = new Texture();
         g_pRedMageTex->LoadBMP("Textures/mage_red.bmp");
