@@ -112,6 +112,10 @@ private:
 
     // Blur effect
     BlurEffect m_blur;
+    Timer m_timerBlur;
+    int m_nBlurDirection;
+    int m_nBlurOut;
+    int m_nNextState;
 
 };
 

@@ -25,7 +25,7 @@ public:
         DEFAULT_SAMPLE_DISTANCE = 1,
 
         MAX_BLUR_FACTOR     = 10,
-        MAX_SAMPLE_DISTANCE = 50,
+        MAX_SAMPLE_DISTANCE = 5000,
 
         MIN_BLUR_FACTOR     = 1,
         MIN_SAMPLE_DISTANCE = 1

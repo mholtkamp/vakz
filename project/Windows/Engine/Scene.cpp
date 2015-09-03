@@ -108,13 +108,34 @@ Scene::~Scene()
 void Scene::Render()
 {
     int i = 0;
+    int nEffectOn = 0;
     Matrix matMVP;
 
     // Bind FBO if scene has effects
     if (m_nNumEffects        > 0 &&
         s_nEffectProcessing != 0)
     {
-        glBindFramebuffer(GL_FRAMEBUFFER, s_hFBO);
+        for (i = 0; i < m_nNumEffects; i++)
+        {
+            if(m_pEffects[i]->IsEnabled() != 0)
+            {
+                nEffectOn = 1;
+                break;
+            }
+        }
+
+        if (nEffectOn != 0)
+        {
+            // At least one effect is in use, bind the FBO.
+            glBindFramebuffer(GL_FRAMEBUFFER, s_hFBO);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        }
+        else
+        {
+            // No effects in use, render straight to screen.
+            glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        }
+        
     }
     
     // Render 3D Objects

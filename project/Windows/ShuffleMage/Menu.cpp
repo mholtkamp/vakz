@@ -10,6 +10,13 @@
 #define MAIN_BUTTON_WIDTH 0.45f
 #define MAIN_BUTTON_HEIGHT 0.15f
 
+#define BLUR_FACTOR 4
+#define BLUR_MIN_SAMPLE_DISTANCE 1
+#define BLUR_MAX_SAMPLE_DISTANCE 100
+#define BLUR_TIME 0.4f
+#define BLUR_FOREWARD 0
+#define BLUR_BACKWARD 1
+
 Menu::Menu()
 {
     m_pNetworkManager = 0;
@@ -25,10 +32,12 @@ Menu::Menu()
     m_btLogin.SetRect(0.1f, 0.2f, 0.28f, 0.15f);
     m_btLogin.SetTextString("Login");
     m_btLogin.AddToScene(m_scene);
+    m_btLogin.SetVisible(1);
 
     m_btRegister.SetRect(0.48f, 0.2f, 0.42f, 0.15f);
     m_btRegister.SetTextString("Register");
     m_btRegister.AddToScene(m_scene);
+    m_btRegister.SetVisible(1);
 
     m_tfUsername.SetRect(0.25f, 0.75f, 0.65f, 0.15f);
     m_tfUsername.SetMaxSize(16);
@@ -80,6 +89,13 @@ Menu::Menu()
     m_btExit.AddToScene(m_scene);
 
     m_scene.AddEffect(&m_blur);
+    m_blur.SetBlurFactor(1);
+    m_blur.SetSampleDistance(1);
+    m_blur.SetEnable(1);
+    m_timerBlur.Start();
+    m_nBlurDirection = BLUR_BACKWARD;
+    m_nBlurOut = 0;
+    m_nNextState = MENU_STATE_LOGIN;
 }
 
 Menu::~Menu()
@@ -97,7 +113,20 @@ void Menu::SetState(int nState)
     if (nState >= 0 &&
         nState < MENU_MAX_STATES)
     {
-        m_nState = nState;
+        if (m_nBlurOut == 0)
+        {
+            m_nBlurOut = 1;
+            m_nBlurDirection = BLUR_FOREWARD;
+            m_blur.SetEnable(1);
+            m_timerBlur.Start();
+            m_nNextState = nState;
+            return;
+        }
+        else
+        {
+            m_nBlurOut = 0;
+            m_nState = nState;
+        }
     }
 
     EnableLogin(0);
@@ -126,79 +155,142 @@ void Menu::SetState(int nState)
     {
         EnableShop(1);
     }
+
+    m_timerBlur.Start();
+    m_nBlurDirection = BLUR_BACKWARD;
+    m_blur.SetEnable(1);
 }
 
 
 void Menu::Update()
 {
-    // Check if "just-touched"
-    int nDown = IsPointerDown();
-    if (m_nTouchDown == 0 &&
-        nDown        != 0)
+    float fBlurTime = 0.0f;
+    int nSampDist   = 1;
+
+    // Do not blur out these states
+    if (m_nBlurOut != 0 &&
+        m_nState   == MENU_STATE_WAIT_LOGIN)
     {
-        m_nJustTouched = 1;
+        SetState(m_nNextState);
+    }
+    // Blur out the rest
+    else if (m_nBlurOut != 0)
+    {
+        m_timerBlur.Stop();
+        if (m_timerBlur.Time() >= BLUR_TIME)
+        {
+            SetState(m_nNextState);
+        }
     }
     else
     {
-        m_nJustTouched = 0;
-    }
-    m_nTouchDown = nDown;
 
-    // Handle back button, why not.
-    if (IsKeyDown(VKEY_BACK))
-    {
-        HideSoftKeyboard();
-    }
-
-    if (m_nState == MENU_STATE_LOGIN)
-    {
-        UpdateLogin();
-    }
-    else if (m_nState == MENU_STATE_MAIN)
-    {
-        UpdateMain();
-    }
-    else if (m_nState == MENU_STATE_QUEUE)
-    {
-        UpdateQueue();
-    }
-    else if (m_nState == MENU_STATE_DECK)
-    {
-        UpdateDeck();
-    }
-    else if (m_nState == MENU_STATE_SHOP)
-    {
-        UpdateShop();
-    }
-    else if (m_nState == MENU_STATE_WAIT_LOGIN)
-    {
-        if (m_nLoginStatus == LOGIN_STATUS_OK)
+        // Check if "just-touched"
+        int nDown = IsPointerDown();
+        if (m_nTouchDown == 0 &&
+            nDown        != 0)
         {
-            m_pPlayerData->PrintData();
-            LogDebug("Login successful!");
-            SetState(MENU_STATE_MAIN);
+            m_nJustTouched = 1;
         }
-        else if (m_nLoginStatus > LOGIN_STATUS_OK)
+        else
         {
-            if (m_nLoginStatus == LOGIN_STATUS_REGISTRATION_FAILED)
-            {
-                LogError("Registration failed.");
-            }
-            else if (m_nLoginStatus == LOGIN_STATUS_INVALID_PASS)
-            {
-                LogError("Invalid password.");
-            }
-            else if (m_nLoginStatus == LOGIN_STATUS_USER_NOT_FOUND)
-            {
-                LogError("Username not found.");
-            }
+            m_nJustTouched = 0;
+        }
+        m_nTouchDown = nDown;
 
-            m_nLoginStatus = LOGIN_STATUS_NONE;
-            SetState(MENU_STATE_LOGIN);
-            m_tfUsername.ClearText();
-            m_tfPassword.ClearText();
+        // Handle back button, why not.
+        if (IsKeyDown(VKEY_BACK))
+        {
+            HideSoftKeyboard();
+        }
+
+        if (m_nState == MENU_STATE_LOGIN)
+        {
+            UpdateLogin();
+        }
+        else if (m_nState == MENU_STATE_MAIN)
+        {
+            UpdateMain();
+        }
+        else if (m_nState == MENU_STATE_QUEUE)
+        {
+            UpdateQueue();
+        }
+        else if (m_nState == MENU_STATE_DECK)
+        {
+            UpdateDeck();
+        }
+        else if (m_nState == MENU_STATE_SHOP)
+        {
+            UpdateShop();
+        }
+        else if (m_nState == MENU_STATE_WAIT_LOGIN)
+        {
+            if (m_nLoginStatus == LOGIN_STATUS_OK)
+            {
+                m_pPlayerData->PrintData();
+                LogDebug("Login successful!");
+                SetState(MENU_STATE_MAIN);
+            }
+            else if (m_nLoginStatus > LOGIN_STATUS_OK)
+            {
+                if (m_nLoginStatus == LOGIN_STATUS_REGISTRATION_FAILED)
+                {
+                    LogError("Registration failed.");
+                }
+                else if (m_nLoginStatus == LOGIN_STATUS_INVALID_PASS)
+                {
+                    LogError("Invalid password.");
+                }
+                else if (m_nLoginStatus == LOGIN_STATUS_USER_NOT_FOUND)
+                {
+                    LogError("Username not found.");
+                }
+
+                m_nLoginStatus = LOGIN_STATUS_NONE;
+                SetState(MENU_STATE_LOGIN);
+                m_tfUsername.ClearText();
+                m_tfPassword.ClearText();
+            }
         }
     }
+
+    // Update Blur effect
+    m_timerBlur.Stop();
+    fBlurTime = m_timerBlur.Time();
+
+    if (m_blur.IsEnabled() != 0 &&
+        fBlurTime < BLUR_TIME)
+    {
+        m_blur.SetBlurFactor(BLUR_FACTOR);
+        if (m_nBlurDirection == BLUR_FOREWARD)
+        {
+            nSampDist = static_cast<int>(BLUR_MAX_SAMPLE_DISTANCE * (fBlurTime/BLUR_TIME));
+
+            if (nSampDist < 1)
+            {
+                nSampDist = 1;
+            }
+            m_blur.SetSampleDistance(nSampDist);
+        }
+        else
+        {
+            nSampDist = static_cast<int>(BLUR_MAX_SAMPLE_DISTANCE - BLUR_MAX_SAMPLE_DISTANCE * (fBlurTime/BLUR_TIME));
+
+            if (nSampDist < 1)
+            {
+                nSampDist = 1;
+            }
+            m_blur.SetSampleDistance(nSampDist);
+        }   
+    }
+    else if (m_blur.IsEnabled() != 0 &&
+             fBlurTime >= BLUR_TIME)
+    {
+        // Blur transition is finished. Disable effect.
+        m_blur.SetEnable(0);
+    }
+
 }
 
 void Menu::UpdateLogin()

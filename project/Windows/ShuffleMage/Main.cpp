@@ -69,7 +69,6 @@ int main()
     pNetworkManager->m_pMenu = pMenu;
     
     pMenu->RegisterScene();
-    pMenu->SetState(MENU_STATE_LOGIN);
 
     while ((GetStatus() & VAKZ_QUIT) == 0)
     {
