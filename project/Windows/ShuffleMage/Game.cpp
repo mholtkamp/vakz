@@ -5,6 +5,7 @@
 #include "Resources.h"
 #include <math.h>
 #include "NetworkManager.h"
+#include "Log.h"
 
 Game::Game()
 {

@@ -3,6 +3,7 @@
 #include "Constants.h"
 #include "Game.h"
 #include "NetworkManager.h"
+#include "Log.h"
 
 #if defined SM_SERVER
 #include "../ShuffleMageServer/ServerGame.h"
@@ -123,7 +124,7 @@ void Pawn::SetSide(int nSide)
     m_nSide = nSide;
     if (nSide == 0)
     {
-        SetPosition(1, 1);
+        UpdatePosition(1, 1);
 
 #ifdef SM_CLIENT
         m_matter.SetRotation(0.0f, -90.0f, 0.0f);
@@ -136,7 +137,7 @@ void Pawn::SetSide(int nSide)
         m_nX = 4;
         m_nZ = 1;
 
-        SetPosition(4, 1);
+        UpdatePosition(4, 1);
 
 #ifdef SM_CLIENT
         m_matter.SetRotation(0.0f, 90.0f, 0.0f);

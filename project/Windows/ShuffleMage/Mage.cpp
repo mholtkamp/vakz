@@ -1,6 +1,7 @@
 #include "Mage.h"
 #include "Constants.h"
 #include "Resources.h"
+#include "Log.h"
 
 Mage::Mage()
 {

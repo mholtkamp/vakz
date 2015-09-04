@@ -206,7 +206,6 @@ void NetworkManager::ResQueue()
             SetGameState(GAME_STATE_GAME);
             SetGame(m_pGame);
         }
-        
     }
     else
     {
