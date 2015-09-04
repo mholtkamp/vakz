@@ -3,6 +3,7 @@
 #include "Log.h"
 #include "VInput.h"
 #include "Settings.h"
+#include "Toast.h"
 
 #define DEFAULT_AMBIENT_RED   0.12f
 #define DEFAULT_AMBIENT_GREEN 0.12f
@@ -209,6 +210,10 @@ void Scene::Render()
 
         }
     }
+
+    // Render toasts, if there are no active toasts, this function
+    // will not render anything.
+    RenderToast();
 
     // If the soft keyboard is enabled, render it
     if (IsSoftKeyboardEnabled() != 0)

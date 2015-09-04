@@ -3,8 +3,7 @@
 
 void Toast(const char* pText);
 
-void Render();
+void RenderToast();
 
-void Update();
 
 #endif

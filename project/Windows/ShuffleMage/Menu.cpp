@@ -2,6 +2,7 @@
 #include "Vakz.h"
 #include "VInput.h"
 #include "Log.h"
+#include "Toast.h"
 
 #include "NetworkManager.h"
 #include "Constants.h"
@@ -236,15 +237,15 @@ void Menu::Update()
             {
                 if (m_nLoginStatus == LOGIN_STATUS_REGISTRATION_FAILED)
                 {
-                    LogError("Registration failed.");
+                    Toast("Registration failed");
                 }
                 else if (m_nLoginStatus == LOGIN_STATUS_INVALID_PASS)
                 {
-                    LogError("Invalid password.");
+                    Toast("Invalid password");
                 }
                 else if (m_nLoginStatus == LOGIN_STATUS_USER_NOT_FOUND)
                 {
-                    LogError("Username not found.");
+                    Toast("Username not found");
                 }
 
                 m_nLoginStatus = LOGIN_STATUS_NONE;

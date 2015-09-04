@@ -279,3 +279,8 @@ void Text::GenerateVertexArray(float** pArray,
         }
     }
 }
+
+void Text::SetFont(Font* pFont)
+{
+    m_pFont = pFont;
+}

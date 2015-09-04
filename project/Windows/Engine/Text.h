@@ -65,6 +65,16 @@ public:
     //## **********************************************************************
     void SetText(const char* pText);
 
+    //## **********************************************************************
+    //## SetFont
+    //##
+    //## Sets the Text object's font texture.
+    //##
+    //## Input:
+    //##   pFont - pointer to font object
+    //## **********************************************************************
+    void SetFont(Font* pFont);
+
     enum TextEnum
     {
         DEFAULT_BUFFER_SIZE = 128,
