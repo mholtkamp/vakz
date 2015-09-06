@@ -203,5 +203,8 @@
     <ClInclude Include="CardAreaGrab.h">
       <Filter>Cards</Filter>
     </ClInclude>
+    <ClInclude Include="HUD.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -7,6 +7,7 @@
 
 #define PLAYER_USER_SIZE 15
 #define PLAYER_PASS_SIZE 15
+#define HAND_SIZE 5
 #define DECK_SIZE 30
 #define COLLECTION_SIZE 512
 

@@ -43,10 +43,10 @@ void LoadResources()
         g_pBlueMageTex->LoadBMP("Textures/mage_blue.bmp");
 
         g_pRedTileTex = new Texture();
-        g_pRedTileTex->LoadBMP("Textures/tile_red.bmp");
+        g_pRedTileTex->LoadBMP("Textures/tile_red_small.bmp");
 
         g_pBlueTileTex = new Texture();
-        g_pBlueTileTex->LoadBMP("Textures/tile_blue.bmp");
+        g_pBlueTileTex->LoadBMP("Textures/tile_blue_small.bmp");
 
         // Static Meshes
         g_pMageMesh = new StaticMesh();

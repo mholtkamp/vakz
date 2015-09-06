@@ -115,6 +115,7 @@
     <ClInclude Include="Constants.h" />
     <ClInclude Include="Deck.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="HUD.h" />
     <ClInclude Include="MsgPosition.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="Mage.h" />

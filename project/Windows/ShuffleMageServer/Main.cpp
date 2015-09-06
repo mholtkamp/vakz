@@ -24,6 +24,7 @@ int main()
 
     while (1)
     {
+        Sleep(5);
 
         // First, Check for new connections.
         Socket* pNewSocket = 0;
