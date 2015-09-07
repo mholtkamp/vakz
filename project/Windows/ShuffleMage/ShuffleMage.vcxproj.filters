@@ -105,6 +105,9 @@
     <ClCompile Include="CardAreaGrab.cpp">
       <Filter>Cards</Filter>
     </ClCompile>
+    <ClCompile Include="HUD.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Menu.h">

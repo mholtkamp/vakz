@@ -64,6 +64,9 @@ void Game::Construct()
         }
     }
 
+    // Register HUD
+    m_hud.Register(&m_scene);
+
     m_nTouchDown    = 0;
     m_nJustTouched  = 0;
     m_nJustUp       = 0;

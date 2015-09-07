@@ -1,14 +1,14 @@
 #include "HUD.h"
 #include "Resources.h"
 
-#define HAND_BACK_X 0.4f
+#define HAND_BACK_X -0.4f
 #define HAND_BACK_Y 0.5f
 #define HAND_BACK_WIDTH 0.8f
 #define HAND_BACK_HEIGHT 0.4f
-#define HAND_CARD_X_OFFSET 0.1f
+#define HAND_CARD_X_OFFSET 0.05f
 #define HAND_CARD_Y_OFFSET 0.05f
-#define HAND_CARD_WIDTH 0.1f
-#define HAND_CARD_HEIGHT 0.1f
+#define HAND_CARD_WIDTH 0.15f
+#define HAND_CARD_HEIGHT 0.15f
 
 HUD::HUD()
 {
@@ -53,7 +53,7 @@ HUD::HUD()
     for (i = 0; i < HAND_SIZE; i++)
     {
         m_arHandCards[i].SetBox(HAND_BACK_X + i*(HAND_CARD_X_OFFSET + HAND_CARD_WIDTH),
-                                HAND_BACK_Y + HAND_CARD_Y_OFFSET,
+                                HAND_BACK_Y + HAND_CARD_Y_OFFSET + 0.25f*HAND_BACK_HEIGHT,
                                 HAND_CARD_WIDTH,
                                 HAND_CARD_HEIGHT);
     }
@@ -69,6 +69,17 @@ HUD::HUD()
     // Set default text strings, just so we can see something
     m_textHealth.SetText("500");
     m_textEnemyHealth.SetText("500");
+    m_textHealth.SetScale(1.4f, 1.2f);
+    m_textEnemyHealth.SetScale(1.4, 1.2f);
+
+    // Enable borders where needed.
+    m_quadHealth.EnableBorder(1);
+    m_quadEnemyHealth.EnableBorder(1);
+
+}
+
+HUD::~HUD()
+{
 
 }
 

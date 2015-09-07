@@ -6,7 +6,7 @@
 #include "Constants.h"
 #include "Mage.h"
 #include "Tile.h"
-
+#include "HUD.h"
 #include "MsgPosition.h"
 
 class Game
@@ -52,6 +52,7 @@ private:
     Camera m_camera;
     DirectionalLight m_light;
     Mage m_arMages[NUM_MAGES];
+    HUD m_hud;
     
 
     int m_nTouchDown;
