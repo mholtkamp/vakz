@@ -6,6 +6,8 @@ Texture* g_pRedMageTex  = 0;
 Texture* g_pBlueMageTex = 0;
 Texture* g_pRedTileTex  = 0;
 Texture* g_pBlueTileTex = 0;
+Texture* g_pCastTex     = 0;
+Texture* g_pRotateTex   = 0;
 
 // Static Mesh Resources
 StaticMesh* g_pMageMesh = 0;
@@ -47,6 +49,12 @@ void LoadResources()
 
         g_pBlueTileTex = new Texture();
         g_pBlueTileTex->LoadBMP("Textures/tile_blue_small.bmp");
+
+        g_pCastTex     = new Texture();
+        g_pCastTex->LoadBMP("Textures/cast.bmp");
+
+        g_pRotateTex   = new Texture();
+        g_pRotateTex->LoadBMP("Textures/rotate.bmp");
 
         // Static Meshes
         g_pMageMesh = new StaticMesh();

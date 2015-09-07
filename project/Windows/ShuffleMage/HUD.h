@@ -22,6 +22,8 @@ public:
 
 private:
 
+    void* m_pGame;
+
     Quad m_arHandCards[HAND_SIZE];
 
     Quad m_quadDrawBar;
@@ -32,7 +34,7 @@ private:
     Text m_textHealth;
 
     Quad m_quadEnemyHealth;
-    Text m_textEnemyText;
+    Text m_textEnemyHealth;
 
     Quad m_quadCast;
     Quad m_quadRotate;
