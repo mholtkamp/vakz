@@ -19,6 +19,11 @@ public:
     void SetEnable(int nEnable);
     void SetGame(void* pGame);
 
+    void SetHandTextures(Texture* arHand[5]);
+
+    int IsCastPressed();
+    int IsRotatePressed();
+
 
 private:
 

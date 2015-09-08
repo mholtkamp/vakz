@@ -2,13 +2,13 @@
 #include "Resources.h"
 
 #define HAND_BACK_X -0.4f
-#define HAND_BACK_Y 0.5f
+#define HAND_BACK_Y 0.6f
 #define HAND_BACK_WIDTH 0.8f
-#define HAND_BACK_HEIGHT 0.4f
-#define HAND_CARD_X_OFFSET 0.05f
-#define HAND_CARD_Y_OFFSET 0.05f
-#define HAND_CARD_WIDTH 0.15f
-#define HAND_CARD_HEIGHT 0.15f
+#define HAND_BACK_HEIGHT 0.3f
+#define HAND_CARD_X_OFFSET 0.031f
+#define HAND_CARD_Y_OFFSET 0.016f
+#define HAND_CARD_WIDTH 0.12f
+#define HAND_CARD_HEIGHT 0.12f
 
 HUD::HUD()
 {
@@ -52,30 +52,29 @@ HUD::HUD()
     
     for (i = 0; i < HAND_SIZE; i++)
     {
-        m_arHandCards[i].SetBox(HAND_BACK_X + i*(HAND_CARD_X_OFFSET + HAND_CARD_WIDTH),
+        m_arHandCards[i].SetBox(HAND_BACK_X + i*(HAND_CARD_X_OFFSET + HAND_CARD_WIDTH) + HAND_CARD_X_OFFSET,
                                 HAND_BACK_Y + HAND_CARD_Y_OFFSET + 0.25f*HAND_BACK_HEIGHT,
                                 HAND_CARD_WIDTH,
                                 HAND_CARD_HEIGHT);
     }
 
-    m_quadHealth.SetBox(-0.9f, 0.75f, 0.3f, 0.2f);
-    m_quadEnemyHealth.SetBox(0.6f, 0.75f, 0.3f, 0.2f);
-    m_textHealth.SetPosition(-0.85f, 0.79f);
-    m_textEnemyHealth.SetPosition(0.65f, 0.79f);
+    m_quadHealth.SetBox(-0.9f, 0.75f, 0.3f, 0.14f);
+    m_quadEnemyHealth.SetBox(0.6f, 0.75f, 0.3f, 0.14f);
+    m_textHealth.SetPosition(-0.86f, 0.79f);
+    m_textEnemyHealth.SetPosition(0.64f, 0.79f);
 
-    m_quadCast.SetBox(0.5f, -0.9f, 0.15f, 0.15f);
-    m_quadRotate.SetBox(0.8f, -0.9f, 0.15f, 0.15f);
+    m_quadCast.SetBox(0.35f, -0.9f, 0.25f, 0.25f);
+    m_quadRotate.SetBox(0.68f, -0.9f, 0.25f, 0.25f);
 
     // Set default text strings, just so we can see something
     m_textHealth.SetText("500");
     m_textEnemyHealth.SetText("500");
     m_textHealth.SetScale(1.4f, 1.2f);
-    m_textEnemyHealth.SetScale(1.4, 1.2f);
+    m_textEnemyHealth.SetScale(1.4f, 1.2f);
 
     // Enable borders where needed.
     m_quadHealth.EnableBorder(1);
     m_quadEnemyHealth.EnableBorder(1);
-
 }
 
 HUD::~HUD()
@@ -132,4 +131,14 @@ void HUD::SetEnable(int nEnable)
 void HUD::SetGame(void* pGame)
 {
     m_pGame = pGame;
+}
+
+int HUD::IsCastPressed()
+{
+    if (IsPoint)
+}
+
+int HUD::IsRotatePressed()
+{
+
 }

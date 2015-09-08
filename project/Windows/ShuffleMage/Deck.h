@@ -1,6 +1,7 @@
 #ifndef DECK_H
 #define DECK_H
 
+#include "Card.h"
 #include "Constants.h"
 
 class Deck
@@ -18,7 +19,7 @@ public:
 
 private:
 
-    Card m_arCards[DECK_SIZE];
+    Card* m_arCards[DECK_SIZE];
 };
 
 #endif
