@@ -17,7 +17,10 @@ public:
     {
         MAGE_1    = 0,
         MAGE_2    = 1,
-        NUM_MAGES = 2
+        NUM_MAGES = 2,
+
+        INDEX_LEFT  = 0,
+        INDEX_RIGHT = 1
     };
 
     Game();
@@ -55,13 +58,16 @@ private:
     HUD m_hud;
     
 
-    int m_nTouchDown;
-    int m_nJustTouched;
-    int m_nJustUp;
-    float m_fTouchDownX;
-    float m_fTouchDownY;
-    float m_fTouchUpX;
-    float m_fTouchUpY;
+    int m_nTouchDownLeft;
+    int m_nJustTouchedLeft;
+    int m_nJustUpLeft;
+    float m_fTouchDownXLeft;
+    float m_fTouchDownYLeft;
+    float m_fTouchUpXLeft;
+    float m_fTouchUpYLeft;
+
+    int m_nTouchDownRight;
+    int m_nJustTouchedRight;
 
     // Messages
     MsgPosition m_msgPosition;

@@ -87,6 +87,11 @@ void SetButton(int nButton)
         nButton <  VINPUT_MAX_BUTTONS)
     {
         s_arButtons[nButton] = 1;
+
+        if (nButton == VBUTTON_LEFT)
+        {
+            s_arTouches[0] = 1;
+        }
     }
 }
 
@@ -99,6 +104,11 @@ void ClearButton(int nButton)
         nButton <  VINPUT_MAX_BUTTONS)
     {
         s_arButtons[nButton] = 0;
+
+        if (nButton == VBUTTON_LEFT)
+        {
+            s_arTouches[0] = 0;
+        }
     }
 }
 
@@ -196,8 +206,7 @@ int IsPointerDown(int nPointer)
     {
         // If either the left mouse button is down or the specified
         // touch index is down, then return 1.
-        if ((s_arButtons[VBUTTON_LEFT] != 0) ||
-            (s_arTouches[nPointer]     != 0))
+        if (s_arTouches[nPointer] != 0)
         {
             if (s_nKeyboardEnable != 0)
             {

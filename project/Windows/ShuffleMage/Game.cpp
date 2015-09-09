@@ -67,55 +67,100 @@ void Game::Construct()
     // Register HUD
     m_hud.Register(&m_scene);
 
-    m_nTouchDown    = 0;
-    m_nJustTouched  = 0;
-    m_nJustUp       = 0;
-    m_fTouchDownX   = 0.0f;
-    m_fTouchDownY   = 0.0f;
-    m_fTouchUpX     = 0.0f;
-    m_fTouchUpY     = 0.0f;
+    m_nTouchDownLeft    = 0;
+    m_nJustTouchedLeft  = 0;
+    m_nJustUpLeft       = 0;
+    m_fTouchDownXLeft   = 0.0f;
+    m_fTouchDownYLeft   = 0.0f;
+    m_fTouchUpXLeft     = 0.0f;
+    m_fTouchUpYLeft     = 0.0f;
+
+    m_nTouchDownRight    = 0;
+    m_nJustTouchedRight  = 0;
 
     m_pNetworkManager = 0;
 }
 
 void Game::Update()
 {
+    float fX     = 0.0f;
+    float fY     = 0.0f;
     float fDispX = 0.0f;
     float fDispY = 0.0f;
+    
+    int nDownLeft   = 0;
+    int nDownRight  = 0;
+    int nLeftIndex  = 0;
+    int nRightIndex = 0;
 
-    int nDown = IsPointerDown();
+    // Figure out what pointers are down
+    if(IsPointerDown(0) != 0)
+    {
+        GetPointerPositionNormalized(fX, fY, 0);
+        if (fX < 0.0f)
+        {
+            nDownLeft = 1;
+            nLeftIndex = 0;
+        }
+        else if (IsPointerDown(1) != 0)
+        {
+            GetPointerPositionNormalized(fX, fY, 1);
+            if (fX < 0.0f)
+            {
+                nDownLeft = 1;
+                nLeftIndex = 1;
+            }
+            else
+            {
+                nDownRight = 1;
+                nDownLeft  = 0;
+            }
+        }
+        else
+        {
+            nDownRight = 1;
+            nDownLeft  = 0;
+        }
+    }
+    else
+    {
+        nDownLeft  = 0;
+        nDownRight = 0;
+    }
 
-    if (nDown == 0 &&
-        m_nTouchDown != 0)
+    // Check if left touch was just released
+    if (nDownLeft        == 0 &&
+        m_nTouchDownLeft != 0)
     {
         // Record the touch up location
-        GetPointerPositionNormalized(m_fTouchUpX, m_fTouchUpY);
-        m_nJustUp = 1;
+        GetPointerPositionNormalized(m_fTouchUpXLeft, m_fTouchUpYLeft, nLeftIndex);
+        m_nJustUpLeft = 1;
     }
     else
     {
-        m_nJustUp = 0;
+        m_nJustUpLeft = 0;
     }
 
-    if (m_nTouchDown == 0 &&
-        nDown        != 0)
+    // Check if left touch was just pressed
+    if (m_nTouchDownLeft == 0 &&
+        nDownLeft        != 0)
     {
-        m_nJustTouched = 1;
+        m_nJustTouchedLeft = 1;
 
         // Record the touch down location
-        GetPointerPositionNormalized(m_fTouchDownX, m_fTouchDownY);
+        GetPointerPositionNormalized(m_fTouchDownXLeft, m_fTouchDownYLeft, nLeftIndex);
     }
     else
     {
-        m_nJustTouched = 0;
+        m_nJustTouchedLeft = 0;
     }
-    m_nTouchDown = nDown;
+    m_nTouchDownLeft = nDownLeft;
 
     // Perform movement
-    if (m_nJustUp)
+    if (m_nJustUpLeft)
     {
-        fDispX = m_fTouchUpX - m_fTouchDownX;
-        fDispY = m_fTouchUpY - m_fTouchDownY;
+        fDispX = m_fTouchUpXLeft - m_fTouchDownXLeft;
+        fDispY = m_fTouchUpYLeft - m_fTouchDownYLeft;
 
         // Check the direction of gesture
         if (fabs(fDispX) > fabs(fDispY))
@@ -144,15 +189,32 @@ void Game::Update()
         }
     }
 
-
-
-
-    static float fRot = -40.0f;
-
-    if(IsKeyDown(VKEY_Z))
+    // Check if right touch is just down.
+    if (nDownRight        != 0 &&
+        m_nTouchDownRight == 0)
     {
-        fRot += 1.0f;
-        m_camera.SetRotation(fRot, 0.0f, 0.0f);
+        m_nJustTouchedRight = 1;
+    }
+    else
+    {
+        m_nJustTouchedRight = 0;
+    }
+    m_nTouchDownRight = nDownRight;
+
+    if (m_nJustTouchedRight != 0)
+    {
+        GetPointerPositionNormalized(fX,fY, nRightIndex);
+
+        if (m_hud.IsCastPressed(fX, fY) != 0)
+        {
+            // TODO: Add cast logic
+            LogDebug("Cast pressed!");
+        }
+        else if (m_hud.IsRotatePressed(fX, fY) != 0)
+        {
+            // TODO: Add rotate logic
+            LogDebug("Rotate pressed!");
+        }
     }
 }
 

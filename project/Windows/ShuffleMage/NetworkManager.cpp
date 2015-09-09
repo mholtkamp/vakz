@@ -14,7 +14,7 @@
 #include "MsgPosition.h"
 
 
-#define MASTER_SEREVER_IP "192.168.2.3"
+#define MASTER_SEREVER_IP "127.0.0.1" //"192.168.2.3"
 #define SERVER_PORT 2000
 #define KEEP_ALIVE_PERIOD 20.0f
 

@@ -5,6 +5,7 @@
 #include "Scene.h"
 #include "Quad.h"
 #include "Text.h"
+#include "Rect.h"
 
 class HUD
 {
@@ -21,8 +22,10 @@ public:
 
     void SetHandTextures(Texture* arHand[5]);
 
-    int IsCastPressed();
-    int IsRotatePressed();
+    int IsCastPressed(float fX,
+                      float fY);
+    int IsRotatePressed(float fX,
+                        float fY);
 
 
 private:
@@ -43,6 +46,8 @@ private:
 
     Quad m_quadCast;
     Quad m_quadRotate;
+    Rect m_rectCast;
+    Rect m_rectRotate;
 
 };
 

@@ -63,8 +63,24 @@ HUD::HUD()
     m_textHealth.SetPosition(-0.86f, 0.79f);
     m_textEnemyHealth.SetPosition(0.64f, 0.79f);
 
-    m_quadCast.SetBox(0.35f, -0.9f, 0.25f, 0.25f);
-    m_quadRotate.SetBox(0.68f, -0.9f, 0.25f, 0.25f);
+    m_rectCast.m_fX      = 0.35f;
+    m_rectCast.m_fY      = -0.9f;
+    m_rectCast.m_fWidth  = 0.25f;
+    m_rectCast.m_fHeight = 0.25f;
+
+    m_rectRotate.m_fX      = 0.68f;
+    m_rectRotate.m_fY      = -0.9f;
+    m_rectRotate.m_fWidth  = 0.25f;
+    m_rectRotate.m_fHeight = 0.25f;
+
+    m_quadCast.SetBox(m_rectCast.m_fX, 
+                      m_rectCast.m_fY,
+                      m_rectCast.m_fWidth,
+                      m_rectCast.m_fHeight);
+    m_quadRotate.SetBox(m_rectRotate.m_fX, 
+                        m_rectRotate.m_fY,
+                        m_rectRotate.m_fWidth,
+                        m_rectRotate.m_fHeight);
 
     // Set default text strings, just so we can see something
     m_textHealth.SetText("500");
@@ -133,12 +149,12 @@ void HUD::SetGame(void* pGame)
     m_pGame = pGame;
 }
 
-int HUD::IsCastPressed()
+int HUD::IsCastPressed(float fX, float fY)
 {
-    if (IsPoint)
+    return m_rectCast.Contains(fX, fY);
 }
 
-int HUD::IsRotatePressed()
+int HUD::IsRotatePressed(float fX, float fY)
 {
-
+    return m_rectRotate.Contains(fX, fY);
 }
