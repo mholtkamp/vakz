@@ -69,6 +69,9 @@
     <ClCompile Include="..\ShuffleMage\Deck.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\ShuffleMage\MsgDraw.cpp">
+      <Filter>Messages</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Session.h">
@@ -105,6 +108,9 @@
       <Filter>Messages</Filter>
     </ClInclude>
     <ClInclude Include="..\ShuffleMage\MsgPosition.h">
+      <Filter>Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ShuffleMage\MsgDraw.h">
       <Filter>Messages</Filter>
     </ClInclude>
   </ItemGroup>

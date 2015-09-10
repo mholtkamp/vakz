@@ -5,7 +5,7 @@
 
 class CardLaser : public Card
 {
-
+public:
     CardLaser();
     ~CardLaser();
 

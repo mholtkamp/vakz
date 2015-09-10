@@ -2,13 +2,19 @@
 #include "Constants.h"
 #include "Log.h"
 #include "Session.h"
+#include <stdlib.h>
+#include <time.h>
 
 // Response Messages
 #include "MsgResQueue.h"
-#include "MsgPosition.h"
 
-static MsgResQueue s_msgResQueue;
-static MsgPosition s_msgPosition;
+// Game Messages
+#include "MsgPosition.h"
+#include "MsgDraw.h"
+
+static MsgResQueue      s_msgResQueue;
+static MsgPosition      s_msgPosition;
+static MsgDraw          s_msgDraw;
 
 ServerGame::ServerGame()
 {
@@ -89,6 +95,7 @@ void ServerGame::SetSessions(void* pSession1,
         m_arDecks[SESSION_2].Set(m_arPlayerData[SESSION_2]->m_arDeck1);
 
         // Shuffle decks
+        srand(static_cast<unsigned int>(time(0)));
         m_arDecks[SESSION_1].Shuffle();
         m_arDecks[SESSION_2].Shuffle();
 
@@ -146,7 +153,7 @@ void ServerGame::RefreshHand(int nSession)
     int i      = 0;
     int nCount = 0;
 
-    //++ s_msgDraw.Clear();
+    s_msgDraw.Clear();
 
     for (i = 0; i < HAND_SIZE; i++)
     {
@@ -154,12 +161,18 @@ void ServerGame::RefreshHand(int nSession)
         {
             m_arHands[nSession][i] = m_arDecks[nSession].Draw();
 
-            //++ s_msgDraw.m_arCards[nCount] = m_arHands[nSession][i];
-            //++ nCount++;
+            if (m_arHands[nSession][i] == -1)
+            {
+                m_arHands[nSession][i] = 0;
+                break;
+            }
+
+            s_msgDraw.m_arCards[nCount] = m_arHands[nSession][i];
+            nCount++;
         }
     }
 
-    //++ Send(s_msgDraw, nSession);
+    Send(s_msgDraw, nSession);
 }
 
 char* ServerGame::ProcessMessage(char* pBuffer,

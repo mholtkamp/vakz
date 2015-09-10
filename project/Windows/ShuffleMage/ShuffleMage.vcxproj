@@ -74,6 +74,7 @@
     <ClCompile Include="CardBomb.cpp" />
     <ClCompile Include="CardBubble.cpp" />
     <ClCompile Include="CardBullet.cpp" />
+    <ClCompile Include="CardFactory.cpp" />
     <ClCompile Include="CardHeal.cpp" />
     <ClCompile Include="CardInvis.cpp" />
     <ClCompile Include="CardLaser.cpp" />
@@ -87,6 +88,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Message.cpp" />
+    <ClCompile Include="MsgDraw.cpp" />
     <ClCompile Include="MsgLogin.cpp" />
     <ClCompile Include="MsgPosition.cpp" />
     <ClCompile Include="MsgQueue.cpp" />
@@ -107,6 +109,7 @@
     <ClInclude Include="CardBomb.h" />
     <ClInclude Include="CardBubble.h" />
     <ClInclude Include="CardBullet.h" />
+    <ClInclude Include="CardFactory.h" />
     <ClInclude Include="CardHeal.h" />
     <ClInclude Include="CardInvis.h" />
     <ClInclude Include="CardLaser.h" />
@@ -118,6 +121,7 @@
     <ClInclude Include="Deck.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="HUD.h" />
+    <ClInclude Include="MsgDraw.h" />
     <ClInclude Include="MsgPosition.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="Mage.h" />

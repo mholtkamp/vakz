@@ -5,6 +5,7 @@
 #include "Camera.h"
 #include "Constants.h"
 #include "Mage.h"
+#include "Card.h"
 #include "Tile.h"
 #include "HUD.h"
 #include "MsgPosition.h"
@@ -43,6 +44,8 @@ public:
                         int nX,
                         int nZ);
 
+    void AddCardsToHand(int* arCards);
+
     Tile m_arTiles[GRID_WIDTH][GRID_HEIGHT];
 
     void* m_pNetworkManager;
@@ -56,6 +59,7 @@ private:
     DirectionalLight m_light;
     Mage m_arMages[NUM_MAGES];
     HUD m_hud;
+    Card* m_arHand[HAND_SIZE];
     
 
     // Touch/Gesture controls

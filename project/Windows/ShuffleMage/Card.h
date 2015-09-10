@@ -8,16 +8,16 @@
 
 enum CardIDEnum
 {
-    CARD_BULLET    = 0,
-    CARD_LASER     = 1,
-    CARD_HEAL      = 2,
-    CARD_INVIS     = 3,
-    CARD_SHOCKWAVE = 4,
-    CARD_BOMB      = 5,
-    CARD_SPEARS    = 6,
-    CARD_BUBBLE    = 7,
-    CARD_SWIPE     = 8,
-    CARD_AREAGRAB  = 9
+    CARD_BULLET    = 1,
+    CARD_LASER     = 2,
+    CARD_HEAL      = 3,
+    CARD_INVIS     = 4,
+    CARD_SHOCKWAVE = 5,
+    CARD_BOMB      = 6,
+    CARD_SPEARS    = 7,
+    CARD_BUBBLE    = 8,
+    CARD_SWIPE     = 9,
+    CARD_AREAGRAB  = 10
 };
 
 class Card

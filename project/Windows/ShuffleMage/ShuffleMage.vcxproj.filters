@@ -111,6 +111,12 @@
     <ClCompile Include="Deck.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MsgDraw.cpp">
+      <Filter>Messages</Filter>
+    </ClCompile>
+    <ClCompile Include="CardFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Menu.h">
@@ -210,6 +216,12 @@
       <Filter>Cards</Filter>
     </ClInclude>
     <ClInclude Include="HUD.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MsgDraw.h">
+      <Filter>Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="CardFactory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

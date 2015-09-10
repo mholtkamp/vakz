@@ -6,6 +6,7 @@
 #include "Quad.h"
 #include "Text.h"
 #include "Rect.h"
+#include "Card.h"
 
 class HUD
 {
@@ -20,7 +21,7 @@ public:
     void SetEnable(int nEnable);
     void SetGame(void* pGame);
 
-    void SetHandTextures(Texture* arHand[5]);
+    void SetHandTextures(Card** arHand);
 
     int IsCastPressed(float fX,
                       float fY);

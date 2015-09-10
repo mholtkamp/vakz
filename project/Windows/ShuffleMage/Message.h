@@ -1,13 +1,9 @@
 #ifndef MESSAGE_H
 #define MESSAGE_H
 
+#include "Constants.h"
+
 #define HEADER_SIZE 4
-
-
-#define USER_BUFFER_SIZE 16
-#define PASS_BUFFER_SIZE 16
-#define DECK_SIZE        30
-#define COLLECTION_SIZE  512
 
 enum MessageIDs
 {
@@ -43,6 +39,7 @@ enum MessageSizes
     MSG_REGISTER_SIZE  = 32,
     
     MSG_POSITION_SIZE  = 12,
+    MSG_DRAW_SIZE      = HAND_SIZE * sizeof(int),
 
     MSG_RES_LOGIN_SIZE    = 2424,
     MSG_RES_QUEUE_SIZE    = 8,

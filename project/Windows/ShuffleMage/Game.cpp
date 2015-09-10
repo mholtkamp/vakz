@@ -6,6 +6,7 @@
 #include <math.h>
 #include "NetworkManager.h"
 #include "Log.h"
+#include "CardFactory.h"
 
 Game::Game()
 {
@@ -63,6 +64,8 @@ void Game::Construct()
             }
         }
     }
+
+    memset(m_arHand, 0, sizeof(Card*) * HAND_SIZE);
 
     // Register HUD
     m_hud.Register(&m_scene);
@@ -261,4 +264,42 @@ void Game::UpdatePosition(int nPlayer,
     {
         m_arMages[nPlayer].UpdatePosition(nX, nZ);
     }
+}
+
+void Game::AddCardsToHand(int* arCards)
+{
+    int i         = 0;
+    int nCardSlot = 0;
+
+    for (i = 0; i < HAND_SIZE; i++)
+    {
+        if(m_arHand[i] == 0)
+        {
+            nCardSlot = i;
+            break;
+        }
+    }
+
+    if (i == HAND_SIZE)
+    {
+        LogError("Could not add cards to hand because hand is full.");
+        return;
+    }
+
+    for (i = 0; i < HAND_SIZE; i++)
+    {
+        if(arCards[i] > 0)
+        {
+            if (nCardSlot >= HAND_SIZE)
+            {
+                LogError("Could not add card to hand because hand is full.");
+                break;
+            }
+
+            m_arHand[nCardSlot] = InstantiateCard(arCards[i]);
+            nCardSlot++;
+        }
+    }
+
+    m_hud.SetHandTextures(m_arHand);
 }

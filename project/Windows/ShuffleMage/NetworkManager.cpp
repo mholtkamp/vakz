@@ -10,8 +10,9 @@
 #include "MsgResQueue.h"
 #include "MsgResRegister.h"
 
-// Game Response Messages
+// Game Messages
 #include "MsgPosition.h"
+#include "MsgDraw.h"
 
 
 #define MASTER_SEREVER_IP "127.0.0.1" //"192.168.2.3"
@@ -26,6 +27,7 @@ static MsgResQueue        s_msgResQueue;
 static MsgResRegister     s_msgResRegister;
 
 static MsgPosition        s_msgPosition;
+static MsgDraw            s_msgDraw;
 
 // Declaration of functions in Main.cpp
 void SetGameState(int nState);
@@ -154,6 +156,11 @@ char* NetworkManager::ProcessMessage(char* pBuffer,
                                                                  s_msgPosition.m_nX,
                                                                  s_msgPosition.m_nZ);
                 pBuffer += s_msgPosition.Size() + HEADER_SIZE;
+                break;
+            case MSG_DRAW:
+                s_msgDraw.Read(pBuffer);
+                reinterpret_cast<Game*>(m_pGame)->AddCardsToHand(s_msgDraw.m_arCards);
+                pBuffer += s_msgDraw.Size() + HEADER_SIZE;
                 break;
             default:
                 LogError("Unknown Game message received.");

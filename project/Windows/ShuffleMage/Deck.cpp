@@ -25,12 +25,13 @@ void Deck::Shuffle()
     int i     = 0;
     int nTemp = 0;
     int nPos  = 0;
-
-    srand(static_cast<unsigned int>(time(0)));
+    
+    // It is assumed that the stdlib RNG was already seeded.
+    //srand(static_cast<unsigned int>(time(0)));
 
     for (i = 0; i < DECK_SIZE; i++)
     {
-        nPos = DECK_SIZE * (rand() % 30);
+        nPos = rand() % 30;
         nTemp = m_arCards[i];
         m_arCards[i] = m_arCards[nPos];
         m_arCards[nPos] = nTemp;

@@ -158,3 +158,20 @@ int HUD::IsRotatePressed(float fX, float fY)
 {
     return m_rectRotate.Contains(fX, fY);
 }
+
+void HUD::SetHandTextures(Card** arHand)
+{
+    int i = 0;
+
+    for (i = 0; i < HAND_SIZE; i++)
+    {
+        if (arHand[i] != 0)
+        {
+            m_arHandCards[i].SetTexture(arHand[i]->GetTexture());
+        }
+        else
+        {
+            m_arHandCards[i].SetTexture(0);
+        }
+    }
+}
