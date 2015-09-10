@@ -69,6 +69,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\ShuffleMage\Deck.cpp" />
     <ClCompile Include="..\ShuffleMage\Mage.cpp" />
     <ClCompile Include="..\ShuffleMage\Message.cpp" />
     <ClCompile Include="..\ShuffleMage\MsgLogin.cpp" />

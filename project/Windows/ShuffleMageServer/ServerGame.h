@@ -5,6 +5,7 @@
 #include "Message.h"
 #include "Mage.h"
 #include "Tile.h"
+#include "Deck.h"
 
 enum ServerGameEnum
 {
@@ -38,10 +39,13 @@ public:
     char* ProcessMessage(char* pBuffer,
                          int   nLimit);
 
+    void RefreshHand(int nSession);
+
     // Message Actions
     void UpdatePosition(int nPlayer,
                         int nX,
                         int nZ);
+
 
     enum ServerGameEnum
     {
@@ -55,6 +59,10 @@ public:
 private:
 
     Mage m_arMages[NUM_MAGES];
+
+    Deck m_arDecks[NUM_MAGES];
+
+    int m_arHands[NUM_MAGES][HAND_SIZE];
 
     int m_nGameState;
 

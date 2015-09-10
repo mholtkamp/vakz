@@ -44,6 +44,9 @@ ServerGame::ServerGame()
     // Set Game/Tiles for mages
     m_arMages[MAGE_1].SetGame(this);
     m_arMages[MAGE_2].SetGame(this);
+
+    // Clear hands
+    memset(m_arHands, 0, NUM_MAGES * HAND_SIZE * sizeof(int));
 }
 
 ServerGame::~ServerGame()
@@ -80,6 +83,17 @@ void ServerGame::SetSessions(void* pSession1,
         s_msgResQueue.m_nSuccess = QUEUE_STATUS_MATCH_FOUND;
         s_msgResQueue.m_nSide = SIDE_2;
         Send(s_msgResQueue, SESSION_2);
+
+        // Setup decks
+        m_arDecks[SESSION_1].Set(m_arPlayerData[SESSION_1]->m_arDeck1);
+        m_arDecks[SESSION_2].Set(m_arPlayerData[SESSION_2]->m_arDeck1);
+
+        // Shuffle decks
+        m_arDecks[SESSION_1].Shuffle();
+        m_arDecks[SESSION_2].Shuffle();
+
+        RefreshHand(SESSION_1);
+        RefreshHand(SESSION_2);
     }
     else
     {
@@ -125,6 +139,27 @@ void ServerGame::Send(Message& msg, int nSession)
 int ServerGame::GetGameState()
 {
     return m_nGameState;
+}
+
+void ServerGame::RefreshHand(int nSession)
+{
+    int i      = 0;
+    int nCount = 0;
+
+    //++ s_msgDraw.Clear();
+
+    for (i = 0; i < HAND_SIZE; i++)
+    {
+        if (m_arHands[nSession][i] == 0)
+        {
+            m_arHands[nSession][i] = m_arDecks[nSession].Draw();
+
+            //++ s_msgDraw.m_arCards[nCount] = m_arHands[nSession][i];
+            //++ nCount++;
+        }
+    }
+
+    //++ Send(s_msgDraw, nSession);
 }
 
 char* ServerGame::ProcessMessage(char* pBuffer,

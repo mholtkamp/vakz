@@ -80,6 +80,7 @@
     <ClCompile Include="CardShockwave.cpp" />
     <ClCompile Include="CardSpears.cpp" />
     <ClCompile Include="CardSwipe.cpp" />
+    <ClCompile Include="Deck.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="HUD.cpp" />
     <ClCompile Include="Mage.cpp" />

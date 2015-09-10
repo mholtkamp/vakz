@@ -11,15 +11,18 @@ public:
     Deck();
     ~Deck();
     
-    void Draw(int nCount);
+    int Draw();
 
     void Shuffle();
 
     int Remaining();
 
+    void Set(int* arCardIDs);
+
 private:
 
-    Card* m_arCards[DECK_SIZE];
+    int m_nRemaining;
+    int m_arCards[DECK_SIZE];
 };
 
 #endif

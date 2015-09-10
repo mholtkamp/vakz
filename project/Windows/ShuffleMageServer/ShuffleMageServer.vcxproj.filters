@@ -66,6 +66,9 @@
     <ClCompile Include="..\ShuffleMage\Tile.cpp">
       <Filter>Client</Filter>
     </ClCompile>
+    <ClCompile Include="..\ShuffleMage\Deck.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Session.h">

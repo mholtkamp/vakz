@@ -48,7 +48,6 @@ private:
     Quad m_quadRotate;
     Rect m_rectCast;
     Rect m_rectRotate;
-
 };
 
 #endif

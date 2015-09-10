@@ -58,6 +58,7 @@ private:
     HUD m_hud;
     
 
+    // Touch/Gesture controls
     int m_nTouchDownLeft;
     int m_nJustTouchedLeft;
     int m_nJustUpLeft;
