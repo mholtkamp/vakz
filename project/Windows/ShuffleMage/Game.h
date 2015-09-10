@@ -36,6 +36,10 @@ public:
 
     void SetupCamera();
 
+    void RotateHandLeft();
+
+    void RotateHandRight();
+
     void SendPosition(int nPlayer,
                       int nX,
                       int nZ);

@@ -18,7 +18,7 @@
 #include "MsgResQueue.h"
 #include "MsgResRegister.h"
 
-#define DATABASE_PATH "C:/Users/Martin/ShuffleMage/" //"C:/Users/mholt_000/ShuffleMage/"
+#define DATABASE_PATH "C:/ShuffleMage/" //Users/Martin/ShuffleMage/" //"C:/Users/mholt_000/ShuffleMage/"
 char Session::s_arRecvBuffer[RECV_BUFFER_SIZE] = {0};
 char Session::s_arSendBuffer[SEND_BUFFER_SIZE] = {0};
 

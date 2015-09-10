@@ -215,8 +215,7 @@ void Game::Update()
         }
         else if (m_hud.IsRotatePressed(fX, fY) != 0)
         {
-            // TODO: Add rotate logic
-            LogDebug("Rotate pressed!");
+            RotateHandLeft();
         }
     }
 }
@@ -302,4 +301,43 @@ void Game::AddCardsToHand(int* arCards)
     }
 
     m_hud.SetHandTextures(m_arHand);
+}
+
+void Game::RotateHandLeft()
+{
+    int i       = 0;
+    Card* pTemp = 0;
+
+    if (m_arHand[0] == 0)
+    {
+        return;
+    }
+
+    pTemp = m_arHand[0];
+
+    for (i = 0; i < HAND_SIZE - 1; i++)
+    {
+        if (m_arHand[i+1] != 0)
+        {
+            m_arHand[i] = m_arHand[i+1];
+        }
+        else
+        {
+            m_arHand[i] = pTemp;
+            break;
+        }
+    }
+
+    if (i == HAND_SIZE - 1)
+    {
+        // Hand was full of cards
+        m_arHand[HAND_SIZE - 1] = pTemp;
+    }
+
+    m_hud.SetHandTextures(m_arHand);
+}
+
+void Game::RotateHandRight()
+{
+
 }
