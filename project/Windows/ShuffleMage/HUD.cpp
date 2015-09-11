@@ -169,10 +169,12 @@ void HUD::SetHandTextures(Card** arHand)
         if (arHand[i] != 0)
         {
             m_arHandCards[i].SetTexture(arHand[i]->GetTexture());
+            m_arHandCards[i].SetVisible(1);
         }
         else
         {
             m_arHandCards[i].SetTexture(0);
+            m_arHandCards[i].SetVisible(0);
         }
     }
 }
