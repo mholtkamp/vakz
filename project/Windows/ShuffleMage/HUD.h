@@ -28,6 +28,11 @@ public:
     int IsRotatePressed(float fX,
                         float fY);
 
+    void SetHealth(int nHealth);
+    void SetEnemyHealth(int nHealth);
+    void SetMana(int nMana);
+    void SetDrawCharge(int nDrawCharge);
+
 
 private:
 

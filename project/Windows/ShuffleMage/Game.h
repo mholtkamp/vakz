@@ -40,6 +40,8 @@ public:
 
     void RotateHandRight();
 
+    void RemoveCardFromHand(int nIndex);
+
     void SendPosition(int nPlayer,
                       int nX,
                       int nZ);
@@ -65,6 +67,9 @@ private:
     HUD m_hud;
     Card* m_arHand[HAND_SIZE];
     
+    // Timers
+    Timer m_timerMana;
+    Timer m_timerDraw;
 
     // Touch/Gesture controls
     int m_nTouchDownLeft;

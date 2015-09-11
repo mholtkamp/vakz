@@ -31,6 +31,9 @@ public:
     virtual void SetVisible(int nVisible);
     virtual void SetSpeed(float fSpeed);
 
+    virtual int GetHealth();
+    virtual void SetHealth(int nHealth);
+
     void SetSide(int nSide);
 
     void SetGame(void* pGame);

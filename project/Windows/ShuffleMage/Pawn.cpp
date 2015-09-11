@@ -151,3 +151,13 @@ void Pawn::SetGame(void* pGame)
 {
     m_pGame   = pGame;
 }
+
+int Pawn::GetHealth()
+{
+    return m_nHealth;
+}
+
+void Pawn::SetHealth(int nHealth)
+{
+    m_nHealth = nHealth;
+}

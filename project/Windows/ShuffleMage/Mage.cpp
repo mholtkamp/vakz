@@ -6,6 +6,11 @@
 Mage::Mage()
 {
     m_nHealth = DEFAULT_MAGE_HEALTH;
+    m_nMana   = DEFAULT_MAGE_MANA;
+    m_nDrawCharge = DEFAULT_DRAW_CHARGE;
+
+    m_nDrawRegenRate = DEFAULT_DRAW_CHARGE_REGEN_RATE;
+    m_nManaRegenRate = DEFAULT_MAGE_MANA_REGEN_RATE;
 
     m_nConfused   = 0;
     m_nPoisoned   = 0;
@@ -27,6 +32,11 @@ Mage::Mage()
 Mage::Mage(int nSide) : Pawn(nSide)
 {
     m_nHealth = DEFAULT_MAGE_HEALTH;
+    m_nMana   = DEFAULT_MAGE_MANA;
+    m_nDrawCharge = DEFAULT_DRAW_CHARGE;
+
+    m_nDrawRegenRate = DEFAULT_DRAW_CHARGE_REGEN_RATE;
+    m_nManaRegenRate = DEFAULT_MAGE_MANA_REGEN_RATE;
 
     m_nConfused   = 0;
     m_nPoisoned   = 0;
@@ -48,6 +58,69 @@ Mage::Mage(int nSide) : Pawn(nSide)
 Mage::~Mage()
 {
 
+}
+
+int  Mage::GetMana()
+{
+    return m_nMana;
+}
+
+void Mage::SetMana(int nMana)
+{
+    m_nMana = nMana;
+}
+
+void Mage::Replenish(int nMana)
+{
+    m_nMana += nMana;
+    if (m_nMana > DEFAULT_MAGE_MANA)
+    {
+        m_nMana = DEFAULT_MAGE_MANA;
+    }
+}
+
+void Mage::Drain(int nMana)
+{
+    m_nMana -= nMana;
+    if (m_nMana < 0)
+    {
+        m_nMana = 0;
+    }
+}
+
+void Mage::RegenMana()
+{
+    m_nMana += m_nManaRegenRate;
+
+    if (m_nMana >= MAX_MAGE_MANA)
+    {
+        m_nMana = MAX_MAGE_MANA;
+    }
+}
+
+void Mage::RegenDrawCharge()
+{
+    m_nDrawCharge += m_nDrawRegenRate;
+
+    if (m_nDrawCharge >= MAX_DRAW_CHARGE)
+    {
+        m_nDrawCharge = MAX_DRAW_CHARGE;
+    }
+}
+
+void Mage::SetManaRegenRate(int nManaRegenRate)
+{
+    m_nManaRegenRate = nManaRegenRate;
+}
+
+void Mage::SetDrawChargeRegenRate(int nDrawChargeRegenRate)
+{
+    m_nDrawRegenRate = nDrawChargeRegenRate;
+}
+
+int Mage::GetDrawCharge()
+{
+    return m_nDrawCharge;
 }
 
 int Mage::IsConfused()

@@ -82,6 +82,10 @@ void Game::Construct()
     m_nJustTouchedRight  = 0;
 
     m_pNetworkManager = 0;
+
+    // Timers
+    m_timerDraw.Start();
+    m_timerMana.Start();
 }
 
 void Game::Update()
@@ -91,10 +95,36 @@ void Game::Update()
     float fDispX = 0.0f;
     float fDispY = 0.0f;
     
+    float fDrawTime = 0.0f;
+    float fManaTime = 0.0f;
+
     int nDownLeft   = 0;
     int nDownRight  = 0;
     int nLeftIndex  = 0;
     int nRightIndex = 0;
+
+    // Update Draw and Mana timers
+    m_timerDraw.Stop();
+    m_timerMana.Stop();
+
+    fDrawTime = m_timerDraw.Time();
+    fManaTime = m_timerMana.Time();
+
+    if (fDrawTime >= DRAW_TICK_TIME)
+    {
+        // Regen draw charge
+        m_arMages[m_nPlayerSide].RegenDrawCharge();
+        m_hud.SetDrawCharge(m_arMages[m_nPlayerSide].GetDrawCharge());
+        m_timerDraw.Start();
+    }
+    
+    if (fManaTime >= MANA_TICK_TIME)
+    {
+        // Regen mana charge
+        m_arMages[m_nPlayerSide].RegenMana();
+        m_hud.SetMana(m_arMages[m_nPlayerSide].GetMana());
+        m_timerMana.Start();
+    }
 
     // Figure out what pointers are down
     if(IsPointerDown(0) != 0)
@@ -210,13 +240,38 @@ void Game::Update()
 
         if (m_hud.IsCastPressed(fX, fY) != 0)
         {
-            // TODO: Add cast logic
-            LogDebug("Cast pressed!");
+            if (m_arHand[0] != 0)
+            {
+                // Only cast card if there is enough mana.
+                if (m_arHand[0]->GetManaCost() < m_arMages[m_nPlayerSide].GetMana())
+                {
+                    m_arMages[m_nPlayerSide].Drain(m_arHand[0]->GetManaCost());
+                    m_hud.SetMana(m_arMages[m_nPlayerSide].GetMana());
+                    m_arHand[0]->Cast(this);
+                    RemoveCardFromHand(0);
+                }
+            }
         }
         else if (m_hud.IsRotatePressed(fX, fY) != 0)
         {
             RotateHandLeft();
         }
+    }
+}
+
+void Game::RemoveCardFromHand(int nIndex)
+{
+    int i = 0;
+
+    if (m_arHand[nIndex] != 0)
+    {
+        for (i = 0; i < HAND_SIZE - 1; i++)
+        {
+            m_arHand[i] = m_arHand[i+1];
+        }
+
+        m_arHand[HAND_SIZE - 1] = 0;
+        m_hud.SetHandTextures(m_arHand);
     }
 }
 

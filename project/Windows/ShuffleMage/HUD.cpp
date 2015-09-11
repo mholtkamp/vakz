@@ -1,5 +1,6 @@
 #include "HUD.h"
 #include "Resources.h"
+#include <stdio.h>
 
 #define HAND_BACK_X -0.4f
 #define HAND_BACK_Y 0.6f
@@ -174,4 +175,28 @@ void HUD::SetHandTextures(Card** arHand)
             m_arHandCards[i].SetTexture(0);
         }
     }
+}
+
+void HUD::SetHealth(int nHealth)
+{
+    char arString[8] = {0};
+    sprintf(arString, "%d", nHealth);
+    m_textHealth.SetText(arString);
+}
+
+void HUD::SetEnemyHealth(int nHealth)
+{
+    char arString[8] = {0};
+    sprintf(arString, "%d", nHealth);
+    m_textEnemyHealth.SetText(arString);
+}
+
+void HUD::SetMana(int nMana)
+{
+    m_quadManaBar.SetWidth((static_cast<float>(nMana)/DEFAULT_MAGE_MANA) * HAND_BACK_WIDTH);
+}
+
+void HUD::SetDrawCharge(int nDrawCharge)
+{
+    m_quadDrawBar.SetWidth((static_cast<float>(nDrawCharge)/DEFAULT_MAGE_MANA) * HAND_BACK_WIDTH);
 }

@@ -17,6 +17,19 @@ public:
     void UpdatePosition(int nX,
                         int nZ);
 
+    int  GetMana();
+    void SetMana(int nMana);
+    void Replenish(int nMana);
+    void Drain(int nMana);
+
+    void RegenMana();
+    void RegenDrawCharge();
+
+    void SetManaRegenRate(int nManaRegenRate);
+    void SetDrawChargeRegenRate(int nDrawChargeRegenRate);
+
+    int GetDrawCharge();
+
     //void SetSide(int nSide);
 
     // Status Getters
@@ -38,6 +51,12 @@ public:
     void SetRooted(int nRooted);
 
 private:
+
+    int m_nMana;
+    int m_nDrawCharge;
+
+    int m_nManaRegenRate;
+    int m_nDrawRegenRate;
 
     // Statuses
     int m_nConfused;
