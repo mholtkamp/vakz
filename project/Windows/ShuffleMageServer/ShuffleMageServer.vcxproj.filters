@@ -19,6 +19,12 @@
     <Filter Include="Client">
       <UniqueIdentifier>{6c122c33-e96d-44c2-895f-85f241be2290}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Cards">
+      <UniqueIdentifier>{9c47373d-997c-47bb-9f4f-f5dbb29de8b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Activations">
+      <UniqueIdentifier>{e6e6ea69-8ee7-428f-ae31-acf4c39104e7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -72,6 +78,51 @@
     <ClCompile Include="..\ShuffleMage\MsgDraw.cpp">
       <Filter>Messages</Filter>
     </ClCompile>
+    <ClCompile Include="..\ShuffleMage\MsgCard.cpp">
+      <Filter>Messages</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ShuffleMage\CardFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ShuffleMage\Card.cpp">
+      <Filter>Cards</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ShuffleMage\CardAreaGrab.cpp">
+      <Filter>Cards</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ShuffleMage\CardBomb.cpp">
+      <Filter>Cards</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ShuffleMage\CardBubble.cpp">
+      <Filter>Cards</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ShuffleMage\CardBullet.cpp">
+      <Filter>Cards</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ShuffleMage\CardHeal.cpp">
+      <Filter>Cards</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ShuffleMage\CardInvis.cpp">
+      <Filter>Cards</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ShuffleMage\CardLaser.cpp">
+      <Filter>Cards</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ShuffleMage\CardShockwave.cpp">
+      <Filter>Cards</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ShuffleMage\CardSpears.cpp">
+      <Filter>Cards</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ShuffleMage\CardSwipe.cpp">
+      <Filter>Cards</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ShuffleMage\Activation.cpp">
+      <Filter>Activations</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ShuffleMage\ActLaser.cpp">
+      <Filter>Activations</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Session.h">
@@ -112,6 +163,51 @@
     </ClInclude>
     <ClInclude Include="..\ShuffleMage\MsgDraw.h">
       <Filter>Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ShuffleMage\MsgCard.h">
+      <Filter>Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ShuffleMage\Card.h">
+      <Filter>Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ShuffleMage\CardAreaGrab.h">
+      <Filter>Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ShuffleMage\CardBomb.h">
+      <Filter>Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ShuffleMage\CardBubble.h">
+      <Filter>Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ShuffleMage\CardBullet.h">
+      <Filter>Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ShuffleMage\CardHeal.h">
+      <Filter>Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ShuffleMage\CardInvis.h">
+      <Filter>Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ShuffleMage\CardLaser.h">
+      <Filter>Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ShuffleMage\CardShockwave.h">
+      <Filter>Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ShuffleMage\CardSpears.h">
+      <Filter>Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ShuffleMage\CardSwipe.h">
+      <Filter>Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ShuffleMage\CardTemplate.h">
+      <Filter>Cards</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ShuffleMage\Activation.h">
+      <Filter>Activations</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ShuffleMage\ActLaser.h">
+      <Filter>Activations</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

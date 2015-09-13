@@ -19,7 +19,11 @@ CardHeal::~CardHeal()
 
 Texture* CardHeal::GetTexture()
 {
+#if defined(SM_CLIENT)
     return CARD_HEAL_TEXTURE;
+#else
+    return 0;
+#endif
 }
 
 const char* CardHeal::GetName()

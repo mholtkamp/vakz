@@ -19,7 +19,11 @@ CardBomb::~CardBomb()
 
 Texture* CardBomb::GetTexture()
 {
+#if defined(SM_CLIENT)
     return CARD_BOMB_TEXTURE;
+#else
+    return 0;
+#endif
 }
 
 const char* CardBomb::GetName()

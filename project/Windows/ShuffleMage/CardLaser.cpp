@@ -19,7 +19,11 @@ CardLaser::~CardLaser()
 
 Texture* CardLaser::GetTexture()
 {
+#if defined(SM_CLIENT)
     return CARD_LASER_TEXTURE;
+#else
+    return 0;
+#endif
 }
 
 const char* CardLaser::GetName()

@@ -54,6 +54,15 @@ int main()
 
         // Next, update the match queue to create new games
         matchQueue.Update();
+        
+        // Update all games
+        for (int i = 0; i < MAX_GAMES; i++)
+        {
+            if (arGames[i].IsActive() != 0)
+            {
+                arGames[i].Update();
+            }
+        }
     }
     return 0;
 }

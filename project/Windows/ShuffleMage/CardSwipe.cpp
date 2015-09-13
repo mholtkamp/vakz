@@ -19,7 +19,11 @@ CardSwipe::~CardSwipe()
 
 Texture* CardSwipe::GetTexture()
 {
+#if defined(SM_CLIENT)
     return CARD_SWIPE_TEXTURE;
+#else
+    return 0;
+#endif
 }
 
 const char* CardSwipe::GetName()

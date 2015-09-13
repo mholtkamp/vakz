@@ -29,5 +29,5 @@ int MsgDraw::Size()
 
 void MsgDraw::Clear()
 {
-        memset(m_arCards, 0, HAND_SIZE * sizeof(int));
+    memset(m_arCards, 0, HAND_SIZE * sizeof(int));
 }

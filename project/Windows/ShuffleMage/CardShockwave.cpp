@@ -19,7 +19,11 @@ CardShockwave::~CardShockwave()
 
 Texture* CardShockwave::GetTexture()
 {
+#if defined(SM_CLIENT)
     return CARD_SHOCKWAVE_TEXTURE;
+#else
+    return 0;
+#endif
 }
 
 const char* CardShockwave::GetName()

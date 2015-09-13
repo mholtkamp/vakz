@@ -19,7 +19,11 @@ CardBubble::~CardBubble()
 
 Texture* CardBubble::GetTexture()
 {
+#if defined(SM_CLIENT)
     return CARD_BUBBLE_TEXTURE;
+#else
+    return 0;
+#endif
 }
 
 const char* CardBubble::GetName()

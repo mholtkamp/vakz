@@ -39,7 +39,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>E:\Projects\vakz\project\Windows\Engine;C:\Projects\vakz\project\Windows\Engine;C:\Projects\vakz\project\Windows\ShuffleMage;E:\Projects\vakz\project\Windows\ShuffleMage;$(IncludePath)</IncludePath>
+    <IncludePath>E:\Projects\vakz\project\Windows\Engine;C:\Projects\vakz\project\Windows\Engine;C:\Projects\vakz\project\Windows\ShuffleMage;E:\Projects\vakz\project\Windows\ShuffleMage;E:\Projects\vakz\project\Windows\ShuffleMageServer;C:\Projects\vakz\project\Windows\ShuffleMageServer;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Projects\vakz\project\Windows\Debug;E:\Projects\vakz\project\Windows\Debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -69,9 +69,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\ShuffleMage\Activation.cpp" />
+    <ClCompile Include="..\ShuffleMage\ActLaser.cpp" />
+    <ClCompile Include="..\ShuffleMage\Card.cpp" />
+    <ClCompile Include="..\ShuffleMage\CardAreaGrab.cpp" />
+    <ClCompile Include="..\ShuffleMage\CardBomb.cpp" />
+    <ClCompile Include="..\ShuffleMage\CardBubble.cpp" />
+    <ClCompile Include="..\ShuffleMage\CardBullet.cpp" />
+    <ClCompile Include="..\ShuffleMage\CardFactory.cpp" />
+    <ClCompile Include="..\ShuffleMage\CardHeal.cpp" />
+    <ClCompile Include="..\ShuffleMage\CardInvis.cpp" />
+    <ClCompile Include="..\ShuffleMage\CardLaser.cpp" />
+    <ClCompile Include="..\ShuffleMage\CardShockwave.cpp" />
+    <ClCompile Include="..\ShuffleMage\CardSpears.cpp" />
+    <ClCompile Include="..\ShuffleMage\CardSwipe.cpp" />
     <ClCompile Include="..\ShuffleMage\Deck.cpp" />
     <ClCompile Include="..\ShuffleMage\Mage.cpp" />
     <ClCompile Include="..\ShuffleMage\Message.cpp" />
+    <ClCompile Include="..\ShuffleMage\MsgCard.cpp" />
     <ClCompile Include="..\ShuffleMage\MsgDraw.cpp" />
     <ClCompile Include="..\ShuffleMage\MsgLogin.cpp" />
     <ClCompile Include="..\ShuffleMage\MsgPosition.cpp" />
@@ -88,7 +103,22 @@
     <ClCompile Include="Session.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\ShuffleMage\Activation.h" />
+    <ClInclude Include="..\ShuffleMage\ActLaser.h" />
+    <ClInclude Include="..\ShuffleMage\Card.h" />
+    <ClInclude Include="..\ShuffleMage\CardAreaGrab.h" />
+    <ClInclude Include="..\ShuffleMage\CardBomb.h" />
+    <ClInclude Include="..\ShuffleMage\CardBubble.h" />
+    <ClInclude Include="..\ShuffleMage\CardBullet.h" />
+    <ClInclude Include="..\ShuffleMage\CardHeal.h" />
+    <ClInclude Include="..\ShuffleMage\CardInvis.h" />
+    <ClInclude Include="..\ShuffleMage\CardLaser.h" />
+    <ClInclude Include="..\ShuffleMage\CardShockwave.h" />
+    <ClInclude Include="..\ShuffleMage\CardSpears.h" />
+    <ClInclude Include="..\ShuffleMage\CardSwipe.h" />
+    <ClInclude Include="..\ShuffleMage\CardTemplate.h" />
     <ClInclude Include="..\ShuffleMage\Message.h" />
+    <ClInclude Include="..\ShuffleMage\MsgCard.h" />
     <ClInclude Include="..\ShuffleMage\MsgDraw.h" />
     <ClInclude Include="..\ShuffleMage\MsgLogin.h" />
     <ClInclude Include="..\ShuffleMage\MsgPosition.h" />

@@ -19,7 +19,11 @@ CardInvis::~CardInvis()
 
 Texture* CardInvis::GetTexture()
 {
+#if defined(SM_CLIENT)
     return CARD_INVIS_TEXTURE;
+#else
+    return 0;
+#endif
 }
 
 const char* CardInvis::GetName()

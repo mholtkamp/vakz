@@ -2,6 +2,7 @@
 #include "Constants.h"
 #include "Log.h"
 #include "Session.h"
+#include "CardFactory.h"
 #include <stdlib.h>
 #include <time.h>
 
@@ -10,10 +11,12 @@
 
 // Game Messages
 #include "MsgPosition.h"
+#include "MsgCard.h"
 #include "MsgDraw.h"
 
 static MsgResQueue      s_msgResQueue;
 static MsgPosition      s_msgPosition;
+static MsgCard          s_msgCard;
 static MsgDraw          s_msgDraw;
 
 ServerGame::ServerGame()
@@ -21,7 +24,7 @@ ServerGame::ServerGame()
     int i = 0;
     int j = 0;
 
-    m_nGameState = GAME_STATE_INACTIVE;
+    m_nGameState = SERVER_GAME_STATE_INACTIVE;
 
     m_arSessions[SESSION_1] = 0;
     m_arSessions[SESSION_2] = 0;
@@ -53,6 +56,10 @@ ServerGame::ServerGame()
 
     // Clear hands
     memset(m_arHands, 0, NUM_MAGES * HAND_SIZE * sizeof(int));
+
+    // Clear activations
+    memset(m_arActivations, 0, MAX_ACTIVATIONS * sizeof(Activation*));
+ 
 }
 
 ServerGame::~ServerGame()
@@ -60,9 +67,39 @@ ServerGame::~ServerGame()
 
 }
 
+int ServerGame::IsActive()
+{
+    if (m_nGameState == SERVER_GAME_STATE_ACTIVE  ||
+        m_nGameState == SERVER_GAME_STATE_OVER    ||
+        m_nGameState == SERVER_GAME_STATE_WAITING)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
 void ServerGame::Update()
 {
+    int i = 0;
 
+    // Update all activations
+    for (i = 0; i < MAX_ACTIVATIONS; i++)
+    {
+        if (m_arActivations[i] != 0)
+        {
+            m_arActivations[i]->Update();
+
+            if (m_arActivations[i]->m_nExpired != 0)
+            {
+                m_arActivations[i]->OnDestroy();
+                delete m_arActivations[i];
+                m_arActivations[i] = 0;
+            }
+        }
+    }
 }
 
 void ServerGame::SetSessions(void* pSession1,
@@ -78,7 +115,7 @@ void ServerGame::SetSessions(void* pSession1,
         m_arPlayerData[SESSION_2] = reinterpret_cast<Session*>(m_arSessions[SESSION_2])->GetPlayerData();
 
         // Set the state to
-        m_nGameState = GAME_STATE_WAITING;
+        m_nGameState = SERVER_GAME_STATE_WAITING;
 
         // Send message to first player
         s_msgResQueue.m_nSuccess = QUEUE_STATUS_MATCH_FOUND;
@@ -191,6 +228,12 @@ char* ServerGame::ProcessMessage(char* pBuffer,
                        s_msgPosition.m_nZ);
         pBuffer += s_msgPosition.Size() + HEADER_SIZE;
         break;
+    case MSG_CARD:
+        s_msgCard.Read(pBuffer);
+        UseCard(s_msgCard.m_nCard,
+                s_msgCard.m_nCaster);
+        pBuffer += s_msgCard.Size() + HEADER_SIZE;
+        break;
     default:
         pBuffer = 0;
         break;
@@ -222,5 +265,68 @@ void ServerGame::UpdatePosition(int nPlayer,
         s_msgPosition.m_nZ      = nZ;
 
         Send(s_msgPosition, SESSION_1);
+    }
+}
+
+void ServerGame::UseCard(int nCard,
+                         int nCaster)
+{
+    int   i     = 0;
+    Card* pCard = 0;
+
+    if (nCaster >= MAGE_1 &&
+        nCaster <= MAGE_2)
+    {
+        for (i = 0; i < HAND_SIZE; i++)
+        {
+            if (m_arHands[nCaster][i] == nCard)
+            {
+                // Card exists in hand, next check if the caster has
+                // enough mana to stop cheaters and desync issues.
+
+                pCard = InstantiateCard(nCard);
+                if (pCard == 0)
+                {
+                    // Card could not be instantiated
+                    LogError("Card could not be instantiated from ID in ServerGame::UseCard()");
+                    return;
+                }
+
+                if (m_arMages[nCaster].GetMana() >= pCard->GetManaCost())
+                {
+                    LogDebug("Card activated on Server.");
+
+                    // Activate in ServerGame.
+                    pCard->Cast(this, nCaster);
+
+                    // Send MsgCard to other client
+                    s_msgCard.Clear();
+                    s_msgCard.m_nCard   = nCard;
+                    s_msgCard.m_nCaster = nCaster;
+                    Send(s_msgCard, (nCaster == MAGE_1) ? MAGE_2 : MAGE_1);
+                    
+                    delete pCard;
+                    pCard = 0;
+                    return;
+                }
+            }
+        }
+    }
+    else
+    {
+        LogError("Invalid caster in ServerGame::UseCard()");
+    }
+}
+
+Mage* ServerGame::GetMage(int nIndex)
+{
+    if (nIndex >= MAGE_1 && 
+        nIndex <= NUM_MAGES)
+    {
+        return &(m_arMages[nIndex]);
+    }
+    else
+    {
+        return 0;
     }
 }

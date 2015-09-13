@@ -2,6 +2,10 @@
 #include "Game.h"
 #include "Resources.h"
 
+#if defined SM_SERVER
+#include "ServerGame.h"
+#endif
+
 #define HIT_TIME 0.1f
 #define LIFETIME 0.5f
 #define OFFSET_Y 0.5f
@@ -28,11 +32,42 @@ void ActLaser::Update()
     fTime = m_timer.Time();
 
 #if defined(SM_SERVER)
+    int i = 0;
+    int nEnemyX = 0;
+    int nEnemyZ = 0;
+
+    ServerGame* pTheGame = reinterpret_cast<ServerGame*>(m_pGame);
+    Mage*       pEnemyMage = 0;
+
     if (fTime > HIT_TIME &&
         m_nHit == 0)
     {
         // Perform hit check and damage calculation
+        if (m_nCaster == SIDE_1)
+        {
+            pEnemyMage = pTheGame->GetMage(SIDE_2);
+            pEnemyMage->GetPosition(nEnemyX, nEnemyZ);
 
+            if (nEnemyZ == m_nCastZ &&
+                nEnemyX  > m_nCastX)
+            {
+                // Hit player 2, Send Health Message
+                LogDebug("Blue player hit by Laser.");
+            }
+        }
+        else
+        {
+            pEnemyMage = pTheGame->GetMage(SIDE_1);
+            pEnemyMage->GetPosition(nEnemyX, nEnemyZ);
+
+            if (nEnemyZ == m_nCastZ &&
+                nEnemyX  < m_nCastX)
+            {
+                // Hit player 1, Send Health Message
+                LogDebug("Red player hit by Laser.");
+            }
+        }
+        m_nHit = 1;
     }
 #endif
 
@@ -73,6 +108,11 @@ void ActLaser::OnCreate(void* pGame,
     pTheGame->m_arActMatters[nIndex].SetRotation(0.0f, 
                                                  nCaster ? -90.0f : 90.0f,
                                                  0.0f);
+#else
+    ServerGame* pTheGame = reinterpret_cast<ServerGame*>(m_pGame);
+    Mage* pMage          = pTheGame->GetMage(nCaster);
+
+    pMage->GetPosition(m_nCastX, m_nCastZ);
 #endif
 }
 

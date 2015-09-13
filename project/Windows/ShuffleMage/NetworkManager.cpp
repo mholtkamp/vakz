@@ -27,6 +27,7 @@ static MsgResQueue        s_msgResQueue;
 static MsgResRegister     s_msgResRegister;
 
 static MsgPosition        s_msgPosition;
+static MsgCard            s_msgCard;
 static MsgDraw            s_msgDraw;
 
 // Declaration of functions in Main.cpp
@@ -161,6 +162,12 @@ char* NetworkManager::ProcessMessage(char* pBuffer,
                 s_msgDraw.Read(pBuffer);
                 reinterpret_cast<Game*>(m_pGame)->AddCardsToHand(s_msgDraw.m_arCards);
                 pBuffer += s_msgDraw.Size() + HEADER_SIZE;
+                break;
+            case MSG_CARD:
+                s_msgCard.Read(pBuffer);
+                reinterpret_cast<Game*>(m_pGame)->UseCard(s_msgCard.m_nCard,
+                                                          s_msgCard.m_nCaster);
+                pBuffer += s_msgCard.Size() + HEADER_SIZE;
                 break;
             default:
                 LogError("Unknown Game message received.");

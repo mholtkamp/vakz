@@ -8,8 +8,10 @@
 #include "Card.h"
 #include "Tile.h"
 #include "HUD.h"
-#include "MsgPosition.h"
 #include "Activation.h"
+
+#include "MsgPosition.h"
+#include "MsgCard.h"
 
 class Game
 {
@@ -50,6 +52,9 @@ public:
     void UpdatePosition(int nPlayer,
                         int nX,
                         int nZ);
+
+    void UseCard(int nCard,
+                 int nCaster);
 
     void AddCardsToHand(int* arCards);
 
@@ -92,6 +97,7 @@ private:
 
     // Messages
     MsgPosition m_msgPosition;
+    MsgCard     m_msgCard;
 };
 
 #endif

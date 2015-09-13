@@ -25,7 +25,11 @@ CardXCARD::~CardXCARD()
 
 Texture* CardXCARD::GetTexture()
 {
+#if defined(SM_CLIENT)
     return CARD_DCARD_TEXTURE;
+#else
+    return 0;
+#endif
 }
 
 const char* CardXCARD::GetName()

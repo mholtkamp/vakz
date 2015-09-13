@@ -23,6 +23,8 @@ public:
     ServerGame();
     ~ServerGame();
 
+    int IsActive();
+
     void Update();
 
     int GetGameState();
@@ -41,10 +43,16 @@ public:
 
     void RefreshHand(int nSession);
 
+    Mage* GetMage(int nIndex);
+
     // Message Actions
     void UpdatePosition(int nPlayer,
                         int nX,
                         int nZ);
+    void UseCard(int nCard,
+                 int nCaster);
+
+
 
 
     enum ServerGameEnum
@@ -55,6 +63,9 @@ public:
     };
 
     Tile m_arTiles[GRID_WIDTH][GRID_HEIGHT];
+
+    // Activations
+    Activation* m_arActivations[MAX_ACTIVATIONS];
 
 private:
 

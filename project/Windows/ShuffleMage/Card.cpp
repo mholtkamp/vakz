@@ -1,6 +1,10 @@
 #include "Card.h"
 #include "Game.h"
 
+#if defined (SM_SERVER)
+#include "../ShuffleMageServer/ServerGame.h"
+#endif
+
 int Card::SpawnActivation(void* pGame,
                           int   nCaster,
                           Activation* pActivation)

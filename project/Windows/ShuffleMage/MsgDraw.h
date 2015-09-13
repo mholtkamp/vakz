@@ -15,9 +15,9 @@ public:
 
     void Write(char* pBuffer);
 
-    virtual int Size();
+    int Size();
 
-    virtual void Clear();
+    void Clear();
 
     int m_arCards[HAND_SIZE];
 

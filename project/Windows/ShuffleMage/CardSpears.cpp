@@ -19,7 +19,11 @@ CardSpears::~CardSpears()
 
 Texture* CardSpears::GetTexture()
 {
+#if defined(SM_CLIENT)
     return CARD_SPEARS_TEXTURE;
+#else
+    return 0;
+#endif
 }
 
 const char* CardSpears::GetName()

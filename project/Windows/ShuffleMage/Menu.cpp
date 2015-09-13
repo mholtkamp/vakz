@@ -8,7 +8,7 @@
 #include "Constants.h"
 
 #define MAIN_BUTTON_X     0.55f
-#define MAIN_BUTTON_WIDTH 0.45f
+#define MAIN_BUTTON_WIDTH 0.50f
 #define MAIN_BUTTON_HEIGHT 0.15f
 
 #define BLUR_FACTOR 1
@@ -81,11 +81,11 @@ Menu::Menu()
     m_btSettings.SetTextString("Settings");
     m_btSettings.AddToScene(m_scene);
 
-    m_btLogout.SetRect(-1.0f, -0.6f, 0.35f, MAIN_BUTTON_HEIGHT);
+    m_btLogout.SetRect(-1.005f, -0.6f, 0.35f, MAIN_BUTTON_HEIGHT);
     m_btLogout.SetTextString("Logout");
     m_btLogout.AddToScene(m_scene);
 
-    m_btExit.SetRect(-1.0f, -0.8f, 0.35f, MAIN_BUTTON_HEIGHT);
+    m_btExit.SetRect(-1.005f, -0.8f, 0.35f, MAIN_BUTTON_HEIGHT);
     m_btExit.SetTextString("Exit");
     m_btExit.AddToScene(m_scene);
 

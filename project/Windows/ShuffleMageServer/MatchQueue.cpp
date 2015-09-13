@@ -121,7 +121,7 @@ int MatchQueue::StartGame(void* pSession1,
 
     for (i = 0; i < MATCH_QUEUE_SIZE; i++)
     {
-        if (arGames[i].GetGameState() == GAME_STATE_INACTIVE)
+        if (arGames[i].GetGameState() == SERVER_GAME_STATE_INACTIVE)
         {
             arGames[i].SetSessions(pSession1, pSession2);
             reinterpret_cast<Session*>(pSession1)->m_pGame = &arGames[i];

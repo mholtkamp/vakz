@@ -19,7 +19,11 @@ CardBullet::~CardBullet()
 
 Texture* CardBullet::GetTexture()
 {
+#if defined(SM_CLIENT)
     return CARD_BULLET_TEXTURE;
+#else
+    return 0;
+#endif
 }
 
 const char* CardBullet::GetName()

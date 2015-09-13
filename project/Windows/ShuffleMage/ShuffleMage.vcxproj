@@ -39,7 +39,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>E:\Projects\vakz\project\Windows\Engine;C:\Projects\vakz\project\Windows\Engine;$(IncludePath)</IncludePath>
+    <IncludePath>E:\Projects\vakz\project\Windows\Engine;C:\Projects\vakz\project\Windows\Engine;C:\Projects\vakz\project\Windows\ShuffleMage;E:\Projects\vakz\project\Windows\ShuffleMage;E:\Projects\vakz\project\Windows\ShuffleMageServer;C:\Projects\vakz\project\Windows\ShuffleMageServer;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Projects\vakz\project\Windows\Debug;E:\Projects\vakz\project\Windows\Debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -91,6 +91,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Message.cpp" />
+    <ClCompile Include="MsgCard.cpp" />
     <ClCompile Include="MsgDraw.cpp" />
     <ClCompile Include="MsgLogin.cpp" />
     <ClCompile Include="MsgPosition.cpp" />
@@ -126,6 +127,7 @@
     <ClInclude Include="Deck.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="HUD.h" />
+    <ClInclude Include="MsgCard.h" />
     <ClInclude Include="MsgDraw.h" />
     <ClInclude Include="MsgPosition.h" />
     <ClInclude Include="Tile.h" />

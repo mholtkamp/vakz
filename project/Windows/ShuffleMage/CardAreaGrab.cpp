@@ -19,7 +19,11 @@ CardAreaGrab::~CardAreaGrab()
 
 Texture* CardAreaGrab::GetTexture()
 {
+#if defined(SM_CLIENT)
     return CARD_AREAGRAB_TEXTURE;
+#else
+    return 0;
+#endif
 }
 
 const char* CardAreaGrab::GetName()

@@ -100,9 +100,6 @@ void Game::Construct()
         // Add to scene
         m_scene.AddMatter(&m_arActMatters[i]);
     }
-
-
-
 }
 
 void Game::Update()
@@ -266,8 +263,16 @@ void Game::Update()
                     m_arMages[m_nPlayerSide].Drain(m_arHand[0]->GetManaCost());
                     m_hud.SetMana(m_arMages[m_nPlayerSide].GetMana());
                     m_arHand[0]->Cast(this, m_nPlayerSide);
-                    RemoveCardFromHand(0);
+                    
                     m_arMages[m_nPlayerSide].PlayCastAnimation();
+
+                    // Send Card message to server
+                    m_msgCard.Clear();
+                    m_msgCard.m_nCard   = m_arHand[0]->GetID();
+                    m_msgCard.m_nCaster = m_nPlayerSide;
+                    reinterpret_cast<NetworkManager*>(m_pNetworkManager)->Send(m_msgCard);
+
+                    RemoveCardFromHand(0);
                 }
             }
         }
@@ -355,6 +360,24 @@ void Game::UpdatePosition(int nPlayer,
     }
 }
 
+void Game::UseCard(int nCard,
+                   int nCaster)
+{
+    Card* pCard = InstantiateCard(nCard);
+
+    if (pCard != 0)
+    {
+        pCard->Cast(this, nCaster);
+        m_arMages[nCaster].PlayCastAnimation();
+        delete pCard;
+        pCard = 0;
+    }
+    else
+    {
+        LogError("Game::UseCard, could not instantiate card from ID.");
+    }
+}
+
 void Game::AddCardsToHand(int* arCards)
 {
     int i         = 0;
@@ -434,7 +457,8 @@ void Game::RotateHandRight()
 
 Mage* Game::GetMage(int nIndex)
 {
-    if (nIndex <= SIDE_2)
+    if (nIndex >= SIDE_1 &&
+        nIndex <= SIDE_2)
     {
         return &(m_arMages[nIndex]);
     }
