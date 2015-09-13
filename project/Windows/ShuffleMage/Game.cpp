@@ -267,6 +267,7 @@ void Game::Update()
                     m_hud.SetMana(m_arMages[m_nPlayerSide].GetMana());
                     m_arHand[0]->Cast(this, m_nPlayerSide);
                     RemoveCardFromHand(0);
+                    m_arMages[m_nPlayerSide].PlayCastAnimation();
                 }
             }
         }

@@ -17,6 +17,8 @@ public:
     void UpdatePosition(int nX,
                         int nZ);
 
+    void PlayCastAnimation();
+
     int  GetMana();
     void SetMana(int nMana);
     void Replenish(int nMana);

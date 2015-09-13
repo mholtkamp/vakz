@@ -201,3 +201,10 @@ void Mage::UpdatePosition(int nX,
         m_matter.Translate(0.0f, MAGE_Y_OFFSET, 0.0f);
 #endif
 }
+
+void Mage::PlayCastAnimation()
+{
+#if defined SM_CLIENT
+    m_matter.PlayAnimationOnce("Cast");
+#endif
+}

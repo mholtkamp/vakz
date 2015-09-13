@@ -158,6 +158,17 @@ public:
     void SetAnimation(const char* pAnimation);
 
     //## **********************************************************************
+    //## PlayAnimationOnce
+    //##
+    //## Plays an animation just once, returning to whatever animation was 
+    //## set previously when finished.
+    //## 
+    //## Input:
+    //##   pAnimation - name of animation to play.
+    //## **********************************************************************
+    void PlayAnimationOnce(const char* pAnimation);
+
+    //## **********************************************************************
     //## SetLoopMode
     //##
     //## Sets the animation looping mode. Loop mode controls the repetition
@@ -345,6 +356,9 @@ private:
 
     //## Current animation index of the bound mesh
     int m_nCurrentAnimation;
+
+    //## Play-Once animation index.
+    int m_nPlayOnceAnimation;
 
     //## Current frame of animation
     float m_fCurrentFrame;

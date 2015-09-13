@@ -31,6 +31,7 @@ Matter::Matter()
     m_pCollider = 0;
 
     m_nCurrentAnimation   = 0;
+    m_nPlayOnceAnimation  = -1;
     m_fCurrentFrame       = 0.0f;
     m_nLoopMode           = LOOP_NONE;
     m_nPlay               = 0;
@@ -161,7 +162,7 @@ void Matter::Render(void* pScene)
         // Set up uniforms/attributes
         m_pMesh->SetRenderState(pScene,
                                 hProg,
-                                m_nCurrentAnimation,
+                                (m_nPlayOnceAnimation != -1) ? m_nPlayOnceAnimation : m_nCurrentAnimation,
                                 m_fCurrentFrame);
         m_pMaterial->SetRenderState(pScene,
                                     hProg);
@@ -366,6 +367,33 @@ void Matter::SetAnimation(const char* pAnimation)
 }
 
 //*****************************************************************************
+// PlayAnimationOnce
+//*****************************************************************************
+void Matter::PlayAnimationOnce(const char* pAnimation)
+{
+    int i                   = 0;
+    int nNewAnimation       = 0;
+    AnimatedMesh* pAnimMesh = 0;
+
+    if (m_pMesh            != 0 &&
+        m_pMesh->GetType() == MESH_ANIMATED)
+    {
+        // Convert the matter's mesh to an animated mesh
+        pAnimMesh = reinterpret_cast<AnimatedMesh*>(m_pMesh);
+
+        // Retrieve the index of the animation
+        nNewAnimation = pAnimMesh->GetAnimationIndex(pAnimation);
+
+        // If a valid animation index was returned, then set it
+        if (nNewAnimation != -1)
+        {
+            m_nPlayOnceAnimation = nNewAnimation;
+            m_fCurrentFrame = 0;
+        }
+    }
+}
+
+//*****************************************************************************
 // SetLoopMode
 //*****************************************************************************
 void Matter::SetLoopMode(int nLoopMode)
@@ -449,6 +477,21 @@ void Matter::UpdateAnimation()
         
         // Reset the timer to record next frame's time
         m_timerFrame.Start();
+
+        if (m_nPlayOnceAnimation != -1)
+        {
+            if (static_cast<int>(m_fCurrentFrame) < fLastFrame)
+            {
+                // If the animation hasn't ended, increase the frame count.
+                m_fCurrentFrame += fElapsedTime     * 
+                                   fFramesPerSecond * 
+                                   m_fSpeed;
+            }
+            else
+            {
+                m_nPlayOnceAnimation = -1;
+            }
+        }
 
         if (m_nLoopMode == LOOP_NONE)
         {
