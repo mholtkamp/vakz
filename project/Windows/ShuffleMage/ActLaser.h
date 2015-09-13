@@ -20,6 +20,8 @@ public:
     void OnDestroy();
 
 
+    int m_nCastX;
+    int m_nCastZ;
     int m_nHit;
     DiffuseMaterial* m_pMaterial;
 };

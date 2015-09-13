@@ -58,16 +58,8 @@ Matter::~Matter()
 //*****************************************************************************
 void Matter::SetMesh(Mesh* pMesh)
 {
-    if (pMesh != 0)
-    {
-        // Set the new mesh.
-        m_pMesh   = pMesh;
-    }
-    else
-    {
-        LogWarning("Denied attempt to set static mesh to null pointer in"
-                   " Matter::SetMesh().");
-    }
+    // Set the new mesh.
+    m_pMesh   = pMesh;
 }
 
 //*****************************************************************************
@@ -75,15 +67,8 @@ void Matter::SetMesh(Mesh* pMesh)
 //*****************************************************************************
 void Matter::SetMaterial(Material* pMaterial)
 {
-    if (pMaterial != 0)
-    {
-        // Set the new material
-        m_pMaterial = pMaterial;
-    }
-    else
-    {
-        LogWarning("Denied attempt to set null material in Matter::SetMaterial().");
-    }
+    // Set the new material
+    m_pMaterial = pMaterial;
 }
 
 //*****************************************************************************
@@ -99,17 +84,13 @@ void Matter::SetTexture(Texture* pTexture)
 //*****************************************************************************
 void Matter::SetCollider(Collider* pCollider)
 {
-    if(pCollider != 0)
+    m_pCollider = pCollider;
+    if (m_pCollider != 0)
     {
-        m_pCollider = pCollider;
         m_pCollider->SetPosition(m_fX, m_fY, m_fZ);
         m_pCollider->SetRotation(m_fRotX, m_fRotY, m_fRotZ);
         m_pCollider->SetScale(m_fScaleX, m_fScaleY, m_fScaleZ);
         m_pCollider->SetMatter(this);
-    }
-    else
-    {
-        LogWarning("Denied attempt to set a null collider in Matter::SetCollider().");
     }
 }
 

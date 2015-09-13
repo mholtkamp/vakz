@@ -53,6 +53,8 @@ public:
 
     void AddCardsToHand(int* arCards);
 
+    Mage* GetMage(int nIndex);
+
     Tile m_arTiles[GRID_WIDTH][GRID_HEIGHT];
 
     void* m_pNetworkManager;

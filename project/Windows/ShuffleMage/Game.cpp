@@ -96,6 +96,9 @@ void Game::Construct()
         // Material will default to diffuse white,
         // Mesh pointer is set to null in constructor.
         m_arActMatters[i].SetMaterial(g_pDiffuseMaterial);
+
+        // Add to scene
+        m_scene.AddMatter(&m_arActMatters[i]);
     }
 
 
@@ -104,6 +107,7 @@ void Game::Construct()
 
 void Game::Update()
 {
+    int i = 0;
     float fX     = 0.0f;
     float fY     = 0.0f;
     float fDispX = 0.0f;
@@ -271,6 +275,22 @@ void Game::Update()
             RotateHandLeft();
         }
     }
+
+    // Update all activations
+    for (i = 0; i < MAX_ACTIVATIONS; i++)
+    {
+        if (m_arActivations[i] != 0)
+        {
+            m_arActivations[i]->Update();
+
+            if (m_arActivations[i]->m_nExpired != 0)
+            {
+                m_arActivations[i]->OnDestroy();
+                delete m_arActivations[i];
+                m_arActivations[i] = 0;
+            }
+        }
+    }
 }
 
 void Game::RemoveCardFromHand(int nIndex)
@@ -409,4 +429,16 @@ void Game::RotateHandLeft()
 void Game::RotateHandRight()
 {
 
+}
+
+Mage* Game::GetMage(int nIndex)
+{
+    if (nIndex <= SIDE_2)
+    {
+        return &(m_arMages[nIndex]);
+    }
+    else
+    {
+        return 0;
+    }
 }

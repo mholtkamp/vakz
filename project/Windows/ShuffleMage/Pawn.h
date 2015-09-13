@@ -19,6 +19,9 @@ public:
 
     virtual void SetPosition(int nX,
                              int nZ);
+
+    void GetPosition(int& nX,
+                     int& nZ);
     
     virtual void UpdatePosition(int nX,
                                 int nZ);

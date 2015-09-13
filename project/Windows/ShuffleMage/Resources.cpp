@@ -31,6 +31,10 @@ Texture* g_pCardBubbleTex = 0;
 Texture* g_pCardSwipeTex = 0;
 Texture* g_pCardAreaGrabTex = 0;
 
+// Activations
+StaticMesh* g_pActLaserMesh;
+Texture*    g_pActLaserTex;
+
 static int s_nLoaded = 0;
 
 void LoadResources()
@@ -93,7 +97,11 @@ void LoadResources()
         g_pCardAreaGrabTex = new Texture();
         g_pCardAreaGrabTex->LoadBMP("Textures/Cards/CardAreaGrab.bmp");
 
-
+        // Activations
+        g_pActLaserMesh = new StaticMesh();
+        g_pActLaserMesh->Load("Meshes/Activations/laser_mesh.obj");
+        g_pActLaserTex  = new Texture();
+        g_pActLaserTex->LoadBMP("Textures/Activations/laser_tex.bmp");
         s_nLoaded = 1;
     }
 }

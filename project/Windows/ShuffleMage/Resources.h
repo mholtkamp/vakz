@@ -36,6 +36,10 @@ extern Texture* g_pCardBubbleTex;
 extern Texture* g_pCardSwipeTex;
 extern Texture* g_pCardAreaGrabTex;
 
+// Activations
+extern StaticMesh* g_pActLaserMesh;
+extern Texture*    g_pActLaserTex;
+
 
 void LoadResources();
 

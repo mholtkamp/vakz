@@ -161,3 +161,10 @@ void Pawn::SetHealth(int nHealth)
 {
     m_nHealth = nHealth;
 }
+
+void Pawn::GetPosition(int& nX,
+                       int& nZ)
+{
+    nX = m_nX;
+    nZ = m_nZ;
+}

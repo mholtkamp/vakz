@@ -124,6 +124,9 @@ void Scene::Render()
                            0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     // Render 3D Objects
     if (m_pCamera != 0)
     {
@@ -164,15 +167,12 @@ void Scene::Render()
             // Restore state
             glDepthMask(GL_TRUE);
             glDisable(GL_DEPTH_TEST);
-            glDisable(GL_BLEND);
         }
     }
 
     //@@ Possibly render code to a RenderGlyphs() private helper function.
     // Render screen glyphs last after 3D scene has rendered
     glDisable(GL_DEPTH_TEST);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     for (i = 0; i < m_nNumGlyphs; i++)
     {
         m_pGlyphs[i]->Render();

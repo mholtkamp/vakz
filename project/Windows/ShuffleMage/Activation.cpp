@@ -43,5 +43,7 @@ void Activation::OnDestroy()
 {
 #if defined(SM_CLIENT)
     reinterpret_cast<Game*>(m_pGame)->m_arActMatters[m_nActivityIndex].SetMesh(0);
+    reinterpret_cast<Game*>(m_pGame)->m_arActMatters[m_nActivityIndex].SetTexture(0);
+    reinterpret_cast<Game*>(m_pGame)->m_arActMatters[m_nActivityIndex].SetMaterial(0);
 #endif
 }
