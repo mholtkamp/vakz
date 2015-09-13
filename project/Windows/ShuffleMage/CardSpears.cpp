@@ -47,7 +47,7 @@ int CardSpears::GetRarity()
     return CARD_SPEARS_RARITY;
 }
 
-void CardSpears::Cast(void* pGame)
+void CardSpears::Cast(void* pGame, int nCaster)
 {
     LogDebug("Implement CardSpears::Cast()!");
 }

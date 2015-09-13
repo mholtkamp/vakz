@@ -47,7 +47,7 @@ int CardInvis::GetRarity()
     return CARD_INVIS_RARITY;
 }
 
-void CardInvis::Cast(void* pGame)
+void CardInvis::Cast(void* pGame, int nCaster)
 {
     LogDebug("Implement CardInvis::Cast()!");
 }

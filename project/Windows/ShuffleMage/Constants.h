@@ -70,4 +70,6 @@
 #define RARITY_RARE     2
 #define RARITY_EPIC     3
 
+#define MAX_ACTIVATIONS 12
+
 #endif

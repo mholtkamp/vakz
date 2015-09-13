@@ -47,7 +47,7 @@ int CardBullet::GetRarity()
     return RARITY_COMMON;
 }
 
-void CardBullet::Cast(void* pGame)
+void CardBullet::Cast(void* pGame, int nCaster)
 {
     LogDebug("Implement CardBullet::Cast()!");
 }

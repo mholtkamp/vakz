@@ -9,6 +9,7 @@
 #include "Tile.h"
 #include "HUD.h"
 #include "MsgPosition.h"
+#include "Activation.h"
 
 class Game
 {
@@ -56,6 +57,10 @@ public:
 
     void* m_pNetworkManager;
 
+    // Activations
+    Activation* m_arActivations[MAX_ACTIVATIONS];
+    Matter      m_arActMatters[MAX_ACTIVATIONS];
+
 private:
 
     int m_nPlayerSide;
@@ -85,7 +90,6 @@ private:
 
     // Messages
     MsgPosition m_msgPosition;
-
 };
 
 #endif

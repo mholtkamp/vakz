@@ -47,7 +47,7 @@ int CardBubble::GetRarity()
     return CARD_BUBBLE_RARITY;
 }
 
-void CardBubble::Cast(void* pGame)
+void CardBubble::Cast(void* pGame, int nCaster)
 {
     LogDebug("Implement CardBubble::Cast()!");
 }

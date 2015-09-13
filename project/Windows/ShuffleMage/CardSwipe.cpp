@@ -47,7 +47,7 @@ int CardSwipe::GetRarity()
     return CARD_SWIPE_RARITY;
 }
 
-void CardSwipe::Cast(void* pGame)
+void CardSwipe::Cast(void* pGame, int nCaster)
 {
     LogDebug("Implement CardSwipe::Cast()!");
 }

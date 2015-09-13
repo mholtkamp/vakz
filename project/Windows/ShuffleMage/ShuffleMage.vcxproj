@@ -69,7 +69,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Activation.cpp" />
+    <ClCompile Include="ActLaser.cpp" />
     <ClCompile Include="Button.cpp" />
+    <ClCompile Include="Card.cpp" />
     <ClCompile Include="CardAreaGrab.cpp" />
     <ClCompile Include="CardBomb.cpp" />
     <ClCompile Include="CardBubble.cpp" />
@@ -103,6 +106,8 @@
     <ClCompile Include="Tile.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Activation.h" />
+    <ClInclude Include="ActLaser.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Card.h" />
     <ClInclude Include="CardAreaGrab.h" />

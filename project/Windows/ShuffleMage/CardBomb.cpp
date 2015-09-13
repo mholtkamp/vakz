@@ -47,7 +47,7 @@ int CardBomb::GetRarity()
     return CARD_BOMB_RARITY;
 }
 
-void CardBomb::Cast(void* pGame)
+void CardBomb::Cast(void* pGame, int nCaster)
 {
     LogDebug("Implement CardBomb::Cast()!");
 }

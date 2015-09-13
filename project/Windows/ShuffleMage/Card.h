@@ -4,6 +4,7 @@
 #include "Texture.h"
 #include "Resources.h"
 #include "Log.h"
+#include "Activation.h"
 #include "Constants.h"
 
 enum CardIDEnum
@@ -34,7 +35,13 @@ public:
     virtual int GetID()            = 0;
     virtual int GetManaCost()      = 0;
     virtual int GetRarity()        = 0;
-    virtual void Cast(void* pGame) = 0;
+    virtual void Cast(void* pGame, int nCaster) = 0;
+
+protected:
+
+    int SpawnActivation(void*       pGame,
+                        int         nCaster,
+                        Activation* pActivation);
 };
 
 #endif

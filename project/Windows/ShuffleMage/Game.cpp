@@ -86,6 +86,20 @@ void Game::Construct()
     // Timers
     m_timerDraw.Start();
     m_timerMana.Start();
+
+    // Initialize activation related members
+    for (i = 0; i < MAX_ACTIVATIONS; i++)
+    {
+        // If an activation is non-zero, that means there is an activation in use
+        m_arActivations[i] = 0;
+ 
+        // Material will default to diffuse white,
+        // Mesh pointer is set to null in constructor.
+        m_arActMatters[i].SetMaterial(g_pDiffuseMaterial);
+    }
+
+
+
 }
 
 void Game::Update()
@@ -247,7 +261,7 @@ void Game::Update()
                 {
                     m_arMages[m_nPlayerSide].Drain(m_arHand[0]->GetManaCost());
                     m_hud.SetMana(m_arMages[m_nPlayerSide].GetMana());
-                    m_arHand[0]->Cast(this);
+                    m_arHand[0]->Cast(this, m_nPlayerSide);
                     RemoveCardFromHand(0);
                 }
             }

@@ -47,7 +47,7 @@ int CardAreaGrab::GetRarity()
     return CARD_AREAGRAB_RARITY;
 }
 
-void CardAreaGrab::Cast(void* pGame)
+void CardAreaGrab::Cast(void* pGame, int nCaster)
 {
     LogDebug("Implement CardAreaGrab::Cast()!");
 }

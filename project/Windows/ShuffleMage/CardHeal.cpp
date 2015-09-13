@@ -47,7 +47,7 @@ int CardHeal::GetRarity()
     return CARD_HEAL_RARITY;
 }
 
-void CardHeal::Cast(void* pGame)
+void CardHeal::Cast(void* pGame, int nCaster)
 {
     LogDebug("Implement CardHeal::Cast()!");
 }

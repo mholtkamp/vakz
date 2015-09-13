@@ -47,7 +47,7 @@ int CardShockwave::GetRarity()
     return CARD_SHOCKWAVE_RARITY;
 }
 
-void CardShockwave::Cast(void* pGame)
+void CardShockwave::Cast(void* pGame, int nCaster)
 {
     LogDebug("Implement CardShockwave::Cast()!");
 }

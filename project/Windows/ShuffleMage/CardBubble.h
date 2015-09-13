@@ -18,7 +18,7 @@ public:
     int GetID();
     int GetManaCost();
     int GetRarity();
-    void Cast(void* pGame);
+    void Cast(void* pGame, int nCaster);
 };
 
 #endif

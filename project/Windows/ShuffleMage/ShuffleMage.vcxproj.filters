@@ -19,6 +19,9 @@
     <Filter Include="Cards">
       <UniqueIdentifier>{32f5f542-bf48-4813-b9a5-91d8bafecaad}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Activations">
+      <UniqueIdentifier>{0724e175-e79c-44e5-b3f2-de077759abc3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -116,6 +119,15 @@
     </ClCompile>
     <ClCompile Include="CardFactory.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Activation.cpp">
+      <Filter>Activations</Filter>
+    </ClCompile>
+    <ClCompile Include="Card.cpp">
+      <Filter>Cards</Filter>
+    </ClCompile>
+    <ClCompile Include="ActLaser.cpp">
+      <Filter>Activations</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -223,6 +235,12 @@
     </ClInclude>
     <ClInclude Include="CardFactory.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Activation.h">
+      <Filter>Activations</Filter>
+    </ClInclude>
+    <ClInclude Include="ActLaser.h">
+      <Filter>Activations</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

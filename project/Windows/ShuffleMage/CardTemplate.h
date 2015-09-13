@@ -53,7 +53,7 @@ int CardXCARD::GetRarity()
     return CARD_DCARD_RARITY;
 }
 
-void CardXCARD::Cast(void* pGame)
+void CardXCARD::Cast(void* pGame, int nCaster)
 {
     LogDebug("Implement CardXCARD::Cast()!");
 }
