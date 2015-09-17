@@ -360,6 +360,25 @@ void Game::UpdatePosition(int nPlayer,
     }
 }
 
+void Game::UpdateHealth(int nPlayer,
+                        int nHealth)
+{
+    if (nPlayer >= MAGE_1 &&
+        nPlayer <= MAGE_2)
+    {
+        m_arMages[nPlayer].SetHealth(nHealth);
+        
+        if (nPlayer == m_nPlayerSide)
+        {
+            m_hud.SetHealth(nHealth);
+        }
+        else
+        {
+            m_hud.SetEnemyHealth(nHealth);
+        }
+    }
+}
+
 void Game::UseCard(int nCard,
                    int nCaster)
 {

@@ -88,6 +88,7 @@
     <ClCompile Include="..\ShuffleMage\Message.cpp" />
     <ClCompile Include="..\ShuffleMage\MsgCard.cpp" />
     <ClCompile Include="..\ShuffleMage\MsgDraw.cpp" />
+    <ClCompile Include="..\ShuffleMage\MsgHealth.cpp" />
     <ClCompile Include="..\ShuffleMage\MsgLogin.cpp" />
     <ClCompile Include="..\ShuffleMage\MsgPosition.cpp" />
     <ClCompile Include="..\ShuffleMage\MsgQueue.cpp" />
@@ -120,6 +121,7 @@
     <ClInclude Include="..\ShuffleMage\Message.h" />
     <ClInclude Include="..\ShuffleMage\MsgCard.h" />
     <ClInclude Include="..\ShuffleMage\MsgDraw.h" />
+    <ClInclude Include="..\ShuffleMage\MsgHealth.h" />
     <ClInclude Include="..\ShuffleMage\MsgLogin.h" />
     <ClInclude Include="..\ShuffleMage\MsgPosition.h" />
     <ClInclude Include="..\ShuffleMage\MsgQueue.h" />

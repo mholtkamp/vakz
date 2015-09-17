@@ -53,6 +53,9 @@ public:
                         int nX,
                         int nZ);
 
+    void UpdateHealth(int nPlayer,
+                      int nHealth);
+
     void UseCard(int nCard,
                  int nCaster);
 

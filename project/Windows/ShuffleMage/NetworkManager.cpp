@@ -12,6 +12,7 @@
 
 // Game Messages
 #include "MsgPosition.h"
+#include "MsgHealth.h"
 #include "MsgDraw.h"
 
 
@@ -29,6 +30,7 @@ static MsgResRegister     s_msgResRegister;
 static MsgPosition        s_msgPosition;
 static MsgCard            s_msgCard;
 static MsgDraw            s_msgDraw;
+static MsgHealth          s_msgHealth;
 
 // Declaration of functions in Main.cpp
 void SetGameState(int nState);
@@ -168,6 +170,12 @@ char* NetworkManager::ProcessMessage(char* pBuffer,
                 reinterpret_cast<Game*>(m_pGame)->UseCard(s_msgCard.m_nCard,
                                                           s_msgCard.m_nCaster);
                 pBuffer += s_msgCard.Size() + HEADER_SIZE;
+                break;
+            case MSG_HEALTH:
+                s_msgHealth.Read(pBuffer);
+                reinterpret_cast<Game*>(m_pGame)->UpdateHealth(s_msgHealth.m_nPlayer,
+                                                               s_msgHealth.m_nHealth);
+                pBuffer += s_msgHealth.Size() + HEADER_SIZE;
                 break;
             default:
                 LogError("Unknown Game message received.");

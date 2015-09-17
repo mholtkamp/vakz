@@ -6,6 +6,7 @@
 #include "ServerGame.h"
 #endif
 
+#define DAMAGE   20
 #define HIT_TIME 0.1f
 #define LIFETIME 0.5f
 #define OFFSET_Y 0.5f
@@ -52,7 +53,7 @@ void ActLaser::Update()
                 nEnemyX  > m_nCastX)
             {
                 // Hit player 2, Send Health Message
-                LogDebug("Blue player hit by Laser.");
+                pEnemyMage->Damage(DAMAGE);
             }
         }
         else
@@ -64,7 +65,7 @@ void ActLaser::Update()
                 nEnemyX  < m_nCastX)
             {
                 // Hit player 1, Send Health Message
-                LogDebug("Red player hit by Laser.");
+                pEnemyMage->Damage(DAMAGE);
             }
         }
         m_nHit = 1;

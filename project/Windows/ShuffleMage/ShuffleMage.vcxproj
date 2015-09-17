@@ -93,6 +93,7 @@
     <ClCompile Include="Message.cpp" />
     <ClCompile Include="MsgCard.cpp" />
     <ClCompile Include="MsgDraw.cpp" />
+    <ClCompile Include="MsgHealth.cpp" />
     <ClCompile Include="MsgLogin.cpp" />
     <ClCompile Include="MsgPosition.cpp" />
     <ClCompile Include="MsgQueue.cpp" />
@@ -129,6 +130,7 @@
     <ClInclude Include="HUD.h" />
     <ClInclude Include="MsgCard.h" />
     <ClInclude Include="MsgDraw.h" />
+    <ClInclude Include="MsgHealth.h" />
     <ClInclude Include="MsgPosition.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="Mage.h" />

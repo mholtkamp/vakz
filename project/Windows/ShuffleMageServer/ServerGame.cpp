@@ -12,11 +12,13 @@
 // Game Messages
 #include "MsgPosition.h"
 #include "MsgCard.h"
+#include "MsgHealth.h"
 #include "MsgDraw.h"
 
 static MsgResQueue      s_msgResQueue;
 static MsgPosition      s_msgPosition;
 static MsgCard          s_msgCard;
+static MsgHealth        s_msgHealth;
 static MsgDraw          s_msgDraw;
 
 ServerGame::ServerGame()
@@ -329,4 +331,19 @@ Mage* ServerGame::GetMage(int nIndex)
     {
         return 0;
     }
+}
+
+void ServerGame::UpdateHealth(int nPlayer)
+{
+    if (nPlayer < 0 ||
+        nPlayer >= NUM_MAGES)
+    {
+        // Invalid index into mage array.
+        return;
+    }
+
+    s_msgHealth.Clear();
+    s_msgHealth.m_nPlayer = nPlayer;
+    s_msgHealth.m_nHealth = m_arMages[nPlayer].GetHealth();
+    Send(s_msgHealth, SESSION_ALL);
 }

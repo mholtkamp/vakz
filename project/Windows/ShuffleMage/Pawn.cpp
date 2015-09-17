@@ -101,11 +101,18 @@ void Pawn::Move(int nX,
 void Pawn::Damage(int nDamage)
 {
     m_nHealth -= nDamage;
+    
+#if defined (SM_SERVER)
+        reinterpret_cast<ServerGame*>(m_pGame)->UpdateHealth(m_nSide);
+#endif
 }
 
 void Pawn::Heal(int nHealth)
 {
     m_nHealth += nHealth;
+#if defined (SM_SERVER)
+        reinterpret_cast<ServerGame*>(m_pGame)->UpdateHealth(m_nSide);
+#endif
 }
 
 void Pawn::SetVisible(int nVisible)
@@ -160,6 +167,10 @@ int Pawn::GetHealth()
 void Pawn::SetHealth(int nHealth)
 {
     m_nHealth = nHealth;
+
+#if defined (SM_SERVER)
+        reinterpret_cast<ServerGame*>(m_pGame)->UpdateHealth(m_nSide);
+#endif
 }
 
 void Pawn::GetPosition(int& nX,

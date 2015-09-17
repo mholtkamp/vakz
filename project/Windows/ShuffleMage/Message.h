@@ -40,6 +40,7 @@ enum MessageSizes
     
     MSG_POSITION_SIZE  = 12,
     MSG_CARD_SIZE      = 8,
+    MSG_HEALTH_SIZE    = 8,
     MSG_DRAW_SIZE      = HAND_SIZE * sizeof(int),
 
     MSG_RES_LOGIN_SIZE    = 2424,

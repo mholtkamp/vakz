@@ -49,6 +49,9 @@ public:
     void UpdatePosition(int nPlayer,
                         int nX,
                         int nZ);
+
+    void UpdateHealth(int nPlayer);
+
     void UseCard(int nCard,
                  int nCaster);
 
