@@ -109,6 +109,8 @@ void ActLaser::OnCreate(void* pGame,
     pTheGame->m_arActMatters[nIndex].SetRotation(0.0f, 
                                                  nCaster ? -90.0f : 90.0f,
                                                  0.0f);
+
+    g_pActLaserSound->Play();
 #else
     ServerGame* pTheGame = reinterpret_cast<ServerGame*>(m_pGame);
     Mage* pMage          = pTheGame->GetMage(nCaster);

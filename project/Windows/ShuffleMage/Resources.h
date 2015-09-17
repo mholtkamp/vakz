@@ -5,6 +5,7 @@
 #include "Texture.h"
 #include "AnimatedMesh.h"
 #include "DiffuseMaterial.h"
+#include "Sound.h"
 
 // Texture Resources
 extern Texture* g_pRedMageTex;
@@ -39,7 +40,7 @@ extern Texture* g_pCardAreaGrabTex;
 // Activations
 extern StaticMesh* g_pActLaserMesh;
 extern Texture*    g_pActLaserTex;
-
+extern Sound*      g_pActLaserSound;
 
 void LoadResources();
 

@@ -52,7 +52,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>Ws2_32.lib</AdditionalDependencies>
+      <AdditionalDependencies>Ws2_32.lib;winmm.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -81,6 +81,7 @@
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="MeshCollider.cpp" />
     <ClCompile Include="Rect.cpp" />
+    <ClCompile Include="Sound.cpp" />
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="Text.cpp" />
     <ClCompile Include="Timer.cpp" />
