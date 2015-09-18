@@ -1,4 +1,5 @@
 #include "Sound.h"
+#include <string.h>
 
 #if defined (WINDOWS)
 #include <windows.h>

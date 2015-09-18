@@ -149,6 +149,15 @@ void Game::Update()
         {
             nDownLeft = 1;
             nLeftIndex = 0;
+
+            if (IsPointerDown(1) != 0)
+            {
+                if (fX > 0.0f)
+                {
+                    nDownRight = 1;
+                    nRightIndex = 1;
+                }
+            }
         }
         else if (IsPointerDown(1) != 0)
         {
