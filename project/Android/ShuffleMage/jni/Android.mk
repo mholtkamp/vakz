@@ -54,7 +54,7 @@ FILE_LIST_SM := $(wildcard E:/Projects/vakz/project/Windows/ShuffleMage/*.cpp)
 LOCAL_SRC_FILES := $(FILE_LIST_SM:%=%)
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../../Windows/Engine 
 LOCAL_CPPFLAGS := -DSM_CLIENT=1 
-LOCAL_LDLIBS    := -lm -llog -lGLESv3 -landroid -lEGL
+LOCAL_LDLIBS    := -lm -llog -lGLESv3 -landroid -lEGL -lOpenSLES
 LOCAL_STATIC_LIBRARIES := android_native_app_glue Vakz
 include $(BUILD_SHARED_LIBRARY)
 

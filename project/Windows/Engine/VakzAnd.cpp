@@ -5,6 +5,7 @@
 #include "VGL.h"
 #include "VInput.h"
 #include "VFile.h"
+#include "Sound.h"
 #include "Settings.h"
 #include "Log.h"
 #include "Scene.h"
@@ -176,6 +177,8 @@ void Shutdown()
     vakzData.display = EGL_NO_DISPLAY;
     vakzData.context = EGL_NO_CONTEXT;
     vakzData.surface = EGL_NO_SURFACE;
+
+    Sound::Shutdown();
 }
 
 static void HandleCommand(struct android_app* app,
@@ -433,6 +436,8 @@ int Initialize(void* pData)
     SetAssetManager(pState->activity->assetManager);
 
     InitializeSoftKeyboard();
+
+    Sound::Initialize();
 
     return 0;
 }
