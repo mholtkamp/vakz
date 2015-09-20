@@ -80,6 +80,7 @@
     <ClCompile Include="ImageLoader.cpp" />
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="MeshCollider.cpp" />
+    <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="Rect.cpp" />
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="Terrain.cpp" />
@@ -126,6 +127,7 @@
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
+    <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="Rect.h" />
     <ClInclude Include="Terrain.h" />
     <ClInclude Include="Toast.h" />
