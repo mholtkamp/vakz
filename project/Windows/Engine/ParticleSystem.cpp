@@ -41,7 +41,7 @@ ParticleSystem::ParticleSystem()
     m_arVBOs[0] = 0;
     m_arVBOs[1] = 0;
 
-    m_nDrawBuffer = 0;
+    m_nUpdateBuffer = 0;
 }
 
 ParticleSystem::~ParticleSystem()
@@ -72,7 +72,9 @@ void ParticleSystem::Initialize()
 
 void ParticleSystem::Update()
 {
-    
+    glBindBuffer(GL_ARRAY_BUFFER, m_arVBOs[m_nUpdateBuffer]);
+    glBindBuffer(GL_TRANSFORM_FEEDBACK_BUFFER, m_arVBOs[!m_nUpdateBuffer]);
+
 }
 
 void ParticleSystem::Render()

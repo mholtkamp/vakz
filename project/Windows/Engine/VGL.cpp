@@ -640,9 +640,11 @@ int LoadVGL()
 //*****************************************************************************
 // BuildProgram
 //*****************************************************************************
-static int BuildProgram(int         nProgramIndex,
-                        const char* pVertex,
-                        const char* pFragment)
+static int BuildProgram(int          nProgramIndex,
+                        const char*  pVertex,
+                        const char*  pFragment,
+                        const char** pFeedbackVaryings      = 0,
+                        const int    nFeedbackVaryingsCount = 0)
 {
     int nStatus   = 1;
     int nCompiled = 0;
@@ -719,6 +721,16 @@ static int BuildProgram(int         nProgramIndex,
         // Attach individual shaders to the shader program
         glAttachShader(hProgram, hVertex);
 	    glAttachShader(hProgram, hFragment);
+
+        // Check to see if there are any feedback varyings to setup
+        // before linking the program
+        if (pFeedbackVaryings != 0)
+        {
+            glTransformFeedbackVaryings(hProgram,
+                                        nFeedbackVaryingsCount,
+                                        pFeedbackVaryings,
+                                        GL_INTERLEAVED_ATTRIBS);
+        }
 
         // Link program
         glLinkProgram(hProgram);
@@ -824,7 +836,9 @@ int LoadShaders()
         LogDebug("Building Particle Update Shader");
         nStatus = BuildProgram(PARTICLE_UPDATE_PROGRAM,
                                pParticleUpdateVertexShader,
-                               pParticleUpdateFragmentShader);
+                               pParticleUpdateFragmentShader,
+                               pParticleUpdateFeedbackVaryings,
+                               nParticleUpdateFeedbackVaryingsCount);
     }
 
     // Particle Render Shader

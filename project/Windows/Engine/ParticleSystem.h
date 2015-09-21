@@ -72,7 +72,7 @@ private:
     //## Life     = 4 bytes
     unsigned int m_arVBOs[2];
 
-    int m_nDrawBuffer;
+    int m_nUpdateBuffer;
 };
 
 #endif

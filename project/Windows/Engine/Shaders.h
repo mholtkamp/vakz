@@ -263,7 +263,7 @@ GLSL_VERSION_STRING
 "}\n";
 
 //## **************************************************************************
-//## Particle Updated Vertex Shader
+//## Particle Update Vertex Shader
 //## **************************************************************************
 static const char* pParticleUpdateVertexShader =
 GLSL_VERSION_STRING
@@ -346,7 +346,7 @@ GLSL_VERSION_STRING
 "}\n";
 
 //## **************************************************************************
-//## Particle Updated Fragment Shader
+//## Particle Update Fragment Shader
 //## **************************************************************************
 static const char* pParticleUpdateFragmentShader =
 GLSL_VERSION_STRING
@@ -356,6 +356,18 @@ GLSL_VERSION_STRING
 "{\n"
 "   oFragColor = vec4(1.0, 1.0, 1.0, 1.0);\n"
 "}\n";
+
+//## **************************************************************************
+//## Particle Update Transform Feedback Varyings
+//## **************************************************************************
+static const char* pParticleUpdateFeedbackVaryings[4] =
+{
+    "oPosition",
+    "oVelocity",
+    "oColor",
+    "oLife"
+};
+static int nParticleUpdateFeedbackVaryingsCount = 4;
 
 //## **************************************************************************
 //## Particle Render Vertex Shader
