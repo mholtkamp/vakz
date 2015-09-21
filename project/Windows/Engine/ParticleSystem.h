@@ -10,13 +10,15 @@ public:
     ParticleSystem();
     ~ParticleSystem();
 
+    void Initialize();
+
     void Update();
 
     void Render();
 
-    void SetMaxParticles(int nMaxParticles);
+    void SetParticleCount(int nParticleCount);
 
-    void SetEmissionRate(float fEmissionRate);
+    void SetEmissionRate(int nEmissionRate);
 
     void SetLifetime(float fMinLifetime,
                      float fMaxLifetime);
@@ -36,14 +38,16 @@ public:
 
     enum ParticleSystemEnum
     {
-        MAX_PARTICLE_COUNT = 1024
+        MAX_PARTICLE_COUNT = 1024,
+        PARTICLE_DATA_SIZE = (12 + 12 + 16 + 4)*sizeof(float)
     };
 
 private:
 
-    int m_nMaxParticles;
+    int m_nParticleCount;
 
-    float m_fEmissionRate;
+    int m_nEmissionRate;
+    float m_fEmissionPeriod;
 
     float m_fMinLifetime;
     float m_fMaxLifetime;
@@ -61,7 +65,14 @@ private:
 
     Texture* m_pTexture;
 
-    int m_hVBO;
+    //## VBO to hold particle properties
+    //## Position = 12 bytes
+    //## Velocity = 12 bytes
+    //## Color    = 16 bytes
+    //## Life     = 4 bytes
+    unsigned int m_arVBOs[2];
+
+    int m_nDrawBuffer;
 };
 
 #endif

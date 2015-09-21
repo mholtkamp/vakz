@@ -12,8 +12,9 @@ enum ProgramEnum
     STATIC_FULLBRIGHT_PROGRAM       = 4,
     ANIMATED_FULLBRIGHT_PROGRAM     = 5,
     BLUR_EFFECT_PROGRAM             = 6,
-    MAX_PROGRAMS                    = 7
-
+    PARTICLE_UPDATE_PROGRAM         = 7,
+    PARTICLE_RENDER_PROGRAM         = 8,
+    MAX_PROGRAMS                    = 9
 };
 
 //## **************************************************************************

@@ -809,12 +809,31 @@ int LoadShaders()
                                pFullbrightFragmentShader);
     }
 
+    // Blur Effect Shader
     if (nStatus != 0)
     {
         LogDebug("Building BlurEffect Shader");
         nStatus = BuildProgram(BLUR_EFFECT_PROGRAM,
                                pEffectVertexShader,
                                pBlurFragmentShader);
+    }
+
+    // Particle Update Shader
+    if (nStatus != 0)
+    {
+        LogDebug("Building Particle Update Shader");
+        nStatus = BuildProgram(PARTICLE_UPDATE_PROGRAM,
+                               pParticleUpdateVertexShader,
+                               pParticleUpdateFragmentShader);
+    }
+
+    // Particle Render Shader
+    if (nStatus != 0)
+    {
+        LogDebug("Building Particle Render Shader");
+        nStatus = BuildProgram(PARTICLE_RENDER_PROGRAM,
+                               pParticleRenderVertexShader,
+                               pParticleRenderFragmentShader);
     }
 
     return nStatus;

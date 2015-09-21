@@ -262,4 +262,137 @@ GLSL_VERSION_STRING
 "   oFragColor = lSum;\n"
 "}\n";
 
+//## **************************************************************************
+//## Particle Updated Vertex Shader
+//## **************************************************************************
+static const char* pParticleUpdateVertexShader =
+GLSL_VERSION_STRING
+
+// Randomizer uniforms
+"uniform float uMinLifetime;\n"
+"uniform float uMaxLifetime;\n"
+"uniform vec4 uMinColor;\n"
+"uniform vec4 uMaxColor;\n"
+"uniform vec3 uMinVelocity;\n"
+"uniform vec3 uMaxVelocity;\n"
+"uniform int uMinSize;\n"
+"uniform int uMaxSize;\n"
+
+// Other uniforms
+"uniform vec3 uGravity;\n"
+"uniform int uSeed;\n"
+"uniform float uDeltaTime;\n"
+"uniform int uGenerate;\n"
+"uniform vec3 uOrigin;\n"
+"uniform vec3 uSpawnVariance;\n"
+
+// Particle data attributes
+"in vec3 aPosition;\n"
+"in vec3 aVelocity;\n"
+"in vec4 aColor;\n"
+"in float aLife;\n"
+
+// Particle data ouput
+"out vec3 oPosition;\n"
+"out vec3 oVelocity;\n"
+"out vec4 oColor;\n"
+"out float oLife;\n"
+
+// Random function
+"float rand(inout int lSeed)\n"
+"{\n"
+"   lSeed = ((lSeed * 1103515245) + 12345) & 0x7fffffff\n;"
+"   return float(lSeed % 32768)/32768.0;\n"
+"}\n"
+
+// Main
+"void main()\n"
+"{\n"
+"   int   lSeed    = uSeed + gl_VertexID;\n"
+"   float lRand1    = 0.0;\n"
+"   float lRand2    = 0.0;\n"
+"   float lRand3    = 0.0;\n"
+
+// Generate a new particle
+"   if (aLife     <= 0.0f && \n"
+"       uGenerate != 0)\n"
+"   {\n"
+"       lRand1 = rand(lSeed);\n"
+"       lRand2 = rand(lSeed);\n"
+"       lRand3 = rand(lSeed);\n"
+"       oPosition = vec3(uOrigin.x + uSpawnVariance.x*(lRand1 - 0.5)*2.0,\n"
+"                        uOrigin.y + uSpawnVariance.y*(lRand2 - 0.5)*2.0,\n"
+"                        uOrigin.z + uSpawnVariance.z*(lRand3 - 0.5)*2.0);\n"
+"       lRand1 = rand(lSeed);\n"
+"       lRand2 = rand(lSeed);\n"
+"       lRand3 = rand(lSeed);\n"
+"       oVelocity = vec3(mix(uMinVelocity.x, uMaxVelocity.x, lRand1),\n"
+"                        mix(uMinVelocity.y, uMaxVelocity.y, lRand2),\n"
+"                        mix(uMinVelocity.z, uMaxVelocity.z, lRand3));\n"
+"       lRand1 = rand(lSeed);\n"
+"       oColor = vec4(mix(uMinColor.x, uMaxColor.x, lRand1),\n"
+"                     mix(uMinColor.y, uMaxColor.y, lRand1),\n"
+"                     mix(uMinColor.z, uMaxColor.z, lRand1),\n"
+"                     mix(uMinColor.w, uMaxColor.w, lRand1));\n"
+"       lRand1 = rand(lSeed);\n"
+"       oLife = mix(uMinLifetime, uMaxLifetime, lRand1);\n"
+"   }\n"
+"   else\n"
+"   {\n"
+"       oVelocity += uGravity*uDeltaTime;\n"
+"       oPosition += oVelocity*uDeltaTime;\n"
+"       oLife -= uDeltaTime;\n"
+"   }\n"
+"}\n";
+
+//## **************************************************************************
+//## Particle Updated Fragment Shader
+//## **************************************************************************
+static const char* pParticleUpdateFragmentShader =
+GLSL_VERSION_STRING
+"precision mediump float;\n"
+"out vec4 oFragColor;\n"
+"void main()\n"
+"{\n"
+"   oFragColor = vec4(1.0, 1.0, 1.0, 1.0);\n"
+"}\n";
+
+//## **************************************************************************
+//## Particle Render Vertex Shader
+//## **************************************************************************
+static const char* pParticleRenderVertexShader =
+GLSL_VERSION_STRING
+
+"uniform float uParticleSize;\n"
+"uniform mat4 uMatrixMVP;\n"
+
+"in vec3 aPosition;\n"
+"in vec4 aColor;\n"
+"in float aLife;\n"
+
+"out vec4 vColor;\n"
+
+"void main()\n"
+"{\n"
+"   vColor = aColor;\n"
+"   gl_Position = uMatrixMVP * vec4(aPosition, 1.0);\n"
+"   gl_PointSize = uParticleSize;\n"
+"}\n";
+
+
+//## **************************************************************************
+//## Particle Render Fragment Shader
+//## **************************************************************************
+static const char* pParticleRenderFragmentShader =
+GLSL_VERSION_STRING
+"precision mediump float;\n"
+
+"uniform sampler2D uTexture;\n"
+"in vec4 aColor;\n"
+"out vec4 oFragColor;\n"
+
+"void main()"
+"{"
+"    oFragColor = aColor;"
+"}";
 #endif
