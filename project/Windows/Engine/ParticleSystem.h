@@ -2,6 +2,8 @@
 #define PARTICLE_SYSTEM_H
 
 #include "Texture.h"
+#include "Matrix.h"
+#include "Timer.h"
 
 class ParticleSystem
 {
@@ -14,7 +16,7 @@ public:
 
     void Update();
 
-    void Render();
+    void Render(Matrix* pMatrixVP);
 
     void SetParticleCount(int nParticleCount);
 
@@ -39,11 +41,13 @@ public:
     enum ParticleSystemEnum
     {
         MAX_PARTICLE_COUNT = 1024,
-        PARTICLE_DATA_SIZE = (12 + 12 + 16 + 4)*sizeof(float)
+        PARTICLE_DATA_SIZE = (12 + 12 + 16 + 4)
     };
 
 private:
+    static int s_nStaticInit;
 
+    int m_nGenerate;
     int m_nParticleCount;
 
     int m_nEmissionRate;
@@ -62,6 +66,8 @@ private:
     float m_fMaxSize;
 
     float m_arGravity[3];
+    float m_arOrigin[3];
+    float m_arSpawnVariance[3];
 
     Texture* m_pTexture;
 
@@ -73,6 +79,10 @@ private:
     unsigned int m_arVBOs[2];
 
     int m_nUpdateBuffer;
+
+    Timer m_timer;
+
+    void* m_pSync;
 };
 
 #endif

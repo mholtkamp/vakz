@@ -118,7 +118,7 @@ typedef ptrdiff_t GLintptrARB;
 typedef ptrdiff_t GLsizeiptrARB;
 typedef long long GLint64EXT;
 typedef long long GLuint64EXT;
-typedef struct __GLsync* GLsync;
+typedef struct __GLsync *GLsync;
 
 // Define constants
 #define GL_DEPTH_BUFFER_BIT 0x00000100
@@ -728,6 +728,10 @@ typedef struct __GLsync* GLsync;
 #define GL_NUM_SAMPLE_COUNTS 0x9380
 #define GL_TEXTURE_IMMUTABLE_LEVELS 0x82DF
 
+// Compatibility constants
+#define GL_PROGRAM_POINT_SIZE 0x8642
+
+// Function pointers
 typedef void (APIENTRYP PFNGLACTIVETEXTUREPROC)(GLenum);
 GLAPI PFNGLACTIVETEXTUREPROC glActiveTexture;
 

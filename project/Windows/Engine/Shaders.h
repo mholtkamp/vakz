@@ -275,8 +275,8 @@ GLSL_VERSION_STRING
 "uniform vec4 uMaxColor;\n"
 "uniform vec3 uMinVelocity;\n"
 "uniform vec3 uMaxVelocity;\n"
-"uniform int uMinSize;\n"
-"uniform int uMaxSize;\n"
+"uniform float uMinSize;\n"
+"uniform float uMaxSize;\n"
 
 // Other uniforms
 "uniform vec3 uGravity;\n"
@@ -376,7 +376,7 @@ static const char* pParticleRenderVertexShader =
 GLSL_VERSION_STRING
 
 "uniform float uParticleSize;\n"
-"uniform mat4 uMatrixMVP;\n"
+"uniform mat4 uMatrixVP;\n"
 
 "in vec3 aPosition;\n"
 "in vec4 aColor;\n"
@@ -403,8 +403,12 @@ GLSL_VERSION_STRING
 "in vec4 aColor;\n"
 "out vec4 oFragColor;\n"
 
-"void main()"
-"{"
-"    oFragColor = aColor;"
-"}";
+"void main()\n"
+"{\n"
+"    oFragColor = aColor;\n"
+"    if (oFragColor.a < 0.004)\n"
+"    {\n"
+"        discard;\n"
+"    }\n"
+"}\n";
 #endif

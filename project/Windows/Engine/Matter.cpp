@@ -133,7 +133,6 @@ void Matter::Render(void* pScene)
         m_pMaterial   != 0 &&
         pCamera       != 0)
     {
-        
         // Update animations (if there are any)
         UpdateAnimation();
 

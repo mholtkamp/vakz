@@ -24,29 +24,34 @@ unsigned int Scene::s_hEffectColorAttach = 0;
 Scene::Scene(int nMaxMatters,
              int nMaxLights,
              int nMaxGlyphs,
-             int nMaxEffects)
+             int nMaxEffects,
+             int nMaxParticles)
 {
-    m_nMaxMatters = nMaxMatters;
-    m_nMaxLights  = nMaxLights;
-    m_nMaxGlyphs  = nMaxGlyphs;
-    m_nMaxEffects = nMaxEffects;
+    m_nMaxMatters   = nMaxMatters;
+    m_nMaxLights    = nMaxLights;
+    m_nMaxGlyphs    = nMaxGlyphs;
+    m_nMaxEffects   = nMaxEffects;
+    m_nMaxParticles = nMaxParticles;
 
     // When first initialized, there are no objects in the scene
-    m_nNumMatters = 0;
-    m_nNumLights  = 0;
-    m_nNumGlyphs  = 0;
-    m_nNumEffects = 0;
+    m_nNumMatters   = 0;
+    m_nNumLights    = 0;
+    m_nNumGlyphs    = 0;
+    m_nNumEffects   = 0;
+    m_nNumParticles = 0;
 
     // Allocate the arrays to hold scene components
     m_pMatters = new Matter*[m_nMaxMatters];
     m_pLights  = new Light*[m_nMaxLights];
     m_pGlyphs  = new Glyph*[m_nMaxGlyphs];
     m_pEffects = new Effect*[m_nMaxEffects];
+    m_pParticleSystems = new ParticleSystem*[m_nMaxParticles];
 
     if (m_pMatters == 0 ||
         m_pLights  == 0 ||
         m_pGlyphs  == 0 ||
-        m_pEffects == 0)
+        m_pEffects == 0 ||
+        m_pParticleSystems)
     {
         LogError("Memory allocation error in Scene Constructor");
     }
@@ -113,6 +118,9 @@ void Scene::Render()
 {
     int i = 0;
     int nEffectOn = 0;
+    Matrix matVP;
+    Matrix* pProj = 0;
+    Matrix* pView = 0;
     Matrix matMVP;
 
     // Bind the FBO
@@ -167,6 +175,28 @@ void Scene::Render()
             // Restore state
             glDepthMask(GL_TRUE);
             glDisable(GL_DEPTH_TEST);
+        }
+
+        // Render particle systems
+        for (i = 0; i < m_nNumParticles; i++)
+        {
+            pProj = m_pCamera->GetProjectionMatrix();
+            pView = m_pCamera->GetViewMatrix();
+
+            // Multiply projection/view matrices.
+            matVP = (*pProj) * (*pView);
+
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+            glEnable(GL_BLEND);
+            glEnable(GL_DEPTH_TEST);
+            glDepthMask(GL_FALSE);
+
+            m_pParticleSystems[i]->Update();
+            m_pParticleSystems[i]->Render(&matVP);
+
+            glDisable(GL_BLEND);
+            glDisable(GL_DEPTH_TEST);
+            glDepthMask(GL_TRUE);
         }
     }
 
@@ -336,6 +366,30 @@ void Scene::AddEffect(Effect* pEffect)
     else
     {
         LogWarning("Denied attempt to add null effect to scene.");
+    }
+}
+
+//*****************************************************************************
+// AddParticleSystem
+//*****************************************************************************
+void Scene::AddParticleSystem(ParticleSystem* pParticleSystem)
+{
+    if (pParticleSystem != 0)
+    {
+        if (m_nNumParticles < m_nMaxParticles)
+        {
+            m_pParticleSystems[m_nNumParticles] = pParticleSystem;
+            m_nNumParticles++;
+        }
+        else
+        {
+            LogError("Failed to add particle system to scene because maximum number of "
+                     "particle systems has been reached.");
+        }
+    }
+    else
+    {
+        LogWarning("Denied attempt to add null particle system to scene.");
     }
 }
 

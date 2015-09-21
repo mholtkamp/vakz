@@ -7,6 +7,7 @@
 #include "DirectionalLight.h"
 #include "Glyph.h"
 #include "Effect.h"
+#include "ParticleSystem.h"
 
 class Scene
 {
@@ -18,7 +19,8 @@ public:
     Scene(int nMaxMatters = DEFAULT_MAX_MATTERS,
           int nMaxLights  = DEFAULT_MAX_LIGHTS,
           int nMaxGlyphs  = DEFAULT_MAX_GLYPHS,
-          int nMaxEffects = DEFAULT_MAX_EFFECTS);
+          int nMaxEffects = DEFAULT_MAX_EFFECTS,
+          int nMaxParticles = DEFAULT_MAX_PARTICLES);
 
     //## **********************************************************************
     //## Destructor
@@ -78,6 +80,16 @@ public:
     //##   pEffect - pointer to effect object to be added to the scene.
     //## **********************************************************************
     void AddEffect(Effect* pEffect);
+
+    //## **********************************************************************
+    //## AddParticleSystem
+    //##
+    //## Adds a particle system to the scene.
+    //##
+    //## Input:
+    //##   pParticleSystem - pointer to particle system object to add.
+    //## **********************************************************************
+    void AddParticleSystem(ParticleSystem* pParticleSystem);
 
     //## **********************************************************************
     //## SetCamera
@@ -195,10 +207,11 @@ public:
 
     enum SceneEnum
     {
-        DEFAULT_MAX_MATTERS = 1024,
-        DEFAULT_MAX_LIGHTS  = 128,
-        DEFAULT_MAX_GLYPHS  = 512,
-        DEFAULT_MAX_EFFECTS = 16
+        DEFAULT_MAX_MATTERS   = 1024,
+        DEFAULT_MAX_LIGHTS    = 128,
+        DEFAULT_MAX_GLYPHS    = 512,
+        DEFAULT_MAX_EFFECTS   = 16,
+        DEFAULT_MAX_PARTICLES = 16
     };
 
 private:
@@ -215,18 +228,21 @@ private:
     int m_nMaxLights;
     int m_nMaxGlyphs;
     int m_nMaxEffects;
+    int m_nMaxParticles;
 
     //## Values that hold the current number for each component.
     int m_nNumMatters;
     int m_nNumLights;
     int m_nNumGlyphs;
     int m_nNumEffects;
+    int m_nNumParticles;
 
     //## Arrays to hold scene components.
     Matter** m_pMatters;
     Light**  m_pLights;
     Glyph**  m_pGlyphs;
     Effect** m_pEffects;
+    ParticleSystem** m_pParticleSystems;
 
     //## Pointer to camera that the 3D scene should be rendered from.
     Camera* m_pCamera;
