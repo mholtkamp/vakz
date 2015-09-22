@@ -26,7 +26,8 @@
 
 int main()
 {
-    SetWindowSize(1024,768);
+    SetWindowSize(1024, 768);
+    SetResolution(1024, 768);
     Initialize();
 
     //@@ DEBUG INVERSE TEST
@@ -87,7 +88,7 @@ int main()
         //pFlowerPot->SetRigid(1);
 
         // Add to scene
-        pTestScene->AddMatter(&(pFlowerPots[fp]));
+        //pTestScene->AddMatter(&(pFlowerPots[fp]));
     }
 
     // Create TestAnim
@@ -143,6 +144,14 @@ int main()
     colText.SetScale(0.6f, 0.8f);
     colText.SetText("No Collision");
     pTestScene->AddGlyph(&colText);
+
+    // Particle System Test
+    ParticleSystem* pParticleSystem = new ParticleSystem();
+    float arParMinColor[4] = {0.0f, 0.0f, 1.0, 0.5f};
+    float arParMaxColor[4] = {0.8f, 0.8f, 1.0, 1.0f};
+    pParticleSystem->SetColor(arParMinColor, arParMaxColor);
+    pParticleSystem->Initialize();
+    pTestScene->AddParticleSystem(pParticleSystem);
 
     float fFlowerX = 0.0f;
     float fSeconds = 0.0f;

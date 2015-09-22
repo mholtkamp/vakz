@@ -2,6 +2,7 @@
 #include "Mesh.h"
 #include "Material.h"
 #include "Log.h"
+#include <stdio.h>
 #include <string.h>
 
 // Buffer used to store shader compilation logs
@@ -726,10 +727,16 @@ static int BuildProgram(int          nProgramIndex,
         // before linking the program
         if (pFeedbackVaryings != 0)
         {
+            while(glGetError() != GL_NO_ERROR)
+            {
+            
+            }
             glTransformFeedbackVaryings(hProgram,
                                         nFeedbackVaryingsCount,
                                         pFeedbackVaryings,
                                         GL_INTERLEAVED_ATTRIBS);
+
+            printf("glError() = %d\n", glGetError());
         }
 
         // Link program

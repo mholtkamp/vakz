@@ -287,10 +287,10 @@ GLSL_VERSION_STRING
 "uniform vec3 uSpawnVariance;\n"
 
 // Particle data attributes
-"in vec3 aPosition;\n"
-"in vec3 aVelocity;\n"
-"in vec4 aColor;\n"
-"in float aLife;\n"
+"layout(location = 0) in vec3 aPosition;\n"
+"layout(location = 1) in vec3 aVelocity;\n"
+"layout(location = 2) in vec4 aColor;\n"
+"layout(location = 3) in float aLife;\n"
 
 // Particle data ouput
 "out vec3 oPosition;\n"
@@ -301,7 +301,7 @@ GLSL_VERSION_STRING
 // Random function
 "float rand(inout int lSeed)\n"
 "{\n"
-"   lSeed = ((lSeed * 1103515245) + 12345) & 0x7fffffff\n;"
+"   lSeed = ((lSeed * 1103515245) + 12345) & 0x7fffffff;\n"
 "   return float(lSeed % 32768)/32768.0;\n"
 "}\n"
 
@@ -339,9 +339,11 @@ GLSL_VERSION_STRING
 "   }\n"
 "   else\n"
 "   {\n"
-"       oVelocity += uGravity*uDeltaTime;\n"
-"       oPosition += oVelocity*uDeltaTime;\n"
-"       oLife -= uDeltaTime;\n"
+//"       oVelocity += uGravity*uDeltaTime;\n"
+"       oPosition = aPosition + aVelocity*uDeltaTime;\n"
+"       oVelocity = aVelocity + uGravity*uDeltaTime;\n"
+"       oColor    = aColor;"
+"       oLife     = aLife - uDeltaTime;\n"
 "   }\n"
 "}\n";
 
@@ -387,7 +389,7 @@ GLSL_VERSION_STRING
 "void main()\n"
 "{\n"
 "   vColor = aColor;\n"
-"   gl_Position = uMatrixMVP * vec4(aPosition, 1.0);\n"
+"   gl_Position = uMatrixVP * vec4(aPosition, 1.0);\n"
 "   gl_PointSize = uParticleSize;\n"
 "}\n";
 
@@ -400,12 +402,12 @@ GLSL_VERSION_STRING
 "precision mediump float;\n"
 
 "uniform sampler2D uTexture;\n"
-"in vec4 aColor;\n"
+"in vec4 vColor;\n"
 "out vec4 oFragColor;\n"
 
 "void main()\n"
 "{\n"
-"    oFragColor = aColor;\n"
+"    oFragColor = vColor;\n"
 "    if (oFragColor.a < 0.004)\n"
 "    {\n"
 "        discard;\n"

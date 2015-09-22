@@ -40,7 +40,7 @@ int ParticleSystem::s_nStaticInit = 0;
 ParticleSystem::ParticleSystem()
 {
     m_nGenerate = 1;
-    m_nParticleCount = 200;
+    m_nParticleCount = 1000;
 
     m_nEmissionRate = 20;
 
@@ -57,28 +57,28 @@ ParticleSystem::ParticleSystem()
     m_arMaxColor[2] = 1.0f;
     m_arMaxColor[3] = 1.0f;
 
-    m_arMinVelocity[0] = 0.0f;
-    m_arMinVelocity[1] = 1.0f;
-    m_arMinVelocity[2] = 0.0f;
+    m_arMinVelocity[0] = -0.5f;
+    m_arMinVelocity[1] =  1.0f;
+    m_arMinVelocity[2] = -0.5f;
 
-    m_arMaxVelocity[0] = 0.0f;
+    m_arMaxVelocity[0] = 0.5f;
     m_arMaxVelocity[1] = 2.0f;
-    m_arMaxVelocity[2] = 0.0f;
+    m_arMaxVelocity[2] = 0.5f;
 
     m_fMinSize = 0.1f;
     m_fMaxSize = 0.2f;
 
-    m_arGravity[0] = 0.0f;
-    m_arGravity[1] = 0.0f;
-    m_arGravity[2] = 0.0f;
+    m_arGravity[0] =  0.0f;
+    m_arGravity[1] = -1.0f;
+    m_arGravity[2] =  0.0f;
 
     m_arOrigin[0] = 0.0f;
     m_arOrigin[1] = 0.0f;
     m_arOrigin[2] = 0.0f;
 
-    m_arSpawnVariance[0] = 1.0f;
-    m_arSpawnVariance[1] = 0.3f;
-    m_arSpawnVariance[2] = 1.0f;
+    m_arSpawnVariance[0] = 0.1f;
+    m_arSpawnVariance[1] = 0.1f;
+    m_arSpawnVariance[2] = 0.1f;
 
     m_pTexture = 0;
 
@@ -158,13 +158,13 @@ void ParticleSystem::Initialize()
     glBufferData(GL_ARRAY_BUFFER,
                  PARTICLE_DATA_SIZE * m_nParticleCount,
                  0,
-                 GL_DYNAMIC_DRAW);
+                 GL_DYNAMIC_COPY);
 
     glBindBuffer(GL_ARRAY_BUFFER, m_arVBOs[1]);
     glBufferData(GL_ARRAY_BUFFER,
                  PARTICLE_DATA_SIZE * m_nParticleCount,
                  0,
-                 GL_DYNAMIC_DRAW);
+                 GL_DYNAMIC_COPY);
 }
 
 void ParticleSystem::Update()
@@ -182,38 +182,39 @@ void ParticleSystem::Update()
     
     // Bind the correct buffers
     glBindBuffer(GL_ARRAY_BUFFER, m_arVBOs[m_nUpdateBuffer]);
-    glBindBuffer(GL_TRANSFORM_FEEDBACK_BUFFER, m_arVBOs[!m_nUpdateBuffer]);
+    glBindBuffer ( GL_TRANSFORM_FEEDBACK_BUFFER, m_arVBOs[!m_nUpdateBuffer]);
+    glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, m_arVBOs[!m_nUpdateBuffer]);
 
     // Assign vertex attributes
-    glVertexAttribPointer(s_hPosition,
+    glVertexAttribPointer(0,
                           3,
                           GL_FLOAT,
                           GL_FALSE,
                           PARTICLE_DATA_SIZE,
                           0);
-    glVertexAttribPointer(s_hVelocity,
+    glVertexAttribPointer(1,
                           3,
                           GL_FLOAT,
                           GL_FALSE,
                           PARTICLE_DATA_SIZE,
                           (void*) 12);
-    glVertexAttribPointer(s_hColor,
+    glVertexAttribPointer(2,
                           4,
                           GL_FLOAT,
                           GL_FALSE,
                           PARTICLE_DATA_SIZE,
                           (void*) 24);
-    glVertexAttribPointer(s_hLife,
+    glVertexAttribPointer(3,
                           1,
                           GL_FLOAT,
                           GL_FALSE,
                           PARTICLE_DATA_SIZE,
                           (void*) 40);
 
-    glEnableVertexAttribArray(s_hPosition);
-    glEnableVertexAttribArray(s_hVelocity);
-    glEnableVertexAttribArray(s_hColor);
-    glEnableVertexAttribArray(s_hLife);
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+    glEnableVertexAttribArray(2);
+    glEnableVertexAttribArray(3);
 
     // Set Uniforms
     glUniform1f(s_hMinLifetime, m_fMinLifetime);
@@ -248,6 +249,7 @@ void ParticleSystem::Update()
 
     glDisable(GL_RASTERIZER_DISCARD);
     glBindBuffer(GL_TRANSFORM_FEEDBACK_BUFFER, 0);
+    glBindBufferBase(GL_TRANSFORM_FEEDBACK_BUFFER, 0, 0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     m_timer.Start();
@@ -289,7 +291,7 @@ void ParticleSystem::Render(Matrix* pMatrixVP)
     glEnableVertexAttribArray(s_hRendLife);
 
     // Setup the uniforms
-    glUniform1f(s_hRendSize, 3.0f);
+    glUniform1f(s_hRendSize, 20.0f);
     glUniformMatrix4fv(s_hRendMatrixVP, 1, GL_FALSE, pMatrixVP->GetArray());
     glUniform1i(s_hRendTexture, 0);
 

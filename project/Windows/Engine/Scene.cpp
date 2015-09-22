@@ -51,7 +51,7 @@ Scene::Scene(int nMaxMatters,
         m_pLights  == 0 ||
         m_pGlyphs  == 0 ||
         m_pEffects == 0 ||
-        m_pParticleSystems)
+        m_pParticleSystems == 0)
     {
         LogError("Memory allocation error in Scene Constructor");
     }
