@@ -8,11 +8,13 @@ char ImageLoader::s_arFileBuffer[BMP_MAX_SIZE*BMP_MAX_SIZE*4 + 64];
 // LoadBMP
 //*****************************************************************************
 unsigned char* ImageLoader::LoadBMP(const char* pFileName,
+                                    int         nColorKey,
                                     int&        nWidth,
                                     int&        nHeight,
                                     short&      sBPP)
 {
     int i = 0;
+    int j = 0;
     unsigned char* pData = 0;
     unsigned char* pSrc  = 0;
 
@@ -49,17 +51,47 @@ unsigned char* ImageLoader::LoadBMP(const char* pFileName,
         }
         else if (sBPP == 24)
         {
-            pData = new unsigned char[nWidth * nHeight * 3];
             pSrc  = reinterpret_cast<unsigned char*>(&s_arFileBuffer[54]);
 
-            for (i = 0; i < nWidth*nHeight*3; i += 3)
+            if (nColorKey == 0)
             {
-                // Swap the B and R byte because windows bitmap format is in BGR
-                pData[i]     = pSrc[i + 2];
-                pData[i + 1] = pSrc[i + 1];
-                pData[i + 2] = pSrc[i];                  
-            }
+                pData = new unsigned char[nWidth * nHeight * 3];
 
+                for (i = 0; i < nWidth*nHeight*3; i += 3)
+                {
+                    // Swap the B and R byte because windows bitmap format is in BGR
+                    pData[i]     = pSrc[i + 2];
+                    pData[i + 1] = pSrc[i + 1];
+                    pData[i + 2] = pSrc[i];
+                }
+            }
+            else
+            {
+                pData = new unsigned char[nWidth * nHeight * 4];
+
+                j = 0;
+                for (i = 0; i < nWidth*nHeight*3; i += 3)
+                {
+                    // Swap the B and R byte because windows bitmap format is in BGR
+                    pData[j]     = pSrc[i + 2];
+                    pData[j + 1] = pSrc[i + 1];
+                    pData[j + 2] = pSrc[i];
+
+                    // Set the alpha byte based on color
+                    if (pData[j]   == 255 &&
+                        pData[j+1] == 0   &&
+                        pData[j+2] == 255)
+                    {
+                        pData[j + 3] = 0;
+                    }
+                    else
+                    {
+                        pData[j + 3] = 255;
+                    }
+                    j += 4;
+                }
+            }
+            
             // Delete client-side image data. It is stored on GPU now.
             return pData;
         }

@@ -27,7 +27,8 @@ public:
     //## Input:
     //##   pFileName - path to .bmp file to load.
     //## **********************************************************************
-    void LoadBMP(const char* pFileName);
+    void LoadBMP(const char* pFileName,
+                 int         nColorKey = 0);
 
     //## **********************************************************************
     //## LoadArray

@@ -400,14 +400,21 @@ GLSL_VERSION_STRING
 static const char* pParticleRenderFragmentShader =
 GLSL_VERSION_STRING
 "precision mediump float;\n"
-
+"uniform int uTexType;\n"
 "uniform sampler2D uTexture;\n"
 "in vec4 vColor;\n"
 "out vec4 oFragColor;\n"
 
 "void main()\n"
 "{\n"
-"    oFragColor = vColor;\n"
+"    if (uTexType != 0)\n"
+"    {\n"
+"       oFragColor = vColor * texture(uTexture, vec2(gl_PointCoord.x, 1.0 - gl_PointCoord.y));\n"
+"    }\n"
+"    else\n"
+"    {\n"
+"       oFragColor = vColor;\n"
+"    }\n"
 "    if (oFragColor.a < 0.004)\n"
 "    {\n"
 "        discard;\n"

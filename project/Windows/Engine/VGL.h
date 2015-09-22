@@ -730,6 +730,7 @@ typedef struct __GLsync *GLsync;
 
 // Compatibility constants
 #define GL_PROGRAM_POINT_SIZE 0x8642
+#define GL_POINT_SPRITE 0x8861
 
 // Function pointers
 typedef void (APIENTRYP PFNGLACTIVETEXTUREPROC)(GLenum);

@@ -30,7 +30,8 @@ Texture::~Texture()
 //*****************************************************************************
 // LoadBMP
 //*****************************************************************************
-void Texture::LoadBMP(const char* pFileName)
+void Texture::LoadBMP(const char* pFileName,
+                      int         nColorKey)
 {
     int            i         = 0;
     int            nFileSize = 0;
@@ -41,6 +42,7 @@ void Texture::LoadBMP(const char* pFileName)
 
     
     pData = ImageLoader::LoadBMP(pFileName,
+                                 nColorKey,
                                  m_nWidth,
                                  m_nHeight,
                                  sBPP);
@@ -66,16 +68,37 @@ void Texture::LoadBMP(const char* pFileName)
 	    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-        // Allocate graphics memory and upload texture
-        glTexImage2D(GL_TEXTURE_2D,
-                        0,
-                        GL_RGB,
-                        m_nWidth,
-                        m_nHeight,
-                        0,
-                        GL_RGB,
-                        GL_UNSIGNED_BYTE,
-                        pData);
+        if (nColorKey == 0)
+        {
+            // Allocate graphics memory and upload texture
+            glTexImage2D(GL_TEXTURE_2D,
+                         0,
+                         GL_RGB,
+                         m_nWidth,
+                         m_nHeight,
+                         0,
+                         GL_RGB,
+                         GL_UNSIGNED_BYTE,
+                         pData);
+        }
+        else
+        {
+            m_nFormat = TEXTURE_RGBA;
+
+            // Allocate graphics memory and upload texture
+            // Since the texture used a color key, transparency
+            // is intended, so create an RGBA texture instead
+            // of an RGB texture.
+            glTexImage2D(GL_TEXTURE_2D,
+                         0,
+                         GL_RGBA,
+                         m_nWidth,
+                         m_nHeight,
+                         0,
+                         GL_RGBA,
+                         GL_UNSIGNED_BYTE,
+                         pData);
+        }
 
         // Delete client-side image data. It is stored on GPU now.
         delete [] pData;

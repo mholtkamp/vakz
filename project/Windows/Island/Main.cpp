@@ -147,9 +147,13 @@ int main()
 
     // Particle System Test
     ParticleSystem* pParticleSystem = new ParticleSystem();
-    float arParMinColor[4] = {0.0f, 0.0f, 1.0, 0.5f};
-    float arParMaxColor[4] = {0.8f, 0.8f, 1.0, 1.0f};
+    float arParMinColor[4] = {1.0f, 1.0f, 1.0, 0.1f};
+    float arParMaxColor[4] = {1.0f, 1.0f, 1.0, 0.3f};
     pParticleSystem->SetColor(arParMinColor, arParMaxColor);
+
+    Texture texPart;
+    texPart.LoadBMP("poof.bmp", 1);
+    pParticleSystem->SetTexture(&texPart);
     pParticleSystem->Initialize();
     pTestScene->AddParticleSystem(pParticleSystem);
 
