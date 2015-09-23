@@ -85,6 +85,7 @@ private:
     // Timers
     Timer m_timerMana;
     Timer m_timerDraw;
+    Timer m_timerMove;
 
     // Touch/Gesture controls
     int m_nTouchDownLeft;

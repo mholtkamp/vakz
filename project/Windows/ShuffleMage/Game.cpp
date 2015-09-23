@@ -86,6 +86,7 @@ void Game::Construct()
     // Timers
     m_timerDraw.Start();
     m_timerMana.Start();
+    m_timerMove.Start();
 
     // Initialize activation related members
     for (i = 0; i < MAX_ACTIVATIONS; i++)
@@ -112,6 +113,7 @@ void Game::Update()
     
     float fDrawTime = 0.0f;
     float fManaTime = 0.0f;
+    float fMoveTime = 0.0f;
 
     int nDownLeft   = 0;
     int nDownRight  = 0;
@@ -214,7 +216,11 @@ void Game::Update()
     m_nTouchDownLeft = nDownLeft;
 
     // Perform movement
-    if (m_nJustUpLeft)
+    m_timerMove.Stop();
+    fMoveTime = m_timerMove.Time();
+
+    if (m_nJustUpLeft &&
+        fMoveTime >= m_arMages[m_nPlayerSide].GetMoveTime())
     {
         fDispX = m_fTouchUpXLeft - m_fTouchDownXLeft;
         fDispY = m_fTouchUpYLeft - m_fTouchDownYLeft;
@@ -226,10 +232,12 @@ void Game::Update()
             if (fDispX < 0.0f)
             {
                 m_arMages[m_nPlayerSide].Move( -1 + 2*m_nPlayerSide, 0);
+                m_timerMove.Start();
             }
             else if (fDispX > 0.0f)
             {
                 m_arMages[m_nPlayerSide].Move( 1 - 2*m_nPlayerSide, 0);
+                m_timerMove.Start();
             }
         }
         else
@@ -238,10 +246,12 @@ void Game::Update()
             if (fDispY < 0.0f)
             {
                 m_arMages[m_nPlayerSide].Move(0, 1 - 2*m_nPlayerSide);
+                m_timerMove.Start();
             }
             else if (fDispY > 0.0f)
             {
                 m_arMages[m_nPlayerSide].Move(0, -1 + 2*m_nPlayerSide);
+                m_timerMove.Start();
             }
         }
     }

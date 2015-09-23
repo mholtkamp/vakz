@@ -32,6 +32,8 @@ public:
 
     int GetDrawCharge();
 
+    float GetMoveTime();
+
     //void SetSide(int nSide);
 
     // Status Getters
@@ -53,6 +55,8 @@ public:
     void SetRooted(int nRooted);
 
 private:
+
+    float m_fMoveTime;
 
     int m_nMana;
     int m_nDrawCharge;

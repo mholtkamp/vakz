@@ -5,6 +5,8 @@
 
 Mage::Mage()
 {
+    m_fMoveTime = DEFAULT_MOVE_TIME;
+
     m_nHealth = DEFAULT_MAGE_HEALTH;
     m_nMana   = DEFAULT_MAGE_MANA;
     m_nDrawCharge = DEFAULT_DRAW_CHARGE;
@@ -31,6 +33,8 @@ Mage::Mage()
 
 Mage::Mage(int nSide) : Pawn(nSide)
 {
+    m_fMoveTime = DEFAULT_MOVE_TIME;
+
     m_nHealth = DEFAULT_MAGE_HEALTH;
     m_nMana   = DEFAULT_MAGE_MANA;
     m_nDrawCharge = DEFAULT_DRAW_CHARGE;
@@ -207,4 +211,9 @@ void Mage::PlayCastAnimation()
 #if defined SM_CLIENT
     m_matter.PlayAnimationOnce("Cast");
 #endif
+}
+
+float Mage::GetMoveTime()
+{
+    return m_fMoveTime;
 }

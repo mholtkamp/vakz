@@ -339,7 +339,6 @@ GLSL_VERSION_STRING
 "   }\n"
 "   else\n"
 "   {\n"
-//"       oVelocity += uGravity*uDeltaTime;\n"
 "       oPosition = aPosition + aVelocity*uDeltaTime;\n"
 "       oVelocity = aVelocity + uGravity*uDeltaTime;\n"
 "       oColor    = aColor;"
