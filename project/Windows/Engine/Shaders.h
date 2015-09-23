@@ -296,13 +296,15 @@ GLSL_VERSION_STRING
 "out vec3 oPosition;\n"
 "out vec3 oVelocity;\n"
 "out vec4 oColor;\n"
-"out float oLife;\n"
+"flat out float oLife;\n"
 
 // Random function
-"float rand(inout int lSeed)\n"
+"float rand(inout int lRandSeed)\n"
 "{\n"
-"   lSeed = ((lSeed * 1103515245) + 12345) & 0x7fffffff;\n"
-"   return float(lSeed % 32768)/32768.0;\n"
+//"   lRandSeed = ((lRandSeed * 1103515245) + 12345) & 0x7fffffff;\n"
+//"   return float(lRandSeed % 32768)/32768.0;\n"
+"   lRandSeed = ((lRandSeed * 104417) + 12345);\n"
+"   return float(lRandSeed % 32768)/32768.0;\n"
 "}\n"
 
 // Main

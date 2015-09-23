@@ -101,7 +101,7 @@ ParticleSystem::~ParticleSystem()
 
 void ParticleSystem::Initialize()
 {   
-    int hProg;
+    int hProg     = 0;
 
     // Perform static initialization
     if (s_nStaticInit == 0)
@@ -147,9 +147,6 @@ void ParticleSystem::Initialize()
         // is not needed and would probably produce an error if it was used.
         glEnable(GL_PROGRAM_POINT_SIZE);
         glEnable(GL_POINT_SPRITE);
-#elif defined (ANDROID)
-        glEnable(0x8642);
-        glEnable(0x8861);
 #endif
 
         s_nStaticInit = 1;
@@ -218,7 +215,6 @@ void ParticleSystem::Update()
                           GL_FALSE,
                           PARTICLE_DATA_SIZE,
                           (void*) 40);
-
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);
     glEnableVertexAttribArray(2);

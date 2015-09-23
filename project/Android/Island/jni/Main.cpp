@@ -183,8 +183,8 @@ void android_main(struct android_app* state) {
 
     // Particle System Test
     ParticleSystem* pParticleSystem = new ParticleSystem();
-    float arParMinColor[4] = {1.0f, 1.0f, 1.0, 0.7f};
-    float arParMaxColor[4] = {1.0f, 1.0f, 1.0, 1.0f};
+    float arParMinColor[4] = {1.0f, 1.0f, 1.0, 0.1f};
+    float arParMaxColor[4] = {1.0f, 1.0f, 1.0, 0.3f};
     pParticleSystem->SetColor(arParMinColor, arParMaxColor);
 
     Texture texPart;
