@@ -262,11 +262,11 @@ private:
 
     //## Handles for FBO
     static unsigned int s_hFBO;
-    static unsigned int s_hColorAttach;
-    static unsigned int s_hDepthAttach;
+    static Texture s_texColorAttach;
+    static Texture s_texDepthAttach;
 
     //## Handles for effect FBO
-    static unsigned int s_hEffectColorAttach;
+    static Texture s_texEffectColorAttach;
 };
 
 #endif

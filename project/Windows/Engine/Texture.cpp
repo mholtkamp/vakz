@@ -182,6 +182,9 @@ void Texture::Bind()
     glBindTexture(GL_TEXTURE_2D, m_hTexture);
 }
 
+//*****************************************************************************
+// SetFiltering
+//*****************************************************************************
 void Texture::SetFiltering(int nFilterType)
 {
     glBindTexture(GL_TEXTURE_2D, m_hTexture);
@@ -196,4 +199,20 @@ void Texture::SetFiltering(int nFilterType)
 	    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     }
+}
+
+//*****************************************************************************
+// GetHandle
+//*****************************************************************************
+unsigned int Texture::GetHandle()
+{
+    return m_hTexture;
+}
+
+//*****************************************************************************
+// SetHandle
+//*****************************************************************************
+void Texture::SetHandle(unsigned int hTexture)
+{
+    m_hTexture = hTexture;
 }

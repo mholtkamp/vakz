@@ -4,6 +4,7 @@
 #include "VInput.h"
 #include "Settings.h"
 #include "Toast.h"
+#include "Quad.h"
 
 #define DEFAULT_AMBIENT_RED   0.12f
 #define DEFAULT_AMBIENT_GREEN 0.12f
@@ -13,10 +14,10 @@
 #define DEFAULT_GRAVITY 9.8f
 
 int Scene::s_nFBOInitialized = 0;
-unsigned int Scene::s_hFBO               = 0;
-unsigned int Scene::s_hColorAttach       = 0;
-unsigned int Scene::s_hDepthAttach       = 0;
-unsigned int Scene::s_hEffectColorAttach = 0;
+unsigned int Scene::s_hFBO   = 0;
+Texture Scene::s_texColorAttach;
+Texture Scene::s_texDepthAttach;
+Texture Scene::s_texEffectColorAttach;
 
 //*****************************************************************************
 // Constructor
@@ -122,18 +123,25 @@ void Scene::Render()
     Matrix* pProj = 0;
     Matrix* pView = 0;
     Matrix matMVP;
+    Quad quadScreen;
+
+    quadScreen.SetPosition(-1.0f, -1.0f);
+    quadScreen.SetDimensions(2.0f, 2.0f);
 
     // Bind the FBO
     glBindFramebuffer(GL_FRAMEBUFFER, s_hFBO);
     glFramebufferTexture2D(GL_FRAMEBUFFER,
                            GL_COLOR_ATTACHMENT0,
                            GL_TEXTURE_2D,
-                           s_hColorAttach,
+                           s_texColorAttach.GetHandle(),
                            0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    // Adjust the viewport to match the FBO size
+    glViewport(0,0, g_nResolutionX, g_nResolutionY);
 
     // Render 3D Objects
     if (m_pCamera != 0)
@@ -211,8 +219,8 @@ void Scene::Render()
     // Render effects if they are enabled
     if (m_nNumEffects        > 0)
     {
-        // Render to screen buffer
-        //glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        // Render separate texture
+        nEffectOn = 0;
         for (i = 0; i < m_nNumEffects; i++)
         {
             if (m_pEffects[i]->IsEnabled())
@@ -220,24 +228,22 @@ void Scene::Render()
                 glFramebufferTexture2D(GL_FRAMEBUFFER,
                                         GL_COLOR_ATTACHMENT0,
                                         GL_TEXTURE_2D,
-                                        s_hEffectColorAttach,
+                                        s_texEffectColorAttach.GetHandle(),
                                         0);
+                nEffectOn = 1;
                 break;
             }
         }
 
         for (i = 0; i < m_nNumEffects; i++)
         {
-
-
             if (m_pEffects[i]->IsEnabled() != 0)
             {
                 m_pEffects[i]->Render(this,
                                       s_hFBO,
-                                      s_hColorAttach,
-                                      s_hDepthAttach);
+                                      s_texColorAttach.GetHandle(),
+                                      s_texDepthAttach.GetHandle());
             }
-
         }
     }
 
@@ -254,19 +260,40 @@ void Scene::Render()
     glDisable(GL_BLEND);
     glEnable(GL_DEPTH_TEST);
 
-    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-    glBindFramebuffer(GL_READ_FRAMEBUFFER, s_hFBO);
+    // Now render a full-screen quad to the screen.
+    // Note: glBlitFramebuffer was previously used but the result
+    // would be flipped on certain android devices.
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-    glBlitFramebuffer(0,
-                      0,
-                      g_nResolutionX,
-                      g_nResolutionY,
-                      0,
-                      0,
-                      g_nScreenWidth,
-                      g_nScreenHeight,
-                      GL_COLOR_BUFFER_BIT,
-                      GL_NEAREST);
+    // Change viewport to draw on entire screen
+    glViewport(0,0, g_nScreenWidth, g_nScreenHeight);
+
+    if (nEffectOn != 0)
+    {
+        quadScreen.SetTexture(&s_texEffectColorAttach);
+    }
+    else
+    {
+        quadScreen.SetTexture(&s_texColorAttach);
+    }
+    quadScreen.Render();
+    
+
+
+    //@@ Old
+    //glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+    //glBindFramebuffer(GL_READ_FRAMEBUFFER, s_hFBO);
+
+    //glBlitFramebuffer(0,
+    //                  0,
+    //                  g_nResolutionX,
+    //                  g_nResolutionY,
+    //                  0,
+    //                  0,
+    //                  g_nScreenWidth,
+    //                  g_nScreenHeight,
+    //                  GL_COLOR_BUFFER_BIT,
+    //                  GL_NEAREST);
 }
 
 //*****************************************************************************
@@ -523,7 +550,8 @@ void Scene::Update()
 //*****************************************************************************
 void Scene::InitializeFBO()
 {
-    int nStatus = 0;
+    int nStatus        = 0;
+    unsigned int hTemp = 0;
 
     if (s_nFBOInitialized == 0)
     {
@@ -532,8 +560,9 @@ void Scene::InitializeFBO()
         glBindFramebuffer(GL_FRAMEBUFFER, s_hFBO);
 
         // Next create the color attachment (Texture)
-        glGenTextures(1, &s_hColorAttach);
-        glBindTexture(GL_TEXTURE_2D, s_hColorAttach);
+        glGenTextures(1, &hTemp);
+        s_texColorAttach.SetHandle(hTemp);
+        glBindTexture(GL_TEXTURE_2D, hTemp);
 
         glTexImage2D(GL_TEXTURE_2D,
                      0,
@@ -554,13 +583,14 @@ void Scene::InitializeFBO()
         glFramebufferTexture2D(GL_FRAMEBUFFER,
                                GL_COLOR_ATTACHMENT0,
                                GL_TEXTURE_2D,
-                               s_hColorAttach,
+                               hTemp,
                                0);
 
         // The depth attachment will be attached next.
         // A Renderbuffer will be used for the depth attachment.
-        glGenRenderbuffers(1, &s_hDepthAttach);
-        glBindRenderbuffer(GL_RENDERBUFFER, s_hDepthAttach);
+        glGenRenderbuffers(1, &hTemp);
+        s_texDepthAttach.SetHandle(hTemp);
+        glBindRenderbuffer(GL_RENDERBUFFER, hTemp);
         glRenderbufferStorage(GL_RENDERBUFFER,
                               GL_DEPTH24_STENCIL8,
                               g_nResolutionX,
@@ -570,7 +600,7 @@ void Scene::InitializeFBO()
         glFramebufferRenderbuffer(GL_FRAMEBUFFER,
                                   GL_DEPTH_STENCIL_ATTACHMENT,
                                   GL_RENDERBUFFER,
-                                  s_hDepthAttach);
+                                  hTemp);
 
         // Lastly, check if the FBO is ready to be used.
         nStatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
@@ -584,8 +614,9 @@ void Scene::InitializeFBO()
         glViewport(0,0, g_nResolutionX, g_nResolutionY);
 
         // Create effect texture
-        glGenTextures(1, &s_hEffectColorAttach);
-        glBindTexture(GL_TEXTURE_2D, s_hEffectColorAttach);
+        glGenTextures(1, &hTemp);
+        s_texEffectColorAttach.SetHandle(hTemp);
+        glBindTexture(GL_TEXTURE_2D, hTemp);
 
         glTexImage2D(GL_TEXTURE_2D,
                      0,

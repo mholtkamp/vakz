@@ -66,6 +66,24 @@ public:
     //## **********************************************************************
     void SetFiltering(int nFilterType);
 
+    //## **********************************************************************
+    //## GetHandle
+    //##
+    //## Returns:
+    //##   unsigned int - the OpenGL unsigned int handle.
+    //## **********************************************************************
+    unsigned int GetHandle();
+
+    //## **********************************************************************
+    //## SetHandle
+    //##
+    //## Sets the objects OpenGL handle with a pre-generated OpenGL Texture.
+    //## 
+    //## Input:
+    //##   hTexture - texture handle
+    //## **********************************************************************
+    void SetHandle(unsigned int hTexture);
+
     enum TextureEnum
     {
         TEXTURE_MAX_SIZE        = 2048,
