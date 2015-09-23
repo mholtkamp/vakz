@@ -27,7 +27,8 @@ public:
     //## Input:
     //##   pFileName - path to .bmp file to load.
     //## **********************************************************************
-    void LoadBMP(const char* pFileName);
+    void LoadBMP(const char* pFileName,
+                 int         nColorKey = 0);
 
     //## **********************************************************************
     //## LoadArray
@@ -64,6 +65,24 @@ public:
     //##    nFilterType - NEAREST or LINEAR (refer to TextureEnum)
     //## **********************************************************************
     void SetFiltering(int nFilterType);
+
+    //## **********************************************************************
+    //## GetHandle
+    //##
+    //## Returns:
+    //##   unsigned int - the OpenGL unsigned int handle.
+    //## **********************************************************************
+    unsigned int GetHandle();
+
+    //## **********************************************************************
+    //## SetHandle
+    //##
+    //## Sets the objects OpenGL handle with a pre-generated OpenGL Texture.
+    //## 
+    //## Input:
+    //##   hTexture - texture handle
+    //## **********************************************************************
+    void SetHandle(unsigned int hTexture);
 
     enum TextureEnum
     {

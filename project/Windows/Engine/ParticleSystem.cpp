@@ -1,6 +1,7 @@
 #include "ParticleSystem.h"
 #include "VGL.h"
 #include "Log.h"
+#include <stdlib.h>
 
 // Shader uniform handles for update program
 static int s_hMinLifetime   = -1;
@@ -27,6 +28,7 @@ static int s_hLife        = -1;
 // Shader uniform handles for render program
 static int s_hRendSize      = -1;
 static int s_hRendMatrixVP  = -1;
+static int s_hTexType       = -1;
 static int s_hRendTexture   = -1;
 
 // Shader attribute handles for render program
@@ -99,7 +101,7 @@ ParticleSystem::~ParticleSystem()
 
 void ParticleSystem::Initialize()
 {   
-    int hProg;
+    int hProg     = 0;
 
     // Perform static initialization
     if (s_nStaticInit == 0)
@@ -130,6 +132,7 @@ void ParticleSystem::Initialize()
 
         s_hRendSize      = glGetUniformLocation(hProg, "uParticleSize");
         s_hRendMatrixVP  = glGetUniformLocation(hProg, "uMatrixVP");
+        s_hTexType       = glGetUniformLocation(hProg, "uTexType");
         s_hRendTexture   = glGetUniformLocation(hProg, "uTexture");
 
         s_hRendPosition = glGetAttribLocation(hProg, "aPosition");
@@ -143,7 +146,9 @@ void ParticleSystem::Initialize()
         // used instead. On android (running a pure ES 3.0 environment) this call
         // is not needed and would probably produce an error if it was used.
         glEnable(GL_PROGRAM_POINT_SIZE);
+        glEnable(GL_POINT_SPRITE);
 #endif
+
         s_nStaticInit = 1;
     }
 
@@ -210,7 +215,6 @@ void ParticleSystem::Update()
                           GL_FALSE,
                           PARTICLE_DATA_SIZE,
                           (void*) 40);
-
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);
     glEnableVertexAttribArray(2);
@@ -227,7 +231,7 @@ void ParticleSystem::Update()
     //glUniform1f(s_hMaxSize, 1, m_fMaxSize);
     glUniform3fv(s_hGravity, 1, m_arGravity);
     glUniform1i(s_hSeed, rand());
-    glUniform1f(s_hDeltaTime, fDeltaTime);
+    glUniform1f(s_hDeltaTime, 0.016f /*fDeltaTime*/);
     glUniform1i(s_hGenerate, m_nGenerate);
     glUniform3fv(s_hOrigin, 1, m_arOrigin);
     glUniform3fv(s_hSpawnVariance, 1, m_arSpawnVariance);
@@ -291,8 +295,16 @@ void ParticleSystem::Render(Matrix* pMatrixVP)
     glEnableVertexAttribArray(s_hRendLife);
 
     // Setup the uniforms
-    glUniform1f(s_hRendSize, 20.0f);
+    glUniform1f(s_hRendSize, 32.0f);
     glUniformMatrix4fv(s_hRendMatrixVP, 1, GL_FALSE, pMatrixVP->GetArray());
+    if (m_pTexture == 0)
+    {
+        glUniform1i(s_hTexType, 0);
+    }
+    else
+    {
+        glUniform1i(s_hTexType, 1);
+    }
     glUniform1i(s_hRendTexture, 0);
 
     // Bind texture

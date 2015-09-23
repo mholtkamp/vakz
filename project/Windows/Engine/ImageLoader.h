@@ -27,6 +27,7 @@ public:
     //##   unsigned char* - pointer to array of pixel data.
     //## **********************************************************************
     static unsigned char* LoadBMP(const char* pFileName,
+                                  int         nColorKey,
                                   int&        nWidth,
                                   int&        nHeight,
                                   short&      sBPP);

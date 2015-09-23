@@ -296,13 +296,15 @@ GLSL_VERSION_STRING
 "out vec3 oPosition;\n"
 "out vec3 oVelocity;\n"
 "out vec4 oColor;\n"
-"out float oLife;\n"
+"flat out float oLife;\n"
 
 // Random function
-"float rand(inout int lSeed)\n"
+"float rand(inout int lRandSeed)\n"
 "{\n"
-"   lSeed = ((lSeed * 1103515245) + 12345) & 0x7fffffff;\n"
-"   return float(lSeed % 32768)/32768.0;\n"
+//"   lRandSeed = ((lRandSeed * 1103515245) + 12345) & 0x7fffffff;\n"
+//"   return float(lRandSeed % 32768)/32768.0;\n"
+"   lRandSeed = ((lRandSeed * 104417) + 12345);\n"
+"   return float(lRandSeed % 32768)/32768.0;\n"
 "}\n"
 
 // Main
@@ -399,14 +401,21 @@ GLSL_VERSION_STRING
 static const char* pParticleRenderFragmentShader =
 GLSL_VERSION_STRING
 "precision mediump float;\n"
-
+"uniform int uTexType;\n"
 "uniform sampler2D uTexture;\n"
 "in vec4 vColor;\n"
 "out vec4 oFragColor;\n"
 
 "void main()\n"
 "{\n"
-"    oFragColor = vColor;\n"
+"    if (uTexType != 0)\n"
+"    {\n"
+"       oFragColor = vColor * texture(uTexture, vec2(gl_PointCoord.x, 1.0 - gl_PointCoord.y));\n"
+"    }\n"
+"    else\n"
+"    {\n"
+"       oFragColor = vColor;\n"
+"    }\n"
 "    if (oFragColor.a < 0.004)\n"
 "    {\n"
 "        discard;\n"

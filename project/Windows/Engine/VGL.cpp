@@ -727,16 +727,10 @@ static int BuildProgram(int          nProgramIndex,
         // before linking the program
         if (pFeedbackVaryings != 0)
         {
-            while(glGetError() != GL_NO_ERROR)
-            {
-            
-            }
             glTransformFeedbackVaryings(hProgram,
                                         nFeedbackVaryingsCount,
                                         pFeedbackVaryings,
                                         GL_INTERLEAVED_ATTRIBS);
-
-            printf("glError() = %d\n", glGetError());
         }
 
         // Link program

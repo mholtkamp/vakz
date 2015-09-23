@@ -101,6 +101,13 @@ int InitializeGraphics(ANativeWindow* pWindow)
     EGLSurface surface;
     EGLContext context;
 
+    LogWarning("Creating OPENGL CONTEXT.");
+
+    while(EGL_SUCCESS != eglGetError())
+    {
+
+    }
+
     EGLDisplay display = eglGetDisplay(EGL_DEFAULT_DISPLAY);
 
     eglInitialize(display, 0, 0);
@@ -118,14 +125,20 @@ int InitializeGraphics(ANativeWindow* pWindow)
 
     ANativeWindow_setBuffersGeometry(vakzData.window, 0, 0, format);
 
+
     surface = eglCreateWindowSurface(display, config, vakzData.window, NULL);
 
-    context = eglCreateContext(display, config, NULL, NULL);
+    context = eglCreateContext(display, config, EGL_NO_CONTEXT, arContextAttribs);
 
     if (eglMakeCurrent(display, surface, surface, context) == EGL_FALSE) {
         LogWarning("Error making context current");
         return -1;
     }
+
+//    while(true)
+//    {
+//
+//    }
 
     eglQuerySurface(display, surface, EGL_WIDTH, &w);
     eglQuerySurface(display, surface, EGL_HEIGHT, &h);
@@ -452,6 +465,7 @@ int Render()
 
         if (s_pScene != 0)
         {
+            eglMakeCurrent(vakzData.display, vakzData.surface, vakzData.surface, vakzData.context);
             s_pScene->Render();
         }
         else

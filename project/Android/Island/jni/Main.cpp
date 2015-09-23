@@ -56,7 +56,8 @@ int animating = 1;
 
 void android_main(struct android_app* state) {
 
-    //state->onAppCmd = handle_cmd;
+    //state->onAppCmd = handle_cmd;.
+    SetResolution(1280, 720);
     Initialize(state);
 
     //usleep(55000);
@@ -123,7 +124,7 @@ void android_main(struct android_app* state) {
         //pFlowerPot->SetRigid(1);
 
         // Add to scene
-        pTestScene->AddMatter(&(pFlowerPots[fp]));
+        //pTestScene->AddMatter(&(pFlowerPots[fp]));
     }
 
     // Create TestAnim
@@ -142,7 +143,7 @@ void android_main(struct android_app* state) {
                               -0.706f, 0.706f);
     pTestAnim->SetCollider(pTestCollider);
     pTestAnim->SetScale(0.25f, 0.25f, 0.25f);
-    pTestAnim->SetPhysical(1);
+    //pTestAnim->SetPhysical(1);
 
     LogDebug("Loaded both meshes.");
 
@@ -179,6 +180,18 @@ void android_main(struct android_app* state) {
     colText.SetScale(0.6f, 0.8f);
     colText.SetText("No Collision");
     pTestScene->AddGlyph(&colText);
+
+    // Particle System Test
+    ParticleSystem* pParticleSystem = new ParticleSystem();
+    float arParMinColor[4] = {1.0f, 1.0f, 1.0, 0.1f};
+    float arParMaxColor[4] = {1.0f, 1.0f, 1.0, 0.3f};
+    pParticleSystem->SetColor(arParMinColor, arParMaxColor);
+
+    Texture texPart;
+    texPart.LoadBMP("poof.bmp", 1);
+    pParticleSystem->SetTexture(&texPart);
+    pParticleSystem->Initialize();
+    pTestScene->AddParticleSystem(pParticleSystem);
 
     float fFlowerX = 0.0f;
     float fSeconds = 0.0f;
@@ -508,5 +521,4 @@ void android_main(struct android_app* state) {
     delete pTestScene;
     delete [] pFlowerPots;
     exit(0);
-
 }

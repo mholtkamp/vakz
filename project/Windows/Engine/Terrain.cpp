@@ -42,6 +42,7 @@ void Terrain::LoadBMP(const char* pFileName)
     unsigned char* pData = 0;
 
     pData = ImageLoader::LoadBMP(pFileName,
+                                 0,
                                  nWidth,
                                  nHeight,
                                  sBPP);
