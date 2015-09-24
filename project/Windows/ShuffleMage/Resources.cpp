@@ -32,9 +32,12 @@ Texture* g_pCardSwipeTex = 0;
 Texture* g_pCardAreaGrabTex = 0;
 
 // Activations
-StaticMesh* g_pActLaserMesh;
-Texture*    g_pActLaserTex;
-Sound*      g_pActLaserSound;
+StaticMesh* g_pActLaserMesh  = 0;
+Texture*    g_pActLaserTex   = 0;
+Sound*      g_pActLaserSound = 0;
+
+StaticMesh* g_pActBombMesh = 0;
+Texture*    g_pActBombTex  = 0;
 
 static int s_nLoaded = 0;
 
@@ -105,6 +108,12 @@ void LoadResources()
         g_pActLaserTex->LoadBMP("Textures/Activations/laser_tex.bmp");
         g_pActLaserSound = new Sound();
         g_pActLaserSound->Load("Sounds/laser_sound.wav");
+
+        g_pActBombMesh = new StaticMesh();
+        g_pActBombMesh->Load("Meshes/Activations/bomb_mesh.obj");
+        g_pActBombTex  = new Texture();
+        g_pActBombTex->LoadBMP("Textures/Activations/bomb_tex.bmp");
+
         s_nLoaded = 1;
     }
 }

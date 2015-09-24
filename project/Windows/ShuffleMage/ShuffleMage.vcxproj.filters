@@ -135,6 +135,9 @@
     <ClCompile Include="MsgHealth.cpp">
       <Filter>Messages</Filter>
     </ClCompile>
+    <ClCompile Include="ActBomb.cpp">
+      <Filter>Activations</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Menu.h">
@@ -253,6 +256,9 @@
     </ClInclude>
     <ClInclude Include="MsgHealth.h">
       <Filter>Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="ActBomb.h">
+      <Filter>Activations</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

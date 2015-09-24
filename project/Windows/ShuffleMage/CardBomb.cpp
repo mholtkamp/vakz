@@ -1,4 +1,5 @@
 #include "CardBomb.h"
+#include "ActBomb.h"
 
 #define CARD_BOMB_TEXTURE g_pCardBombTex
 #define CARD_BOMB_NAME "BOMB"
@@ -53,5 +54,10 @@ int CardBomb::GetRarity()
 
 void CardBomb::Cast(void* pGame, int nCaster)
 {
-    LogDebug("Implement CardBomb::Cast()!");
+    Activation* pAct = new ActBomb();
+    if (SpawnActivation(pGame, nCaster, pAct) == -1)
+    {
+        // Couldn't create activation.
+        delete pAct;
+    }
 }

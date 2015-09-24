@@ -42,6 +42,9 @@ extern StaticMesh* g_pActLaserMesh;
 extern Texture*    g_pActLaserTex;
 extern Sound*      g_pActLaserSound;
 
+extern StaticMesh* g_pActBombMesh;
+extern Texture*    g_pActBombTex;
+
 void LoadResources();
 
 void DeleteResources();

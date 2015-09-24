@@ -69,6 +69,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\ShuffleMage\ActBomb.cpp" />
     <ClCompile Include="..\ShuffleMage\Activation.cpp" />
     <ClCompile Include="..\ShuffleMage\ActLaser.cpp" />
     <ClCompile Include="..\ShuffleMage\Card.cpp" />
@@ -104,6 +105,7 @@
     <ClCompile Include="Session.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\ShuffleMage\ActBomb.h" />
     <ClInclude Include="..\ShuffleMage\Activation.h" />
     <ClInclude Include="..\ShuffleMage\ActLaser.h" />
     <ClInclude Include="..\ShuffleMage\Card.h" />
