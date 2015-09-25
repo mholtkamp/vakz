@@ -2,6 +2,7 @@
 #define ACT_BOMB_H
 
 #include "Activation.h"
+#include "ParticleSystem.h"
 
 class ActBomb : public Activation
 {
@@ -31,7 +32,11 @@ public:
 
     int m_nHit;
 
+private:
+
     void CheckHit();
+    void BeginExplosion();
+    ParticleSystem* m_pParticle;
 };
 
 #endif

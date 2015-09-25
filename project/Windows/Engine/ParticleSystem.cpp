@@ -24,9 +24,9 @@ static int s_hPosition    = -1;
 static int s_hVelocity    = -1;
 static int s_hColor       = -1;
 static int s_hLife        = -1;
+static int s_hSize        = -1;
 
 // Shader uniform handles for render program
-static int s_hRendSize      = -1;
 static int s_hRendMatrixVP  = -1;
 static int s_hTexType       = -1;
 static int s_hRendTexture   = -1;
@@ -35,6 +35,7 @@ static int s_hRendTexture   = -1;
 static int s_hRendPosition = -1;
 static int s_hRendColor    = -1;
 static int s_hRendLife     = -1;
+static int s_hRendSize     = -1;
 
 // Class-static variables
 int ParticleSystem::s_nStaticInit = 0;
@@ -96,12 +97,13 @@ ParticleSystem::~ParticleSystem()
 {
     // Free video memory
     // Allow for a glError if the VBOs are 0.
-    glDeleteBuffers(1, m_arVBOs);
+    glDeleteBuffers(2, m_arVBOs);
 }
 
 void ParticleSystem::Initialize()
 {   
-    int hProg     = 0;
+    int hProg         = 0;
+    char* pZeroBuffer = 0;
 
     // Perform static initialization
     if (s_nStaticInit == 0)
@@ -127,10 +129,10 @@ void ParticleSystem::Initialize()
         s_hVelocity = glGetAttribLocation(hProg, "aVelocity");
         s_hColor    = glGetAttribLocation(hProg, "aColor");
         s_hLife     = glGetAttribLocation(hProg, "aLife");
+        s_hSize     = glGetAttribLocation(hProg, "aSize");
 
         hProg = GetShaderProgram(PARTICLE_RENDER_PROGRAM);
 
-        s_hRendSize      = glGetUniformLocation(hProg, "uParticleSize");
         s_hRendMatrixVP  = glGetUniformLocation(hProg, "uMatrixVP");
         s_hTexType       = glGetUniformLocation(hProg, "uTexType");
         s_hRendTexture   = glGetUniformLocation(hProg, "uTexture");
@@ -138,6 +140,7 @@ void ParticleSystem::Initialize()
         s_hRendPosition = glGetAttribLocation(hProg, "aPosition");
         s_hRendColor    = glGetAttribLocation(hProg, "aColor");
         s_hRendLife     = glGetAttribLocation(hProg, "aLife");
+        s_hRendSize     = glGetAttribLocation(hProg, "aSize");
 
 #if defined (WINDOWS)
         // Lastly, we need to enable point size control in the vertex shader.
@@ -159,17 +162,22 @@ void ParticleSystem::Initialize()
     // when performing transform feedback
     glGenBuffers(2, m_arVBOs);
 
+    pZeroBuffer = new char[m_nParticleCount * PARTICLE_DATA_SIZE];
+    memset(pZeroBuffer, 0, m_nParticleCount * PARTICLE_DATA_SIZE);
+
     glBindBuffer(GL_ARRAY_BUFFER, m_arVBOs[0]);
     glBufferData(GL_ARRAY_BUFFER,
                  PARTICLE_DATA_SIZE * m_nParticleCount,
-                 0,
+                 pZeroBuffer,
                  GL_DYNAMIC_COPY);
 
     glBindBuffer(GL_ARRAY_BUFFER, m_arVBOs[1]);
     glBufferData(GL_ARRAY_BUFFER,
                  PARTICLE_DATA_SIZE * m_nParticleCount,
-                 0,
+                 pZeroBuffer,
                  GL_DYNAMIC_COPY);
+
+    delete [] pZeroBuffer;
 }
 
 void ParticleSystem::Update()
@@ -215,10 +223,18 @@ void ParticleSystem::Update()
                           GL_FALSE,
                           PARTICLE_DATA_SIZE,
                           (void*) 40);
+    glVertexAttribPointer(4,
+                          1,
+                          GL_FLOAT,
+                          GL_FALSE,
+                          PARTICLE_DATA_SIZE,
+                          (void*) 44);
+
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);
     glEnableVertexAttribArray(2);
     glEnableVertexAttribArray(3);
+    glEnableVertexAttribArray(4);
 
     // Set Uniforms
     glUniform1f(s_hMinLifetime, m_fMinLifetime);
@@ -227,8 +243,8 @@ void ParticleSystem::Update()
     glUniform4fv(s_hMaxColor, 1, m_arMaxColor);
     glUniform3fv(s_hMinVelocity, 1, m_arMinVelocity);
     glUniform3fv(s_hMaxVelocity, 1, m_arMaxVelocity);
-    //glUniform1f(s_hMinSize, 1, m_fMinSize);
-    //glUniform1f(s_hMaxSize, 1, m_fMaxSize);
+    glUniform1f(s_hMinSize, m_fMinSize);
+    glUniform1f(s_hMaxSize, m_fMaxSize);
     glUniform3fv(s_hGravity, 1, m_arGravity);
     glUniform1i(s_hSeed, rand());
     glUniform1f(s_hDeltaTime, 0.016f /*fDeltaTime*/);
@@ -249,7 +265,7 @@ void ParticleSystem::Update()
     // Since the rendering relies on the particle update being finished,
     // and the gpu does its processing asynchronously, we must wait until
     // the gpu processing is done using a sync object.
-    m_pSync = glFenceSync ( GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+    m_pSync = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
 
     glDisable(GL_RASTERIZER_DISCARD);
     glBindBuffer(GL_TRANSFORM_FEEDBACK_BUFFER, 0);
@@ -288,14 +304,20 @@ void ParticleSystem::Render(Matrix* pMatrixVP)
                           GL_FALSE,
                           PARTICLE_DATA_SIZE,
                           (void*) 40);
+    glVertexAttribPointer(s_hRendSize,
+                          1,
+                          GL_FLOAT,
+                          GL_FALSE,
+                          PARTICLE_DATA_SIZE,
+                          (void*) 44);
 
     // Enable the attrib arrays
     glEnableVertexAttribArray(s_hRendPosition);
     glEnableVertexAttribArray(s_hRendColor);
     glEnableVertexAttribArray(s_hRendLife);
+    glEnableVertexAttribArray(s_hRendSize);
 
     // Setup the uniforms
-    glUniform1f(s_hRendSize, 32.0f);
     glUniformMatrix4fv(s_hRendMatrixVP, 1, GL_FALSE, pMatrixVP->GetArray());
     if (m_pTexture == 0)
     {
@@ -383,6 +405,24 @@ void ParticleSystem::SetGravity(float arGravity[3])
     m_arGravity[0] = arGravity[0];
     m_arGravity[1] = arGravity[1];
     m_arGravity[2] = arGravity[2];
+}
+
+void ParticleSystem::SetOrigin(float fX,
+               float fY,
+               float fZ)
+{
+    m_arOrigin[0] = fX;
+    m_arOrigin[1] = fY;
+    m_arOrigin[2] = fZ;
+}
+
+void ParticleSystem::SetSpawnVariance(float fX,
+                                      float fY,
+                                      float fZ)
+{
+    m_arSpawnVariance[0] = fX;
+    m_arSpawnVariance[1] = fY;
+    m_arSpawnVariance[2] = fZ;
 }
 
 void ParticleSystem::SetTexture(Texture* pTexture)

@@ -92,6 +92,24 @@ public:
     void AddParticleSystem(ParticleSystem* pParticleSystem);
 
     //## **********************************************************************
+    //## RemoveObject
+    //##
+    //## Removes a scene object from the scene. Note, the way everything is 
+    //## configured right now, these functions simply iterate through a list
+    //## remove the item from the list, and then shift all items down so that
+    //## the array of objects is tightly packed.
+    //##
+    //## Input:
+    //##   pParticleSystem - pointer to particle system object to add.
+    //## **********************************************************************
+    void RemoveMatter(Matter* pMatter);
+    void RemoveLight(Light* pLight);
+    void RemoveGlyph(Glyph* pGlyph);
+    void RemoveEffect(Effect* pEffect);
+    void RemoveParticleSystem(ParticleSystem* pParticleSystem);
+
+
+    //## **********************************************************************
     //## SetCamera
     //##
     //## Sets the camera for the scene. The camera determines the viewpoint and

@@ -33,6 +33,8 @@ public:
 
     void Construct();
 
+    Scene* GetScene();
+
     void Update();
 
     void RegisterScene();

@@ -638,3 +638,183 @@ void Scene::InitializeFBO()
         s_nFBOInitialized = 1;
     }
 }
+
+//*****************************************************************************
+// RemoveMatter
+//*****************************************************************************
+void Scene::RemoveMatter(Matter* pMatter)
+{
+    int i      = 0;
+    int nFound = 0;
+
+    if (pMatter == 0)
+    {
+        return;
+    }
+
+    for (i = 0; i < m_nNumMatters; i++)
+    {
+        if (m_pMatters[i] == pMatter)
+        {
+            m_pMatters[i] = 0;
+            nFound = 1;
+            i++;
+            break;
+        }
+    }
+
+    if (nFound != 0)
+    {
+        for (; i < m_nNumMatters; i++)
+        {
+            m_pMatters[i-1] = m_pMatters[i];
+        }
+
+        m_pMatters[m_nNumMatters - 1] = 0;
+        m_nNumMatters--;
+    }
+}
+
+//*****************************************************************************
+// RemoveLight
+//*****************************************************************************
+void Scene::RemoveLight(Light* pLight)
+{
+    int i      = 0;
+    int nFound = 0;
+
+    if (pLight == 0)
+    {
+        return;
+    }
+
+    for (i = 0; i < m_nNumLights; i++)
+    {
+        if (m_pLights[i] == pLight)
+        {
+            m_pLights[i] = 0;
+            nFound = 1;
+            i++;
+            break;
+        }
+    }
+
+    if (nFound != 0)
+    {
+        for (; i < m_nNumLights; i++)
+        {
+            m_pLights[i-1] = m_pLights[i];
+        }
+
+        m_pLights[m_nNumLights - 1] = 0;
+        m_nNumLights--;
+    }
+}
+
+//*****************************************************************************
+// RemoveGlyph
+//*****************************************************************************
+void Scene::RemoveGlyph(Glyph* pGlyph)
+{
+    int i      = 0;
+    int nFound = 0;
+
+    if (pGlyph == 0)
+    {
+        return;
+    }
+
+    for (i = 0; i < m_nNumGlyphs; i++)
+    {
+        if (m_pGlyphs[i] == pGlyph)
+        {
+            m_pGlyphs[i] = 0;
+            nFound = 1;
+            i++;
+            break;
+        }
+    }
+
+    if (nFound != 0)
+    {
+        for (; i < m_nNumGlyphs; i++)
+        {
+            m_pGlyphs[i-1] = m_pGlyphs[i];
+        }
+
+        m_pGlyphs[m_nNumGlyphs - 1] = 0;
+        m_nNumGlyphs--;
+    }
+}
+
+//*****************************************************************************
+// RemoveEffect
+//*****************************************************************************
+void Scene::RemoveEffect(Effect* pEffect)
+{
+    int i      = 0;
+    int nFound = 0;
+
+    if (pEffect == 0)
+    {
+        return;
+    }
+
+    for (i = 0; i < m_nNumEffects; i++)
+    {
+        if (m_pEffects[i] == pEffect)
+        {
+            m_pEffects[i] = 0;
+            nFound = 1;
+            i++;
+            break;
+        }
+    }
+
+    if (nFound != 0)
+    {
+        for (; i < m_nNumEffects; i++)
+        {
+            m_pEffects[i-1] = m_pEffects[i];
+        }
+
+        m_pEffects[m_nNumEffects - 1] = 0;
+        m_nNumEffects--;
+    }
+}
+
+//*****************************************************************************
+// RemoveParticleSystem
+//*****************************************************************************
+void Scene::RemoveParticleSystem(ParticleSystem* pParticleSystem)
+{
+    int i      = 0;
+    int nFound = 0;
+
+    if (pParticleSystem == 0)
+    {
+        return;
+    }
+
+    for (i = 0; i < m_nNumParticles; i++)
+    {
+        if (m_pParticleSystems[i] == pParticleSystem)
+        {
+            m_pParticleSystems[i] = 0;
+            nFound = 1;
+            i++;
+            break;
+        }
+    }
+
+    if (nFound != 0)
+    {
+        for (; i < m_nNumParticles; i++)
+        {
+            m_pParticleSystems[i-1] = m_pParticleSystems[i];
+        }
+
+        m_pParticleSystems[m_nNumParticles - 1] = 0;
+        m_nNumParticles--;
+    }
+}

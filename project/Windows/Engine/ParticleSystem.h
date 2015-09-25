@@ -36,12 +36,20 @@ public:
 
     void SetGravity(float arGravity[3]);
 
+    void SetOrigin(float fX,
+                   float fY,
+                   float fZ);
+
+    void SetSpawnVariance(float fX,
+                          float fY,
+                          float fZ);
+
     void SetTexture(Texture* pTexture);
 
     enum ParticleSystemEnum
     {
         MAX_PARTICLE_COUNT = 1024,
-        PARTICLE_DATA_SIZE = (12 + 12 + 16 + 4)
+        PARTICLE_DATA_SIZE = (12 + 12 + 16 + 4 + 4)
     };
 
 private:

@@ -103,6 +103,11 @@ void Game::Construct()
     }
 }
 
+Scene* Game::GetScene()
+{
+    return &m_scene;
+}
+
 void Game::Update()
 {
     int i = 0;

@@ -291,12 +291,14 @@ GLSL_VERSION_STRING
 "layout(location = 1) in vec3 aVelocity;\n"
 "layout(location = 2) in vec4 aColor;\n"
 "layout(location = 3) in float aLife;\n"
+"layout(location = 4) in float aSize;\n"
 
 // Particle data ouput
 "out vec3 oPosition;\n"
 "out vec3 oVelocity;\n"
 "out vec4 oColor;\n"
 "flat out float oLife;\n"
+"flat out float oSize;\n"
 
 // Random function
 "float rand(inout int lRandSeed)\n"
@@ -338,13 +340,16 @@ GLSL_VERSION_STRING
 "                     mix(uMinColor.w, uMaxColor.w, lRand1));\n"
 "       lRand1 = rand(lSeed);\n"
 "       oLife = mix(uMinLifetime, uMaxLifetime, lRand1);\n"
+"       lRand1 = rand(lSeed);\n"
+"       oSize = mix(uMinSize, uMaxSize, lRand1);\n"
 "   }\n"
 "   else\n"
 "   {\n"
 "       oPosition = aPosition + aVelocity*uDeltaTime;\n"
 "       oVelocity = aVelocity + uGravity*uDeltaTime;\n"
-"       oColor    = aColor;"
+"       oColor    = aColor;\n"
 "       oLife     = aLife - uDeltaTime;\n"
+"       oSize     = aSize;\n"
 "   }\n"
 "}\n";
 
@@ -363,14 +368,15 @@ GLSL_VERSION_STRING
 //## **************************************************************************
 //## Particle Update Transform Feedback Varyings
 //## **************************************************************************
-static const char* pParticleUpdateFeedbackVaryings[4] =
+static const char* pParticleUpdateFeedbackVaryings[5] =
 {
     "oPosition",
     "oVelocity",
     "oColor",
-    "oLife"
+    "oLife",
+    "oSize"
 };
-static int nParticleUpdateFeedbackVaryingsCount = 4;
+static int nParticleUpdateFeedbackVaryingsCount = 5;
 
 //## **************************************************************************
 //## Particle Render Vertex Shader
@@ -378,12 +384,12 @@ static int nParticleUpdateFeedbackVaryingsCount = 4;
 static const char* pParticleRenderVertexShader =
 GLSL_VERSION_STRING
 
-"uniform float uParticleSize;\n"
 "uniform mat4 uMatrixVP;\n"
 
 "in vec3 aPosition;\n"
 "in vec4 aColor;\n"
 "in float aLife;\n"
+"in float aSize;\n"
 
 "out vec4 vColor;\n"
 
@@ -391,7 +397,7 @@ GLSL_VERSION_STRING
 "{\n"
 "   vColor = aColor;\n"
 "   gl_Position = uMatrixVP * vec4(aPosition, 1.0);\n"
-"   gl_PointSize = uParticleSize;\n"
+"   gl_PointSize = aSize;\n"
 "}\n";
 
 
