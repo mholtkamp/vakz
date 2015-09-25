@@ -12,6 +12,7 @@ Texture* g_pRotateTex   = 0;
 // Static Mesh Resources
 StaticMesh* g_pMageMesh = 0;
 StaticMesh* g_pTileMesh = 0;
+StaticMesh* g_pPlaneXY  = 0;
 
 // Animated Mesh Resources
 AnimatedMesh* g_pMageAnimatedMesh = 0;
@@ -38,6 +39,8 @@ Sound*      g_pActLaserSound = 0;
 
 StaticMesh* g_pActBombMesh = 0;
 Texture*    g_pActBombTex  = 0;
+
+Texture* g_pActHealTex = 0;
 
 static int s_nLoaded = 0;
 
@@ -70,6 +73,9 @@ void LoadResources()
 
         g_pTileMesh = new StaticMesh();
         g_pTileMesh->Load("Meshes/tile.obj");
+
+        g_pPlaneXY = new StaticMesh();
+        g_pPlaneXY->Load("Meshes/planeXY.obj");
         
         // Animated Meshes
         g_pMageAnimatedMesh = new AnimatedMesh();
@@ -113,6 +119,10 @@ void LoadResources()
         g_pActBombMesh->Load("Meshes/Activations/bomb_mesh.obj");
         g_pActBombTex  = new Texture();
         g_pActBombTex->LoadBMP("Textures/Activations/bomb_tex.bmp");
+
+        g_pActHealTex = new Texture();
+        g_pActHealTex->LoadBMP("Textures/Activations/heal_tex.bmp");
+        g_pActHealTex->SetFiltering(Texture::NEAREST);
 
         s_nLoaded = 1;
     }
