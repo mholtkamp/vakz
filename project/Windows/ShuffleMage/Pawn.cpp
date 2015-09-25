@@ -4,6 +4,7 @@
 #include "Game.h"
 #include "NetworkManager.h"
 #include "Log.h"
+#include "Tile.h"
 
 #if defined SM_SERVER
 #include "../ShuffleMageServer/ServerGame.h"
@@ -49,25 +50,37 @@ void Pawn::Register(Scene* pScene)
 void Pawn::SetPosition(int nX,
                        int nZ)
 {
-    m_nX = nX;
-    m_nZ = nZ;
+
 
 #ifdef SM_CLIENT
-    m_matter.SetPosition(m_nX * TILE_WIDTH, 0.0f, m_nZ * TILE_HEIGHT);
-    reinterpret_cast<Game*>(m_pGame)->SendPosition(m_nSide, m_nX, m_nZ);
+    m_matter.SetPosition(nX * TILE_WIDTH, 0.0f, nZ * TILE_HEIGHT);
+    reinterpret_cast<Game*>(m_pGame)->SendPosition(m_nSide, nX, nZ);
+    reinterpret_cast<Game*>(m_pGame)->m_arTiles[m_nX][m_nZ].SetPawn(0);
+    reinterpret_cast<Game*>(m_pGame)->m_arTiles[nX][nZ].SetPawn(this);
+#else
+    reinterpret_cast<ServerGame*>(m_pGame)->m_arTiles[m_nX][m_nZ].SetPawn(0);
+    reinterpret_cast<ServerGame*>(m_pGame)->m_arTiles[nX][nZ].SetPawn(this);
 #endif
 
+    m_nX = nX;
+    m_nZ = nZ;
 }
 
 void Pawn::UpdatePosition(int nX,
                           int nZ)
 {
+#ifdef SM_CLIENT
+    m_matter.SetPosition(nX * TILE_WIDTH, 0.0f, nZ * TILE_HEIGHT);
+    reinterpret_cast<Game*>(m_pGame)->m_arTiles[m_nX][m_nZ].SetPawn(0);
+    reinterpret_cast<Game*>(m_pGame)->m_arTiles[nX][nZ].SetPawn(this);
+#else
+    reinterpret_cast<ServerGame*>(m_pGame)->m_arTiles[m_nX][m_nZ].SetPawn(0);
+    reinterpret_cast<ServerGame*>(m_pGame)->m_arTiles[nX][nZ].SetPawn(this);
+#endif
+
+    // Assign these member values afterwards.
     m_nX = nX;
     m_nZ = nZ;
-
-#ifdef SM_CLIENT
-    m_matter.SetPosition(m_nX * TILE_WIDTH, 0.0f, m_nZ * TILE_HEIGHT);
-#endif
 }
 
 void Pawn::Move(int nX,
@@ -91,8 +104,10 @@ void Pawn::Move(int nX,
     {
         // Location is in grid boundaries
         // Now check if the new tile is owned.
-        if (pGame->m_arTiles[nNewX][nNewZ].GetOwner() == m_nSide)
+        if (pGame->m_arTiles[nNewX][nNewZ].GetOwner() == m_nSide &&
+            pGame->m_arTiles[nNewX][nNewZ].GetPawn()  == 0)
         {
+            // Set the new pawn position
             SetPosition(nNewX, nNewZ);
         }
     }

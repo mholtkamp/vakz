@@ -216,27 +216,14 @@ void ActBomb::CheckHit()
 {
 #if defined (SM_SERVER)
 
-    int nEnemyX;
-    int nEnemyZ;
-
-    Mage* pEnemyMage = 0;
+    Pawn* pTargPawn = 0;
     ServerGame* pTheGame = reinterpret_cast<ServerGame*>(m_pGame);
 
-    if (m_nCaster == SIDE_1)
+    // Check if the target tile is occupied, if so, apply damage
+    pTargPawn = pTheGame->m_arTiles[m_nTargetX][m_nTargetZ].GetPawn();
+    if (pTargPawn != 0)
     {
-        pEnemyMage = pTheGame->GetMage(SIDE_2);
-    }
-    else
-    {
-        pEnemyMage = pTheGame->GetMage(SIDE_1);
-    }
-
-    pEnemyMage->GetPosition(nEnemyX, nEnemyZ);
-
-    if(nEnemyX == m_nTargetX &&
-        nEnemyZ == m_nTargetZ)
-    {
-        pEnemyMage->Damage(DAMAGE);
+        pTargPawn->Damage(DAMAGE);
     }
 #endif
 }

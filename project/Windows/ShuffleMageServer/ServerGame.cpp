@@ -34,6 +34,10 @@ ServerGame::ServerGame()
     m_arPlayerData[SESSION_1] = 0;
     m_arPlayerData[SESSION_2] = 0;
 
+    // Set Game/Tiles for mages
+    m_arMages[MAGE_1].SetGame(this);
+    m_arMages[MAGE_2].SetGame(this);
+
     m_arMages[SESSION_1].SetSide(SIDE_1);
     m_arMages[SESSION_2].SetSide(SIDE_2);
 
@@ -51,10 +55,6 @@ ServerGame::ServerGame()
             }
         }
     }
-
-    // Set Game/Tiles for mages
-    m_arMages[MAGE_1].SetGame(this);
-    m_arMages[MAGE_2].SetGame(this);
 
     // Clear hands
     memset(m_arHands, 0, NUM_MAGES * HAND_SIZE * sizeof(int));

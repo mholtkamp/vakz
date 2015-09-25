@@ -46,28 +46,25 @@ void ActLaser::Update()
         // Perform hit check and damage calculation
         if (m_nCaster == SIDE_1)
         {
-            pEnemyMage = pTheGame->GetMage(SIDE_2);
-            pEnemyMage->GetPosition(nEnemyX, nEnemyZ);
-
-            if (nEnemyZ == m_nCastZ &&
-                nEnemyX  > m_nCastX)
+            for (i = m_nCastX + 1; i < GRID_WIDTH; i++)
             {
-                // Hit player 2, Send Health Message
-                pEnemyMage->Damage(DAMAGE);
+                if (pTheGame->m_arTiles[i][m_nCastZ].GetPawn() != 0)
+                {
+                    pTheGame->m_arTiles[i][m_nCastZ].GetPawn()->Damage(DAMAGE);
+                }
             }
         }
-        else
+        else if (m_nCaster == SIDE_2)
         {
-            pEnemyMage = pTheGame->GetMage(SIDE_1);
-            pEnemyMage->GetPosition(nEnemyX, nEnemyZ);
-
-            if (nEnemyZ == m_nCastZ &&
-                nEnemyX  < m_nCastX)
+            for (i = m_nCastX - 1; i >= 0; i--)
             {
-                // Hit player 1, Send Health Message
-                pEnemyMage->Damage(DAMAGE);
+                if (pTheGame->m_arTiles[i][m_nCastZ].GetPawn() != 0)
+                {
+                    pTheGame->m_arTiles[i][m_nCastZ].GetPawn()->Damage(DAMAGE);
+                }
             }
         }
+        
         m_nHit = 1;
     }
 #endif

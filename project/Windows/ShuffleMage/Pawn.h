@@ -3,7 +3,6 @@
 
 #include "Scene.h"
 #include "Matter.h"
-#include "Tile.h"
 
 class Pawn
 {

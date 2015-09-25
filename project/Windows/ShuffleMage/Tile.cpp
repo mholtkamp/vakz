@@ -14,6 +14,7 @@ Tile::Tile()
 
     m_nOwner = SIDE_1;
     m_nType  = TILE_TYPE_NORMAL;
+    m_pPawn  = 0;
 }
 
 Tile::~Tile()
@@ -58,4 +59,14 @@ void Tile::SetPosition(int nX,
 #ifdef SM_CLIENT
     m_matter.SetPosition(nX * TILE_WIDTH, 0.0f, nZ * TILE_HEIGHT);
 #endif
+}
+
+Pawn* Tile::GetPawn()
+{
+    return m_pPawn;
+}
+
+void Tile::SetPawn(Pawn* pPawn)
+{
+    m_pPawn = pPawn;
 }
