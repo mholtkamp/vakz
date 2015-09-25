@@ -121,7 +121,7 @@ void LoadResources()
         g_pActBombTex->LoadBMP("Textures/Activations/bomb_tex.bmp");
 
         g_pActHealTex = new Texture();
-        g_pActHealTex->LoadBMP("Textures/Activations/heal_tex.bmp");
+        g_pActHealTex->LoadBMP("Textures/Activations/heal_tex.bmp", 1);
         g_pActHealTex->SetFiltering(Texture::NEAREST);
 
         s_nLoaded = 1;

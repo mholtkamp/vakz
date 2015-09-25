@@ -129,6 +129,9 @@
     <ClCompile Include="..\ShuffleMage\ActBomb.cpp">
       <Filter>Activations</Filter>
     </ClCompile>
+    <ClCompile Include="..\ShuffleMage\ActHeal.cpp">
+      <Filter>Activations</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Session.h">
@@ -219,6 +222,9 @@
       <Filter>Messages</Filter>
     </ClInclude>
     <ClInclude Include="..\ShuffleMage\ActBomb.h">
+      <Filter>Activations</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ShuffleMage\ActHeal.h">
       <Filter>Activations</Filter>
     </ClInclude>
   </ItemGroup>

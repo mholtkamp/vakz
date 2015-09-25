@@ -1,4 +1,5 @@
 #include "CardHeal.h"
+#include "ActHeal.h"
 
 #define CARD_HEAL_TEXTURE g_pCardHealTex
 #define CARD_HEAL_NAME "HEAL"
@@ -53,5 +54,10 @@ int CardHeal::GetRarity()
 
 void CardHeal::Cast(void* pGame, int nCaster)
 {
-    LogDebug("Implement CardHeal::Cast()!");
+    Activation* pAct = new ActHeal();
+    if (SpawnActivation(pGame, nCaster, pAct) == -1)
+    {
+        // Couldn't create activation.
+        delete pAct;
+    }
 }
