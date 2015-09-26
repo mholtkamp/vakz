@@ -43,7 +43,6 @@ void ActBomb::OnCreate(void* pGame,
 {
     int nCastX = 0;
     int nCastZ = 0;
-    int nSide  = 0;
 
     Activation::OnCreate(pGame,
                          nIndex,
