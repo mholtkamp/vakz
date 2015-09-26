@@ -3,6 +3,10 @@
 #include "Resources.h"
 #include "Log.h"
 
+#if defined (SM_SERVER)
+#include "ServerGame.h"
+#endif
+
 Mage::Mage()
 {
     m_fMoveTime = DEFAULT_MOVE_TIME;
@@ -160,30 +164,60 @@ int Mage::IsRooted()
 void Mage::SetConfused(int nConfused)
 {
     m_nConfused = nConfused;
+
+#if defined(SM_SERVER)
+    reinterpret_cast<ServerGame*>(m_pGame)->UpdateStatus(m_nSide, STATUS_CONFUSED, m_nConfused);
+#endif
 }
 void Mage::SetPoisoned(int nPoisoned)
 {
     m_nPoisoned = nPoisoned;
+
+#if defined(SM_SERVER)
+    reinterpret_cast<ServerGame*>(m_pGame)->UpdateStatus(m_nSide, STATUS_POISONED, m_nPoisoned);
+#endif
 }
 void Mage::SetFloating(int nFloating)
 {
     m_nFloating = nFloating;
+
+#if defined(SM_SERVER)
+    reinterpret_cast<ServerGame*>(m_pGame)->UpdateStatus(m_nSide, STATUS_FLOATING, m_nFloating);
+#endif
 }
 void Mage::SetInvisible(int nInvisible)
 {
     m_nInvisible = nInvisible;
+
+#if defined(SM_SERVER)
+    reinterpret_cast<ServerGame*>(m_pGame)->UpdateStatus(m_nSide, STATUS_INVISIBLE, m_nInvisible);
+#else
+    m_matter.SetVisible(!nInvisible);
+#endif
 }
 void Mage::SetInvincible(int nInvincible)
 {
     m_nInvincible = nInvincible;
+
+#if defined(SM_SERVER)
+    reinterpret_cast<ServerGame*>(m_pGame)->UpdateStatus(m_nSide, STATUS_INVINCIBLE, m_nInvincible);
+#endif
 }
 void Mage::SetStunned(int nStunned)
 {
     m_nStunned = nStunned;
+
+#if defined(SM_SERVER)
+    reinterpret_cast<ServerGame*>(m_pGame)->UpdateStatus(m_nSide, STATUS_STUNNED, m_nStunned);
+#endif
 }
 void Mage::SetRooted(int nRooted)
 {
     m_nRooted = nRooted;
+
+#if defined(SM_SERVER)
+    reinterpret_cast<ServerGame*>(m_pGame)->UpdateStatus(m_nSide, STATUS_ROOTED, m_nRooted);
+#endif
 }
 
 void Mage::SetPosition(int nX,

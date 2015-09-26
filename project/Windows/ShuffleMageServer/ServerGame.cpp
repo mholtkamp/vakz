@@ -14,12 +14,14 @@
 #include "MsgCard.h"
 #include "MsgHealth.h"
 #include "MsgDraw.h"
+#include "MsgStatus.h"
 
 static MsgResQueue      s_msgResQueue;
 static MsgPosition      s_msgPosition;
 static MsgCard          s_msgCard;
 static MsgHealth        s_msgHealth;
 static MsgDraw          s_msgDraw;
+static MsgStatus        s_msgStatus;
 
 ServerGame::ServerGame()
 {
@@ -346,4 +348,16 @@ void ServerGame::UpdateHealth(int nPlayer)
     s_msgHealth.m_nPlayer = nPlayer;
     s_msgHealth.m_nHealth = m_arMages[nPlayer].GetHealth();
     Send(s_msgHealth, SESSION_ALL);
+}
+
+void ServerGame::UpdateStatus(int nPlayer,
+                              int nStatus,
+                              int nAfflicted)
+{
+    s_msgStatus.Clear();
+    s_msgStatus.m_nPlayer    = nPlayer;
+    s_msgStatus.m_nStatus    = nStatus;
+    s_msgStatus.m_nAfflicted = nAfflicted;
+
+    Send(s_msgStatus, SESSION_ALL);
 }

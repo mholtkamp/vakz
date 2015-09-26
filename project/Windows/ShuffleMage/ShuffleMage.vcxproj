@@ -71,6 +71,7 @@
   <ItemGroup>
     <ClCompile Include="ActBomb.cpp" />
     <ClCompile Include="ActHeal.cpp" />
+    <ClCompile Include="ActInvis.cpp" />
     <ClCompile Include="Activation.cpp" />
     <ClCompile Include="ActLaser.cpp" />
     <ClCompile Include="Button.cpp" />
@@ -103,6 +104,7 @@
     <ClCompile Include="MsgResLogin.cpp" />
     <ClCompile Include="MsgResQueue.cpp" />
     <ClCompile Include="MsgResRegister.cpp" />
+    <ClCompile Include="MsgStatus.cpp" />
     <ClCompile Include="NetworkManager.cpp" />
     <ClCompile Include="Pawn.cpp" />
     <ClCompile Include="Resources.cpp" />
@@ -112,6 +114,7 @@
   <ItemGroup>
     <ClInclude Include="ActBomb.h" />
     <ClInclude Include="ActHeal.h" />
+    <ClInclude Include="ActInvis.h" />
     <ClInclude Include="Activation.h" />
     <ClInclude Include="ActLaser.h" />
     <ClInclude Include="Button.h" />
@@ -136,6 +139,7 @@
     <ClInclude Include="MsgDraw.h" />
     <ClInclude Include="MsgHealth.h" />
     <ClInclude Include="MsgPosition.h" />
+    <ClInclude Include="MsgStatus.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="Mage.h" />
     <ClInclude Include="Pawn.h" />

@@ -14,6 +14,8 @@
 
 ActLaser::ActLaser()
 {
+    m_nType     = CARD_LASER;
+
     m_nCastX    = 0;
     m_nCastZ    = 0;
     m_nHit      = 0;

@@ -42,6 +42,8 @@ Texture*    g_pActBombTex  = 0;
 
 Texture* g_pActHealTex = 0;
 
+Texture* g_pActInvisTex = 0;
+
 static int s_nLoaded = 0;
 
 void LoadResources()
@@ -123,6 +125,9 @@ void LoadResources()
         g_pActHealTex = new Texture();
         g_pActHealTex->LoadBMP("Textures/Activations/heal_tex.bmp", 1);
         g_pActHealTex->SetFiltering(Texture::NEAREST);
+
+        g_pActInvisTex = new Texture();
+        g_pActInvisTex->LoadBMP("Textures/Activations/invis_tex.bmp", 1);
 
         s_nLoaded = 1;
     }

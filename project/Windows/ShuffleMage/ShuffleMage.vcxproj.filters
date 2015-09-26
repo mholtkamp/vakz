@@ -138,8 +138,14 @@
     <ClCompile Include="ActBomb.cpp">
       <Filter>Activations</Filter>
     </ClCompile>
+    <ClCompile Include="ActInvis.cpp">
+      <Filter>Activations</Filter>
+    </ClCompile>
     <ClCompile Include="ActHeal.cpp">
       <Filter>Activations</Filter>
+    </ClCompile>
+    <ClCompile Include="MsgStatus.cpp">
+      <Filter>Messages</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -263,8 +269,14 @@
     <ClInclude Include="ActBomb.h">
       <Filter>Activations</Filter>
     </ClInclude>
+    <ClInclude Include="ActInvis.h">
+      <Filter>Activations</Filter>
+    </ClInclude>
     <ClInclude Include="ActHeal.h">
       <Filter>Activations</Filter>
+    </ClInclude>
+    <ClInclude Include="MsgStatus.h">
+      <Filter>Messages</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

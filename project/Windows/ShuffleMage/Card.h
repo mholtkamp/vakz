@@ -42,6 +42,14 @@ protected:
     int SpawnActivation(void*       pGame,
                         int         nCaster,
                         Activation* pActivation);
+
+    void DestroyDuplicateActivations(void*       pGame,
+                                     int         nCaster,
+                                     Activation* pActivation);
+
+    int CheckForDuplicateActivation(void*       pGame,
+                                    int         nCaster,
+                                    Activation* pActivation);
 };
 
 #endif

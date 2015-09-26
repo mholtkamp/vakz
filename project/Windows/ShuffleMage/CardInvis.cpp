@@ -1,4 +1,5 @@
 #include "CardInvis.h"
+#include "ActInvis.h"
 
 #define CARD_INVIS_TEXTURE g_pCardInvisTex
 #define CARD_INVIS_NAME "INVIS"
@@ -53,5 +54,14 @@ int CardInvis::GetRarity()
 
 void CardInvis::Cast(void* pGame, int nCaster)
 {
-    LogDebug("Implement CardInvis::Cast()!");
+    Activation* pAct = new ActInvis();
+
+    // Only one invis should be running at any time.
+    DestroyDuplicateActivations(pGame, nCaster, pAct);
+
+    if (SpawnActivation(pGame, nCaster, pAct) == -1)
+    {
+        // Couldn't create activation.
+        delete pAct;
+    }
 }

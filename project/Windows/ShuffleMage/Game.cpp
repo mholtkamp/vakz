@@ -403,6 +403,45 @@ void Game::UpdateHealth(int nPlayer,
     }
 }
 
+void Game::UpdateStatus(int nPlayer,
+                        int nStatus,
+                        int nAfflicted)
+{
+    if (nPlayer < 0 &&
+        nPlayer >= NUM_MAGES)
+    {
+        return;
+    }
+
+    switch(nStatus)
+    {
+    case STATUS_FLOATING:
+        m_arMages[nPlayer].SetFloating(nAfflicted);
+        break;
+    case STATUS_POISONED:
+        m_arMages[nPlayer].SetPoisoned(nAfflicted);
+        break;
+    case STATUS_STUNNED:
+        m_arMages[nPlayer].SetStunned(nAfflicted);
+        break;
+    case STATUS_CONFUSED:
+        m_arMages[nPlayer].SetConfused(nAfflicted);
+        break;
+    case STATUS_INVISIBLE:
+        m_arMages[nPlayer].SetInvisible(nAfflicted);
+        break;
+    case STATUS_INVINCIBLE:
+        m_arMages[nPlayer].SetInvincible(nAfflicted);
+        break;
+    case STATUS_ROOTED:
+        m_arMages[nPlayer].SetRooted(nAfflicted);
+        break;
+    default:
+        LogDebug("Unknown player status received.");
+        break;
+    }
+}
+
 void Game::UseCard(int nCard,
                    int nCaster)
 {

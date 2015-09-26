@@ -48,6 +48,8 @@ extern Texture*    g_pActBombTex;
 
 extern Texture*    g_pActHealTex;
 
+extern Texture*    g_pActInvisTex;
+
 void LoadResources();
 
 void DeleteResources();

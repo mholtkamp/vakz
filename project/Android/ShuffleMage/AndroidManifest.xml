@@ -14,7 +14,7 @@
     <uses-sdk android:minSdkVersion="18" />
 
     <!-- This .apk has no Java code itself, so set hasCode to false. -->
-    <application android:label="Shuffle Mage" android:hasCode="false" android:allowClearUserData="true">
+    <application android:label="Shuffle Mage" android:hasCode="false" android:allowClearUserData="true" android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
 
         <!-- Our activity is the built-in NativeActivity framework class.
              This will take care of integrating with our NDK code. -->

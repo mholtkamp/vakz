@@ -425,6 +425,11 @@ void ParticleSystem::SetSpawnVariance(float fX,
     m_arSpawnVariance[2] = fZ;
 }
 
+void ParticleSystem::SetGenerate(int nGenerate)
+{
+    m_nGenerate = nGenerate;
+}
+
 void ParticleSystem::SetTexture(Texture* pTexture)
 {
     m_pTexture = pTexture;

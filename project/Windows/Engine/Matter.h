@@ -146,6 +146,26 @@ public:
                    float fTransZ);
 
     //## **********************************************************************
+    //## IsVisible
+    //##
+    //## Returns:
+    //##   int - '1' if matter is visible and should be rendered.
+    //##         '0' if matter is invisible and should not be rendered.
+    //## **********************************************************************
+    int IsVisible();
+
+    //## **********************************************************************
+    //## SetVisible
+    //##
+    //## Sets the visible flag to let the scene know whether to render the 
+    //## matter or not.
+    //##
+    //## Input:
+    //##   nVisible - flag to set matter as visible for rendering.
+    //## **********************************************************************
+    void SetVisible(int nVisible);
+
+    //## **********************************************************************
     //## SetAnimation
     //##
     //## If the matter has a bound mesh with animation data, then this 
@@ -323,6 +343,9 @@ private:
 
     //## Updates variables reponsible for animation
     void UpdateAnimation();
+
+    //## Visible flag
+    int m_nVisible;
 
     //## Position
     float m_fX;

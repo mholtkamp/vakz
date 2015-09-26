@@ -14,6 +14,7 @@
 #include "MsgPosition.h"
 #include "MsgHealth.h"
 #include "MsgDraw.h"
+#include "MsgStatus.h"
 
 
 #define MASTER_SEREVER_IP "192.168.2.3" // "127.0.0.1" //"192.168.2.3"
@@ -31,6 +32,7 @@ static MsgPosition        s_msgPosition;
 static MsgCard            s_msgCard;
 static MsgDraw            s_msgDraw;
 static MsgHealth          s_msgHealth;
+static MsgStatus          s_msgStatus;
 
 // Declaration of functions in Main.cpp
 void SetGameState(int nState);
@@ -176,6 +178,13 @@ char* NetworkManager::ProcessMessage(char* pBuffer,
                 reinterpret_cast<Game*>(m_pGame)->UpdateHealth(s_msgHealth.m_nPlayer,
                                                                s_msgHealth.m_nHealth);
                 pBuffer += s_msgHealth.Size() + HEADER_SIZE;
+                break;
+            case MSG_STATUS:
+                s_msgStatus.Read(pBuffer);
+                reinterpret_cast<Game*>(m_pGame)->UpdateStatus(s_msgStatus.m_nPlayer,
+                                                               s_msgStatus.m_nStatus,
+                                                               s_msgStatus.m_nAfflicted);
+                pBuffer += s_msgStatus.Size() + HEADER_SIZE;
                 break;
             default:
                 LogError("Unknown Game message received.");

@@ -17,6 +17,8 @@
 
 ActBomb::ActBomb()
 {
+    m_nType = CARD_BOMB;
+
     m_fCastX    = 0.0f;
     m_fCastY    = 0.0f;
     m_fCastZ    = 0.0f;

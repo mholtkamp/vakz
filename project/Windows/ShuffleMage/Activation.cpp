@@ -3,6 +3,7 @@
 
 Activation::Activation()
 {
+    m_nType          = 0;
     m_nActivityIndex = 0;
     m_nExpired       = 0;
     m_nCaster        = 0;

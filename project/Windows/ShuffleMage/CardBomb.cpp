@@ -10,7 +10,7 @@
 
 CardBomb::CardBomb()
 {
-
+    
 }
 
 CardBomb::~CardBomb()

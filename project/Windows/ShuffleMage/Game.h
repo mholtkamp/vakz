@@ -58,6 +58,10 @@ public:
     void UpdateHealth(int nPlayer,
                       int nHealth);
 
+    void UpdateStatus(int nPlayer,
+                      int nStatus,
+                      int nAfflicted);
+
     void UseCard(int nCard,
                  int nCaster);
 

@@ -71,6 +71,7 @@
   <ItemGroup>
     <ClCompile Include="..\ShuffleMage\ActBomb.cpp" />
     <ClCompile Include="..\ShuffleMage\ActHeal.cpp" />
+    <ClCompile Include="..\ShuffleMage\ActInvis.cpp" />
     <ClCompile Include="..\ShuffleMage\Activation.cpp" />
     <ClCompile Include="..\ShuffleMage\ActLaser.cpp" />
     <ClCompile Include="..\ShuffleMage\Card.cpp" />
@@ -98,6 +99,7 @@
     <ClCompile Include="..\ShuffleMage\MsgResLogin.cpp" />
     <ClCompile Include="..\ShuffleMage\MsgResQueue.cpp" />
     <ClCompile Include="..\ShuffleMage\MsgResRegister.cpp" />
+    <ClCompile Include="..\ShuffleMage\MsgStatus.cpp" />
     <ClCompile Include="..\ShuffleMage\Pawn.cpp" />
     <ClCompile Include="..\ShuffleMage\Tile.cpp" />
     <ClCompile Include="MatchQueue.cpp" />
@@ -108,6 +110,7 @@
   <ItemGroup>
     <ClInclude Include="..\ShuffleMage\ActBomb.h" />
     <ClInclude Include="..\ShuffleMage\ActHeal.h" />
+    <ClInclude Include="..\ShuffleMage\ActInvis.h" />
     <ClInclude Include="..\ShuffleMage\Activation.h" />
     <ClInclude Include="..\ShuffleMage\ActLaser.h" />
     <ClInclude Include="..\ShuffleMage\Card.h" />
@@ -133,6 +136,7 @@
     <ClInclude Include="..\ShuffleMage\MsgResLogin.h" />
     <ClInclude Include="..\ShuffleMage\MsgResQueue.h" />
     <ClInclude Include="..\ShuffleMage\MsgResRegister.h" />
+    <ClInclude Include="..\ShuffleMage\MsgStatus.h" />
     <ClInclude Include="MatchQueue.h" />
     <ClInclude Include="ServerConstants.h" />
     <ClInclude Include="ServerGame.h" />

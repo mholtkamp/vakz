@@ -14,6 +14,8 @@
 
 ActHeal::ActHeal()
 {
+    m_nType = CARD_HEAL;
+
     m_fPosX = 0.0f;
     m_fPosY = 0.0f;
     m_fPosZ = 0.0f;

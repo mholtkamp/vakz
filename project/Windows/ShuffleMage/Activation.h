@@ -19,6 +19,7 @@ public:
     virtual void OnEnemyDamage(int nDamage);
     virtual void OnDestroy();
 
+    int   m_nType;
     int   m_nActivityIndex;
     int   m_nExpired;
     int   m_nCaster;

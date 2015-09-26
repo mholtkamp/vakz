@@ -71,6 +71,14 @@
 #define RARITY_RARE     2
 #define RARITY_EPIC     3
 
+#define STATUS_FLOATING   0
+#define STATUS_POISONED   1
+#define STATUS_STUNNED    2
+#define STATUS_CONFUSED   3
+#define STATUS_INVISIBLE  4
+#define STATUS_INVINCIBLE 5
+#define STATUS_ROOTED     6
+
 #define MAX_ACTIVATIONS 12
 
 #endif

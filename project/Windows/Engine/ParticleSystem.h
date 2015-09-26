@@ -44,6 +44,8 @@ public:
                           float fY,
                           float fZ);
 
+    void SetGenerate(int nGenerate);
+
     void SetTexture(Texture* pTexture);
 
     enum ParticleSystemEnum

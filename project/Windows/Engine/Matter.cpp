@@ -25,6 +25,8 @@ Matter::Matter()
     m_fScaleY = 1.0f;
     m_fScaleZ = 1.0f;
 
+    m_nVisible = 1;
+
     m_pMesh     = 0;
     m_pMaterial = 0;
     m_pTexture  = 0;
@@ -128,14 +130,15 @@ void Matter::Render(void* pScene)
     // Note: May want to move this generation to the SetPosition()/
     // SetRotation()/SetScale() functions to reduce calculations.
     GenerateModelMatrix();
+
+    // Update animations (if there are any)
+    UpdateAnimation();
     
     if (m_pMesh       != 0 &&
         m_pMaterial   != 0 &&
-        pCamera       != 0)
+        pCamera       != 0 &&
+        m_nVisible    != 0)
     {
-        // Update animations (if there are any)
-        UpdateAnimation();
-
         // Get the proper shader based on mesh type and material type
         hProg = GetMatterShaderProgram(m_pMesh->GetType(),
                                        m_pMaterial->GetType());
@@ -618,4 +621,20 @@ void Matter::SetYVelocity(float fYVel)
 void Matter::SetZVelocity(float fZVel)
 {
     m_arVelocity[2] = fZVel;
+}
+
+//*****************************************************************************
+// IsVisible
+//*****************************************************************************
+int Matter::IsVisible()
+{
+    return m_nVisible;
+}
+
+//*****************************************************************************
+// SetVisible
+//*****************************************************************************
+void Matter::SetVisible(int nVisible)
+{
+    m_nVisible = nVisible;
 }

@@ -55,8 +55,9 @@ public:
     void UseCard(int nCard,
                  int nCaster);
 
-
-
+    void UpdateStatus(int nPlayer,
+                      int nStatus,
+                      int nAfflicted);
 
     enum ServerGameEnum
     {
