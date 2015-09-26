@@ -888,5 +888,17 @@ unsigned int GetMatterShaderProgram(int nMeshType,
         return s_arPrograms[ANIMATED_DIFFUSE_PROGRAM];
     }
 
+    if (nMeshType     == MESH_STATIC &&
+        nMaterialType == MATERIAL_FULLBRIGHT)
+    {
+        return s_arPrograms[STATIC_FULLBRIGHT_PROGRAM];
+    }
+
+    if (nMeshType     == MESH_ANIMATED &&
+        nMaterialType == MATERIAL_FULLBRIGHT)
+    {
+        return s_arPrograms[ANIMATED_FULLBRIGHT_PROGRAM];
+    }
+
     return 0;
 }

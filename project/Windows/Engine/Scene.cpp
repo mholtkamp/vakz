@@ -153,6 +153,8 @@ void Scene::Render()
         glEnable(GL_CULL_FACE);
         glFrontFace(GL_CCW);
         glCullFace(GL_BACK);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glEnable(GL_BLEND);
 
         for (i = 0; i < m_nNumMatters; i++)
         {
@@ -165,8 +167,6 @@ void Scene::Render()
         for (i = 0; i < m_nNumMatters; i++)
         {
             // Setup state for rendering translucent collision meshes
-            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-            glEnable(GL_BLEND);
             glEnable(GL_DEPTH_TEST);
             glDepthMask(GL_FALSE);
 

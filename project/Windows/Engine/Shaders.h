@@ -212,7 +212,11 @@ GLSL_VERSION_STRING
 "   vec4  lObjectColor = uColor;\n"
 "   if (uTextureMode == 1)\n"
 "   {\n"
-"       lObjectColor.rgb = lObjectColor.rgb * texture(uTexture,  vTexCoord).rgb;\n"
+"       lObjectColor = lObjectColor * texture(uTexture,  vTexCoord);\n"
+"   }\n"
+"   if (lObjectColor.a < 0.004)\n"
+"   {\n"
+"       discard;\n"
 "   }\n"
 "   oFragColor = lObjectColor;\n"
 "}\n";

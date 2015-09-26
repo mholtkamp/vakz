@@ -204,8 +204,9 @@ void ActBomb::Update()
 
 void ActBomb::OnDestroy()
 {
-#if defined (SM_CLIENT)
     Activation::OnDestroy();
+
+#if defined (SM_CLIENT)
     reinterpret_cast<Game*>(m_pGame)->GetScene()->RemoveParticleSystem(m_pParticle);
     delete m_pParticle;
     m_pParticle = 0;

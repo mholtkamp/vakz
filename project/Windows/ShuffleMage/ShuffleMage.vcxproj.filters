@@ -138,6 +138,9 @@
     <ClCompile Include="ActBomb.cpp">
       <Filter>Activations</Filter>
     </ClCompile>
+    <ClCompile Include="ActHeal.cpp">
+      <Filter>Activations</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Menu.h">
@@ -258,6 +261,9 @@
       <Filter>Messages</Filter>
     </ClInclude>
     <ClInclude Include="ActBomb.h">
+      <Filter>Activations</Filter>
+    </ClInclude>
+    <ClInclude Include="ActHeal.h">
       <Filter>Activations</Filter>
     </ClInclude>
   </ItemGroup>

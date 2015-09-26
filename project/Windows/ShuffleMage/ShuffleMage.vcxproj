@@ -70,6 +70,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ActBomb.cpp" />
+    <ClCompile Include="ActHeal.cpp" />
     <ClCompile Include="Activation.cpp" />
     <ClCompile Include="ActLaser.cpp" />
     <ClCompile Include="Button.cpp" />
@@ -110,6 +111,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ActBomb.h" />
+    <ClInclude Include="ActHeal.h" />
     <ClInclude Include="Activation.h" />
     <ClInclude Include="ActLaser.h" />
     <ClInclude Include="Button.h" />
