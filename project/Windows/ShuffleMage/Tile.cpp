@@ -64,7 +64,7 @@ void Tile::SetOwner(int nOwner)
     {
         if (nOwner == SIDE_2)
         {
-            for (i = m_nX; i > 0; i--)
+            for (i = m_nX; i >= 0; i--)
             {
                 if (pTheGame->m_arTiles[i][m_nZ].GetPawn()  == 0 &&
                     pTheGame->m_arTiles[i][m_nZ].GetOwner() == SIDE_1)
@@ -74,7 +74,7 @@ void Tile::SetOwner(int nOwner)
                 }
             }
 
-            if (i == 0)
+            if (i == -1)
             {
                 // No availble tile to move back to...
                 m_nOwner = !m_nOwner;
