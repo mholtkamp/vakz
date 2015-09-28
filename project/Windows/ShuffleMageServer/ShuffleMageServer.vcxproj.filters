@@ -144,6 +144,9 @@
     <ClCompile Include="..\ShuffleMage\MsgTile.cpp">
       <Filter>Messages</Filter>
     </ClCompile>
+    <ClCompile Include="..\ShuffleMage\ActSwipe.cpp">
+      <Filter>Activations</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Session.h">
@@ -250,6 +253,9 @@
     </ClInclude>
     <ClInclude Include="..\ShuffleMage\MsgTile.h">
       <Filter>Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ShuffleMage\ActSwipe.h">
+      <Filter>Activations</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

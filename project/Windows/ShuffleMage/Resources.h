@@ -55,6 +55,9 @@ extern StaticMesh* g_pActAreaGrabDropMesh;
 extern Texture*    g_pActAreaGrabDropTex;
 extern Texture*    g_pActAreaGrabWaveTex;
 
+extern StaticMesh* g_pActSwipeMesh;
+extern Texture*    g_pActSwipeTex;
+
 void LoadResources();
 
 void DeleteResources();

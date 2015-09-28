@@ -1,4 +1,5 @@
 #include "CardSwipe.h"
+#include "ActSwipe.h"
 
 #define CARD_SWIPE_TEXTURE g_pCardSwipeTex
 #define CARD_SWIPE_NAME "SWIPE"
@@ -53,5 +54,10 @@ int CardSwipe::GetRarity()
 
 void CardSwipe::Cast(void* pGame, int nCaster)
 {
-    LogDebug("Implement CardSwipe::Cast()!");
+    Activation* pAct = new ActSwipe();
+    if (SpawnActivation(pGame, nCaster, pAct) == -1)
+    {
+        // Couldn't create activation.
+        delete pAct;
+    }
 }

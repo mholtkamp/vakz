@@ -49,6 +49,9 @@ StaticMesh* g_pActAreaGrabDropMesh = 0;
 Texture*    g_pActAreaGrabDropTex  = 0;
 Texture*    g_pActAreaGrabWaveTex  = 0;
 
+StaticMesh* g_pActSwipeMesh = 0;
+Texture*    g_pActSwipeTex  = 0;
+
 static int s_nLoaded = 0;
 
 void LoadResources()
@@ -144,6 +147,11 @@ void LoadResources()
         g_pActAreaGrabWaveTex  = new Texture();
         g_pActAreaGrabWaveTex->LoadBMP("Textures/Activations/areagrab_wave_gray_tex.bmp", 1);
 
+        g_pActSwipeMesh = new StaticMesh();
+        g_pActSwipeMesh->Load("Meshes/Activations/swipe_mesh.obj");
+        g_pActSwipeTex = new Texture();
+        g_pActSwipeTex->LoadBMP("Textures/Activations/swipe_tex.bmp");
+
         s_nLoaded = 1;
     }
 }
@@ -197,5 +205,8 @@ void DeleteResources()
         delete g_pActAreaGrabDropMesh;
         delete g_pActAreaGrabDropTex;
         delete g_pActAreaGrabWaveTex;
+
+        delete g_pActSwipeMesh;
+        delete g_pActSwipeTex;
     }
 }
