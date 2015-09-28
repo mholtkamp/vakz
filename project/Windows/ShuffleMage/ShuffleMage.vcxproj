@@ -69,6 +69,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ActAreaGrab.cpp" />
     <ClCompile Include="ActBomb.cpp" />
     <ClCompile Include="ActHeal.cpp" />
     <ClCompile Include="ActInvis.cpp" />
@@ -105,6 +106,7 @@
     <ClCompile Include="MsgResQueue.cpp" />
     <ClCompile Include="MsgResRegister.cpp" />
     <ClCompile Include="MsgStatus.cpp" />
+    <ClCompile Include="MsgTile.cpp" />
     <ClCompile Include="NetworkManager.cpp" />
     <ClCompile Include="Pawn.cpp" />
     <ClCompile Include="Resources.cpp" />
@@ -112,6 +114,7 @@
     <ClCompile Include="Tile.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ActAreaGrab.h" />
     <ClInclude Include="ActBomb.h" />
     <ClInclude Include="ActHeal.h" />
     <ClInclude Include="ActInvis.h" />
@@ -140,6 +143,7 @@
     <ClInclude Include="MsgHealth.h" />
     <ClInclude Include="MsgPosition.h" />
     <ClInclude Include="MsgStatus.h" />
+    <ClInclude Include="MsgTile.h" />
     <ClInclude Include="Tile.h" />
     <ClInclude Include="Mage.h" />
     <ClInclude Include="Pawn.h" />

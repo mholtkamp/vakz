@@ -1,6 +1,12 @@
 #include "Tile.h"
 #include "Resources.h"
 
+#if defined (SM_CLIENT)
+#include "Game.h"
+#else
+#include "ServerGame.h"
+#endif
+
 Tile::Tile()
 {
     // Set position of matter
@@ -15,6 +21,7 @@ Tile::Tile()
     m_nOwner = SIDE_1;
     m_nType  = TILE_TYPE_NORMAL;
     m_pPawn  = 0;
+    m_pGame  = 0;
 }
 
 Tile::~Tile()
@@ -44,9 +51,9 @@ void Tile::SetOwner(int nOwner)
     m_nOwner = nOwner;
     
 #ifdef SM_CLIENT
-    // This function needs to be updated so that the proper texture is used,
-    // not just the "Normal" texture.
-    m_matter.SetTexture((m_nOwner == SIDE_1) ? g_pRedTileTex : g_pBlueTileTex);
+    UpdateTexture();
+#else
+    reinterpret_cast<ServerGame*>(m_pGame)->UpdateTile(m_nX, m_nZ, m_nOwner, m_nType);
 #endif
 }
 
@@ -69,4 +76,27 @@ Pawn* Tile::GetPawn()
 void Tile::SetPawn(Pawn* pPawn)
 {
     m_pPawn = pPawn;
+}
+
+void Tile::SetGame(void* pGame)
+{
+    m_pGame = pGame;
+}
+
+void Tile::SetType(int nType)
+{
+    m_nType = nType;
+
+#if defined (SM_SERVER)
+    reinterpret_cast<ServerGame*>(m_pGame)->UpdateTile(m_nX, m_nZ, m_nOwner, m_nType);
+#endif
+}
+
+void Tile::UpdateTexture()
+{
+#if defined (SM_CLIENT)
+    // This function needs to be updated so that the proper texture is used,
+    // not just the "Normal" texture.
+    m_matter.SetTexture((m_nOwner == SIDE_1) ? g_pRedTileTex : g_pBlueTileTex);
+#endif
 }

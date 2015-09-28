@@ -59,6 +59,11 @@ public:
                       int nStatus,
                       int nAfflicted);
 
+    void UpdateTile(int nX,
+                    int nZ,
+                    int nOwner,
+                    int nType);
+
     enum ServerGameEnum
     {
         MAGE_1    = 0,

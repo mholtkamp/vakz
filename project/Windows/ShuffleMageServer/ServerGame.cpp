@@ -15,6 +15,7 @@
 #include "MsgHealth.h"
 #include "MsgDraw.h"
 #include "MsgStatus.h"
+#include "MsgTile.h"
 
 static MsgResQueue      s_msgResQueue;
 static MsgPosition      s_msgPosition;
@@ -22,6 +23,7 @@ static MsgCard          s_msgCard;
 static MsgHealth        s_msgHealth;
 static MsgDraw          s_msgDraw;
 static MsgStatus        s_msgStatus;
+static MsgTile          s_msgTile;
 
 ServerGame::ServerGame()
 {
@@ -47,13 +49,16 @@ ServerGame::ServerGame()
     {
         for (j = 0; j < GRID_WIDTH; j++)
         {
+            m_arTiles[j][i].SetGame(this);
+            m_arTiles[j][i].SetPosition(j, i);
+
             if (j < GRID_WIDTH / 2)
             {
-                m_arTiles[j][i].SetOwner(SIDE_1);
+                m_arTiles[j][i].m_nOwner = SIDE_1;
             }
             else
             {
-                m_arTiles[j][i].SetOwner(SIDE_2);
+                m_arTiles[j][i].m_nOwner = SIDE_2;
             }
         }
     }
@@ -360,4 +365,18 @@ void ServerGame::UpdateStatus(int nPlayer,
     s_msgStatus.m_nAfflicted = nAfflicted;
 
     Send(s_msgStatus, SESSION_ALL);
+}
+
+void ServerGame::UpdateTile(int nX,
+                            int nZ,
+                            int nOwner,
+                            int nType)
+{
+    s_msgTile.Clear();
+    s_msgTile.m_nX     = nX;
+    s_msgTile.m_nZ     = nZ;
+    s_msgTile.m_nOwner = nOwner;
+    s_msgTile.m_nType  = nType;
+
+    Send(s_msgTile, SESSION_ALL);
 }

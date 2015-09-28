@@ -29,6 +29,7 @@ enum MessageIDs
     MSG_READY         = 105,
     MSG_START         = 106,
     MSG_STATUS        = 107,
+    MSG_TILE          = 108,
     MSG_END           = 109
 };
 
@@ -44,6 +45,7 @@ enum MessageSizes
     MSG_HEALTH_SIZE    = 8,
     MSG_DRAW_SIZE      = HAND_SIZE * sizeof(int),
     MSG_STATUS_SIZE    = 12,
+    MSG_TILE_SIZE      = 16,
 
     MSG_RES_LOGIN_SIZE    = 2424,
     MSG_RES_QUEUE_SIZE    = 8,
@@ -69,7 +71,5 @@ public:
     int m_nID;
 
 };
-
-
 
 #endif

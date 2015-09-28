@@ -15,6 +15,7 @@
 #include "MsgHealth.h"
 #include "MsgDraw.h"
 #include "MsgStatus.h"
+#include "MsgTile.h"
 
 
 #define MASTER_SEREVER_IP "192.168.2.3" // "127.0.0.1" //"192.168.2.3"
@@ -33,6 +34,7 @@ static MsgCard            s_msgCard;
 static MsgDraw            s_msgDraw;
 static MsgHealth          s_msgHealth;
 static MsgStatus          s_msgStatus;
+static MsgTile            s_msgTile;
 
 // Declaration of functions in Main.cpp
 void SetGameState(int nState);
@@ -185,6 +187,14 @@ char* NetworkManager::ProcessMessage(char* pBuffer,
                                                                s_msgStatus.m_nStatus,
                                                                s_msgStatus.m_nAfflicted);
                 pBuffer += s_msgStatus.Size() + HEADER_SIZE;
+                break;
+            case MSG_TILE:
+                s_msgTile.Read(pBuffer);
+                reinterpret_cast<Game*>(m_pGame)->UpdateTile(s_msgTile.m_nX,
+                                                             s_msgTile.m_nZ,
+                                                             s_msgTile.m_nOwner,
+                                                             s_msgTile.m_nType);
+                pBuffer += s_msgTile.Size() + HEADER_SIZE;
                 break;
             default:
                 LogError("Unknown Game message received.");

@@ -19,6 +19,7 @@ extern Texture* g_pRotateTex;
 extern StaticMesh* g_pMageMesh;
 extern StaticMesh* g_pTileMesh;
 extern StaticMesh* g_pPlaneXY;
+extern StaticMesh* g_pPlaneXZ;
 
 // Animated Mesh Resources
 extern AnimatedMesh* g_pMageAnimatedMesh;
@@ -49,6 +50,10 @@ extern Texture*    g_pActBombTex;
 extern Texture*    g_pActHealTex;
 
 extern Texture*    g_pActInvisTex;
+
+extern StaticMesh* g_pActAreaGrabDropMesh;
+extern Texture*    g_pActAreaGrabDropTex;
+extern Texture*    g_pActAreaGrabWaveTex;
 
 void LoadResources();
 

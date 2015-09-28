@@ -53,15 +53,18 @@ void Game::Construct()
         {
             m_arTiles[j][i].Register(&m_scene);
             m_arTiles[j][i].SetPosition(j, i);
+            m_arTiles[j][i].SetGame(this);
 
             if (j < GRID_WIDTH / 2)
             {
-                m_arTiles[j][i].SetOwner(SIDE_1);
+                m_arTiles[j][i].m_nOwner = SIDE_1;
             }
             else
             {
-                m_arTiles[j][i].SetOwner(SIDE_2);
+                m_arTiles[j][i].m_nOwner = SIDE_2;
             }
+
+            m_arTiles[j][i].UpdateTexture();
         }
     }
 
@@ -547,5 +550,20 @@ Mage* Game::GetMage(int nIndex)
     else
     {
         return 0;
+    }
+}
+
+void Game::UpdateTile(int nX,
+                      int nZ,
+                      int nOwner,
+                      int nType)
+{
+    if(nX >= 0          &&
+       nX <  GRID_WIDTH &&
+       nZ >= 0          &&
+       nZ <  GRID_HEIGHT)
+    {
+        m_arTiles[nX][nZ].SetOwner(nOwner);
+        m_arTiles[nX][nZ].SetType(nType);
     }
 }

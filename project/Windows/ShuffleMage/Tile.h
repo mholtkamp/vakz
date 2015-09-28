@@ -28,14 +28,21 @@ public:
 
     void SetPawn(Pawn* pPawn);
 
-private:
+    void SetGame(void* pGame);
+
+    void SetType(int nType);
+
+    void UpdateTexture();
 
     int m_nX;
     int m_nZ;
-
     int m_nOwner;
     int m_nType;
+
+private:
+
     Pawn* m_pPawn;
+    void* m_pGame;
 
 #ifdef SM_CLIENT
     Matter m_matter;

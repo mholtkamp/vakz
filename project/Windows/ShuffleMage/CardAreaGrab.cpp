@@ -1,4 +1,5 @@
 #include "CardAreaGrab.h"
+#include "ActAreaGrab.h"
 
 #define CARD_AREAGRAB_TEXTURE g_pCardAreaGrabTex
 #define CARD_AREAGRAB_NAME "AREA GRAB"
@@ -53,5 +54,10 @@ int CardAreaGrab::GetRarity()
 
 void CardAreaGrab::Cast(void* pGame, int nCaster)
 {
-    LogDebug("Implement CardAreaGrab::Cast()!");
+    Activation* pAct = new ActAreaGrab();
+    if (SpawnActivation(pGame, nCaster, pAct) == -1)
+    {
+        // Couldn't create activation.
+        delete pAct;
+    }
 }

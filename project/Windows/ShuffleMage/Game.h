@@ -62,6 +62,11 @@ public:
                       int nStatus,
                       int nAfflicted);
 
+    void UpdateTile(int nX,
+                    int nZ,
+                    int nOwner,
+                    int nType);
+
     void UseCard(int nCard,
                  int nCaster);
 

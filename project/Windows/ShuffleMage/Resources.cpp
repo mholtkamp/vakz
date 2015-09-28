@@ -13,6 +13,7 @@ Texture* g_pRotateTex   = 0;
 StaticMesh* g_pMageMesh = 0;
 StaticMesh* g_pTileMesh = 0;
 StaticMesh* g_pPlaneXY  = 0;
+StaticMesh* g_pPlaneXZ  = 0;
 
 // Animated Mesh Resources
 AnimatedMesh* g_pMageAnimatedMesh = 0;
@@ -43,6 +44,10 @@ Texture*    g_pActBombTex  = 0;
 Texture* g_pActHealTex = 0;
 
 Texture* g_pActInvisTex = 0;
+
+StaticMesh* g_pActAreaGrabDropMesh = 0;
+Texture*    g_pActAreaGrabDropTex  = 0;
+Texture*    g_pActAreaGrabWaveTex  = 0;
 
 static int s_nLoaded = 0;
 
@@ -78,6 +83,9 @@ void LoadResources()
 
         g_pPlaneXY = new StaticMesh();
         g_pPlaneXY->Load("Meshes/planeXY.obj");
+
+        g_pPlaneXZ = new StaticMesh();
+        g_pPlaneXZ->Load("Meshes/planeXZ.obj");
         
         // Animated Meshes
         g_pMageAnimatedMesh = new AnimatedMesh();
@@ -129,6 +137,13 @@ void LoadResources()
         g_pActInvisTex = new Texture();
         g_pActInvisTex->LoadBMP("Textures/Activations/invis_tex.bmp", 1);
 
+        g_pActAreaGrabDropMesh = new StaticMesh();
+        g_pActAreaGrabDropMesh->Load("Meshes/Activations/areagrab_drop_mesh.obj");
+        g_pActAreaGrabDropTex  = new Texture;
+        g_pActAreaGrabDropTex->LoadBMP("Textures/Activations/areagrab_drop_gray_tex.bmp");
+        g_pActAreaGrabWaveTex  = new Texture();
+        g_pActAreaGrabWaveTex->LoadBMP("Textures/Activations/areagrab_wave_gray_tex.bmp", 1);
+
         s_nLoaded = 1;
     }
 }
@@ -146,6 +161,8 @@ void DeleteResources()
         // Static Meshes
         delete g_pMageMesh;
         delete g_pTileMesh;
+        delete g_pPlaneXY;
+        delete g_pPlaneXZ;
 
         // Animated Meshes
         delete g_pMageAnimatedMesh;
@@ -164,5 +181,21 @@ void DeleteResources()
         delete g_pCardBubbleTex;
         delete g_pCardSwipeTex;
         delete g_pCardAreaGrabTex;
+
+        // Activations
+        delete g_pActLaserMesh;
+        delete g_pActLaserTex;
+        delete g_pActLaserSound;
+
+        delete g_pActBombMesh;
+        delete g_pActBombTex;
+
+        delete g_pActHealTex;
+
+        delete g_pActInvisTex;
+
+        delete g_pActAreaGrabDropMesh;
+        delete g_pActAreaGrabDropTex;
+        delete g_pActAreaGrabWaveTex;
     }
 }
