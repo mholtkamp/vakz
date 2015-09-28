@@ -50,6 +50,10 @@ public:
                         int nX,
                         int nZ);
 
+    void UpdatePositionAll(int nPlayer,
+                           int nX,
+                           int nZ);
+
     void UpdateHealth(int nPlayer);
 
     void UseCard(int nCard,

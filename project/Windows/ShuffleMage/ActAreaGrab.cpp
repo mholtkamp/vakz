@@ -180,6 +180,9 @@ void ActAreaGrab::Update()
                                             m_arTargetZ[i] * TILE_HEIGHT);
                 m_arMatters[i]->SetTexture(g_pActAreaGrabWaveTex);
                 m_arMatters[i]->SetScale(WAVE_START_SCALE, 1.0f, WAVE_START_SCALE);
+#else
+                // Server needs to change tile ownership
+                pTheGame->m_arTiles[m_arTargetX[i]][m_arTargetZ[i]].SetOwner(m_nCaster);
 #endif
             }
         }
@@ -204,9 +207,6 @@ void ActAreaGrab::Update()
                                            m_arColor[2],
                                            0.0f);
             }
-#else
-            // Server needs to change tile ownership
-            pTheGame->m_arTiles[m_arTargetX[i]][m_arTargetZ[i]].SetOwner(m_nCaster);
 #endif
         }
     }
@@ -214,6 +214,13 @@ void ActAreaGrab::Update()
     if (fTime >= OWNERSHIP_DURATION)
     {
         m_nExpired = 1;
+
+#if defined (SM_SERVER)
+        // Restore proper ownership of the tiles
+        pTheGame->m_arTiles[m_arTargetX[0]][m_arTargetZ[0]].RestoreOwnership();
+        pTheGame->m_arTiles[m_arTargetX[1]][m_arTargetZ[1]].RestoreOwnership();
+        pTheGame->m_arTiles[m_arTargetX[2]][m_arTargetZ[2]].RestoreOwnership();
+#endif
     }
 
     m_timerDelta.Start();

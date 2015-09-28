@@ -277,6 +277,17 @@ void ServerGame::UpdatePosition(int nPlayer,
     }
 }
 
+void ServerGame::UpdatePositionAll(int nPlayer,
+                                   int nX,
+                                   int nZ)
+{
+    s_msgPosition.m_nPlayer = nPlayer;
+    s_msgPosition.m_nX = nX;
+    s_msgPosition.m_nZ = nZ;
+
+    Send(s_msgPosition, SESSION_ALL);
+}
+
 void ServerGame::UseCard(int nCard,
                          int nCaster)
 {

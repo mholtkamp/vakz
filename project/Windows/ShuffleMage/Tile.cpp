@@ -53,7 +53,56 @@ void Tile::SetOwner(int nOwner)
 #ifdef SM_CLIENT
     UpdateTexture();
 #else
-    reinterpret_cast<ServerGame*>(m_pGame)->UpdateTile(m_nX, m_nZ, m_nOwner, m_nType);
+    int i = 0;
+    ServerGame* pTheGame = reinterpret_cast<ServerGame*>(m_pGame);
+
+    // Check if the owned pawn is a mage of the opposite side.
+    // If so, push back the mage.
+    Mage* pMage = reinterpret_cast<ServerGame*>(m_pGame)->GetMage(!nOwner);
+
+    if (pMage == m_pPawn)
+    {
+        if (nOwner == SIDE_2)
+        {
+            for (i = m_nX; i > 0; i--)
+            {
+                if (pTheGame->m_arTiles[i][m_nZ].GetPawn()  == 0 &&
+                    pTheGame->m_arTiles[i][m_nZ].GetOwner() == SIDE_1)
+                {
+                    pMage->SetPosition(i, m_nZ);
+                    break;
+                }
+            }
+
+            if (i == 0)
+            {
+                // No availble tile to move back to...
+                m_nOwner = !m_nOwner;
+            }
+        }
+        else
+        {
+            for (i = m_nX; i < GRID_WIDTH; i++)
+            {
+                if (pTheGame->m_arTiles[i][m_nZ].GetPawn()  == 0 &&
+                    pTheGame->m_arTiles[i][m_nZ].GetOwner() == SIDE_2)
+                {
+                    pMage->SetPosition(i, m_nZ);
+                    break;
+                }
+            }
+
+            if (i == GRID_WIDTH)
+            {
+                // No availble tile to move back to...
+                m_nOwner = !m_nOwner;
+            }
+        }
+    }
+
+    // Send Tile update message
+    pTheGame->UpdateTile(m_nX, m_nZ, m_nOwner, m_nType);
+
 #endif
 }
 
@@ -99,4 +148,16 @@ void Tile::UpdateTexture()
     // not just the "Normal" texture.
     m_matter.SetTexture((m_nOwner == SIDE_1) ? g_pRedTileTex : g_pBlueTileTex);
 #endif
+}
+
+void Tile::RestoreOwnership()
+{
+    if (m_nX < GRID_WIDTH/2)
+    {
+        SetOwner(SIDE_1);
+    }
+    else
+    {
+        SetOwner(SIDE_2);
+    }
 }

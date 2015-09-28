@@ -34,6 +34,8 @@ public:
 
     void UpdateTexture();
 
+    void RestoreOwnership();
+
     int m_nX;
     int m_nZ;
     int m_nOwner;

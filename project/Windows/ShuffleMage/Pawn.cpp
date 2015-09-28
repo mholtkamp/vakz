@@ -60,6 +60,7 @@ void Pawn::SetPosition(int nX,
 #else
     reinterpret_cast<ServerGame*>(m_pGame)->m_arTiles[m_nX][m_nZ].SetPawn(0);
     reinterpret_cast<ServerGame*>(m_pGame)->m_arTiles[nX][nZ].SetPawn(this);
+    reinterpret_cast<ServerGame*>(m_pGame)->UpdatePositionAll(m_nSide, nX, nZ);
 #endif
 
     m_nX = nX;
