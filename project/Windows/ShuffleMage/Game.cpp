@@ -281,7 +281,8 @@ void Game::Update()
     {
         GetPointerPositionNormalized(fX,fY, nRightIndex);
 
-        if (m_hud.IsCastPressed(fX, fY) != 0)
+        if (m_hud.IsCastPressed(fX, fY)          != 0 &&
+            m_arMages[m_nPlayerSide].IsStunned() == 0)
         {
             if (m_arHand[0] != 0)
             {

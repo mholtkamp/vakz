@@ -10,7 +10,7 @@
 #endif
 
 #define DAMAGE 20
-#define SPEED_X 3.0f
+#define SPEED_X 20.0f
 #define SHOT_BUBBLE_SCALE 0.4f
 #define STUN_DURATION 3.5f
 #define STUN_BUBBLE_SCALE 1.0f
@@ -113,6 +113,7 @@ void ActBubble::Update()
 
                        if (pTargetPawn == pTheGame->GetMage(!m_nCaster))
                        {
+                            DestroyPreviousHits();
                             reinterpret_cast<Mage*>(pTargetPawn)->SetStunned(1);
                        }
 #endif
@@ -141,6 +142,7 @@ void ActBubble::Update()
 
                        if (pTargetPawn == pTheGame->GetMage(!m_nCaster))
                        {
+                            DestroyPreviousHits();
                             reinterpret_cast<Mage*>(pTargetPawn)->SetStunned(1);
                        }
 #endif
@@ -201,3 +203,28 @@ void ActBubble::OnDestroy()
 #endif
 }
 
+void ActBubble::DestroyPreviousHits()
+{
+    int i = 0;
+
+#if defined (SM_CLIENT)
+    Game* pTheGame = reinterpret_cast<Game*>(m_pGame);
+#else
+    ServerGame* pTheGame = reinterpret_cast<ServerGame*>(m_pGame);
+#endif
+
+
+    for (i = 0; i < MAX_ACTIVATIONS; i++)
+    {
+        if (pTheGame->m_arActivations[i] != 0 &&
+            pTheGame->m_arActivations[i]->m_nType == m_nType)
+        {
+            // Duplicate has been found, but check if it has hit before destroying it.
+            if (reinterpret_cast<ActBubble*>(pTheGame->m_arActivations[i])->m_nHit != 0)
+            {
+                pTheGame->m_arActivations[i]->OnDestroy();
+                pTheGame->m_arActivations[i] = 0;
+            }
+        }
+    }
+}

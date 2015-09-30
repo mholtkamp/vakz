@@ -30,8 +30,11 @@ public:
 
 private:
 
+    void DestroyPreviousHits();
+
     Matter*          m_pMatter;
     DiffuseMaterial* m_pMaterial;
+
 };
 
 #endif
