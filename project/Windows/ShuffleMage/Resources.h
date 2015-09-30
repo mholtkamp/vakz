@@ -20,6 +20,7 @@ extern StaticMesh* g_pMageMesh;
 extern StaticMesh* g_pTileMesh;
 extern StaticMesh* g_pPlaneXY;
 extern StaticMesh* g_pPlaneXZ;
+extern StaticMesh* g_pSphere;
 
 // Animated Mesh Resources
 extern AnimatedMesh* g_pMageAnimatedMesh;

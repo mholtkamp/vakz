@@ -71,6 +71,7 @@
   <ItemGroup>
     <ClCompile Include="..\ShuffleMage\ActAreaGrab.cpp" />
     <ClCompile Include="..\ShuffleMage\ActBomb.cpp" />
+    <ClCompile Include="..\ShuffleMage\ActBubble.cpp" />
     <ClCompile Include="..\ShuffleMage\ActHeal.cpp" />
     <ClCompile Include="..\ShuffleMage\ActInvis.cpp" />
     <ClCompile Include="..\ShuffleMage\Activation.cpp" />
@@ -113,6 +114,7 @@
   <ItemGroup>
     <ClInclude Include="..\ShuffleMage\ActAreaGrab.h" />
     <ClInclude Include="..\ShuffleMage\ActBomb.h" />
+    <ClInclude Include="..\ShuffleMage\ActBubble.h" />
     <ClInclude Include="..\ShuffleMage\ActHeal.h" />
     <ClInclude Include="..\ShuffleMage\ActInvis.h" />
     <ClInclude Include="..\ShuffleMage\Activation.h" />

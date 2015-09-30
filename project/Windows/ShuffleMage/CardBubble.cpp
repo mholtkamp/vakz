@@ -1,4 +1,5 @@
 #include "CardBubble.h"
+#include "ActBubble.h"
 
 #define CARD_BUBBLE_TEXTURE g_pCardBubbleTex
 #define CARD_BUBBLE_NAME "BUBBLE"
@@ -53,5 +54,10 @@ int CardBubble::GetRarity()
 
 void CardBubble::Cast(void* pGame, int nCaster)
 {
-    LogDebug("Implement CardBubble::Cast()!");
+    Activation* pAct = new ActBubble();
+    if (SpawnActivation(pGame, nCaster, pAct) == -1)
+    {
+        // Couldn't create activation.
+        delete pAct;
+    }
 }

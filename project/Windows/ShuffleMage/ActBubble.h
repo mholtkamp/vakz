@@ -25,6 +25,8 @@ public:
     float m_fPosZ;
 
     int m_nHit;
+    int m_nTargetX;
+    int m_nTargetZ;
 
 private:
 

@@ -14,6 +14,7 @@ StaticMesh* g_pMageMesh = 0;
 StaticMesh* g_pTileMesh = 0;
 StaticMesh* g_pPlaneXY  = 0;
 StaticMesh* g_pPlaneXZ  = 0;
+StaticMesh* g_pSphere   = 0;
 
 // Animated Mesh Resources
 AnimatedMesh* g_pMageAnimatedMesh = 0;
@@ -89,6 +90,9 @@ void LoadResources()
 
         g_pPlaneXZ = new StaticMesh();
         g_pPlaneXZ->Load("Meshes/planeXZ.obj");
+
+        g_pSphere = new StaticMesh();
+        g_pSphere->Load("Meshes/sphere.obj");
         
         // Animated Meshes
         g_pMageAnimatedMesh = new AnimatedMesh();
@@ -171,6 +175,7 @@ void DeleteResources()
         delete g_pTileMesh;
         delete g_pPlaneXY;
         delete g_pPlaneXZ;
+        delete g_pSphere;
 
         // Animated Meshes
         delete g_pMageAnimatedMesh;
