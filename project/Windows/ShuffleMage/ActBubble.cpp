@@ -11,9 +11,10 @@
 
 #define DAMAGE 20
 #define SPEED_X 3.0f
+#define SHOT_BUBBLE_SCALE 0.4f
 #define STUN_DURATION 3.5f
-#define STUN_BUBBLE_SCALE 2.0f
-#define PULSE_ANGULAR_SPEED 1.0f
+#define STUN_BUBBLE_SCALE 1.0f
+#define PULSE_ANGULAR_SPEED 5.0f
 
 ActBubble::ActBubble()
 {
@@ -58,6 +59,7 @@ void ActBubble::OnCreate(void* pGame,
     m_fPosZ = nCastZ * TILE_HEIGHT;
 
     m_nTargetX = (nCaster ? nCastX - 1 : nCastX + 1);
+    m_nTargetZ = nCastZ;
 
 #if defined (SM_CLIENT)
     m_pMaterial = new DiffuseMaterial();
@@ -69,6 +71,9 @@ void ActBubble::OnCreate(void* pGame,
     m_pMatter->SetPosition(m_fPosX,
                            m_fPosY,
                            m_fPosZ);
+    m_pMatter->SetScale(SHOT_BUBBLE_SCALE,
+                        SHOT_BUBBLE_SCALE,
+                        SHOT_BUBBLE_SCALE);
     pTheGame->GetScene()->AddMatter(m_pMatter);
 #endif
 }
@@ -92,10 +97,10 @@ void ActBubble::Update()
     {
         if (m_nCaster == SIDE_1)
         {
-            if (m_nTargetX < GRID_WIDTH)
-            {
-                m_fPosX += SPEED_X * fTime;
+            m_fPosX += SPEED_X * fTime;
 
+            if (m_nTargetX < GRID_WIDTH)
+            {   
                 // Bubble has reached target
                 if (m_fPosX >= (m_nTargetX * TILE_WIDTH))
                 {
@@ -120,10 +125,10 @@ void ActBubble::Update()
         }
         else
         {
+            m_fPosX -= SPEED_X * fTime;
+            
             if (m_nTargetX >= 0)
             {
-                m_fPosX -= SPEED_X * fTime;
-
                 // Bubble has reached target
                 if (m_fPosX <= (m_nTargetX * TILE_WIDTH))
                 {
@@ -151,8 +156,8 @@ void ActBubble::Update()
 #endif
 
         // Check if the bubble shot is offscreen
-        if (m_fPosX >= 10.0f ||
-            m_fPosX < -5.0f)
+        if (m_fPosX >= 15.0f ||
+            m_fPosX < -10.0f)
         {
             m_nExpired = 1;
         }
@@ -163,7 +168,7 @@ void ActBubble::Update()
     {
         // Do some weird pulsating stuff
 #if defined (SM_CLIENT)
-        fScaleFactor = STUN_BUBBLE_SCALE + cosf(fTime * PULSE_ANGULAR_SPEED);
+        fScaleFactor = STUN_BUBBLE_SCALE + cosf(fTime * PULSE_ANGULAR_SPEED)/5.0f;
         m_pMatter->SetScale(fScaleFactor, fScaleFactor, fScaleFactor);
 #endif
 

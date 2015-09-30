@@ -227,8 +227,9 @@ void Game::Update()
     m_timerMove.Stop();
     fMoveTime = m_timerMove.Time();
 
-    if (m_nJustUpLeft &&
-        fMoveTime >= m_arMages[m_nPlayerSide].GetMoveTime())
+    if (m_nJustUpLeft                                       &&
+        fMoveTime >= m_arMages[m_nPlayerSide].GetMoveTime() &&
+        m_arMages[m_nPlayerSide].IsStunned() == 0)
     {
         fDispX = m_fTouchUpXLeft - m_fTouchDownXLeft;
         fDispY = m_fTouchUpYLeft - m_fTouchDownYLeft;
