@@ -21,6 +21,8 @@ ActAreaGrab::ActAreaGrab()
 {
     int i = 0;
 
+    m_nType = CARD_AREAGRAB;
+
     for (i = 0; i < 3; i++)
     {
         m_arTargetX[i]   = 0;

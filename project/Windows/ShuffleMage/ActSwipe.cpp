@@ -13,6 +13,8 @@
 
 ActSwipe::ActSwipe()
 {
+    m_nType = CARD_SWIPE;
+
     m_nTargetX = 0;
     m_nTargetZ = 0;
 

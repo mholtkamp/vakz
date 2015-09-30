@@ -71,6 +71,7 @@
   <ItemGroup>
     <ClCompile Include="ActAreaGrab.cpp" />
     <ClCompile Include="ActBomb.cpp" />
+    <ClCompile Include="ActBubble.cpp" />
     <ClCompile Include="ActHeal.cpp" />
     <ClCompile Include="ActInvis.cpp" />
     <ClCompile Include="Activation.cpp" />
@@ -117,6 +118,7 @@
   <ItemGroup>
     <ClInclude Include="ActAreaGrab.h" />
     <ClInclude Include="ActBomb.h" />
+    <ClInclude Include="ActBubble.h" />
     <ClInclude Include="ActHeal.h" />
     <ClInclude Include="ActInvis.h" />
     <ClInclude Include="Activation.h" />

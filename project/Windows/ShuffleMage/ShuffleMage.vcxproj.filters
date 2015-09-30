@@ -156,6 +156,9 @@
     <ClCompile Include="ActSwipe.cpp">
       <Filter>Activations</Filter>
     </ClCompile>
+    <ClCompile Include="ActBubble.cpp">
+      <Filter>Activations</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Menu.h">
@@ -294,6 +297,9 @@
       <Filter>Messages</Filter>
     </ClInclude>
     <ClInclude Include="ActSwipe.h">
+      <Filter>Activations</Filter>
+    </ClInclude>
+    <ClInclude Include="ActBubble.h">
       <Filter>Activations</Filter>
     </ClInclude>
   </ItemGroup>
