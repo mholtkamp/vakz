@@ -449,6 +449,8 @@ GLSL_VERSION_STRING
 "uniform sampler2D uTexture;\n"
 "uniform vec4 uAmbientColor;\n"
 "uniform int uTextureMode;\n"
+"uniform float uRimSize;\n"
+"uniform int uRimStyle;\n"
 
 "void main()\n"
 "{\n"
@@ -468,7 +470,21 @@ GLSL_VERSION_STRING
 "   vec3  lDiffuse = clamp(lPower * uDirLightColor.rgb * lObjectColor.rgb, 0.0, 1.0);\n"
 "   oFragColor.rgb = lDiffuse.rgb + lAmbient.rgb;\n"
 "   oFragColor.a   = lObjectColor.a;\n"
-"   oFragColor     = mix(oFragColor, uRimColor, lRimPower * step(0.8, lRimPower));\n"
+
+// Rim light part
+"   float lRimThresh = 1.0 - uRimSize;\n"
+
+// RimStyle == 0 : Hard
+"   if (uRimStyle == 0)\n"
+"   {\n"
+"       oFragColor = mix(oFragColor, uRimColor, step(lRimThresh, lRimPower));\n"
+"   }\n"
+
+// RimStyle == 1: Soft
+"   else if(uRimStyle == 1)\n"
+"   {\n"
+"       oFragColor = mix(oFragColor, uRimColor, lRimPower * step(lRimThresh, lRimPower) * ((lRimPower - lRimThresh)/(1.0 - lRimThresh)));\n"
+"   }\n"
 "}\n";
 
 #endif

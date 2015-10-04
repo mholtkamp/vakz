@@ -15,6 +15,9 @@ RimlitMaterial::RimlitMaterial()
     m_arRimColor[1] = 0.0f;
     m_arRimColor[2] = 0.0f;
     m_arRimColor[3] = 1.0f;
+
+    m_fRimSize  = 0.2f;
+    m_nRimStyle = RIM_STYLE_SOFT;
 }
 
 RimlitMaterial::~RimlitMaterial()
@@ -32,6 +35,8 @@ void RimlitMaterial::SetRenderState(void*        pScene,
     int hDiffuseColor = glGetUniformLocation(hProg, "uDiffuseColor");
     int hRimColor     = glGetUniformLocation(hProg, "uRimColor");
     int hViewVector   = glGetUniformLocation(hProg, "uViewVector");
+    int hRimSize      = glGetUniformLocation(hProg, "uRimSize");
+    int hRimStyle     = glGetUniformLocation(hProg, "uRimStyle");
 
 
     // Set uniforms
@@ -40,6 +45,33 @@ void RimlitMaterial::SetRenderState(void*        pScene,
 
     reinterpret_cast<Scene*>(pScene)->GetCamera()->GetViewVector(arViewVec);
     glUniform3fv(hViewVector, 1, arViewVec);
+
+    glUniform1f(hRimSize,  m_fRimSize);
+    glUniform1i(hRimStyle, m_nRimStyle);
 }
 
+void RimlitMaterial::SetDiffuseColor(float arDiff[4])
+{
+    m_arDiffuseColor[0] = arDiff[0];
+    m_arDiffuseColor[1] = arDiff[1];
+    m_arDiffuseColor[2] = arDiff[2];
+    m_arDiffuseColor[3] = arDiff[3];
+}
 
+void RimlitMaterial::SetRimColor(float arRim[4])
+{
+    m_arRimColor[0] = arRim[0];
+    m_arRimColor[1] = arRim[1];
+    m_arRimColor[2] = arRim[2];
+    m_arRimColor[3] = arRim[3];
+}
+
+void RimlitMaterial::SetRimSize(float fSize)
+{
+    m_fRimSize = fSize;
+}
+
+void RimlitMaterial::SetRimStyle(int nStyle)
+{
+    m_nRimStyle = nStyle;
+}

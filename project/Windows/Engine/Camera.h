@@ -210,6 +210,9 @@ private:
 
     //## Projection matrix
     Matrix m_matProjection;
+
+    //## Vector representing direction camera is looking in world space.
+    float m_arViewVector[3];
 };
 
 #endif

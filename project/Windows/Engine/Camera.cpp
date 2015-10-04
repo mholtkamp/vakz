@@ -37,6 +37,10 @@ Camera::Camera()
 
     m_matView.LoadIdentity();
     m_matProjection.LoadIdentity();
+
+    m_arViewVector[0] = 0.0f;
+    m_arViewVector[1] = 0.0f;
+    m_arViewVector[2] = 0.0f;
 }
 
 //*****************************************************************************
@@ -156,6 +160,26 @@ void Camera::GenerateViewMatrix()
 
     // Translation
     m_matView.Translate(-m_fX, -m_fY, -m_fZ);
+
+    // At this point, also generate the view vector.
+
+    // So I'm not sure if this is gonna work, but I think if I
+    // multiply the vec4(0.0, 0.0, -1.0, 0.0) by the inverse
+    // view matrix, it will produce vector in world space.
+    // There might be a more efficent way to do this.
+    // Update: Yup this strategy works fine, will look into faster methods,
+    // but this really only needs to be done once per frame.
+    float arVec[4]    = {0.0f, 0.0f, -1.0f, 0.0f};
+    float arResult[4] = {0.0f};
+    Matrix matViewInv(m_matView);
+
+    matViewInv.Inverse();
+
+    matViewInv.MultiplyVec4(arVec,arResult);
+
+    m_arViewVector[0] = arResult[0];
+    m_arViewVector[1] = arResult[1];
+    m_arViewVector[2] = arResult[2];
 }
 
 //*****************************************************************************
@@ -239,23 +263,7 @@ void Camera::SetOrthographicWindow(float fWidth,
 //*****************************************************************************
 void Camera::GetViewVector(float arRes[3])
 {
-    // View matrix should have already been generated...
-    // So I'm not sure if this is gonna work, but I think if I
-    // multiply the vec4(0.0, 0.0, -1.0, 0.0) by the inverse
-    // view matrix, it will produce vector in world space.
-    // There might be a more efficent way to do this.
-
-    // The inverse operation should probably be moved to GenerateViewMatrix(),
-    // to increase performance.
-    float arVec[4] = {0.0f, 0.0f, -1.0f, 0.0f};
-    float arResult[4] = {0.0f};
-    Matrix matViewInv(m_matView);
-
-    matViewInv.Inverse();
-
-    matViewInv.MultiplyVec4(arVec,arResult);
-
-    arRes[0] = arResult[0];
-    arRes[1] = arResult[1];
-    arRes[2] = arResult[2];
+    arRes[0] = m_arViewVector[0];
+    arRes[1] = m_arViewVector[1];
+    arRes[2] = m_arViewVector[2];
 }

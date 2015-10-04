@@ -175,6 +175,7 @@ int main()
     float fBearZ = 0.0f;
     float fCube2Rot = 0.0f;
     float fAnimSpeed = 1.0f;
+    float fRimSize = 0.2f;
     int nRenderCount = 0;
     Timer timer;
     Timer timerRender;
@@ -428,7 +429,26 @@ int main()
         }
         //pTestAnim->SetPosition(fBearX, fBearY, fBearZ);
 
+        if (IsKeyDown(VKEY_J))
+        {
+            fRimSize += 0.002f;
+            pRimMat->SetRimSize(fRimSize);
+        }
+        if (IsKeyDown(VKEY_K))
+        {
+            fRimSize -= 0.002f;
+            pRimMat->SetRimSize(fRimSize);
+        }
+        
+        if (IsKeyDown(VKEY_G))
+        {
+            pRimMat->SetRimStyle(RIM_STYLE_SOFT);
+        }
 
+        if (IsKeyDown(VKEY_H))
+        {
+            pRimMat->SetRimStyle(RIM_STYLE_HARD);
+        }
 
         pCamera->SetPosition(fX, fY, fZ);
         pCamera->SetRotation(fRotX, fRotY, fRotZ);
