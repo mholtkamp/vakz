@@ -14,7 +14,9 @@ enum ProgramEnum
     BLUR_EFFECT_PROGRAM             = 6,
     PARTICLE_UPDATE_PROGRAM         = 7,
     PARTICLE_RENDER_PROGRAM         = 8,
-    MAX_PROGRAMS                    = 9
+    STATIC_RIMLIT_PROGRAM           = 9,
+    ANIMATED_RIMLIT_PROGRAM         = 10,
+    MAX_PROGRAMS                    = 11
 };
 
 //## **************************************************************************

@@ -161,6 +161,17 @@ public:
     void SetOrthographicWindow(float fWidth,
                                float fHeight);
 
+    //## **********************************************************************
+    //## GetViewVector
+    //##
+    //## Fills a preallocated size 3 float array with a vector that indicates
+    //## what direction the camera is looking in, in world space.
+    //##
+    //## Output:
+    //##   arRes - direction that camera is looking in.
+    //## **********************************************************************
+    void GetViewVector(float arRes[3]);
+
     enum CameraEnum
     {
         CAMERA_ORTHOGRAPHIC = 0,

@@ -851,6 +851,24 @@ int LoadShaders()
                                pParticleRenderFragmentShader);
     }
 
+    // Static Rimlit Shader
+    if (nStatus != 0)
+    {
+        LogDebug("Building Static Rimlit Shader");
+        nStatus = BuildProgram(STATIC_RIMLIT_PROGRAM,
+                               pStaticMeshVertexShader,
+                               pRimlitFragmentShader);
+    }
+
+    // Animated Rimlit Shader
+    if (nStatus != 0)
+    {
+        LogDebug("Building Animated Rimlit Shader");
+        nStatus = BuildProgram(ANIMATED_RIMLIT_PROGRAM,
+                               pAnimatedMeshVertexShader,
+                               pRimlitFragmentShader);
+    }
+
     return nStatus;
 }
 
@@ -898,6 +916,18 @@ unsigned int GetMatterShaderProgram(int nMeshType,
         nMaterialType == MATERIAL_FULLBRIGHT)
     {
         return s_arPrograms[ANIMATED_FULLBRIGHT_PROGRAM];
+    }
+
+    if (nMeshType     == MESH_STATIC &&
+        nMaterialType == MATERIAL_RIMLIT)
+    {
+        return s_arPrograms[STATIC_RIMLIT_PROGRAM];
+    }
+
+    if (nMeshType     == MESH_ANIMATED &&
+        nMaterialType == MATERIAL_RIMLIT)
+    {
+        return s_arPrograms[ANIMATED_RIMLIT_PROGRAM];
     }
 
     return 0;

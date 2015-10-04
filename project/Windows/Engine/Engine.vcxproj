@@ -83,6 +83,7 @@
     <ClCompile Include="MeshCollider.cpp" />
     <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="Rect.cpp" />
+    <ClCompile Include="RimlitMaterial.cpp" />
     <ClCompile Include="Sound.cpp" />
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="Text.cpp" />
@@ -131,6 +132,7 @@
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="Rect.h" />
+    <ClInclude Include="RimlitMaterial.h" />
     <ClInclude Include="Terrain.h" />
     <ClInclude Include="Toast.h" />
     <ClInclude Include="TriangleBoxCollision.h" />

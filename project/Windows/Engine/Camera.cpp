@@ -233,3 +233,29 @@ void Camera::SetOrthographicWindow(float fWidth,
     m_fOrthoWidth  = fWidth;
     m_fOrthoHeight = fHeight;
 }
+
+//*****************************************************************************
+// GetViewVector
+//*****************************************************************************
+void Camera::GetViewVector(float arRes[3])
+{
+    // View matrix should have already been generated...
+    // So I'm not sure if this is gonna work, but I think if I
+    // multiply the vec4(0.0, 0.0, -1.0, 0.0) by the inverse
+    // view matrix, it will produce vector in world space.
+    // There might be a more efficent way to do this.
+
+    // The inverse operation should probably be moved to GenerateViewMatrix(),
+    // to increase performance.
+    float arVec[4] = {0.0f, 0.0f, -1.0f, 0.0f};
+    float arResult[4] = {0.0f};
+    Matrix matViewInv(m_matView);
+
+    matViewInv.Inverse();
+
+    matViewInv.MultiplyVec4(arVec,arResult);
+
+    arRes[0] = arResult[0];
+    arRes[1] = arResult[1];
+    arRes[2] = arResult[2];
+}

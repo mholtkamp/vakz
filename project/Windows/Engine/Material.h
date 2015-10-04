@@ -7,7 +7,8 @@ enum MaterialType
     MATERIAL_DIFFUSE     = 0,
     MATERIAL_SPECULAR    = 1,
     MATERIAL_FULLBRIGHT  = 2,
-    MATERIAL_TOON        = 3
+    MATERIAL_RIMLIT      = 3,
+    MATERIAL_TOON        = 4
 };
 
 class Material

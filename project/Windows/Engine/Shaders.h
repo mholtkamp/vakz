@@ -431,4 +431,44 @@ GLSL_VERSION_STRING
 "        discard;\n"
 "    }\n"
 "}\n";
+
+//## **************************************************************************
+//## Rimlit Fragment Shader
+//## **************************************************************************
+static const char* pRimlitFragmentShader = 
+GLSL_VERSION_STRING
+"precision mediump float;\n"
+"in vec2 vTexCoord;\n"
+"in vec3 vNormal;\n"
+"out vec4 oFragColor;\n"
+"uniform vec4 uDiffuseColor;\n"
+"uniform vec4 uRimColor;\n"
+"uniform vec3 uViewVector;\n"
+"uniform vec3 uDirLightVector;\n"
+"uniform vec4 uDirLightColor;\n"
+"uniform sampler2D uTexture;\n"
+"uniform vec4 uAmbientColor;\n"
+"uniform int uTextureMode;\n"
+
+"void main()\n"
+"{\n"
+
+// Directional Light Power
+"   vec3  lLightVector = normalize(-1.0*uDirLightVector);\n"
+"   vec3  lNormalVector = normalize(vNormal);\n"
+"   float lPower = dot(lLightVector, lNormalVector);\n"
+"   float lRimPower = 1.0 - abs(dot(uViewVector, lNormalVector));\n"
+
+"   vec4  lObjectColor = uDiffuseColor;\n"
+"   if (uTextureMode == 1)\n"
+"   {\n"
+"       lObjectColor.rgb = lObjectColor.rgb * texture(uTexture,  vTexCoord).rgb;\n"
+"   }\n"
+"   vec3  lAmbient = lObjectColor.rgb * uAmbientColor.rgb;\n"
+"   vec3  lDiffuse = clamp(lPower * uDirLightColor.rgb * lObjectColor.rgb, 0.0, 1.0);\n"
+"   oFragColor.rgb = lDiffuse.rgb + lAmbient.rgb;\n"
+"   oFragColor.a   = lObjectColor.a;\n"
+"   oFragColor     = mix(oFragColor, uRimColor, lRimPower * step(0.8, lRimPower));\n"
+"}\n";
+
 #endif

@@ -156,6 +156,9 @@
     <ClInclude Include="FullbrightMaterial.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="RimlitMaterial.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Scene.cpp">
@@ -276,6 +279,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FullbrightMaterial.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RimlitMaterial.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

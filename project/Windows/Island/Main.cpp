@@ -13,6 +13,7 @@
 #include "DirectionalLight.h"
 #include "MeshCollider.h"
 #include "Text.h"
+#include "RimlitMaterial.h"
 
 #include <stdio.h>
 #include <math.h>
@@ -61,6 +62,8 @@ int main()
     DiffuseMaterial* pBlueMat = new DiffuseMaterial();
     pBlueMat->SetColor(0.3f, 0.3f, 0.9f, 1.0f);
 
+    RimlitMaterial* pRimMat = new RimlitMaterial();
+
 
     // Create FlowerPot
     Matter* pFlowerPots               = new Matter[FLOWER_POT_COUNT];
@@ -99,7 +102,7 @@ int main()
     pTestAnim->SetLoopMode(Matter::LOOP_NONE);
     pTestAnim->SetAnimation("No");
     pTestAnim->StartAnimation();
-    pTestAnim->SetMaterial(pWhiteMat);
+    pTestAnim->SetMaterial(pRimMat);
     pTestAnim->SetPosition(-3.5f, 0.0f, 0.0f);
     BoxCollider* pTestCollider = new BoxCollider();
     pTestCollider->SetExtents(-0.706f, 0.706f,
@@ -107,7 +110,7 @@ int main()
                               -0.706f, 0.706f);
     pTestAnim->SetCollider(pTestCollider);
     pTestAnim->SetScale(0.25f, 0.25f, 0.25f);
-    pTestAnim->SetPhysical(1);
+    //pTestAnim->SetPhysical(1);
 
     LogDebug("Loaded both meshes.");
 
@@ -150,6 +153,7 @@ int main()
     float arParMinColor[4] = {1.0f, 1.0f, 1.0, 0.1f};
     float arParMaxColor[4] = {1.0f, 1.0f, 1.0, 0.3f};
     pParticleSystem->SetColor(arParMinColor, arParMaxColor);
+    pParticleSystem->SetSize(30.0f, 40.0f);
 
     Texture texPart;
     texPart.LoadBMP("poof.bmp", 1);
