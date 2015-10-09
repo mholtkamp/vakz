@@ -159,6 +159,9 @@
     <ClCompile Include="ActBubble.cpp">
       <Filter>Activations</Filter>
     </ClCompile>
+    <ClCompile Include="Forest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Menu.h">
@@ -301,6 +304,9 @@
     </ClInclude>
     <ClInclude Include="ActBubble.h">
       <Filter>Activations</Filter>
+    </ClInclude>
+    <ClInclude Include="Forest.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

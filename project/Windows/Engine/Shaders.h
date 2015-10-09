@@ -157,12 +157,16 @@ GLSL_VERSION_STRING
 "   vec4  lObjectColor = uDiffuseColor;\n"
 "   if (uTextureMode == 1)\n"
 "   {\n"
-"       lObjectColor.rgb = lObjectColor.rgb * texture(uTexture,  vTexCoord).rgb;\n"
+"       lObjectColor = lObjectColor * texture(uTexture,  vTexCoord);\n"
 "   }\n"
 "   vec3  lAmbient = lObjectColor.rgb * uAmbientColor.rgb;\n"
 "   vec3  lDiffuse = clamp(lPower * uDirLightColor.rgb * lObjectColor.rgb, 0.0, 1.0);\n"
 "   oFragColor.rgb = lDiffuse.rgb + lAmbient.rgb;\n"
 "   oFragColor.a   = lObjectColor.a;\n"
+"   if (oFragColor.a < 0.004)\n"
+"   {\n"
+"       discard;\n"
+"   }\n"
 "}\n";
 
 

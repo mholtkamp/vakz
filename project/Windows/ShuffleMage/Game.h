@@ -9,6 +9,7 @@
 #include "Tile.h"
 #include "HUD.h"
 #include "Activation.h"
+#include "Forest.h"
 
 #include "MsgPosition.h"
 #include "MsgCard.h"
@@ -92,6 +93,7 @@ private:
     Mage m_arMages[NUM_MAGES];
     HUD m_hud;
     Card* m_arHand[HAND_SIZE];
+    Forest* m_pForest;
     
     // Timers
     Timer m_timerMana;

@@ -63,6 +63,9 @@ int main()
     pBlueMat->SetColor(0.3f, 0.3f, 0.9f, 1.0f);
 
     RimlitMaterial* pRimMat = new RimlitMaterial();
+    RimlitMaterial* pWhiteRimMat = new RimlitMaterial();
+    float arWhiteRimColor[4] = {1.0f, 1.0f, 1.0f, 1.0f};
+    pWhiteRimMat->SetRimColor(arWhiteRimColor);
 
 
     // Create FlowerPot
@@ -79,7 +82,8 @@ int main()
     for (int fp = 0; fp < FLOWER_POT_COUNT; fp++)
     {
         pFlowerPots[fp].SetMesh(pFlowerPotStaticMesh);
-        pFlowerPots[fp].SetMaterial(pWhiteMat);
+        //pFlowerPots[fp].SetMaterial(pWhiteMat);
+        pFlowerPots[fp].SetMaterial(pWhiteRimMat);
         pFlowerPots[fp].SetPosition(fp % 10, fp / 10, - fp / 10);
         pFlowerPots[fp].SetRotation(0.0f, 0.0f, 0.0f);
 
@@ -93,6 +97,9 @@ int main()
         // Add to scene
         //pTestScene->AddMatter(&(pFlowerPots[fp]));
     }
+
+    pTestScene->AddMatter(&(pFlowerPots[0]));
+    
 
     // Create TestAnim
     Matter* pTestAnim = new Matter();
@@ -134,10 +141,10 @@ int main()
     pTestText->SetText("Animation:\nWave");
 
     // Add the test cube to the scene
-    pTestScene->AddMatter(pTestAnim);
+    //pTestScene->AddMatter(pTestAnim);
 
     // Add text to screen
-    pTestScene->AddGlyph(pTestText);
+    //pTestScene->AddGlyph(pTestText);
 
     // Collision text
     Text colText;
@@ -146,7 +153,7 @@ int main()
     colText.SetPosition(0.5f, 0.8f);
     colText.SetScale(0.6f, 0.8f);
     colText.SetText("No Collision");
-    pTestScene->AddGlyph(&colText);
+    //pTestScene->AddGlyph(&colText);
 
     // Particle System Test
     ParticleSystem* pParticleSystem = new ParticleSystem();
@@ -159,7 +166,7 @@ int main()
     texPart.LoadBMP("poof.bmp", 1);
     pParticleSystem->SetTexture(&texPart);
     pParticleSystem->Initialize();
-    pTestScene->AddParticleSystem(pParticleSystem);
+    //pTestScene->AddParticleSystem(pParticleSystem);
 
     float fFlowerX = 0.0f;
     float fSeconds = 0.0f;
@@ -433,21 +440,25 @@ int main()
         {
             fRimSize += 0.002f;
             pRimMat->SetRimSize(fRimSize);
+            pWhiteRimMat->SetRimSize(fRimSize);
         }
         if (IsKeyDown(VKEY_K))
         {
             fRimSize -= 0.002f;
             pRimMat->SetRimSize(fRimSize);
+            pWhiteRimMat->SetRimSize(fRimSize);
         }
         
         if (IsKeyDown(VKEY_G))
         {
             pRimMat->SetRimStyle(RIM_STYLE_SOFT);
+            pWhiteRimMat->SetRimStyle(RIM_STYLE_SOFT);
         }
 
         if (IsKeyDown(VKEY_H))
         {
             pRimMat->SetRimStyle(RIM_STYLE_HARD);
+            pWhiteRimMat->SetRimStyle(RIM_STYLE_HARD);
         }
 
         pCamera->SetPosition(fX, fY, fZ);

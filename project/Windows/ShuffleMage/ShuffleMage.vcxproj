@@ -91,6 +91,7 @@
     <ClCompile Include="CardSpears.cpp" />
     <ClCompile Include="CardSwipe.cpp" />
     <ClCompile Include="Deck.cpp" />
+    <ClCompile Include="Forest.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="HUD.cpp" />
     <ClCompile Include="Mage.cpp" />
@@ -140,6 +141,7 @@
     <ClInclude Include="CardTemplate.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="Deck.h" />
+    <ClInclude Include="Forest.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="HUD.h" />
     <ClInclude Include="MsgCard.h" />

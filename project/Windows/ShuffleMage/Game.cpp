@@ -17,6 +17,7 @@ Game::Game(int nSide)
 {
     Construct();
     m_nPlayerSide = nSide;
+    m_pForest->SetSide(nSide);
     SetupCamera();
 }
 
@@ -72,6 +73,10 @@ void Game::Construct()
 
     // Register HUD
     m_hud.Register(&m_scene);
+
+    // Create Forest and register
+    m_pForest = new Forest();
+    m_pForest->Register(&m_scene);
 
     m_nTouchDownLeft    = 0;
     m_nJustTouchedLeft  = 0;
@@ -348,8 +353,11 @@ void Game::SetupCamera()
 {
     if (m_nPlayerSide == SIDE_1)
     {
-        m_camera.SetPosition(3.8f, 6.5f, 8.5f);
-        m_camera.SetRotation(-40.0f, 0.0f, 0.0f);
+        m_camera.SetPosition(3.8f, 7.8f, 6.5f);
+        m_camera.SetRotation(-50.0f, 0.0f, 0.0f);
+
+        //m_camera.SetPosition(3.8f, 6.5f, 8.5f);
+        //m_camera.SetRotation(-40.0f, 0.0f, 0.0f);
     }
     else
     {
