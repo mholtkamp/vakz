@@ -353,16 +353,20 @@ void Game::SetupCamera()
 {
     if (m_nPlayerSide == SIDE_1)
     {
-        m_camera.SetPosition(3.8f, 7.8f, 6.5f);
-        m_camera.SetRotation(-50.0f, 0.0f, 0.0f);
+
+        m_camera.SetPosition(3.75f, 6.8f, 7.1f);
+        m_camera.SetRotation(-45.0f, 0.0f, 0.0f);
+
+        //m_camera.SetPosition(3.8f, 7.8f, 6.5f);
+        //m_camera.SetRotation(-50.0f, 0.0f, 0.0f);
 
         //m_camera.SetPosition(3.8f, 6.5f, 8.5f);
         //m_camera.SetRotation(-40.0f, 0.0f, 0.0f);
     }
     else
     {
-        m_camera.SetPosition(3.8f, 6.5f, -6.5f);
-        m_camera.SetRotation(-40.0f, 180.0f, 0.0f);
+        m_camera.SetPosition(3.75f, 6.80f, -5.1f);
+        m_camera.SetRotation(-45.0f, 180.0f, 0.0f);
     }
 
     m_camera.SetProjectionType(Camera::CAMERA_PERSPECTIVE);

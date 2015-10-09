@@ -9,20 +9,20 @@
 #define Y_SHIFT_2 0.0f
 #define Z_SHIFT_2 1.0f
 
-StaticMesh Forest::s_pForestGroundMesh;
-StaticMesh Forest::s_pForestGrassMesh;
-StaticMesh Forest::s_pForestRockMesh;
-StaticMesh Forest::s_pForestMushroomMesh;
-StaticMesh Forest::s_pForestSignpostMesh;
-StaticMesh Forest::s_pForestLanternMesh;
-StaticMesh Forest::s_pForestTreeMesh;
-Texture Forest::s_pForestGroundTex;
-Texture Forest::s_pForestGrassTex;
-Texture Forest::s_pForestRockTex;
-Texture Forest::s_pForestMushroomTex;
-Texture Forest::s_pForestSignpostTex;
-Texture Forest::s_pForestLanternTex;
-Texture Forest::s_pForestTreeTex;
+StaticMesh Forest::s_GroundMesh;
+StaticMesh Forest::s_GrassMesh;
+StaticMesh Forest::s_RockMesh;
+StaticMesh Forest::s_MushroomMesh;
+StaticMesh Forest::s_SignpostMesh;
+StaticMesh Forest::s_LanternMesh;
+StaticMesh Forest::s_TreeMesh;
+Texture Forest::s_GroundTex;
+Texture Forest::s_GrassTex;
+Texture Forest::s_RockTex;
+Texture Forest::s_MushroomTex;
+Texture Forest::s_SignpostTex;
+Texture Forest::s_LanternTex;
+Texture Forest::s_TreeTex;
 
 int Forest::s_nResLoaded = 0;
 
@@ -30,32 +30,32 @@ Forest::Forest()
 {
     LoadResources();
 
-    m_matGround.SetMesh(&s_pForestGroundMesh);
-    m_matGround.SetTexture(&s_pForestGroundTex);
+    m_matGround.SetMesh(&s_GroundMesh);
+    m_matGround.SetTexture(&s_GroundTex);
     m_matGround.SetMaterial(g_pDiffuseMaterial);
 
-    m_matGrass.SetMesh(&s_pForestGrassMesh);
-    m_matGrass.SetTexture(&s_pForestGrassTex);
+    m_matGrass.SetMesh(&s_GrassMesh);
+    m_matGrass.SetTexture(&s_GrassTex);
     m_matGrass.SetMaterial(g_pDiffuseMaterial);
 
-    m_matRock.SetMesh(&s_pForestRockMesh);
-    m_matRock.SetTexture(&s_pForestRockTex);
+    m_matRock.SetMesh(&s_RockMesh);
+    m_matRock.SetTexture(&s_RockTex);
     m_matRock.SetMaterial(g_pDiffuseMaterial);
     
-    m_matMushroom.SetMesh(&s_pForestMushroomMesh);
-    m_matMushroom.SetTexture(&s_pForestMushroomTex);
+    m_matMushroom.SetMesh(&s_MushroomMesh);
+    m_matMushroom.SetTexture(&s_MushroomTex);
     m_matMushroom.SetMaterial(g_pDiffuseMaterial);
 
-    m_matSignpost.SetMesh(&s_pForestSignpostMesh);
-    m_matSignpost.SetTexture(&s_pForestSignpostTex);
+    m_matSignpost.SetMesh(&s_SignpostMesh);
+    m_matSignpost.SetTexture(&s_SignpostTex);
     m_matSignpost.SetMaterial(g_pDiffuseMaterial);
 
-    m_matLantern.SetMesh(&s_pForestLanternMesh);
-    m_matLantern.SetTexture(&s_pForestLanternTex);
+    m_matLantern.SetMesh(&s_LanternMesh);
+    m_matLantern.SetTexture(&s_LanternTex);
     m_matLantern.SetMaterial(g_pDiffuseMaterial);
 
-    m_matTree.SetMesh(&s_pForestTreeMesh);
-    m_matTree.SetTexture(&s_pForestTreeTex);
+    m_matTree.SetMesh(&s_TreeMesh);
+    m_matTree.SetTexture(&s_TreeTex);
     m_matTree.SetMaterial(g_pDiffuseMaterial);
 }
 
@@ -112,22 +112,22 @@ void Forest::LoadResources()
 {
     if (s_nResLoaded == 0)
     {
-        s_pForestGroundMesh.Load("Meshes/Forest_Scene/ground.obj");
-        s_pForestGrassMesh.Load("Meshes/Forest_Scene/grass.obj");
-        s_pForestRockMesh.Load("Meshes/Forest_Scene/rocks.obj");
-        s_pForestMushroomMesh.Load("Meshes/Forest_Scene/mushrooms.obj");
-        s_pForestSignpostMesh.Load("Meshes/Forest_Scene/signpost.obj");
-        s_pForestLanternMesh.Load("Meshes/Forest_Scene/lantern.obj");
-        s_pForestTreeMesh.Load("Meshes/Forest_Scene/trees.obj");
+        s_GroundMesh.Load("Meshes/Forest_Scene/ground.obj");
+        s_GrassMesh.Load("Meshes/Forest_Scene/grass.obj");
+        s_RockMesh.Load("Meshes/Forest_Scene/rocks.obj");
+        s_MushroomMesh.Load("Meshes/Forest_Scene/mushrooms.obj");
+        s_SignpostMesh.Load("Meshes/Forest_Scene/signpost.obj");
+        s_LanternMesh.Load("Meshes/Forest_Scene/lantern.obj");
+        s_TreeMesh.Load("Meshes/Forest_Scene/trees.obj");
 
-         s_pForestGroundTex.LoadBMP("Textures/Forest_Scene/ground_tex.bmp");
-         s_pForestGrassTex.LoadBMP("Textures/Forest_Scene/grass_tex.bmp");
-         s_pForestRockTex.LoadBMP("Textures/Forest_Scene/rock_tex.bmp");
-         s_pForestMushroomTex.LoadBMP("Textures/Forest_Scene/mushroom_tex.bmp");
-         s_pForestSignpostTex.LoadBMP("Textures/Forest_Scene/sign_tex.bmp");
-         s_pForestLanternTex.LoadBMP("Textures/Forest_Scene/lantern_tex.bmp");
-         s_pForestTreeTex.LoadBMP("Textures/Forest_Scene/tree_tex.bmp", 1);
-         s_pForestTreeTex.SetFiltering(Texture::NEAREST);
+         s_GroundTex.LoadBMP("Textures/Forest_Scene/ground_tex.bmp");
+         s_GrassTex.LoadBMP("Textures/Forest_Scene/grass_tex.bmp");
+         s_RockTex.LoadBMP("Textures/Forest_Scene/rock_tex.bmp");
+         s_MushroomTex.LoadBMP("Textures/Forest_Scene/mushroom_tex.bmp");
+         s_SignpostTex.LoadBMP("Textures/Forest_Scene/sign_tex.bmp");
+         s_LanternTex.LoadBMP("Textures/Forest_Scene/lantern_tex.bmp");
+         s_TreeTex.LoadBMP("Textures/Forest_Scene/tree_tex.bmp", 1);
+         s_TreeTex.SetFiltering(Texture::NEAREST);
 
         s_nResLoaded = 1;
     }

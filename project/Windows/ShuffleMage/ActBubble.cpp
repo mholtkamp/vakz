@@ -118,6 +118,8 @@ void ActBubble::Update()
                        }
 #endif
                         m_nHit = 1;
+
+                        m_fPosX = m_nTargetX * TILE_WIDTH;
                     }
 
                     m_nTargetX++;
@@ -147,6 +149,8 @@ void ActBubble::Update()
                        }
 #endif
                         m_nHit = 1;
+
+                        m_fPosX = m_nTargetX * TILE_WIDTH;
                     }
                     m_nTargetX--;
                 }

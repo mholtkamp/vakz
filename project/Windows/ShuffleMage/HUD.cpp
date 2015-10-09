@@ -21,7 +21,7 @@ HUD::HUD()
     // This should really be the only place these colors
     // are referenced. Can't think of any other time that
     // something will need these color values.
-    m_quadHandBack.SetColor(0.0f, 0.0f, 0.0f, 1.0f);
+    m_quadHandBack.SetColor(0.0f, 0.0f, 0.0f, 0.3f);
     m_quadDrawBar.SetColor(0.6f, 0.8f, 0.6f, 1.0f);
     m_quadManaBar.SetColor(0.3f, 0.3f, 0.6f, 1.0f);
     
@@ -90,8 +90,13 @@ HUD::HUD()
     m_textEnemyHealth.SetScale(1.4f, 1.2f);
 
     // Enable borders where needed.
+    m_quadHandBack.EnableBorder(1);
     m_quadHealth.EnableBorder(1);
     m_quadEnemyHealth.EnableBorder(1);
+    m_quadCast.EnableBorder(1);
+    m_quadRotate.EnableBorder(1);
+    m_quadDrawBar.EnableBorder(1);
+    m_quadManaBar.EnableBorder(1);
 }
 
 HUD::~HUD()

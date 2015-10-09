@@ -31,21 +31,21 @@ private:
     Matter m_matTree;
 
     // Forest resources
-    static StaticMesh s_pForestGroundMesh;
-    static StaticMesh s_pForestGrassMesh;
-    static StaticMesh s_pForestRockMesh;
-    static StaticMesh s_pForestMushroomMesh;
-    static StaticMesh s_pForestSignpostMesh;
-    static StaticMesh s_pForestLanternMesh;
-    static StaticMesh s_pForestTreeMesh;
+    static StaticMesh s_GroundMesh;
+    static StaticMesh s_GrassMesh;
+    static StaticMesh s_RockMesh;
+    static StaticMesh s_MushroomMesh;
+    static StaticMesh s_SignpostMesh;
+    static StaticMesh s_LanternMesh;
+    static StaticMesh s_TreeMesh;
 
-    static Texture s_pForestGroundTex;
-    static Texture s_pForestGrassTex;
-    static Texture s_pForestRockTex;
-    static Texture s_pForestMushroomTex;
-    static Texture s_pForestSignpostTex;
-    static Texture s_pForestLanternTex;
-    static Texture s_pForestTreeTex;
+    static Texture s_GroundTex;
+    static Texture s_GrassTex;
+    static Texture s_RockTex;
+    static Texture s_MushroomTex;
+    static Texture s_SignpostTex;
+    static Texture s_LanternTex;
+    static Texture s_TreeTex;
 
     static int s_nResLoaded;
 };
