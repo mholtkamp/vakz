@@ -46,13 +46,13 @@ int nGameState = GAME_STATE_MENU;
 void android_main(struct android_app* state)
 {
     app_dummy();
-    SetResolution(800, 480);
+    //SetResolution(800, 480);
     Initialize(state);
 #else
 int main()
 {
     SetWindowSize(1024, 768);
-    SetResolution(1024, 768);
+    //SetResolution(1024, 768);
     Initialize();
 #endif
 

@@ -155,6 +155,13 @@ int InitializeGraphics(ANativeWindow* pWindow)
 
     SetWindowSize(vakzData.width, vakzData.height);
 
+    if (g_nResolutionX == 0 ||
+        g_nResolutionY == 0)
+    {
+        g_nResolutionX = g_nScreenWidth;
+        g_nResolutionY = g_nScreenHeight;
+    }
+
     // Initialize GL state.
     glClearColor(0.2f, 0.2f, 0.2f, 1.0f);                // Black Background
     glClearDepthf(1.0f);                                 // Depth Buffer Setup

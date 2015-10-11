@@ -424,6 +424,13 @@ int Initialize(void* pData)
     SetFocus(hWnd);                                    // Sets Keyboard Focus To The Window
     ReSizeGLScene(g_nScreenWidth, g_nScreenHeight);    // Set Up Our Perspective GL Screen
 
+    if (g_nResolutionX == 0 ||
+        g_nResolutionY == 0)
+    {
+        g_nResolutionX = g_nScreenWidth;
+        g_nResolutionY = g_nScreenHeight;
+    }
+
     if (!InitGL())                                     // Initialize Our Newly Created GL Window
     {
         KillGLWindow();                                // Reset The Display
