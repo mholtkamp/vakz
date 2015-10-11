@@ -1,4 +1,5 @@
 #include "CardSpears.h"
+#include "ActSpears.h"
 
 #define CARD_SPEARS_TEXTURE g_pCardSpearsTex
 #define CARD_SPEARS_NAME "SPEARS"
@@ -53,5 +54,10 @@ int CardSpears::GetRarity()
 
 void CardSpears::Cast(void* pGame, int nCaster)
 {
-    LogDebug("Implement CardSpears::Cast()!");
+    Activation* pAct = new ActSpears();
+    if (SpawnActivation(pGame, nCaster, pAct) == -1)
+    {
+        // Couldn't create activation.
+        delete pAct;
+    }
 }

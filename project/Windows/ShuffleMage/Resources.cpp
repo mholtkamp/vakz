@@ -53,6 +53,9 @@ Texture*    g_pActAreaGrabWaveTex  = 0;
 StaticMesh* g_pActSwipeMesh = 0;
 Texture*    g_pActSwipeTex  = 0;
 
+StaticMesh* g_pActSpearsMesh = 0;
+Texture*    g_pActSpearsTex  = 0;
+
 static int s_nLoaded = 0;
 
 void LoadResources()
@@ -156,6 +159,11 @@ void LoadResources()
         g_pActSwipeTex = new Texture();
         g_pActSwipeTex->LoadBMP("Textures/Activations/swipe_tex.bmp");
 
+        g_pActSpearsMesh = new StaticMesh();
+        g_pActSpearsMesh->Load("Meshes/Activations/spears_mesh.obj");
+        g_pActSpearsTex = new Texture();
+        g_pActSpearsTex->LoadBMP("Textures/Activations/spears_tex.bmp");
+
         s_nLoaded = 1;
     }
 }
@@ -213,5 +221,8 @@ void DeleteResources()
 
         delete g_pActSwipeMesh;
         delete g_pActSwipeTex;
+
+        delete g_pActSpearsMesh;
+        delete g_pActSpearsTex;
     }
 }

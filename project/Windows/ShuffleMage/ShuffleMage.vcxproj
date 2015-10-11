@@ -76,6 +76,7 @@
     <ClCompile Include="ActInvis.cpp" />
     <ClCompile Include="Activation.cpp" />
     <ClCompile Include="ActLaser.cpp" />
+    <ClCompile Include="ActSpears.cpp" />
     <ClCompile Include="ActSwipe.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Card.cpp" />
@@ -124,6 +125,7 @@
     <ClInclude Include="ActInvis.h" />
     <ClInclude Include="Activation.h" />
     <ClInclude Include="ActLaser.h" />
+    <ClInclude Include="ActSpears.h" />
     <ClInclude Include="ActSwipe.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Card.h" />
