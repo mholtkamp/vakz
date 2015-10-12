@@ -185,6 +185,9 @@ void ActShockwave::UpdateWave(int nWave, float fWaveTime)
         // Restart timer
         m_arWaveTimers[nWave].Start();
 
+        // Reset hit counter
+        m_arHit[nWave] = 0;
+
         // Update the target
         m_arTarget[nWave] += (m_nCaster ? -2 : 2);
 
