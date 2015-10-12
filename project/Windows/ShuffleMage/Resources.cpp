@@ -56,6 +56,9 @@ Texture*    g_pActSwipeTex  = 0;
 StaticMesh* g_pActSpearsMesh = 0;
 Texture*    g_pActSpearsTex  = 0;
 
+StaticMesh* g_pActShockwaveMesh = 0;
+Texture*    g_pActShockwaveTex  = 0;
+
 static int s_nLoaded = 0;
 
 void LoadResources()
@@ -164,6 +167,11 @@ void LoadResources()
         g_pActSpearsTex = new Texture();
         g_pActSpearsTex->LoadBMP("Textures/Activations/spears_tex.bmp");
 
+        g_pActShockwaveMesh = new StaticMesh();
+        g_pActShockwaveMesh->Load("Meshes/Activations/shockwave_mesh.obj");
+        g_pActShockwaveTex = new Texture();
+        g_pActShockwaveTex->LoadBMP("Textures/Activations/shockwave_tex.bmp");
+
         s_nLoaded = 1;
     }
 }
@@ -224,5 +232,8 @@ void DeleteResources()
 
         delete g_pActSpearsMesh;
         delete g_pActSpearsTex;
+
+        delete g_pActShockwaveMesh;
+        delete g_pActShockwaveTex;
     }
 }

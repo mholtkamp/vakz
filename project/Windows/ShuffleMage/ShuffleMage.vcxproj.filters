@@ -165,6 +165,9 @@
     <ClCompile Include="ActSpears.cpp">
       <Filter>Activations</Filter>
     </ClCompile>
+    <ClCompile Include="ActShockwave.cpp">
+      <Filter>Activations</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Menu.h">
@@ -312,6 +315,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ActSpears.h">
+      <Filter>Activations</Filter>
+    </ClInclude>
+    <ClInclude Include="ActShockwave.h">
       <Filter>Activations</Filter>
     </ClInclude>
   </ItemGroup>

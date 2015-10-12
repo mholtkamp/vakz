@@ -153,6 +153,9 @@
     <ClCompile Include="..\ShuffleMage\ActSpears.cpp">
       <Filter>Activations</Filter>
     </ClCompile>
+    <ClCompile Include="..\ShuffleMage\ActShockwave.cpp">
+      <Filter>Activations</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Session.h">
@@ -267,6 +270,9 @@
       <Filter>Activations</Filter>
     </ClInclude>
     <ClInclude Include="..\ShuffleMage\ActSpears.h">
+      <Filter>Activations</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ShuffleMage\ActShockwave.h">
       <Filter>Activations</Filter>
     </ClInclude>
   </ItemGroup>

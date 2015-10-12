@@ -76,6 +76,7 @@
     <ClCompile Include="..\ShuffleMage\ActInvis.cpp" />
     <ClCompile Include="..\ShuffleMage\Activation.cpp" />
     <ClCompile Include="..\ShuffleMage\ActLaser.cpp" />
+    <ClCompile Include="..\ShuffleMage\ActShockwave.cpp" />
     <ClCompile Include="..\ShuffleMage\ActSpears.cpp" />
     <ClCompile Include="..\ShuffleMage\ActSwipe.cpp" />
     <ClCompile Include="..\ShuffleMage\Card.cpp" />
@@ -120,6 +121,7 @@
     <ClInclude Include="..\ShuffleMage\ActInvis.h" />
     <ClInclude Include="..\ShuffleMage\Activation.h" />
     <ClInclude Include="..\ShuffleMage\ActLaser.h" />
+    <ClInclude Include="..\ShuffleMage\ActShockwave.h" />
     <ClInclude Include="..\ShuffleMage\ActSpears.h" />
     <ClInclude Include="..\ShuffleMage\ActSwipe.h" />
     <ClInclude Include="..\ShuffleMage\Card.h" />

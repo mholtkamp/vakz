@@ -29,6 +29,15 @@ StaticMesh::~StaticMesh()
         delete [] m_arPosition;
         m_arPosition = 0;
     }
+
+    //@@ TODO:
+    // This might not be safe, add check to see if graphics context
+    // is active before calling this.
+    //if (m_unVBO != 0)
+    //{
+    //    glDeleteBuffers(1, &m_unVBO);
+    //    m_unVBO = 0;
+    //}
 }
 
 //*****************************************************************************

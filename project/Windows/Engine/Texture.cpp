@@ -24,7 +24,9 @@ Texture::Texture()
 //*****************************************************************************
 Texture::~Texture()
 {
-    
+    //@@ TODO: 
+    // Figure out how to free graphics memory. Check for graphics context
+    // before deleting texture.
 }
 
 //*****************************************************************************

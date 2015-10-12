@@ -21,6 +21,7 @@
 #define ROT_SPEED 70.0f
 #define MOVE_SPEED 5.0f
 #define THRESH 0.4f
+#define MAT_ROT_SPEED 0.5f
 
 #define FLOWER_BOX_SIZE 100.0f
 #define FLOWER_POT_COUNT 100
@@ -183,6 +184,11 @@ int main()
     float fCube2Rot = 0.0f;
     float fAnimSpeed = 1.0f;
     float fRimSize = 0.2f;
+
+    float fMatRotX = 0.0f;
+    float fMatRotY = 0.0f;
+    float fMatRotZ = 0.0f;
+
     int nRenderCount = 0;
     Timer timer;
     Timer timerRender;
@@ -395,45 +401,41 @@ int main()
         {
             if (IsKeyDown(VKEY_C))
             {
-                pTestAnim->SetXVelocity(-3.0f);
+                fMatRotX -= MAT_ROT_SPEED;
             }
             if (IsKeyDown(VKEY_V))
             {
-                
+                fMatRotY -= MAT_ROT_SPEED;
             }
             if (IsKeyDown(VKEY_B))
             {
-                pTestAnim->SetZVelocity(-3.0f);
+                fMatRotZ -= MAT_ROT_SPEED;
             }
         }
         else
         {
             if (IsKeyDown(VKEY_C))
             {
-                pTestAnim->SetXVelocity(3.0f);
+                fMatRotX += MAT_ROT_SPEED;
             }
             if (IsKeyDown(VKEY_V))
             {
-                pTestAnim->SetYVelocity(8.0f);
+                fMatRotY += MAT_ROT_SPEED;
             }
             if (IsKeyDown(VKEY_B))
             {
-                pTestAnim->SetZVelocity(3.0f);
+                fMatRotZ += MAT_ROT_SPEED;
             }
         }
 
-        if (IsKeyDown(VKEY_C) == 0)
-        {
-            pTestAnim->SetXVelocity(0);
-        }
-        if (IsKeyDown(VKEY_V) == 0)
-        {
+        pTestAnim->SetRotation(fMatRotX,
+                               fMatRotY,
+                               fMatRotZ);
 
-        }
-        if (IsKeyDown(VKEY_B) == 0)
-        {
-            pTestAnim->SetZVelocity(0.0f);
-        }
+        pFlowerPots[0].SetRotation(fMatRotX,
+                                   fMatRotY,
+                                   fMatRotZ);
+
         //pTestAnim->SetPosition(fBearX, fBearY, fBearZ);
 
         if (IsKeyDown(VKEY_J))

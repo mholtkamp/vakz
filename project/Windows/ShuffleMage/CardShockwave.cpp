@@ -1,4 +1,5 @@
 #include "CardShockwave.h"
+#include "ActShockwave.h"
 
 #define CARD_SHOCKWAVE_TEXTURE g_pCardShockwaveTex
 #define CARD_SHOCKWAVE_NAME "SHOCKWAVE"
@@ -53,5 +54,10 @@ int CardShockwave::GetRarity()
 
 void CardShockwave::Cast(void* pGame, int nCaster)
 {
-    LogDebug("Implement CardShockwave::Cast()!");
+    Activation* pAct = new ActShockwave();
+    if (SpawnActivation(pGame, nCaster, pAct) == -1)
+    {
+        // Couldn't create activation.
+        delete pAct;
+    }
 }

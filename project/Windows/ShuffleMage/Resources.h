@@ -62,6 +62,9 @@ extern Texture*    g_pActSwipeTex;
 extern StaticMesh* g_pActSpearsMesh;
 extern Texture*    g_pActSpearsTex;
 
+extern StaticMesh* g_pActShockwaveMesh;
+extern Texture*    g_pActShockwaveTex;
+
 void LoadResources();
 
 void DeleteResources();
