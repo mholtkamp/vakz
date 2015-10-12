@@ -3,7 +3,7 @@
 
 #include "Activation.h"
 #include "Matter.h"
-#include "Material.h"
+#include "FullbrightMaterial.h"
 
 class ActShockwave : public Activation
 {
@@ -23,13 +23,17 @@ public:
     int m_nCastX;
     int m_nCastZ;
 
+    int m_nWave2Processing;
+
     int m_arTarget[2];
     int m_arHit[2];
 
 private:
 
-    Timer            m_arWaveTimers;
-    DiffuseMaterial* m_arMaterials[2];
+    void UpdateWave(int nWave, float fWaveTime);
+
+    Timer            m_arWaveTimers[2];
+    FullbrightMaterial* m_arMaterials[2];
     Matter*          m_arMatter[2];
 
 };
