@@ -65,6 +65,11 @@ void ActShockwave::OnCreate(void* pGame,
         {
             m_arTarget[i] = -1;
         }
+        else if (pTheGame->m_arTiles[m_arTarget[i]][m_nCastZ].GetTileType() == TILE_TYPE_EMPTY)
+        {
+            // The tile that the wave was spawned on is empty, so set wave target to -1
+            m_arTarget[i] = -1;
+        }
 
 #if defined (SM_CLIENT)
         m_arMaterials[i] = new FullbrightMaterial();
@@ -87,6 +92,12 @@ void ActShockwave::OnCreate(void* pGame,
         
         pTheGame->GetScene()->AddMatter(m_arMatter[i]);
 #endif
+    }
+
+    // Check if 2nd wave should be nullified because first wave was.
+    if (m_arTarget[0] == -1)
+    {
+        m_arTarget[1] = -1;
     }
 
     // Kick off timer 1
@@ -150,8 +161,13 @@ void ActShockwave::UpdateWave(int nWave, float fWaveTime)
     {
         return;
     }
-#if defined (SM_SERVER)
 
+#if defined (SM_CLIENT)
+    Game* pTheGame = reinterpret_cast<Game*>(m_pGame);
+#endif
+
+
+#if defined (SM_SERVER)
     ServerGame* pTheGame = reinterpret_cast<ServerGame*>(m_pGame);
 
     // Process first wave
@@ -162,6 +178,9 @@ void ActShockwave::UpdateWave(int nWave, float fWaveTime)
         {
             pTheGame->m_arTiles[m_arTarget[nWave]][m_nCastZ].GetPawn()->Damage(DAMAGE);
         }
+
+        // Set tile status to cracked
+        pTheGame->m_arTiles[m_arTarget[nWave]][m_nCastZ].SetType(TILE_TYPE_CRACKED);
 
         m_arHit[nWave] = 1;
     }
@@ -195,6 +214,26 @@ void ActShockwave::UpdateWave(int nWave, float fWaveTime)
             m_arTarget[nWave] < 0)
         {
             m_arTarget[nWave] = -1;
+        }
+        else
+        {
+            // Check if current target is an empty tile
+            if (pTheGame->m_arTiles[m_arTarget[nWave]][m_nCastZ].GetTileType() == TILE_TYPE_EMPTY)
+            {
+                // The tile is empty so discontinue the shockwave
+                m_arTarget[nWave] = -1;
+            }
+        }
+        
+        // Check if other wave's target was an empty tile
+        if (m_arTarget[nWave] + (m_nCaster ? 1 : -1) < GRID_WIDTH ||
+            m_arTarget[nWave] + (m_nCaster ? 1 : -1) >= 0)
+        {
+            if (pTheGame->m_arTiles[m_arTarget[nWave] + (m_nCaster ? 1 : -1)][m_nCastZ].GetTileType() == TILE_TYPE_EMPTY)
+            {
+                // The tile is empty so discontinue the shockwave
+                m_arTarget[nWave] = -1;
+            }
         }
 
 #if defined (SM_CLIENT)

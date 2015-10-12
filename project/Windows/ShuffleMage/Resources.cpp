@@ -6,6 +6,10 @@ Texture* g_pRedMageTex  = 0;
 Texture* g_pBlueMageTex = 0;
 Texture* g_pRedTileTex  = 0;
 Texture* g_pBlueTileTex = 0;
+Texture* g_pRedCrackedTileTex  = 0;
+Texture* g_pBlueCrackedTileTex = 0;
+Texture* g_pRedEmptyTileTex    = 0;
+Texture* g_pBlueEmptyTileTex   = 0;
 Texture* g_pCastTex     = 0;
 Texture* g_pRotateTex   = 0;
 
@@ -77,6 +81,18 @@ void LoadResources()
 
         g_pBlueTileTex = new Texture();
         g_pBlueTileTex->LoadBMP("Textures/tile_blue.bmp");
+
+        g_pRedCrackedTileTex = new Texture();
+        g_pRedCrackedTileTex->LoadBMP("Textures/tile_cracked_red.bmp");
+
+        g_pBlueCrackedTileTex = new Texture();
+        g_pBlueCrackedTileTex->LoadBMP("Textures/tile_cracked_blue.bmp");
+
+        g_pRedEmptyTileTex = new Texture();
+        g_pRedEmptyTileTex->LoadBMP("Textures/tile_empty_red.bmp");
+
+        g_pBlueEmptyTileTex = new Texture();
+        g_pBlueEmptyTileTex->LoadBMP("Textures/tile_empty_blue.bmp");
 
         g_pCastTex     = new Texture();
         g_pCastTex->LoadBMP("Textures/cast.bmp");
@@ -185,6 +201,13 @@ void DeleteResources()
         delete g_pBlueMageTex;
         delete g_pRedTileTex;
         delete g_pBlueTileTex;
+        delete g_pRedCrackedTileTex;
+        delete g_pBlueCrackedTileTex;
+        delete g_pRedEmptyTileTex;
+        delete g_pBlueEmptyTileTex;
+        delete g_pCastTex;
+        delete g_pRotateTex;
+
 
         // Static Meshes
         delete g_pMageMesh;

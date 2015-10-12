@@ -124,6 +124,16 @@ Pawn* Tile::GetPawn()
 
 void Tile::SetPawn(Pawn* pPawn)
 {
+#if defined (SM_SERVER)
+    // Check if a pawn left cracked tile
+    if (m_pPawn != 0 &&
+        pPawn   == 0 &&
+        m_nType ==TILE_TYPE_CRACKED)
+    {
+        SetType(TILE_TYPE_EMPTY);
+    }
+#endif
+
     m_pPawn = pPawn;
 }
 
@@ -138,6 +148,8 @@ void Tile::SetType(int nType)
 
 #if defined (SM_SERVER)
     reinterpret_cast<ServerGame*>(m_pGame)->UpdateTile(m_nX, m_nZ, m_nOwner, m_nType);
+#else
+    UpdateTexture();
 #endif
 }
 
@@ -147,6 +159,43 @@ void Tile::UpdateTexture()
     // This function needs to be updated so that the proper texture is used,
     // not just the "Normal" texture.
     m_matter.SetTexture((m_nOwner == SIDE_1) ? g_pRedTileTex : g_pBlueTileTex);
+
+    if (m_nOwner == SIDE_1)
+    {
+        switch(m_nType)
+        {
+        case TILE_TYPE_NORMAL:
+            m_matter.SetTexture(g_pRedTileTex);
+            break;
+        case TILE_TYPE_CRACKED:
+            m_matter.SetTexture(g_pRedCrackedTileTex);
+            break;
+        case TILE_TYPE_EMPTY:
+            m_matter.SetTexture(g_pRedEmptyTileTex);
+            break;
+        default:
+            m_matter.SetTexture(g_pRedTileTex);
+            break;
+        }
+    }
+    else
+    {
+        switch(m_nType)
+        {
+        case TILE_TYPE_NORMAL:
+            m_matter.SetTexture(g_pBlueTileTex);
+            break;
+        case TILE_TYPE_CRACKED:
+            m_matter.SetTexture(g_pBlueCrackedTileTex);
+            break;
+        case TILE_TYPE_EMPTY:
+            m_matter.SetTexture(g_pBlueEmptyTileTex);
+            break;
+        default:
+            m_matter.SetTexture(g_pBlueTileTex);
+            break;
+        }
+    }
 #endif
 }
 

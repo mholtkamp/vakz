@@ -12,6 +12,10 @@ extern Texture* g_pRedMageTex;
 extern Texture* g_pBlueMageTex;
 extern Texture* g_pRedTileTex;
 extern Texture* g_pBlueTileTex;
+extern Texture* g_pRedCrackedTileTex;
+extern Texture* g_pBlueCrackedTileTex;
+extern Texture* g_pRedEmptyTileTex;
+extern Texture* g_pBlueEmptyTileTex;
 extern Texture* g_pCastTex;
 extern Texture* g_pRotateTex;
 
