@@ -105,8 +105,9 @@ void Pawn::Move(int nX,
     {
         // Location is in grid boundaries
         // Now check if the new tile is owned.
-        if (pGame->m_arTiles[nNewX][nNewZ].GetOwner() == m_nSide &&
-            pGame->m_arTiles[nNewX][nNewZ].GetPawn()  == 0)
+        if (pGame->m_arTiles[nNewX][nNewZ].GetOwner()    == m_nSide &&
+            pGame->m_arTiles[nNewX][nNewZ].GetPawn()     == 0       &&
+            pGame->m_arTiles[nNewX][nNewZ].GetTileType() != TILE_TYPE_EMPTY)
         {
             // Set the new pawn position
             SetPosition(nNewX, nNewZ);

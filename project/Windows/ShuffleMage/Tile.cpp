@@ -148,6 +148,7 @@ void Tile::SetType(int nType)
 
 #if defined (SM_SERVER)
     reinterpret_cast<ServerGame*>(m_pGame)->UpdateTile(m_nX, m_nZ, m_nOwner, m_nType);
+    m_timer.Start();
 #else
     UpdateTexture();
 #endif
@@ -209,4 +210,24 @@ void Tile::RestoreOwnership()
     {
         SetOwner(SIDE_2);
     }
+}
+
+void Tile::Update()
+{
+
+#if defined (SM_SERVER)
+    float fTime = 0.0f;
+
+    if (m_nType != TILE_TYPE_NORMAL)
+    {
+        m_timer.Stop();
+        fTime = m_timer.Time();
+
+        if (fTime >= TILE_RESET_TIME)
+        {
+            SetType(TILE_TYPE_NORMAL);
+        }
+    }
+#endif
+
 }
