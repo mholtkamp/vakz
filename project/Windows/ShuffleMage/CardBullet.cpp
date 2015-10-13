@@ -1,4 +1,5 @@
 #include "CardBullet.h"
+#include "ActBullet.h"
 
 #define CARD_BULLET_TEXTURE g_pCardBulletTex
 #define CARD_BULLET_NAME "BULLET"
@@ -53,5 +54,10 @@ int CardBullet::GetRarity()
 
 void CardBullet::Cast(void* pGame, int nCaster)
 {
-    LogDebug("Implement CardBullet::Cast()!");
+    Activation* pAct = new ActBullet();
+    if (SpawnActivation(pGame, nCaster, pAct) == -1)
+    {
+        // Couldn't create activation.
+        delete pAct;
+    }
 }
