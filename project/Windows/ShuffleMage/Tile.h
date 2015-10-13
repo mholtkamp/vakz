@@ -5,6 +5,7 @@
 #include "Scene.h"
 #include "Constants.h"
 #include "Pawn.h"
+#include "Timer.h"
 
 class Tile
 {
@@ -32,6 +33,8 @@ public:
 
     void SetType(int nType);
 
+    void Update();
+
     void UpdateTexture();
 
     void RestoreOwnership();
@@ -48,6 +51,8 @@ private:
 
 #ifdef SM_CLIENT
     Matter m_matter;
+#else
+    Timer m_timer;
 #endif
 };
 

@@ -119,6 +119,8 @@ Scene* Game::GetScene()
 void Game::Update()
 {
     int i = 0;
+    int j = 0;
+
     float fX     = 0.0f;
     float fY     = 0.0f;
     float fDispX = 0.0f;
@@ -329,6 +331,15 @@ void Game::Update()
                 delete m_arActivations[i];
                 m_arActivations[i] = 0;
             }
+        }
+    }
+
+    // Update all tiles
+    for (i = 0; i < GRID_WIDTH; i++)
+    {
+        for (j = 0; j < GRID_HEIGHT; j++)
+        {
+            m_arTiles[i][j].Update();
         }
     }
 }

@@ -93,6 +93,7 @@ int ServerGame::IsActive()
 void ServerGame::Update()
 {
     int i = 0;
+    int j = 0;
 
     // Update all activations
     for (i = 0; i < MAX_ACTIVATIONS; i++)
@@ -107,6 +108,15 @@ void ServerGame::Update()
                 delete m_arActivations[i];
                 m_arActivations[i] = 0;
             }
+        }
+    }
+
+    // Update all tiles
+    for (i = 0; i < GRID_WIDTH; i++)
+    {
+        for (j = 0; j < GRID_HEIGHT; j++)
+        {
+            m_arTiles[i][j].Update();
         }
     }
 }

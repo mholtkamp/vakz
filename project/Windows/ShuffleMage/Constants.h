@@ -81,4 +81,6 @@
 
 #define MAX_ACTIVATIONS 12
 
+#define TILE_RESET_TIME 20.0f
+
 #endif
