@@ -125,18 +125,50 @@ public:
     void Transpose();
 
     //## **********************************************************************
-    //## Constructor
+    //## Load
+    //## 
+    //## Loads a 4x4 matrix from a preallocated array of 16 floats.
+    //##
+    //## Input:
+    //##   arValues - an array of float values to load into the Matrix
+    //##              object. Float values should be arranged in column
+    //##              major order.
     //## **********************************************************************
     void Load(float* arValues);
 
     //## **********************************************************************
-    //## Constructor
+    //## MultiplyVec3
+    //##
+    //## Multiplies this matrix by vector of size 3. The vector will be
+    //## will be appended with a 4th component (w) value equal to 1.0f so that
+    //## it can be properly multiplied with the 4x4 Matrix object.
+    //## 
+    //## Input:
+    //##   arVec3 - a vector where arVec3[0] is the x component
+    //##                           arVec3[1] is the y component
+    //##                           arVec3[2] is the z component
+    //##
+    //## Output:
+    //##   arRes - a vector of size 3 that contains the result of the multiply
+    //##           operationion with the last component (w) removed.
     //## **********************************************************************
     void MultiplyVec3(float* arVec3,
                       float* arRes);
 
     //## **********************************************************************
-    //## Constructor
+    //## MultiplyVec4
+    //##
+    //## Multiplies this matrix by vector of size 4.
+    //## 
+    //## Input:
+    //##   arVec4 - a vector where arVec4[0] is the x component
+    //##                           arVec4[1] is the y component
+    //##                           arVec4[2] is the z component
+    //##                           arVec4[3] is the w component.
+    //##
+    //## Output:
+    //##   arRes - a vector of size 4 that contains the result of the multiply
+    //##           operationion.
     //## **********************************************************************
     void MultiplyVec4(float* arVec4,
                       float* arRes);

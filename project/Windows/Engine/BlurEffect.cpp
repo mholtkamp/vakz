@@ -4,6 +4,7 @@
 #include "VInput.h"
 #include "Settings.h"
 
+// Vertex data needed to render quad that covers entire screen
 static float s_arPosition[8] = {-1.0f, -1.0f,
                                 -1.0f,  1.0f,
                                  1.0f,  1.0f,
@@ -12,6 +13,10 @@ static float s_arTexCoord[8] = {0.0f, 0.0f,
                                 0.0f, 1.0f,
                                 1.0f, 1.0f,
                                 1.0f, 0.0f};
+
+//*****************************************************************************
+// Constructor
+//*****************************************************************************
 BlurEffect::BlurEffect()
 {
     m_nType = EFFECT_BLUR;
@@ -19,11 +24,17 @@ BlurEffect::BlurEffect()
     m_nSampleDistance = 1;
 }
 
+//*****************************************************************************
+// Destructor
+//*****************************************************************************
 BlurEffect::~BlurEffect()
 {
 
 }
 
+//*****************************************************************************
+// Render
+//*****************************************************************************
 void BlurEffect::Render(void*         pScene,
                         unsigned int  hFBO,
                         unsigned int  hColorAttach,
@@ -76,6 +87,9 @@ void BlurEffect::Render(void*         pScene,
     glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 }
 
+//*****************************************************************************
+// SetBlurFactor
+//*****************************************************************************
 void BlurEffect::SetBlurFactor(int nFactor)
 {
     if (nFactor >= MIN_BLUR_FACTOR &&
@@ -89,6 +103,9 @@ void BlurEffect::SetBlurFactor(int nFactor)
     }   
 }
 
+//*****************************************************************************
+// SetSampleDistance
+//*****************************************************************************
 void BlurEffect::SetSampleDistance(int nDistance)
 {
     if (nDistance >= MIN_SAMPLE_DISTANCE &&

@@ -40,6 +40,9 @@ static int s_hRendSize     = -1;
 // Class-static variables
 int ParticleSystem::s_nStaticInit = 0;
 
+//*****************************************************************************
+// Constructor
+//*****************************************************************************
 ParticleSystem::ParticleSystem()
 {
     m_nGenerate = 1;
@@ -93,6 +96,9 @@ ParticleSystem::ParticleSystem()
     m_pSync = 0;
 }
 
+//*****************************************************************************
+// Destructor
+//*****************************************************************************
 ParticleSystem::~ParticleSystem()
 {
     // Free video memory
@@ -100,6 +106,9 @@ ParticleSystem::~ParticleSystem()
     glDeleteBuffers(2, m_arVBOs);
 }
 
+//*****************************************************************************
+// Initialize
+//*****************************************************************************
 void ParticleSystem::Initialize()
 {   
     int hProg         = 0;
@@ -180,6 +189,9 @@ void ParticleSystem::Initialize()
     delete [] pZeroBuffer;
 }
 
+//*****************************************************************************
+// Update
+//*****************************************************************************
 void ParticleSystem::Update()
 {
     float fDeltaTime = 0.0f;
@@ -264,7 +276,7 @@ void ParticleSystem::Update()
 
     // Since the rendering relies on the particle update being finished,
     // and the gpu does its processing asynchronously, we must wait until
-    // the gpu processing is done using a sync object.
+    // the gpu processing is done by using a sync object.
     m_pSync = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
 
     glDisable(GL_RASTERIZER_DISCARD);
@@ -275,6 +287,9 @@ void ParticleSystem::Update()
     m_timer.Start();
 }
 
+//*****************************************************************************
+// Render
+//*****************************************************************************
 void ParticleSystem::Render(Matrix* pMatrixVP)
 {
     int hProg = GetShaderProgram(PARTICLE_RENDER_PROGRAM);
@@ -338,6 +353,9 @@ void ParticleSystem::Render(Matrix* pMatrixVP)
     glDrawArrays(GL_POINTS, 0, m_nParticleCount);
 }
 
+//*****************************************************************************
+// SetParticleCount
+//*****************************************************************************
 void ParticleSystem::SetParticleCount(int nParticleCount)
 {
     if (nParticleCount > 0 &&
@@ -351,6 +369,9 @@ void ParticleSystem::SetParticleCount(int nParticleCount)
     }
 }
 
+//*****************************************************************************
+// SetEmissionRate
+//*****************************************************************************
 void ParticleSystem::SetEmissionRate(int nEmissionRate)
 {
     if (nEmissionRate > 0)
@@ -360,6 +381,9 @@ void ParticleSystem::SetEmissionRate(int nEmissionRate)
     } 
 }
 
+//*****************************************************************************
+// SetLifetime
+//*****************************************************************************
 void ParticleSystem::SetLifetime(float fMinLifetime,
                                  float fMaxLifetime)
 {
@@ -367,6 +391,9 @@ void ParticleSystem::SetLifetime(float fMinLifetime,
     m_fMaxLifetime = fMaxLifetime;
 }
 
+//*****************************************************************************
+// SetColor
+//*****************************************************************************
 void ParticleSystem::SetColor(float arMinColor[4],
                               float arMaxColor[4])
 {
@@ -381,6 +408,9 @@ void ParticleSystem::SetColor(float arMinColor[4],
     m_arMaxColor[3] = arMaxColor[3];
 }
 
+//*****************************************************************************
+// SetVelocity
+//*****************************************************************************
 void ParticleSystem::SetVelocity(float arMinVelocity[3],
                                  float arMaxVelocity[3])
 {
@@ -393,6 +423,9 @@ void ParticleSystem::SetVelocity(float arMinVelocity[3],
     m_arMaxVelocity[2] = arMaxVelocity[2];
 }
 
+//*****************************************************************************
+// SetSize
+//*****************************************************************************
 void ParticleSystem::SetSize(float fMinSize,
                              float fMaxSize)
 {
@@ -400,6 +433,9 @@ void ParticleSystem::SetSize(float fMinSize,
     m_fMaxSize = fMaxSize;
 }
 
+//*****************************************************************************
+// SetGravity
+//*****************************************************************************
 void ParticleSystem::SetGravity(float arGravity[3])
 {
     m_arGravity[0] = arGravity[0];
@@ -407,6 +443,9 @@ void ParticleSystem::SetGravity(float arGravity[3])
     m_arGravity[2] = arGravity[2];
 }
 
+//*****************************************************************************
+// SetOrigin
+//*****************************************************************************
 void ParticleSystem::SetOrigin(float fX,
                float fY,
                float fZ)
@@ -416,6 +455,9 @@ void ParticleSystem::SetOrigin(float fX,
     m_arOrigin[2] = fZ;
 }
 
+//*****************************************************************************
+// SetSpawnVariance
+//*****************************************************************************
 void ParticleSystem::SetSpawnVariance(float fX,
                                       float fY,
                                       float fZ)
@@ -425,11 +467,17 @@ void ParticleSystem::SetSpawnVariance(float fX,
     m_arSpawnVariance[2] = fZ;
 }
 
+//*****************************************************************************
+// SetGenerate
+//*****************************************************************************
 void ParticleSystem::SetGenerate(int nGenerate)
 {
     m_nGenerate = nGenerate;
 }
 
+//*****************************************************************************
+// SetTexture
+//*****************************************************************************
 void ParticleSystem::SetTexture(Texture* pTexture)
 {
     m_pTexture = pTexture;

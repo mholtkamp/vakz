@@ -85,7 +85,9 @@ int main()
         pFlowerPots[fp].SetMesh(pFlowerPotStaticMesh);
         //pFlowerPots[fp].SetMaterial(pWhiteMat);
         pFlowerPots[fp].SetMaterial(pWhiteRimMat);
-        pFlowerPots[fp].SetPosition(fp % 10, fp / 10, - fp / 10);
+        pFlowerPots[fp].SetPosition((float) (fp % 10), 
+                                    (float) (fp / 10), 
+                                    (float)(-fp / 10));
         pFlowerPots[fp].SetRotation(0.0f, 0.0f, 0.0f);
 
         pFlowerPots[fp].SetTexture(pFlowerPotTexture);

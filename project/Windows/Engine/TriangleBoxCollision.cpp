@@ -1,3 +1,5 @@
+// This is NOT my code. Credit is in the comment below.
+
 /********************************************************/
 /* AABB-triangle overlap test code                      */
 /* by Tomas Akenine-Möller                              */

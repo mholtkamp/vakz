@@ -2,6 +2,9 @@
 #include "VGL.h"
 #include "Scene.h"
 
+//*****************************************************************************
+// Constructor
+//*****************************************************************************
 RimlitMaterial::RimlitMaterial()
 {
     m_nType = MATERIAL_RIMLIT;
@@ -20,11 +23,17 @@ RimlitMaterial::RimlitMaterial()
     m_nRimStyle = RIM_STYLE_SOFT;
 }
 
+//*****************************************************************************
+// Destructor
+//*****************************************************************************
 RimlitMaterial::~RimlitMaterial()
 {
 
 }
 
+//*****************************************************************************
+// SetRenderState
+//*****************************************************************************
 void RimlitMaterial::SetRenderState(void*        pScene,
                                     unsigned int hProg)
 {
@@ -50,6 +59,9 @@ void RimlitMaterial::SetRenderState(void*        pScene,
     glUniform1i(hRimStyle, m_nRimStyle);
 }
 
+//*****************************************************************************
+// SetDiffuseColor
+//*****************************************************************************
 void RimlitMaterial::SetDiffuseColor(float arDiff[4])
 {
     m_arDiffuseColor[0] = arDiff[0];
@@ -58,6 +70,9 @@ void RimlitMaterial::SetDiffuseColor(float arDiff[4])
     m_arDiffuseColor[3] = arDiff[3];
 }
 
+//*****************************************************************************
+// SetRimColor
+//*****************************************************************************
 void RimlitMaterial::SetRimColor(float arRim[4])
 {
     m_arRimColor[0] = arRim[0];
@@ -66,11 +81,17 @@ void RimlitMaterial::SetRimColor(float arRim[4])
     m_arRimColor[3] = arRim[3];
 }
 
+//*****************************************************************************
+// SetRimSize
+//*****************************************************************************
 void RimlitMaterial::SetRimSize(float fSize)
 {
     m_fRimSize = fSize;
 }
 
+//*****************************************************************************
+// SetRimStyle
+//*****************************************************************************
 void RimlitMaterial::SetRimStyle(int nStyle)
 {
     m_nRimStyle = nStyle;

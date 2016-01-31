@@ -1,6 +1,9 @@
 #include "FullbrightMaterial.h"
 #include "VGL.h"
 
+//*****************************************************************************
+// Constructor
+//*****************************************************************************
 FullbrightMaterial::FullbrightMaterial()
 {
     m_nType = MATERIAL_FULLBRIGHT;
@@ -11,11 +14,17 @@ FullbrightMaterial::FullbrightMaterial()
     m_arColor[3] = 1.0f;
 }
 
+//*****************************************************************************
+// Destructor
+//*****************************************************************************
 FullbrightMaterial::~FullbrightMaterial()
 {
     
 }
 
+//*****************************************************************************
+// SetRenderState
+//*****************************************************************************
 void FullbrightMaterial::SetRenderState(void        *pScene,
                                         unsigned int hProg)
 {
@@ -23,6 +32,9 @@ void FullbrightMaterial::SetRenderState(void        *pScene,
     glUniform4fv(hColor, 1, m_arColor);
 }
 
+//*****************************************************************************
+// SetColor
+//*****************************************************************************
 void FullbrightMaterial::SetColor(float fRed,
                                   float fGreen,
                                   float fBlue,

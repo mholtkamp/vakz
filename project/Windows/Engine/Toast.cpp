@@ -32,6 +32,9 @@ static char s_arText[TOAST_MAX_LENGTH + 1] = {0};
 static Quad* s_pQuad;
 static Text* s_pText;
 
+//*****************************************************************************
+// Toast
+//*****************************************************************************
 void Toast(const char* pText)
 {
     int nTextLength = 0;
@@ -41,6 +44,12 @@ void Toast(const char* pText)
     {
         s_pQuad = new Quad();
         s_pText = new Text();
+
+        // Perhaps add a ToastCleanup function to delete the Quad and Text
+        // objects. Doesn't make a big difference though, data will be
+        // held on graphics card until context is destroyed, and memory
+        // on heap will exist until program is terminated, but it is
+        // only one Text and one Quad object so...
     }
 
     memcpy(s_arText,pText, TOAST_MAX_LENGTH);
@@ -59,6 +68,9 @@ void Toast(const char* pText)
     
 }
 
+//*****************************************************************************
+// RenderToast
+//*****************************************************************************
 void RenderToast()
 {
     float fTime = 0.0f;
