@@ -123,9 +123,7 @@ int OrientedBoxCollider::Overlaps(Collider* pOther,
     if (pOther->GetType() == COLLIDER_ORIENTED_BOX)
     {
         LogDebug("Performing SAT with two OBBs");
-    }
-    else
-    {
+
         OrientedBoxCollider* pA = this;
         OrientedBoxCollider* pB = reinterpret_cast<OrientedBoxCollider*>(pOther);
         pTMatter = reinterpret_cast<Matter*>(pThisMatter);
@@ -139,14 +137,14 @@ int OrientedBoxCollider::Overlaps(Collider* pOther,
         GenerateLocalCoordinates(arBoxVertices);
         for(i = 0; i < VERTICES_PER_OBB; i++)
         {
-            matA.MultiplyVec3(&arBoxVertices[i*3], arAVerts);
+            matA.MultiplyVec3(&arBoxVertices[i*3], &arAVerts[i*3]);
         }
 
         // Now find the second box's coordinates in world space.
         pB->GenerateLocalCoordinates(arBoxVertices);
         for(i = 0; i < VERTICES_PER_OBB; i++)
         {
-            matB.MultiplyVec3(&arBoxVertices[i*3], arBVerts);
+            matB.MultiplyVec3(&arBoxVertices[i*3], &arBVerts[i*3]);
         }
 
         // Find the primary axes in world space for A and B
@@ -199,6 +197,7 @@ int OrientedBoxCollider::Overlaps(Collider* pOther,
             }
         }
     }
+
 
     return 1;
 }

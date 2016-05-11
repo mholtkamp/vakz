@@ -20,6 +20,7 @@
 #include <math.h>
 
 #define ROT_SPEED 70.0f
+#define MATTER_ROT_SPEED 15.0f
 #define MOVE_SPEED 5.0f
 #define THRESH 0.4f
 #define MAT_ROT_SPEED 0.5f
@@ -70,9 +71,6 @@ int main()
     pWhiteRimMat->SetRimColor(arWhiteRimColor);
 
 
-    // Create FlowerPot
-    Matter* pFlowerPots               = new Matter[FLOWER_POT_COUNT];
-    MeshCollider* pFlowerPotColliders = new MeshCollider[FLOWER_POT_COUNT];
 
     StaticMesh* pFlowerPotStaticMesh = new StaticMesh();
     pFlowerPotStaticMesh->Load("flowerpot.obj");
@@ -80,29 +78,19 @@ int main()
     pFlowerPotCollisionMesh->LoadGeometry("flowerpot_collider.obj");
     Texture* pFlowerPotTexture = new Texture();
     pFlowerPotTexture->LoadBMP("flowerpot_texture.bmp");
+    OrientedBoxCollider* pFlowerCollider = new OrientedBoxCollider();
+    pFlowerCollider->EnableRendering();
+    pFlowerCollider->SetHalfExtents(0.5f, 1.0f, 0.5f);
+    pFlowerCollider->SetRelativeRotation(14.0f, 10.0f, 12.0f);
+    pFlowerCollider->SetColor(0.2f, 0.1f, 8.0f, 0.3f);
 
-    for (int fp = 0; fp < FLOWER_POT_COUNT; fp++)
-    {
-        pFlowerPots[fp].SetMesh(pFlowerPotStaticMesh);
-        //pFlowerPots[fp].SetMaterial(pWhiteMat);
-        pFlowerPots[fp].SetMaterial(pWhiteRimMat);
-        pFlowerPots[fp].SetPosition((float) (fp % 10), 
-                                    (float) (fp / 10), 
-                                    (float)(-fp / 10));
-        pFlowerPots[fp].SetRotation(0.0f, 0.0f, 0.0f);
-
-        pFlowerPots[fp].SetTexture(pFlowerPotTexture);
-
-        pFlowerPotColliders[fp].AssignMesh(pFlowerPotCollisionMesh);
-        //pFlowerPotCollider->EnableRendering();
-        pFlowerPots[fp].SetCollider(&(pFlowerPotColliders[fp]));
-        //pFlowerPot->SetRigid(1);
-
-        // Add to scene
-        //pTestScene->AddMatter(&(pFlowerPots[fp]));
-    }
-
-    pTestScene->AddMatter(&(pFlowerPots[0]));
+    Matter* pFlower = new Matter();
+    pFlower->SetMesh(pFlowerPotStaticMesh);
+    pFlower->SetMaterial(pWhiteMat);
+    pFlower->SetPosition(-1.0f, 0.0f, 0.0f);
+    pFlower->SetTexture(pFlowerPotTexture);
+    pFlower->SetCollider(pFlowerCollider);
+    pTestScene->AddMatter(pFlower);
     
 
     // Create TestAnim
@@ -182,16 +170,20 @@ int main()
     float fRotY = 0.0f;
     float fRotZ = 0.0f;
     int nLock = 0;
+
     float fBearX = -3.5f;
     float fBearY = 0.0f;
     float fBearZ = 0.0f;
+    float fBearRotX = 0.0f;
+    float fBearRotY = 0.0f;
+    float fBearRotZ = 0.0f;
+    float fFlowerRotX = 0.0f;
+    float fFlowerRotY = 0.0f;
+    float fFlowerRotZ = 0.0f;
+
     float fCube2Rot = 0.0f;
     float fAnimSpeed = 1.0f;
     float fRimSize = 0.2f;
-
-    float fMatRotX = 0.0f;
-    float fMatRotY = 0.0f;
-    float fMatRotZ = 0.0f;
 
     int nRenderCount = 0;
     Timer timer;
@@ -341,40 +333,59 @@ int main()
             pTestAnim->ResetAnimation();
         }
 
-        pTestAnim->SetRotation(fMatRotX,
-                               fMatRotY,
-                               fMatRotZ);
+        // OBB Collision test controls
+        if (!IsKeyDown(VKEY_Z))
+        {
+            if (IsKeyDown(VKEY_U))
+                fBearRotX += MATTER_ROT_SPEED * fSeconds;
+            if (IsKeyDown(VKEY_I))
+                fBearRotY += MATTER_ROT_SPEED * fSeconds;
+            if (IsKeyDown(VKEY_O))
+                fBearRotZ += MATTER_ROT_SPEED * fSeconds;
 
-        //pFlowerPots[0].SetRotation(fMatRotX,
-        //                           fMatRotY,
-        //                           fMatRotZ);
+            if (IsKeyDown(VKEY_J))
+                fFlowerRotX += MATTER_ROT_SPEED * fSeconds;
+            if (IsKeyDown(VKEY_K))
+                fFlowerRotY += MATTER_ROT_SPEED * fSeconds;
+            if (IsKeyDown(VKEY_L))
+                fFlowerRotZ += MATTER_ROT_SPEED * fSeconds;
+        }
+        else
+        {
+            if (IsKeyDown(VKEY_U))
+                fBearRotX -= MATTER_ROT_SPEED * fSeconds;
+            if (IsKeyDown(VKEY_I))
+                fBearRotY -= MATTER_ROT_SPEED * fSeconds;
+            if (IsKeyDown(VKEY_O))
+                fBearRotZ -= MATTER_ROT_SPEED * fSeconds;
+
+            if (IsKeyDown(VKEY_J))
+                fFlowerRotX -= MATTER_ROT_SPEED * fSeconds;
+            if (IsKeyDown(VKEY_K))
+                fFlowerRotY -= MATTER_ROT_SPEED * fSeconds;
+            if (IsKeyDown(VKEY_L))
+                fFlowerRotZ -= MATTER_ROT_SPEED * fSeconds;
+        }
+
+
+        pTestAnim->SetRotation(fBearRotX,
+                               fBearRotY,
+                               fBearRotZ);
+
+        pFlower->SetRotation(fFlowerRotX,
+                             fFlowerRotY,
+                             fFlowerRotZ);
+
+        if (pFlower->Overlaps(pTestAnim))
+        {
+            colText.SetText("OVERLAP");
+        }
+        else
+        {
+            colText.SetText("No OVERLAP");
+        }
 
         //pTestAnim->SetPosition(fBearX, fBearY, fBearZ);
-
-        if (IsKeyDown(VKEY_J))
-        {
-            fRimSize += 0.002f;
-            pRimMat->SetRimSize(fRimSize);
-            pWhiteRimMat->SetRimSize(fRimSize);
-        }
-        if (IsKeyDown(VKEY_K))
-        {
-            fRimSize -= 0.002f;
-            pRimMat->SetRimSize(fRimSize);
-            pWhiteRimMat->SetRimSize(fRimSize);
-        }
-        
-        if (IsKeyDown(VKEY_G))
-        {
-            pRimMat->SetRimStyle(RIM_STYLE_SOFT);
-            pWhiteRimMat->SetRimStyle(RIM_STYLE_SOFT);
-        }
-
-        if (IsKeyDown(VKEY_H))
-        {
-            pRimMat->SetRimStyle(RIM_STYLE_HARD);
-            pWhiteRimMat->SetRimStyle(RIM_STYLE_HARD);
-        }
 
         pCamera->SetPosition(fX, fY, fZ);
         pCamera->SetRotation(fRotX, fRotY, fRotZ);
@@ -433,6 +444,5 @@ int main()
     delete pBlueMat;
     delete pWhiteMat;
     delete pTestScene;
-    delete [] pFlowerPots;
     exit(0);
 }
