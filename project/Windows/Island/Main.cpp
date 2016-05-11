@@ -8,6 +8,7 @@
 #include "Timer.h"
 #include "Matrix.h"
 #include "BoxCollider.h"
+#include "OrientedBoxCollider.h"
 #include "ResourceLibrary.h"
 #include "DiffuseMaterial.h"
 #include "DirectionalLight.h"
@@ -114,12 +115,13 @@ int main()
     pTestAnim->StartAnimation();
     pTestAnim->SetMaterial(pRimMat);
     pTestAnim->SetPosition(-3.5f, 0.0f, 0.0f);
-    BoxCollider* pTestCollider = new BoxCollider();
-    //pTestCollider->SetExtents(-0.706f, 0.706f,
-    //                           0.0f,   2.464f,
-    //                          -0.706f, 0.706f);
+    OrientedBoxCollider* pTestCollider = new OrientedBoxCollider();
+    pTestCollider->SetRelativePosition(0.0f, 1.23f, 0.3f);
+    pTestCollider->SetHalfExtents(0.70f, 1.23f, 0.70f);
+    pTestCollider->EnableRendering();
+    pTestCollider->SetRelativeRotation(0.0f, 0.0f, 0.0f);
     pTestAnim->SetCollider(pTestCollider);
-    pTestAnim->SetScale(0.25f, 0.25f, 0.25f);
+    pTestAnim->SetScale(1.0f, 1.0f, 1.0f);
     //pTestAnim->SetPhysical(1);
 
     LogDebug("Loaded both meshes.");
@@ -144,10 +146,10 @@ int main()
     pTestText->SetText("Animation:\nWave");
 
     // Add the test cube to the scene
-    //pTestScene->AddMatter(pTestAnim);
+    pTestScene->AddMatter(pTestAnim);
 
     // Add text to screen
-    //pTestScene->AddGlyph(pTestText);
+    pTestScene->AddGlyph(pTestText);
 
     // Collision text
     Text colText;
@@ -156,7 +158,7 @@ int main()
     colText.SetPosition(0.5f, 0.8f);
     colText.SetScale(0.6f, 0.8f);
     colText.SetText("No Collision");
-    //pTestScene->AddGlyph(&colText);
+    pTestScene->AddGlyph(&colText);
 
     // Particle System Test
     ParticleSystem* pParticleSystem = new ParticleSystem();
@@ -339,104 +341,13 @@ int main()
             pTestAnim->ResetAnimation();
         }
 
-        if (IsKeyDown(VKEY_U))
-        {
-            fAnimSpeed -= 0.005f;
-            pTestAnim->SetAnimationSpeed(fAnimSpeed);
-        }
-
-        if (IsKeyDown(VKEY_I))
-        {
-            fAnimSpeed += 0.005f;
-            pTestAnim->SetAnimationSpeed(fAnimSpeed);
-        }
-
-        if (IsKeyDown(VKEY_O))
-        {
-            fAnimSpeed = 1.0f;
-            pTestAnim->SetAnimationSpeed(fAnimSpeed);
-        }
-
-        if (IsKeyDown(VKEY_1))
-        {
-            pTestAnim->SetAnimation("Wave");
-            pTestText->SetText("Animation:\nWave");
-            pTestAnim->ResetAnimation();
-        }
-
-        if (IsKeyDown(VKEY_2))
-        {
-            pTestAnim->SetAnimation("No");
-            pTestText->SetText("Animation:\nNo");
-            pTestAnim->ResetAnimation();
-        }
-
-        if (IsKeyDown(VKEY_N))
-        {
-            if (IsKeyDown(VKEY_Z))
-            {
-                fTextScaleX -= 0.005f;
-            }
-            else
-            {
-                fTextScaleX += 0.005f;
-            }
-
-            pTestText->SetScale(fTextScaleX, fTextScaleY);
-        }
-
-        if (IsKeyDown(VKEY_M))
-        {
-            if (IsKeyDown(VKEY_Z))
-            {
-                fTextScaleY -= 0.005f;
-            }
-            else
-            {
-                fTextScaleY += 0.005f;
-            }
-
-            pTestText->SetScale(fTextScaleX, fTextScaleY);
-        }
-
-        if (IsKeyDown(VKEY_Z))
-        {
-            if (IsKeyDown(VKEY_C))
-            {
-                fMatRotX -= MAT_ROT_SPEED;
-            }
-            if (IsKeyDown(VKEY_V))
-            {
-                fMatRotY -= MAT_ROT_SPEED;
-            }
-            if (IsKeyDown(VKEY_B))
-            {
-                fMatRotZ -= MAT_ROT_SPEED;
-            }
-        }
-        else
-        {
-            if (IsKeyDown(VKEY_C))
-            {
-                fMatRotX += MAT_ROT_SPEED;
-            }
-            if (IsKeyDown(VKEY_V))
-            {
-                fMatRotY += MAT_ROT_SPEED;
-            }
-            if (IsKeyDown(VKEY_B))
-            {
-                fMatRotZ += MAT_ROT_SPEED;
-            }
-        }
-
         pTestAnim->SetRotation(fMatRotX,
                                fMatRotY,
                                fMatRotZ);
 
-        pFlowerPots[0].SetRotation(fMatRotX,
-                                   fMatRotY,
-                                   fMatRotZ);
+        //pFlowerPots[0].SetRotation(fMatRotX,
+        //                           fMatRotY,
+        //                           fMatRotZ);
 
         //pTestAnim->SetPosition(fBearX, fBearY, fBearZ);
 
@@ -468,13 +379,13 @@ int main()
         pCamera->SetPosition(fX, fY, fZ);
         pCamera->SetRotation(fRotX, fRotY, fRotZ);
 
-        if (IsPointerDown())
-        {
+        //if (IsPointerDown())
+        //{
             //fCube2Rot += fSeconds * ROT_SPEED;
             //pTestMonkey->SetRotation(0.0f, fCube2Rot, 0.0f);
             //pTestCube->SetRotation(fCube2Rot, 0.0f, 0.0f);
             //pTestAnim->SetRotation(0.0f, -1.0f * fCube2Rot, 0.0f);
-        }
+        //}
 
         //if (pTestAnim->Overlaps(pFlowerPot))
         //{

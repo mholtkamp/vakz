@@ -33,6 +33,8 @@ private:
 
     void GenerateLocalCoordinates(float* arRes);
 
+    int CheckIntervalOverlap(float* arAxis, float* arVertsA, float* arVertsB);
+
     Matrix m_matRotation;
 
     float m_arHalfExtents[3];
