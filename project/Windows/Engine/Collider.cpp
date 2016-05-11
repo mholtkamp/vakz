@@ -12,15 +12,9 @@ Collider::Collider()
 {
     m_nType = COLLIDER_NO_TYPE;
 
-    m_fX = 0.0f;
-    m_fY = 0.0f;
-    m_fZ = 0.0f;
-    m_fScaleX = 0.0f;
-    m_fScaleY = 0.0f;
-    m_fScaleZ = 0.0f;
-    m_fRotX = 0.0f;
-    m_fRotY = 0.0f;
-    m_fRotZ = 0.0f;
+    m_arPosition[0] = 0.0f;
+    m_arPosition[1] = 0.0f;
+    m_arPosition[2] = 0.0f;
 
     m_arRenderColor[0] = DEFAULT_COLLIDER_COLOR_R;
     m_arRenderColor[1] = DEFAULT_COLLIDER_COLOR_G;
@@ -49,37 +43,13 @@ int Collider::GetType()
 //*****************************************************************************
 // SetPosition
 //*****************************************************************************
-void Collider::SetPosition(float fX,
-                           float fY,
-                           float fZ)
+void Collider::SetRelativePosition(float fX,
+                                   float fY,
+                                   float fZ)
 {
-    m_fX = fX;
-    m_fY = fY;
-    m_fZ = fZ;
-}
-
-//*****************************************************************************
-// SetScale
-//*****************************************************************************
-void Collider::SetScale(float fScaleX,
-                        float fScaleY,
-                        float fScaleZ)
-{
-    m_fScaleX = fScaleX;
-    m_fScaleY = fScaleY;
-    m_fScaleZ = fScaleZ;
-}
-
-//*****************************************************************************
-// SetRotation
-//*****************************************************************************
-void Collider::SetRotation(float fRotX,
-                           float fRotY,
-                           float fRotZ)
-{
-    m_fRotX = fRotX;
-    m_fRotY = fRotY;
-    m_fRotZ = fRotZ;
+    m_arPosition[0] = fX;
+    m_arPosition[1] = fY;
+    m_arPosition[2] = fZ;
 }
 
 //*****************************************************************************
@@ -94,22 +64,6 @@ void Collider::SetColor(float fRed,
     m_arRenderColor[1] = fGreen;
     m_arRenderColor[2] = fBlue;
     m_arRenderColor[3] = fAlpha;
-}
-
-//*****************************************************************************
-// SetMatter
-//*****************************************************************************
-void Collider::SetMatter(void* pMatter)
-{
-    m_pMatter = pMatter;
-}
-
-//*****************************************************************************
-// GetMatter
-//*****************************************************************************
-void* Collider::GetMatter()
-{
-    return m_pMatter;
 }
 
 //*****************************************************************************

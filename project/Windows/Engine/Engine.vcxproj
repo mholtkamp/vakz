@@ -81,6 +81,7 @@
     <ClCompile Include="ImageLoader.cpp" />
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="MeshCollider.cpp" />
+    <ClCompile Include="OrientedBoxCollider.cpp" />
     <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="Rect.cpp" />
     <ClCompile Include="RimlitMaterial.cpp" />
@@ -130,6 +131,7 @@
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
+    <ClInclude Include="OrientedBoxCollider.h" />
     <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="Rect.h" />
     <ClInclude Include="RimlitMaterial.h" />

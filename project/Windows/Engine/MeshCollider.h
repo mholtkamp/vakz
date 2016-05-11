@@ -53,7 +53,9 @@ public:
     //##   int - '1' if the colliders overlap,
     //##         '0' otherwise.
     //## **********************************************************************
-    int Overlaps(Collider* pOther);
+    int Overlaps(Collider* pOther,
+                 void* pOtherMatter,
+                 void* pThisMatter);
 
     //## **********************************************************************
     //## GetVertexCount

@@ -89,6 +89,8 @@ public:
     //## **********************************************************************
     void Render(void* pScene);
 
+    const float* GetPosition();
+
     //## **********************************************************************
     //## SetPosition
     //##
@@ -103,6 +105,8 @@ public:
                      float fY,
                      float fZ);
 
+    const float* GetRotation();
+
     //## **********************************************************************
     //## SetRotation
     //##
@@ -116,6 +120,8 @@ public:
     void SetRotation(float fRotX,
                      float fRotY,
                      float fRotZ);
+
+    const float* GetScale();
 
     //## **********************************************************************
     //## SetScale
@@ -348,19 +354,13 @@ private:
     int m_nVisible;
 
     //## Position
-    float m_fX;
-    float m_fY;
-    float m_fZ;
+    float m_arPosition[3];
 
     //## Orientation
-    float m_fRotX;
-    float m_fRotY;
-    float m_fRotZ;
+    float m_arRotation[3];
 
     //## Scale
-    float m_fScaleX;
-    float m_fScaleY;
-    float m_fScaleZ;
+    float m_arScale[3];
 
     //## Mesh pointer
     Mesh*   m_pMesh;

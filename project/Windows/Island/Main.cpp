@@ -115,9 +115,9 @@ int main()
     pTestAnim->SetMaterial(pRimMat);
     pTestAnim->SetPosition(-3.5f, 0.0f, 0.0f);
     BoxCollider* pTestCollider = new BoxCollider();
-    pTestCollider->SetExtents(-0.706f, 0.706f,
-                               0.0f,   2.464f,
-                              -0.706f, 0.706f);
+    //pTestCollider->SetExtents(-0.706f, 0.706f,
+    //                           0.0f,   2.464f,
+    //                          -0.706f, 0.706f);
     pTestAnim->SetCollider(pTestCollider);
     pTestAnim->SetScale(0.25f, 0.25f, 0.25f);
     //pTestAnim->SetPhysical(1);

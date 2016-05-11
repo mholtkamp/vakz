@@ -13,17 +13,17 @@
 //*****************************************************************************
 Matter::Matter()
 {
-    m_fX = 0.0f;
-    m_fY = 0.0f;
-    m_fZ = 0.0f;
+    m_arPosition[0] = 0.0f;
+    m_arPosition[1] = 0.0f;
+    m_arPosition[2] = 0.0f;
 
-    m_fRotX = 0.0f;
-    m_fRotY = 0.0f;
-    m_fRotZ = 0.0f;
+    m_arRotation[0] = 0.0f;
+    m_arRotation[1] = 0.0f;
+    m_arRotation[2] = 0.0f;
 
-    m_fScaleX = 1.0f;
-    m_fScaleY = 1.0f;
-    m_fScaleZ = 1.0f;
+    m_arScale[0] = 1.0f;
+    m_arScale[1] = 1.0f;
+    m_arScale[2] = 1.0f;
 
     m_nVisible = 1;
 
@@ -88,13 +88,6 @@ void Matter::SetTexture(Texture* pTexture)
 void Matter::SetCollider(Collider* pCollider)
 {
     m_pCollider = pCollider;
-    if (m_pCollider != 0)
-    {
-        m_pCollider->SetPosition(m_fX, m_fY, m_fZ);
-        m_pCollider->SetRotation(m_fRotX, m_fRotY, m_fRotZ);
-        m_pCollider->SetScale(m_fScaleX, m_fScaleY, m_fScaleZ);
-        m_pCollider->SetMatter(this);
-    }
 }
 
 //*****************************************************************************
@@ -227,14 +220,9 @@ void Matter::UpdatePhysics(void* pScene,
     if (m_nPhysical != 0)
     {
         m_arVelocity[1] += -1 * pScn->GetGravity() * fSeconds; 
-        m_fX += m_arVelocity[0] * fSeconds;
-        m_fY += m_arVelocity[1] * fSeconds;
-        m_fZ += m_arVelocity[2] * fSeconds;
-
-        if (m_pCollider != 0)
-        {
-            m_pCollider->SetPosition(m_fX, m_fY, m_fZ);
-        }
+        m_arPosition[0] += m_arVelocity[0] * fSeconds;
+        m_arPosition[1] += m_arVelocity[1] * fSeconds;
+        m_arPosition[2] += m_arVelocity[2] * fSeconds;
     }
 }
 
@@ -256,17 +244,35 @@ void Matter::GenerateModelMatrix()
     m_matModel.LoadIdentity();
 
     // Translate
-    m_matModel.Translate(m_fX, m_fY, m_fZ);
+    m_matModel.Translate(m_arPosition[0], 
+                         m_arPosition[1], 
+                         m_arPosition[2]);
 
     // Rotate
-    m_matModel.Rotate(m_fRotX, 1.0f, 0.0f, 0.0f);
-    m_matModel.Rotate(m_fRotY, 0.0f, 1.0f, 0.0f);
-    m_matModel.Rotate(m_fRotZ, 0.0f, 0.0f, 1.0f);
+    m_matModel.Rotate(m_arRotation[0], 1.0f, 0.0f, 0.0f);
+    m_matModel.Rotate(m_arRotation[1], 0.0f, 1.0f, 0.0f);
+    m_matModel.Rotate(m_arRotation[2], 0.0f, 0.0f, 1.0f);
 
     // Scale
-    m_matModel.Scale(m_fScaleX, m_fScaleY, m_fScaleZ);
+    m_matModel.Scale(m_arScale[0], 
+                     m_arScale[1], 
+                     m_arScale[2]);
 }
 
+const float* Matter::GetPosition()
+{
+    return m_arPosition;
+}
+
+const float* Matter::GetRotation()
+{
+    return m_arRotation;
+}
+
+const float* Matter::GetScale()
+{
+    return m_arScale;
+}
 //*****************************************************************************
 // SetPosition
 //*****************************************************************************
@@ -274,14 +280,9 @@ void Matter::SetPosition(float fX,
                          float fY,
                          float fZ)
 {
-    m_fX = fX;
-    m_fY = fY;
-    m_fZ = fZ;
-
-    if (m_pCollider != 0)
-    {
-        m_pCollider->SetPosition(fX, fY, fZ);
-    }
+    m_arPosition[0] = fX;
+    m_arPosition[1] = fY;
+    m_arPosition[2] = fZ;
 }
 
 //*****************************************************************************
@@ -291,14 +292,9 @@ void Matter::SetRotation(float fRotX,
                          float fRotY,
                          float fRotZ)
 {
-    m_fRotX = fRotX;
-    m_fRotY = fRotY;
-    m_fRotZ = fRotZ;
-
-    if (m_pCollider != 0)
-    {
-        m_pCollider->SetRotation(fRotX, fRotY, fRotZ);
-    }
+    m_arRotation[0] = fRotX;
+    m_arRotation[1] = fRotY;
+    m_arRotation[2] = fRotZ;
 }
 
 //*****************************************************************************
@@ -308,14 +304,9 @@ void Matter::SetScale(float fScaleX,
                       float fScaleY,
                       float fScaleZ)
 {
-    m_fScaleX = fScaleX;
-    m_fScaleY = fScaleY;
-    m_fScaleZ = fScaleZ;
-
-    if (m_pCollider != 0)
-    {
-        m_pCollider->SetScale(fScaleX, fScaleY, fScaleZ);
-    }
+    m_arScale[0] = fScaleX;
+    m_arScale[1] = fScaleY;
+    m_arScale[2] = fScaleZ;
 }
 
 //*****************************************************************************
@@ -325,14 +316,9 @@ void Matter::Translate(float fTransX,
                        float fTransY,
                        float fTransZ)
 {
-    m_fX += fTransX;
-    m_fY += fTransY;
-    m_fZ += fTransZ;
-
-    if (m_pCollider != 0)
-    {
-        m_pCollider->SetPosition(m_fX, m_fY, m_fZ);
-    }
+    m_arPosition[0] += fTransX;
+    m_arPosition[1] += fTransY;
+    m_arPosition[2] += fTransZ;
 }
 
 //*****************************************************************************
@@ -563,7 +549,9 @@ int Matter::Overlaps(Matter* pOther)
         pOther->GetCollider() != 0 &&
         m_pCollider           != 0)
     {
-        return m_pCollider->Overlaps(pOther->GetCollider());
+        return m_pCollider->Overlaps(pOther->GetCollider(),
+                                     pOther,
+                                     this);
     }
     else
     {

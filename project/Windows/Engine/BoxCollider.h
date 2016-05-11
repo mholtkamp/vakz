@@ -21,17 +21,17 @@ public:
     //## **********************************************************************
     //## SetExtents
     //##
-    //## Sets the bounds of the axis-aligned bounding box collider. As of now,
-    //## abs(fMinx) should equal abs(fMaxX). The coordinates should be
-    //## provided in model space, when checking collisions, the coordinates
-    //## will be translated to their world positions.
+    //## Sets the bounds of the axis-aligned bounding box collider. If the 
+    //## X Half extent is set to 0.5f, then the width of the collider will
+    //## be 1.0f along the X-Axis (always, as AABBs can not rotate.)
     //## **********************************************************************
-    void SetExtents(float fMinX,
-                    float fMaxX,
-                    float fMinY,
-                    float fMaxY,
-                    float fMinZ,
-                    float fMaxZ);
+    void SetHalfExtents(float fHalfX,
+                        float fHalfY,
+                        float fHalfZ);
+
+    const float* GetHalfExtents();
+
+    const float* GetRelativePosition();
 
     //## **********************************************************************
     //## Render
@@ -55,19 +55,9 @@ public:
     //##   pOther - the other collider of interest. Does not need to be a
     //##            BoxCollider.
     //## **********************************************************************
-    int Overlaps(Collider* pOther);
-
-    //## **********************************************************************
-    //## GetMin/GetMax
-    //## 
-    //## Returns the extent of the bounding box in world space coordinates.
-    //## **********************************************************************
-    float GetMinX();
-    float GetMaxX();
-    float GetMinY();
-    float GetMaxY();
-    float GetMinZ();
-    float GetMaxZ();
+    int Overlaps(Collider* pOther,
+                 void*     pOtherMatter,
+                 void*     pThisMatter);
 
     //## **********************************************************************
     //## Enable/DisableRendering
@@ -79,22 +69,12 @@ public:
 
 private:
 
-    //## Extents of axis aligned bounding box
-    //## These are local extents.
-    float m_fMinX;
-    float m_fMaxX;
-    float m_fMinY;
-    float m_fMaxY;
-    float m_fMinZ;
-    float m_fMaxZ;
+    //## The local half-extents of the box.
+    float m_arHalfExtents[3];
 
     //## Flag to indicate whether the box should be rendered
     //## for debugging purposes.
     int m_nRender;
-
-    //## A position array used for rendering the box collider
-    //## if the enable has been set.
-    float* m_arPosition;
 };
 
 #endif

@@ -3,21 +3,18 @@
 #include "TriangleBoxCollision.h"
 #include "Matter.h"
 
+
 //*****************************************************************************
 // Constructor
 //*****************************************************************************
 BoxCollider::BoxCollider()
 {
     m_nType = COLLIDER_BOX;
-    m_fMinX = -1.0f;
-    m_fMaxX =  1.0f;
-    m_fMinY = -1.0f;
-    m_fMaxY =  1.0f;
-    m_fMinZ = -1.0f;
-    m_fMaxZ =  1.0f;
+    m_arHalfExtents[0] = 1.0f;
+    m_arHalfExtents[1] = 1.0f;
+    m_arHalfExtents[2] = 1.0f;
 
     m_nRender    = 0;
-    m_arPosition = 0;
 }
 
 //*****************************************************************************
@@ -25,29 +22,35 @@ BoxCollider::BoxCollider()
 //*****************************************************************************
 BoxCollider::~BoxCollider()
 {
-    if (m_arPosition != 0)
-    {
-        delete [] m_arPosition;
-        m_arPosition = 0;
-    }
+
 }
 
 //*****************************************************************************
-// SetExtents
+// SetHalfExtents
 //*****************************************************************************
-void BoxCollider::SetExtents(float fMinX,
-                             float fMaxX,
-                             float fMinY,
-                             float fMaxY,
-                             float fMinZ,
-                             float fMaxZ)
+void BoxCollider::SetHalfExtents(float fHalfX,
+                                 float fHalfY,
+                                 float fHalfZ)
 {
-    m_fMinX = fMinX;
-    m_fMaxX = fMaxX;
-    m_fMinY = fMinY;
-    m_fMaxY = fMaxY;
-    m_fMinZ = fMinZ;
-    m_fMaxZ = fMaxZ;
+    m_arHalfExtents[0] = fHalfX;
+    m_arHalfExtents[1] = fHalfY;
+    m_arHalfExtents[2] = fHalfZ;
+}
+
+//*****************************************************************************
+// GetHalfExtents
+//*****************************************************************************
+const float* BoxCollider::GetHalfExtents()
+{
+    return m_arHalfExtents;
+}
+
+//*****************************************************************************
+// GetRelativePosition
+//*****************************************************************************
+const float* BoxCollider::GetRelativePosition()
+{
+    return m_arPosition;
 }
 
 //*****************************************************************************
@@ -57,43 +60,96 @@ void BoxCollider::Render(Matrix* pMVP)
 {
     if (m_nRender != 0)
     {
-        if (m_arPosition == 0)
-        {
-            //@@ TODO
-        } 
+
     }
 }
+
 
 //*****************************************************************************
 // Overlaps
 //*****************************************************************************
-int BoxCollider::Overlaps(Collider* pOther)
+int BoxCollider::Overlaps(Collider* pOther,
+                          void* pOtherMatter,
+                          void* pThisMatter)
 {
-    int i                  = 0;
-    int nVert              = 0;
-    int nTriangles         = 0;
-    BoxCollider*  pBox     = 0;
-    MeshCollider* pMesh    = 0;
-    Matrix*       pMatrixM = 0;
-    float arTriangle[3][3] = {0.0f};
-    float arTransTri[3][3] = {0.0f};
+    int i                    = 0;
+    int nVert                = 0;
+    int nTriangles           = 0;
+    BoxCollider*  pBox       = 0;
+    MeshCollider* pMesh      = 0;
+    Matrix*       pMatrixM   = 0;
+    Matter*       pOMatter   = 0;
+    Matter*       pTMatter   = 0;
+    float arTriangle[3][3]   = {0.0f};
+    float arTransTri[3][3]   = {0.0f};
+
+    const float* pTPosition            = 0;
+    const float* pTScale               = 0;
+    const float* pOPosition            = 0;
+    const float* pOScale               = 0;
+    const float* pOColliderPosition    = 0;
+    const float* pOColliderHalfExtents = 0;
 
     if (pOther->GetType() == COLLIDER_BOX)
     {
-        pBox = reinterpret_cast<BoxCollider*>(pOther);
-        
-        if (pBox->GetMinX() > this->GetMaxX())
+        pBox     = reinterpret_cast<BoxCollider*>(pOther);
+        pOMatter = reinterpret_cast<Matter*>(pOtherMatter);
+        pTMatter = reinterpret_cast<Matter*>(pThisMatter);
+
+        pTPosition            = pTMatter->GetPosition();
+        pTScale               = pTMatter->GetScale();
+        pOPosition            = pOMatter->GetPosition();
+        pOScale               = pOMatter->GetScale();
+        pOColliderPosition    = pBox->GetRelativePosition();
+        pOColliderHalfExtents = pBox->GetHalfExtents();
+
+        if (pOPosition[0] + pOScale[0]*(pOColliderPosition[0] - pOColliderHalfExtents[0]) >
+            pTPosition[0] + pTScale[0]*(m_arPosition[0] + m_arHalfExtents[0]))
+        {
             return 0;
-        if (pBox->GetMinY() > this->GetMaxY())
+        }
+        //if (pBox->GetMinX() > this->GetMaxX())
+        //    return 0;
+
+        if (pOPosition[1] + pOScale[1]*(pOColliderPosition[1] - pOColliderHalfExtents[1]) >
+            pTPosition[1] + pTScale[1]*(m_arPosition[1] + m_arHalfExtents[1]))
+        {
             return 0;
-        if (pBox->GetMinZ() > this->GetMaxZ())
+        }
+        //if (pBox->GetMinY() > this->GetMaxY())
+        //    return 0;
+
+        if (pOPosition[2] + pOScale[2]*(pOColliderPosition[2] - pOColliderHalfExtents[2]) >
+            pTPosition[2] + pTScale[2]*(m_arPosition[2] + m_arHalfExtents[2]))
+        {
             return 0;
-        if (pBox->GetMaxX() < this->GetMinX())
+        }
+        //if (pBox->GetMinZ() > this->GetMaxZ())
+        //    return 0;
+
+        if (pOPosition[0] + pOScale[0]*(pOColliderPosition[0] + pOColliderHalfExtents[0]) <
+            pTPosition[0] + pTScale[0]*(m_arPosition[0] - m_arHalfExtents[0]))
+        {
             return 0;
-        if (pBox->GetMaxY() < this->GetMinY())
+        }
+        //if (pBox->GetMaxX() < this->GetMinX())
+        //    return 0;
+
+        if (pOPosition[1] + pOScale[1]*(pOColliderPosition[1] + pOColliderHalfExtents[1]) <
+            pTPosition[1] + pTScale[1]*(m_arPosition[1] - m_arHalfExtents[1]))
+        {
             return 0;
-        if (pBox->GetMaxZ() < this->GetMinZ())
+        }
+        //if (pBox->GetMaxY() < this->GetMinY())
+        //    return 0;
+
+        if (pOPosition[2] + pOScale[2]*(pOColliderPosition[2] + pOColliderHalfExtents[2]) <
+            pTPosition[2] + pTScale[2]*(m_arPosition[2] - m_arHalfExtents[2]))
+        {
             return 0;
+        }
+        //if (pBox->GetMaxZ() < this->GetMinZ())
+        //    return 0;
 
         return 1;
     }
@@ -101,22 +157,23 @@ int BoxCollider::Overlaps(Collider* pOther)
     {
         // We need a pointer to the owner Matter so that we can 
         // get the Matter's model matrix;
-        if (pOther->GetMatter() == 0)
+        if (pOtherMatter == 0)
         {
             return 0;
         }
 
-        pMatrixM = reinterpret_cast<Matter*>(pOther->GetMatter())->GetModelMatrix();
+        pMatrixM = reinterpret_cast<Matter*>(pOtherMatter)->GetModelMatrix();
+        pMesh    = reinterpret_cast<MeshCollider*>(pOther);
+        pTPosition            = pTMatter->GetPosition();
+        pTScale               = pTMatter->GetScale();
 
-        pMesh = reinterpret_cast<MeshCollider*>(pOther);
+        float arBoxCenter[3] = {m_arPosition[0] * pTScale[0] + pTPosition[0],
+                                m_arPosition[1] * pTScale[1] + pTPosition[1],
+                                m_arPosition[2] * pTScale[2] + pTPosition[2]};
 
-        float arBoxCenter[3] = {(GetMinX() + GetMaxX())/2.0f,
-                                (GetMinY() + GetMaxY())/2.0f,
-                                (GetMinZ() + GetMaxZ())/2.0f};
-
-        float arBoxHalfSize[3] = {(GetMaxX() - GetMinX())/2.0f,
-                                  (GetMaxY() - GetMinY())/2.0f,
-                                  (GetMaxZ() - GetMinZ())/2.0f};
+        float arBoxHalfSize[3] = {m_arHalfExtents[0] * pTScale[0],
+                                  m_arHalfExtents[1] * pTScale[1],
+                                  m_arHalfExtents[2] * pTScale[2]};
 
         nTriangles = pMesh->GetVertexCount()/3;
 
@@ -144,30 +201,30 @@ int BoxCollider::Overlaps(Collider* pOther)
     return 0;
 }
 
-//*****************************************************************************
-// GetExtents
-//*****************************************************************************
-float BoxCollider::GetMinX()
-{
-    return m_fMinX * m_fScaleX + m_fX;
-}
-float BoxCollider::GetMaxX()
-{
-    return m_fMaxX * m_fScaleX + m_fX;
-}
-float BoxCollider::GetMinY()
-{
-    return m_fMinY * m_fScaleY + m_fY;
-}
-float BoxCollider::GetMaxY()
-{
-    return m_fMaxY * m_fScaleY + m_fY;
-}
-float BoxCollider::GetMinZ()
-{
-    return m_fMinZ * m_fScaleZ + m_fZ;
-}
-float BoxCollider::GetMaxZ()
-{
-    return m_fMaxZ * m_fScaleZ + m_fZ;
-}
+////*****************************************************************************
+//// GetExtents
+////*****************************************************************************
+//float BoxCollider::GetMinX()
+//{
+//    return m_fMinX * m_arScale[0] + m_arPosition[0];
+//}
+//float BoxCollider::GetMaxX()
+//{
+//    return m_fMaxX * m_arScale[0] + m_arPosition[0];
+//}
+//float BoxCollider::GetMinY()
+//{
+//    return m_fMinY * m_arScale[1] + m_arPosition[1];
+//}
+//float BoxCollider::GetMaxY()
+//{
+//    return m_fMaxY * m_arScale[1] + m_arPosition[1];
+//}
+//float BoxCollider::GetMinZ()
+//{
+//    return m_fMinZ * m_arScale[2] + m_arPosition[2];
+//}
+//float BoxCollider::GetMaxZ()
+//{
+//    return m_fMaxZ * m_arScale[2] + m_arPosition[2];
+//}
