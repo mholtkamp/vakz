@@ -81,7 +81,7 @@ int main()
     OrientedBoxCollider* pFlowerCollider = new OrientedBoxCollider();
     pFlowerCollider->EnableRendering();
     pFlowerCollider->SetHalfExtents(0.5f, 1.0f, 0.5f);
-    pFlowerCollider->SetRelativeRotation(14.0f, 10.0f, 12.0f);
+    pFlowerCollider->SetRelativeRotation(0.0f, 0.0f, 0.0f);
     pFlowerCollider->SetColor(0.2f, 0.1f, 8.0f, 0.3f);
 
     Matter* pFlower = new Matter();
@@ -109,7 +109,6 @@ int main()
     pTestCollider->EnableRendering();
     pTestCollider->SetRelativeRotation(0.0f, 0.0f, 0.0f);
     pTestAnim->SetCollider(pTestCollider);
-    pTestAnim->SetScale(1.0f, 1.0f, 1.0f);
     //pTestAnim->SetPhysical(1);
 
     LogDebug("Loaded both meshes.");

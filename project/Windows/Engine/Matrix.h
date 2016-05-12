@@ -155,6 +155,9 @@ public:
     void MultiplyVec3(float* arVec3,
                       float* arRes);
 
+    void MultiplyVec3Dir(float* arVec3,
+                         float* arRes);
+
     //## **********************************************************************
     //## MultiplyVec4
     //##

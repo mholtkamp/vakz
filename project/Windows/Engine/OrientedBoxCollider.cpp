@@ -24,6 +24,10 @@ OrientedBoxCollider::~OrientedBoxCollider()
 
 void OrientedBoxCollider::Render(Matrix* pMVP)
 {
+    int i = 0;
+    int j = 0;
+    float arNormalVerts[3 * 2 * 3] = {0.0f};
+
     int hProg = GetShaderProgram(STATIC_FULLBRIGHT_PROGRAM);
     int hPosition    = -1;
     int hTextureMode = -1;
@@ -80,6 +84,28 @@ void OrientedBoxCollider::Render(Matrix* pMVP)
     glUniform4fv(hColor, 1, m_arRenderColor);
 
     glDrawElements(GL_TRIANGLES, 6 * 2 * 3, GL_UNSIGNED_BYTE, arBoxIndices);
+
+
+    // Now draw 3 primary normals
+    for (i = 0; i < 3; i++)
+    {
+        for (j = 0; j < 3; j++)
+        {
+            arNormalVerts[i*3*2 + 0 + j] = m_arPosition[j];
+            arNormalVerts[i*3*2 + 3 + j] = m_arPosition[j] + (i == j)*m_arHalfExtents[i]*2;
+        }
+    }
+    
+    glVertexAttribPointer(hPosition,
+                          3,
+                          GL_FLOAT,
+                          GL_FALSE,
+                          0,
+                          arNormalVerts);
+
+    glLineWidth(4.0f);
+    glDrawArrays(GL_LINES, 0, 6);
+    glLineWidth(1.0f);
 }
 
 int OrientedBoxCollider::Overlaps(Collider* pOther,
@@ -148,13 +174,13 @@ int OrientedBoxCollider::Overlaps(Collider* pOther,
         }
 
         // Find the primary axes in world space for A and B
-        matA.MultiplyVec3(arXVector,arAxesA);
-        matA.MultiplyVec3(arYVector,&arAxesA[3]);
-        matA.MultiplyVec3(arZVector,&arAxesA[6]);
+        matA.MultiplyVec3Dir(arXVector,arAxesA);
+        matA.MultiplyVec3Dir(arYVector,&arAxesA[3]);
+        matA.MultiplyVec3Dir(arZVector,&arAxesA[6]);
 
-        matB.MultiplyVec3(arXVector,arAxesB);
-        matB.MultiplyVec3(arYVector,&arAxesB[3]);
-        matB.MultiplyVec3(arZVector,&arAxesB[6]);
+        matB.MultiplyVec3Dir(arXVector,arAxesB);
+        matB.MultiplyVec3Dir(arYVector,&arAxesB[3]);
+        matB.MultiplyVec3Dir(arZVector,&arAxesB[6]);
 
         // Find the combined axes of each primary A axis
         // crossed with each primary B axis. (9 total)
@@ -287,4 +313,10 @@ int OrientedBoxCollider::CheckIntervalOverlap(float* arAxis, float* arVertsA, fl
 
     // The intervals didnt overlap, so return 1.
     return 1;
+}
+
+void OrientedBoxCollider::RenderPrimaryNormals(Matrix* pMVP)
+{
+    int i = 0;
+
 }
