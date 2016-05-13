@@ -146,10 +146,14 @@ public:
     //##   fTransX - x translation.
     //##   fTransY - y translation.
     //##   fTransZ - z translation.
+    //##   pScene  - pointer to scene in which matter should be moved.
+    //##             Needed to resolve collision properly if physical.
+    //##             A null pointer may be passed when moving non-physical matter
     //## **********************************************************************
     void Translate(float fTransX,
                    float fTransY,
-                   float fTransZ);
+                   float fTransZ,
+                   void* pScene);
 
     //## **********************************************************************
     //## IsVisible
@@ -269,17 +273,18 @@ public:
     void SetPhysical(int nPhysical);
 
     //## **********************************************************************
-    //## SetRigid
+    //## Set Mobile
     //##
-    //## Flag the matter as "rigid". Rigid matter cannot be moved and is
-    //## stored in an octree for collision detection purposes.
+    //## Flag the matter as "mobile". Mobile matter can be moved. Objects
+    //## in environments that will not move should be marked as non-mobile
+    //## to improve performance.
     //##
     //## Input:
     //##   nRigid - rigid flag.
-    //##            '0' to mark as non-rigid.
-    //##            '1' to mark as rigid.
+    //##            '0' to mark as non-mobile.
+    //##            '1' to mark as mobile.
     //## **********************************************************************
-    void SetRigid(int nRigid);
+    void SetMobile(int nMobile);
 
     //## **********************************************************************
     //## SetVelocity
@@ -401,13 +406,13 @@ private:
     //## Timer to record frame time
     Timer m_timerFrame;
 
-    //## Physical flag, let's engine know to apply physics on object.
+    //## Physical flag to let the engine know that the matter should be
+    //## used for collisions when translating a matter
     int m_nPhysical;
 
-    //## Rigid flag, collider should be used for applying physics to 
-    //## physical matters. Rigid matters are also added to the octree
-    //## upon becoming rigid.
-    int m_nRigid;
+    //## A flag to let the engine know that the matter can move, and
+    //## should not be placed in the static collision octree.
+    int m_nMobile;
 
     //## The velocity of the matter, split into X/Y/Z components
     float m_arVelocity[3];

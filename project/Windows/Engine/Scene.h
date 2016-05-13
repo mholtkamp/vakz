@@ -8,6 +8,7 @@
 #include "Glyph.h"
 #include "Effect.h"
 #include "ParticleSystem.h"
+#include "List.h"
 
 class Scene
 {
@@ -16,11 +17,7 @@ public:
     //## **********************************************************************
     //## Constructor
     //## **********************************************************************
-    Scene(int nMaxMatters = DEFAULT_MAX_MATTERS,
-          int nMaxLights  = DEFAULT_MAX_LIGHTS,
-          int nMaxGlyphs  = DEFAULT_MAX_GLYPHS,
-          int nMaxEffects = DEFAULT_MAX_EFFECTS,
-          int nMaxParticles = DEFAULT_MAX_PARTICLES);
+    Scene();
 
     //## **********************************************************************
     //## Destructor
@@ -138,7 +135,7 @@ public:
     //## Returns:
     //##   Light** - array of pointers to Lights.
     //## **********************************************************************
-    Light** GetLightArray();
+    List* GetLightList();
 
     //## **********************************************************************
     //## GetDirectionalLight
@@ -149,6 +146,10 @@ public:
     //##   DirectionalLight* - pointer to scene's directional light.
     //## **********************************************************************
     DirectionalLight* GetDirectionalLight();
+
+    List* GetMatterList();
+
+    int GetNumMatters();
 
     //## **********************************************************************
     //## SetAmbientLight
@@ -241,26 +242,12 @@ private:
                            Matrix* pProjection,
                            Matrix* pMVP);
 
-    //## Values that hold the maximum counts for each scene component.
-    int m_nMaxMatters;
-    int m_nMaxLights;
-    int m_nMaxGlyphs;
-    int m_nMaxEffects;
-    int m_nMaxParticles;
-
-    //## Values that hold the current number for each component.
-    int m_nNumMatters;
-    int m_nNumLights;
-    int m_nNumGlyphs;
-    int m_nNumEffects;
-    int m_nNumParticles;
-
     //## Arrays to hold scene components.
-    Matter** m_pMatters;
-    Light**  m_pLights;
-    Glyph**  m_pGlyphs;
-    Effect** m_pEffects;
-    ParticleSystem** m_pParticleSystems;
+    List m_lMatters;
+    List m_lLights;
+    List m_lGlyphs;
+    List m_lEffects;
+    List m_lParticleSystems;
 
     //## Pointer to camera that the 3D scene should be rendered from.
     Camera* m_pCamera;

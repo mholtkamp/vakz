@@ -72,11 +72,12 @@ void MeshCollider::Render(Matrix* pMVP)
 //*****************************************************************************
 // Overlaps
 //*****************************************************************************
-int MeshCollider::Overlaps(Collider* pOther,
-                           void* pOtherMatter,
-                           void* pThisMatter)
+OverlapResult MeshCollider::Overlaps(Collider* pOther,
+                                     void* pOtherMatter,
+                                     void* pThisMatter)
 {
-    return 0;
+    OverlapResult orResult;
+    return orResult;
 }
 
 //*****************************************************************************

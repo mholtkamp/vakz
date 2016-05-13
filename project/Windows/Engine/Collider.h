@@ -11,6 +11,23 @@ enum ColliderType
     COLLIDER_ORIENTED_BOX =  2
 };
 
+// This struct is returned by the Overlaps() method
+struct OverlapResult
+{
+    int m_nOverlapping;
+    float m_arLeastPenAxis[3];
+    float m_fOverlapDepth;
+
+    OverlapResult()
+    {
+        m_nOverlapping = 0;
+        m_arLeastPenAxis[0] = 0.0f;
+        m_arLeastPenAxis[1] = 0.0f;
+        m_arLeastPenAxis[2] = 0.0f;
+        m_fOverlapDepth = 0.0f;
+    }
+};
+
 class Collider
 {
 
@@ -92,9 +109,9 @@ public:
     //##   int - '1' if the colliders overlap,
     //##         '0' otherwise.
     //## **********************************************************************
-    virtual int Overlaps(Collider* pOther,
-                         void*   pOtherMatter,
-                         void*   pThisMatter) = 0;
+    virtual OverlapResult Overlaps(Collider* pOther,
+                                   void*   pOtherMatter,
+                                   void*   pThisMatter) = 0;
 
     //## **********************************************************************
     //## Enable/DisableRendering

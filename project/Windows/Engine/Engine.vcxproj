@@ -80,6 +80,7 @@
     <ClCompile Include="FullbrightMaterial.cpp" />
     <ClCompile Include="ImageLoader.cpp" />
     <ClCompile Include="Keyboard.cpp" />
+    <ClCompile Include="List.cpp" />
     <ClCompile Include="MeshCollider.cpp" />
     <ClCompile Include="OrientedBoxCollider.cpp" />
     <ClCompile Include="ParticleSystem.cpp" />
@@ -129,6 +130,7 @@
     <ClInclude Include="ImageLoader.h" />
     <ClInclude Include="InputHandler.h" />
     <ClInclude Include="Keyboard.h" />
+    <ClInclude Include="List.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="OrientedBoxCollider.h" />

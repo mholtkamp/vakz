@@ -108,10 +108,14 @@ void OrientedBoxCollider::Render(Matrix* pMVP)
     glLineWidth(1.0f);
 }
 
-int OrientedBoxCollider::Overlaps(Collider* pOther,
-                                  void* pOtherMatter,
-                                  void* pThisMatter)
+OverlapResult OrientedBoxCollider::Overlaps(Collider* pOther,
+                                            void* pOtherMatter,
+                                            void* pThisMatter)
 {
+    // Returning result by value, so it is okay
+    // to use this stack object.
+    OverlapResult orResult;
+
     int i = 0;
 
     static float arXVector[3] = {1.0f, 0.0f, 0.0f};
@@ -148,8 +152,6 @@ int OrientedBoxCollider::Overlaps(Collider* pOther,
 
     if (pOther->GetType() == COLLIDER_ORIENTED_BOX)
     {
-        LogDebug("Performing SAT with two OBBs");
-
         OrientedBoxCollider* pA = this;
         OrientedBoxCollider* pB = reinterpret_cast<OrientedBoxCollider*>(pOther);
         pTMatter = reinterpret_cast<Matter*>(pThisMatter);
@@ -172,6 +174,8 @@ int OrientedBoxCollider::Overlaps(Collider* pOther,
         {
             matB.MultiplyVec3(&arBoxVertices[i*3], &arBVerts[i*3]);
         }
+
+        LogDebug("Performing SAT with two OBBs");
 
         // Find the primary axes in world space for A and B
         matA.MultiplyVec3Dir(arXVector,arAxesA);
@@ -204,28 +208,31 @@ int OrientedBoxCollider::Overlaps(Collider* pOther,
         // overlap.
         for (i = 0; i < 3; i++)
         {
-            if (CheckIntervalOverlap(&arAxesA[i*3], arAVerts, arBVerts) == 0)
+            if (CheckIntervalOverlap(&arAxesA[i*3], arAVerts, arBVerts, orResult) == 0)
             {
-                return 0;
+                orResult.m_nOverlapping = 0;
+                return orResult;
             }
 
-            if (CheckIntervalOverlap(&arAxesB[i*3], arAVerts, arBVerts) == 0)
+            if (CheckIntervalOverlap(&arAxesB[i*3], arAVerts, arBVerts, orResult) == 0)
             {
-                return 0;
+                orResult.m_nOverlapping = 0;
+                return orResult;
             }
         }
 
         for (i = 0; i < 9; i++)
         {
-            if (CheckIntervalOverlap(&arAxesC[i*3], arAVerts, arBVerts) == 0)
+            if (CheckIntervalOverlap(&arAxesC[i*3], arAVerts, arBVerts, orResult) == 0)
             {
-                return 0;
+                orResult.m_nOverlapping = 0;
+                return orResult;
             }
         }
     }
 
-
-    return 1;
+    orResult.m_nOverlapping = 1;
+    return orResult;
 }
 
 void OrientedBoxCollider::SetHalfExtents(float fHalfX,
@@ -261,11 +268,12 @@ void OrientedBoxCollider::GenerateLocalCoordinates(float* pRes)
     }
 }
 
-int OrientedBoxCollider::CheckIntervalOverlap(float* arAxis, float* arVertsA, float* arVertsB)
+int OrientedBoxCollider::CheckIntervalOverlap(float* arAxis, float* arVertsA, float* arVertsB, OverlapResult& orResult)
 {
-    int i       = 0;
-    float fDotA = 0.0f;
-    float fDotB = 0.0f;
+    int i        = 0;
+    float fDotA  = 0.0f;
+    float fDotB  = 0.0f;
+    float fDepth = 0.0f;
 
     // Set initial mins and maxes
     float fMinA = DotProduct(arAxis, arVertsA);
@@ -273,6 +281,13 @@ int OrientedBoxCollider::CheckIntervalOverlap(float* arAxis, float* arVertsA, fl
 
     float fMinB = DotProduct(arAxis, arVertsB);
     float fMaxB = fMinB;
+
+    // Waited to normalize the vector until now to cut down
+    // on unnecessary normalizations. Normalization needs to be 
+    // performed to make sure the dot products return the actual
+    // projected length. The axis may not be a unit-vector if the
+    // Matter's model matrix contains scaling factors.
+    NormalizeVector(arAxis);
 
     for (i = 1; i < VERTICES_PER_OBB; i++)
     {
@@ -311,7 +326,26 @@ int OrientedBoxCollider::CheckIntervalOverlap(float* arAxis, float* arVertsA, fl
         return 0;
     }
 
-    // The intervals didnt overlap, so return 1.
+    // The intervals do overlap, so return 1.
+    // But also record the penetration depth if it is lower
+    // than the previous recording in the OverlapResult object
+    if (fMaxB > fMaxA)
+    {
+        fDepth = fMaxA - fMinB;
+    }
+    else
+    {
+        fDepth = fMaxB - fMinA;
+    }
+
+    if (fDepth < orResult.m_fOverlapDepth)
+    {
+        orResult.m_fOverlapDepth = fDepth;
+        orResult.m_arLeastPenAxis[0] = arAxis[0];
+        orResult.m_arLeastPenAxis[1] = arAxis[1];
+        orResult.m_arLeastPenAxis[2] = arAxis[2];
+    }
+
     return 1;
 }
 

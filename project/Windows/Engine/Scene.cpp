@@ -22,40 +22,8 @@ Texture Scene::s_texEffectColorAttach;
 //*****************************************************************************
 // Constructor
 //*****************************************************************************
-Scene::Scene(int nMaxMatters,
-             int nMaxLights,
-             int nMaxGlyphs,
-             int nMaxEffects,
-             int nMaxParticles)
+Scene::Scene()
 {
-    m_nMaxMatters   = nMaxMatters;
-    m_nMaxLights    = nMaxLights;
-    m_nMaxGlyphs    = nMaxGlyphs;
-    m_nMaxEffects   = nMaxEffects;
-    m_nMaxParticles = nMaxParticles;
-
-    // When first initialized, there are no objects in the scene
-    m_nNumMatters   = 0;
-    m_nNumLights    = 0;
-    m_nNumGlyphs    = 0;
-    m_nNumEffects   = 0;
-    m_nNumParticles = 0;
-
-    // Allocate the arrays to hold scene components
-    m_pMatters = new Matter*[m_nMaxMatters];
-    m_pLights  = new Light*[m_nMaxLights];
-    m_pGlyphs  = new Glyph*[m_nMaxGlyphs];
-    m_pEffects = new Effect*[m_nMaxEffects];
-    m_pParticleSystems = new ParticleSystem*[m_nMaxParticles];
-
-    if (m_pMatters == 0 ||
-        m_pLights  == 0 ||
-        m_pGlyphs  == 0 ||
-        m_pEffects == 0 ||
-        m_pParticleSystems == 0)
-    {
-        LogError("Memory allocation error in Scene Constructor");
-    }
 
     m_pCamera           = 0;
     m_pDirectionalLight = 0;
@@ -77,34 +45,6 @@ Scene::Scene(int nMaxMatters,
 //*****************************************************************************
 Scene::~Scene()
 {
-    // It is assumed that all scene components will be freed by the user.
-    // If the user would like the scene to free the memory components it 
-    // contains, call Scene::Destroy().
-
-    if (m_pMatters != 0)
-    {
-        delete [] m_pMatters;
-        m_pMatters = 0;
-    }
-
-    if (m_pLights != 0)
-    {
-        delete [] m_pLights;
-        m_pLights = 0;
-    }
-
-    if (m_pGlyphs != 0)
-    {
-        delete [] m_pGlyphs;
-        m_pGlyphs = 0;
-    }
-
-    if (m_pEffects != 0)
-    {
-        delete [] m_pEffects;
-        m_pEffects = 0;
-    }
-
     if (m_pPhysTimer != 0)
     {
         delete m_pPhysTimer;
@@ -124,6 +64,11 @@ void Scene::Render()
     Matrix* pView = 0;
     Matrix matMVP;
     Quad quadScreen;
+    ListNode* pNode = 0;
+
+    Matter* pMatter           = 0;
+    ParticleSystem* pParticle = 0;
+    Effect* pEffect           = 0;
 
     quadScreen.SetPosition(-1.0f, -1.0f);
     quadScreen.SetDimensions(2.0f, 2.0f);
@@ -156,28 +101,34 @@ void Scene::Render()
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glEnable(GL_BLEND);
 
-        for (i = 0; i < m_nNumMatters; i++)
+        pNode = m_lMatters.GetHead();
+        while (pNode != 0)
         {
-            m_pMatters[i]->Render(this);
+            reinterpret_cast<Matter*>(pNode->m_pData)->Render(this);
+            pNode = pNode->m_pNext;
         }
 
         glDisable(GL_CULL_FACE);
 
         // Render colliders for debugging if enabled
-        for (i = 0; i < m_nNumMatters; i++)
+        pNode = m_lMatters.GetHead();
+        while (pNode != 0)
         {
+            pMatter = reinterpret_cast<Matter*>(pNode->m_pData);
+            pNode = pNode->m_pNext;
+
             // Setup state for rendering translucent collision meshes
             glEnable(GL_DEPTH_TEST);
             glDepthMask(GL_FALSE);
 
-            if (m_pMatters[i]->GetCollider()                       != 0 && 
-                m_pMatters[i]->GetCollider()->IsRenderingEnabled() != 0)
+            if (pMatter->GetCollider()                       != 0 && 
+                pMatter->GetCollider()->IsRenderingEnabled() != 0)
             {
-                GenerateMVPMatrix(m_pMatters[i]->GetModelMatrix(),
+                GenerateMVPMatrix(pMatter->GetModelMatrix(),
                                   m_pCamera->GetViewMatrix(),
                                   m_pCamera->GetProjectionMatrix(),
                                   &matMVP);
-                m_pMatters[i]->GetCollider()->Render(&matMVP);
+                pMatter->GetCollider()->Render(&matMVP);
             }
 
             // Restore state
@@ -186,8 +137,12 @@ void Scene::Render()
         }
 
         // Render particle systems
-        for (i = 0; i < m_nNumParticles; i++)
+        pNode = m_lParticleSystems.GetHead();
+        while(pNode != 0)
         {
+            pParticle = reinterpret_cast<ParticleSystem*>(pNode->m_pData);
+            pNode = pNode->m_pNext;
+
             pProj = m_pCamera->GetProjectionMatrix();
             pView = m_pCamera->GetViewMatrix();
 
@@ -199,8 +154,8 @@ void Scene::Render()
             glEnable(GL_DEPTH_TEST);
             glDepthMask(GL_FALSE);
 
-            m_pParticleSystems[i]->Update();
-            m_pParticleSystems[i]->Render(&matVP);
+            pParticle->Update();
+            pParticle->Render(&matVP);
 
             glDisable(GL_BLEND);
             glDisable(GL_DEPTH_TEST);
@@ -213,19 +168,24 @@ void Scene::Render()
     glDisable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    for (i = 0; i < m_nNumGlyphs; i++)
-    {
-        m_pGlyphs[i]->Render();
+
+    pNode = m_lGlyphs.GetHead();
+    while (pNode != 0)
+    {   
+        reinterpret_cast<Glyph*>(pNode->m_pData)->Render();
+        pNode = pNode->m_pNext;
     }
 
     // Render effects if they are enabled
-    if (m_nNumEffects        > 0)
+    if (m_lEffects.Count() > 0)
     {
         // Render separate texture
         nEffectOn = 0;
-        for (i = 0; i < m_nNumEffects; i++)
+
+        pNode = m_lEffects.GetHead();
+        while(pNode != 0)
         {
-            if (m_pEffects[i]->IsEnabled())
+            if (reinterpret_cast<Effect*>(pNode->m_pData)->IsEnabled())
             {
                 glFramebufferTexture2D(GL_FRAMEBUFFER,
                                         GL_COLOR_ATTACHMENT0,
@@ -237,14 +197,17 @@ void Scene::Render()
             }
         }
 
-        for (i = 0; i < m_nNumEffects; i++)
+        pNode = m_lEffects.GetHead();
+        while(pNode != 0)
         {
-            if (m_pEffects[i]->IsEnabled() != 0)
+            pEffect = reinterpret_cast<Effect*>(pNode->m_pData);
+
+            if (pEffect->IsEnabled() != 0)
             {
-                m_pEffects[i]->Render(this,
-                                      s_hFBO,
-                                      s_texColorAttach.GetHandle(),
-                                      s_texDepthAttach.GetHandle());
+                pEffect->Render(this,
+                                s_hFBO,
+                                s_texColorAttach.GetHandle(),
+                                s_texDepthAttach.GetHandle());
             }
         }
     }
@@ -305,16 +268,7 @@ void Scene::AddMatter(Matter* pMatter)
 {
     if (pMatter != 0)
     {
-        if (m_nNumMatters < m_nMaxMatters)
-        {
-            m_pMatters[m_nNumMatters] = pMatter;
-            m_nNumMatters++;
-        }
-        else
-        {
-            LogError("Failed to add matter to scene because maximum number of "
-                     "matters has been reached.");
-        }
+        m_lMatters.Add(pMatter);
     }
     else
     {
@@ -333,15 +287,9 @@ void Scene::AddLight(Light* pLight)
         {
             m_pDirectionalLight = reinterpret_cast<DirectionalLight*>(pLight);
         }
-        else if (m_nNumLights < m_nMaxLights)
-        {
-            m_pLights[m_nNumLights] = pLight;
-            m_nNumLights++;
-        }
         else
         {
-            LogError("Failed to add light to scene because maximum number of "
-                     "lights has been reached.");
+            m_lLights.Add(pLight);
         }
     }
     else
@@ -357,16 +305,7 @@ void Scene::AddGlyph(Glyph* pGlyph)
 {
     if (pGlyph != 0)
     {
-        if (m_nNumGlyphs < m_nMaxGlyphs)
-        {
-            m_pGlyphs[m_nNumGlyphs] = pGlyph;
-            m_nNumGlyphs++;
-        }
-        else
-        {
-            LogError("Failed to add glyph to scene because maximum number of "
-                     "glyphs has been reached.");
-        }
+        m_lGlyphs.Add(pGlyph);
     }
     else
     {
@@ -381,16 +320,7 @@ void Scene::AddEffect(Effect* pEffect)
 {
     if (pEffect != 0)
     {
-        if (m_nNumEffects < m_nMaxEffects)
-        {
-            m_pEffects[m_nNumEffects] = pEffect;
-            m_nNumEffects++;
-        }
-        else
-        {
-            LogError("Failed to add effect to scene because maximum number of "
-                     "effects has been reached.");
-        }
+        m_lEffects.Add(pEffect);
     }
     else
     {
@@ -405,16 +335,7 @@ void Scene::AddParticleSystem(ParticleSystem* pParticleSystem)
 {
     if (pParticleSystem != 0)
     {
-        if (m_nNumParticles < m_nMaxParticles)
-        {
-            m_pParticleSystems[m_nNumParticles] = pParticleSystem;
-            m_nNumParticles++;
-        }
-        else
-        {
-            LogError("Failed to add particle system to scene because maximum number of "
-                     "particle systems has been reached.");
-        }
+        m_lParticleSystems.Add(pParticleSystem);
     }
     else
     {
@@ -448,11 +369,26 @@ Camera* Scene::GetCamera()
 //*****************************************************************************
 // GetLightArray
 //*****************************************************************************
-Light** Scene::GetLightArray()
+List* Scene::GetLightList()
 {
-    return m_pLights;
+    return &m_lLights;
 }
 
+//*****************************************************************************
+// GetMatterList
+//*****************************************************************************
+ List* Scene::GetMatterList()
+ {
+    return &m_lMatters;
+ }
+
+//*****************************************************************************
+// GetNumMatters
+//*****************************************************************************
+ int Scene::GetNumMatters()
+ {
+    return m_lMatters.Count();
+ }
 //*****************************************************************************
 // GetDirectionalLight
 //*****************************************************************************
@@ -466,7 +402,7 @@ DirectionalLight* Scene::GetDirectionalLight()
 //*****************************************************************************
 int Scene::GetNumLights()
 {
-    return m_nNumLights;
+    return m_lLights.Count();
 }
 
 //*****************************************************************************
@@ -538,10 +474,10 @@ void Scene::Update()
     fTime = m_pPhysTimer->Time();
 
     // Update physics
-    for (i = 0; i < m_nNumMatters; i++)
-    {
-        m_pMatters[i]->UpdatePhysics(this, fTime);
-    }
+    //for (i = 0; i < m_nNumMatters; i++)
+    //{
+    //    m_pMatters[i]->UpdatePhysics(this, fTime);
+    //}
 
     // Reset timer for next frame calculation
     m_pPhysTimer->Start();
@@ -646,35 +582,7 @@ void Scene::InitializeFBO()
 //*****************************************************************************
 void Scene::RemoveMatter(Matter* pMatter)
 {
-    int i      = 0;
-    int nFound = 0;
-
-    if (pMatter == 0)
-    {
-        return;
-    }
-
-    for (i = 0; i < m_nNumMatters; i++)
-    {
-        if (m_pMatters[i] == pMatter)
-        {
-            m_pMatters[i] = 0;
-            nFound = 1;
-            i++;
-            break;
-        }
-    }
-
-    if (nFound != 0)
-    {
-        for (; i < m_nNumMatters; i++)
-        {
-            m_pMatters[i-1] = m_pMatters[i];
-        }
-
-        m_pMatters[m_nNumMatters - 1] = 0;
-        m_nNumMatters--;
-    }
+    m_lMatters.Remove(pMatter);
 }
 
 //*****************************************************************************
@@ -682,35 +590,7 @@ void Scene::RemoveMatter(Matter* pMatter)
 //*****************************************************************************
 void Scene::RemoveLight(Light* pLight)
 {
-    int i      = 0;
-    int nFound = 0;
-
-    if (pLight == 0)
-    {
-        return;
-    }
-
-    for (i = 0; i < m_nNumLights; i++)
-    {
-        if (m_pLights[i] == pLight)
-        {
-            m_pLights[i] = 0;
-            nFound = 1;
-            i++;
-            break;
-        }
-    }
-
-    if (nFound != 0)
-    {
-        for (; i < m_nNumLights; i++)
-        {
-            m_pLights[i-1] = m_pLights[i];
-        }
-
-        m_pLights[m_nNumLights - 1] = 0;
-        m_nNumLights--;
-    }
+    m_lLights.Remove(pLight);
 }
 
 //*****************************************************************************
@@ -718,35 +598,7 @@ void Scene::RemoveLight(Light* pLight)
 //*****************************************************************************
 void Scene::RemoveGlyph(Glyph* pGlyph)
 {
-    int i      = 0;
-    int nFound = 0;
-
-    if (pGlyph == 0)
-    {
-        return;
-    }
-
-    for (i = 0; i < m_nNumGlyphs; i++)
-    {
-        if (m_pGlyphs[i] == pGlyph)
-        {
-            m_pGlyphs[i] = 0;
-            nFound = 1;
-            i++;
-            break;
-        }
-    }
-
-    if (nFound != 0)
-    {
-        for (; i < m_nNumGlyphs; i++)
-        {
-            m_pGlyphs[i-1] = m_pGlyphs[i];
-        }
-
-        m_pGlyphs[m_nNumGlyphs - 1] = 0;
-        m_nNumGlyphs--;
-    }
+    m_lGlyphs.Remove(pGlyph);
 }
 
 //*****************************************************************************
@@ -754,35 +606,7 @@ void Scene::RemoveGlyph(Glyph* pGlyph)
 //*****************************************************************************
 void Scene::RemoveEffect(Effect* pEffect)
 {
-    int i      = 0;
-    int nFound = 0;
-
-    if (pEffect == 0)
-    {
-        return;
-    }
-
-    for (i = 0; i < m_nNumEffects; i++)
-    {
-        if (m_pEffects[i] == pEffect)
-        {
-            m_pEffects[i] = 0;
-            nFound = 1;
-            i++;
-            break;
-        }
-    }
-
-    if (nFound != 0)
-    {
-        for (; i < m_nNumEffects; i++)
-        {
-            m_pEffects[i-1] = m_pEffects[i];
-        }
-
-        m_pEffects[m_nNumEffects - 1] = 0;
-        m_nNumEffects--;
-    }
+    m_lEffects.Remove(pEffect);
 }
 
 //*****************************************************************************
@@ -790,33 +614,5 @@ void Scene::RemoveEffect(Effect* pEffect)
 //*****************************************************************************
 void Scene::RemoveParticleSystem(ParticleSystem* pParticleSystem)
 {
-    int i      = 0;
-    int nFound = 0;
-
-    if (pParticleSystem == 0)
-    {
-        return;
-    }
-
-    for (i = 0; i < m_nNumParticles; i++)
-    {
-        if (m_pParticleSystems[i] == pParticleSystem)
-        {
-            m_pParticleSystems[i] = 0;
-            nFound = 1;
-            i++;
-            break;
-        }
-    }
-
-    if (nFound != 0)
-    {
-        for (; i < m_nNumParticles; i++)
-        {
-            m_pParticleSystems[i-1] = m_pParticleSystems[i];
-        }
-
-        m_pParticleSystems[m_nNumParticles - 1] = 0;
-        m_nNumParticles--;
-    }
+    m_lParticleSystems.Remove(pParticleSystem);
 }

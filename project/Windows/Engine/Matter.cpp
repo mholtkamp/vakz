@@ -41,7 +41,7 @@ Matter::Matter()
     m_fSpeed              = 1.0f;
 
     m_nPhysical = 0;
-    m_nRigid    = 0;
+    m_nMobile   = 0;
 
     m_arVelocity[0] = 0.0f;
     m_arVelocity[1] = 0.0f;
@@ -113,7 +113,7 @@ void Matter::Render(void* pScene)
     Matrix*           pView         =  0;
     Matrix*           pProjection   =  0;
     Camera*           pCamera       = reinterpret_cast<Scene*>(pScene)->GetCamera();
-    Light**           pLights       = reinterpret_cast<Scene*>(pScene)->GetLightArray();
+    List*             pLightList    = reinterpret_cast<Scene*>(pScene)->GetLightList();
     int               nNumLights    = reinterpret_cast<Scene*>(pScene)->GetNumLights();
     float*            pAmbientColor = 0;
     DirectionalLight* pDirLight     = 0;
@@ -314,11 +314,40 @@ void Matter::SetScale(float fScaleX,
 //*****************************************************************************
 void Matter::Translate(float fTransX,
                        float fTransY,
-                       float fTransZ)
+                       float fTransZ,
+                       void* pScene)
 {
-    m_arPosition[0] += fTransX;
-    m_arPosition[1] += fTransY;
-    m_arPosition[2] += fTransZ;
+    float arOldPos[3];
+    float arDir[3];
+
+    if (m_nPhysical != 0 &&
+        m_nMobile   != 0)
+    {
+        // Record previous position
+        arOldPos[0] = m_arPosition[0];
+        arOldPos[1] = m_arPosition[1];
+        arOldPos[2] = m_arPosition[2];
+
+        // Update the position to the tentative new position
+        m_arPosition[0] += fTransX;
+        m_arPosition[1] += fTransY;
+        m_arPosition[2] += fTransZ;
+
+        // Save the direction of movement in vector-array format
+        arDir[0] = fTransX;
+        arDir[1] = fTransY;
+        arDir[2] = fTransZ;
+
+        reinterpret_cast<Scene*>(pScene)->GetMatterList();
+
+    }
+    else if (m_nMobile != 0)
+    {
+        // The object is mobile, so just move it :)
+        m_arPosition[0] += fTransX;
+        m_arPosition[1] += fTransY;
+        m_arPosition[2] += fTransZ;
+    }
 }
 
 //*****************************************************************************
@@ -551,7 +580,7 @@ int Matter::Overlaps(Matter* pOther)
     {
         return m_pCollider->Overlaps(pOther->GetCollider(),
                                      pOther,
-                                     this);
+                                     this).m_nOverlapping;
     }
     else
     {
@@ -568,11 +597,11 @@ void Matter::SetPhysical(int nPhysical)
 }
 
 //*****************************************************************************
-// SetRigid
+// SetMobile
 //*****************************************************************************
-void Matter::SetRigid(int nRigid)
+void Matter::SetMobile(int nMobile)
 {
-    m_nRigid = nRigid;
+    m_nMobile = nMobile;
 }
 
 //*****************************************************************************

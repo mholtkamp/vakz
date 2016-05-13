@@ -55,9 +55,9 @@ public:
     //##   pOther - the other collider of interest. Does not need to be a
     //##            BoxCollider.
     //## **********************************************************************
-    int Overlaps(Collider* pOther,
-                 void*     pOtherMatter,
-                 void*     pThisMatter);
+    OverlapResult Overlaps(Collider* pOther,
+                           void*     pOtherMatter,
+                           void*     pThisMatter);
 
     //## **********************************************************************
     //## Enable/DisableRendering

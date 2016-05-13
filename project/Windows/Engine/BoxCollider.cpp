@@ -68,10 +68,13 @@ void BoxCollider::Render(Matrix* pMVP)
 //*****************************************************************************
 // Overlaps
 //*****************************************************************************
-int BoxCollider::Overlaps(Collider* pOther,
-                          void* pOtherMatter,
-                          void* pThisMatter)
+OverlapResult BoxCollider::Overlaps(Collider* pOther,
+                                    void* pOtherMatter,
+                                    void* pThisMatter)
 {
+    OverlapResult orResult;
+    orResult.m_nOverlapping = 0;
+
     int i                    = 0;
     int nVert                = 0;
     int nTriangles           = 0;
@@ -106,7 +109,7 @@ int BoxCollider::Overlaps(Collider* pOther,
         if (pOPosition[0] + pOScale[0]*(pOColliderPosition[0] - pOColliderHalfExtents[0]) >
             pTPosition[0] + pTScale[0]*(m_arPosition[0] + m_arHalfExtents[0]))
         {
-            return 0;
+            return orResult;
         }
         //if (pBox->GetMinX() > this->GetMaxX())
         //    return 0;
@@ -114,7 +117,7 @@ int BoxCollider::Overlaps(Collider* pOther,
         if (pOPosition[1] + pOScale[1]*(pOColliderPosition[1] - pOColliderHalfExtents[1]) >
             pTPosition[1] + pTScale[1]*(m_arPosition[1] + m_arHalfExtents[1]))
         {
-            return 0;
+            return orResult;
         }
         //if (pBox->GetMinY() > this->GetMaxY())
         //    return 0;
@@ -122,7 +125,7 @@ int BoxCollider::Overlaps(Collider* pOther,
         if (pOPosition[2] + pOScale[2]*(pOColliderPosition[2] - pOColliderHalfExtents[2]) >
             pTPosition[2] + pTScale[2]*(m_arPosition[2] + m_arHalfExtents[2]))
         {
-            return 0;
+            return orResult;
         }
         //if (pBox->GetMinZ() > this->GetMaxZ())
         //    return 0;
@@ -130,7 +133,7 @@ int BoxCollider::Overlaps(Collider* pOther,
         if (pOPosition[0] + pOScale[0]*(pOColliderPosition[0] + pOColliderHalfExtents[0]) <
             pTPosition[0] + pTScale[0]*(m_arPosition[0] - m_arHalfExtents[0]))
         {
-            return 0;
+            return orResult;
         }
         //if (pBox->GetMaxX() < this->GetMinX())
         //    return 0;
@@ -138,7 +141,7 @@ int BoxCollider::Overlaps(Collider* pOther,
         if (pOPosition[1] + pOScale[1]*(pOColliderPosition[1] + pOColliderHalfExtents[1]) <
             pTPosition[1] + pTScale[1]*(m_arPosition[1] - m_arHalfExtents[1]))
         {
-            return 0;
+            return orResult;
         }
         //if (pBox->GetMaxY() < this->GetMinY())
         //    return 0;
@@ -146,12 +149,13 @@ int BoxCollider::Overlaps(Collider* pOther,
         if (pOPosition[2] + pOScale[2]*(pOColliderPosition[2] + pOColliderHalfExtents[2]) <
             pTPosition[2] + pTScale[2]*(m_arPosition[2] - m_arHalfExtents[2]))
         {
-            return 0;
+            return orResult;
         }
         //if (pBox->GetMaxZ() < this->GetMinZ())
         //    return 0;
 
-        return 1;
+        orResult.m_nOverlapping = 1;
+        return orResult;
     }
     else if (pOther->GetType() == COLLIDER_MESH)
     {
@@ -159,7 +163,7 @@ int BoxCollider::Overlaps(Collider* pOther,
         // get the Matter's model matrix;
         if (pOtherMatter == 0)
         {
-            return 0;
+            return orResult;
         }
 
         pMatrixM = reinterpret_cast<Matter*>(pOtherMatter)->GetModelMatrix();
@@ -192,13 +196,14 @@ int BoxCollider::Overlaps(Collider* pOther,
                               arBoxHalfSize,
                               arTransTri) == 1)
             {
-                return 1;
+                orResult.m_nOverlapping = 1;
+                return orResult;
             }
         }
-        return 0;
+        return orResult;
     }
 
-    return 0;
+    return orResult;
 }
 
 ////*****************************************************************************

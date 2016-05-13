@@ -1,3 +1,6 @@
+#ifndef ORIENTED_BOX_COLLIDER_H
+#define ORIENTED_BOX_COLLIDER_H
+
 #include "Collider.h"
 #include "Matrix.h"
 
@@ -17,9 +20,9 @@ public:
 
     void Render(Matrix* pMVP);
 
-    int Overlaps(Collider* pOther,
-                 void*     pOtherMatter,
-                 void*     pThisMatter);
+    OverlapResult Overlaps(Collider* pOther,
+                           void*     pOtherMatter,
+                           void*     pThisMatter);
 
     void SetHalfExtents(float fHalfX,
                         float fHalfY,
@@ -33,7 +36,7 @@ private:
 
     void GenerateLocalCoordinates(float* arRes);
 
-    int CheckIntervalOverlap(float* arAxis, float* arVertsA, float* arVertsB);
+    int CheckIntervalOverlap(float* arAxis, float* arVertsA, float* arVertsB, OverlapResult& orResult);
 
     void RenderPrimaryNormals(Matrix* pMVP);
 
@@ -44,3 +47,5 @@ private:
     float m_arRotation[3];
 
 };
+
+#endif
