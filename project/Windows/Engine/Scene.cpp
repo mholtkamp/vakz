@@ -109,32 +109,7 @@ void Scene::Render()
         }
 
         glDisable(GL_CULL_FACE);
-
-        // Render colliders for debugging if enabled
-        pNode = m_lMatters.GetHead();
-        while (pNode != 0)
-        {
-            pMatter = reinterpret_cast<Matter*>(pNode->m_pData);
-            pNode = pNode->m_pNext;
-
-            // Setup state for rendering translucent collision meshes
-            glEnable(GL_DEPTH_TEST);
-            glDepthMask(GL_FALSE);
-
-            if (pMatter->GetCollider()                       != 0 && 
-                pMatter->GetCollider()->IsRenderingEnabled() != 0)
-            {
-                GenerateMVPMatrix(pMatter->GetModelMatrix(),
-                                  m_pCamera->GetViewMatrix(),
-                                  m_pCamera->GetProjectionMatrix(),
-                                  &matMVP);
-                pMatter->GetCollider()->Render(&matMVP);
-            }
-
-            // Restore state
-            glDepthMask(GL_TRUE);
-            glDisable(GL_DEPTH_TEST);
-        }
+        glDisable(GL_DEPTH_TEST);
 
         // Render particle systems
         pNode = m_lParticleSystems.GetHead();

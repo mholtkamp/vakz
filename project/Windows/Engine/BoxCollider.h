@@ -71,10 +71,6 @@ private:
 
     //## The local half-extents of the box.
     float m_arHalfExtents[3];
-
-    //## Flag to indicate whether the box should be rendered
-    //## for debugging purposes.
-    int m_nRender;
 };
 
 #endif

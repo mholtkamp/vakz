@@ -8,6 +8,7 @@
 #include "Material.h"
 #include "Collider.h"
 #include "Matrix.h"
+#include "List.h"
 
 class Matter
 {
@@ -57,27 +58,29 @@ public:
     void SetTexture(Texture* pTexture);
 
     //## **********************************************************************
-    //## SetCollider
+    //## AddCollider
     //##
     //## Assigns a collider to the matter. A collider is used for detecting
-    //## and handling different matters overlapping.
+    //## and handling different matters overlapping. Multiple colliders
+    //## can be assigned to the same matter, and multiple matters can use
+    //## the same collider object
     //##
     //## Input:
     //##   pCollider - pointer to new collider.
     //## **********************************************************************
-    void SetCollider(Collider* pCollider);
+    void AddCollider(Collider* pCollider);
+
+    void RemoveCollider(Collider* pCollider);
 
     //## **********************************************************************
-    //## GetCollider
+    //## GetColliderList
     //##
-    //## Assigns a texture to the matter. This texture will be drawn onto
-    //## the Matter's mesh based on the UV cooridinates specificed in the mesh's
-    //## vertex attributes.
+    //## Get the list of all colliders assigned to this mesh
     //##
     //## Returns:
-    //##   Collider* - pointer to this Matter's currently assigned collider.
+    //##   List* - pointer to the list
     //## **********************************************************************
-    Collider* GetCollider();
+    List* GetColliderList();
     
     //## **********************************************************************
     //## Render
@@ -88,6 +91,17 @@ public:
     //##   pScene - pointer to the scene that is rendering this matter.
     //## **********************************************************************
     void Render(void* pScene);
+
+    //## **********************************************************************
+    //## RenderColliders
+    //##
+    //## Renders the matter's attached colliders
+    //##
+    //## Input:
+    //##   pScene - pointer to the scene that is rendering this matter.
+    //## **********************************************************************
+
+    void RenderColliders(void* pScene);
 
     const float* GetPosition();
 
@@ -286,43 +300,10 @@ public:
     //## **********************************************************************
     void SetMobile(int nMobile);
 
-    //## **********************************************************************
-    //## SetVelocity
-    //## 
-    //## Sets the velocity of the matter. Velocity will cause the position of
-    //## the object to change during the UpdatePhysics() function.
-    //##
-    //## Input:
-    //##  fXVel - x component of the velocity in units per second.
-    //##  fYVel - y component of the velocity in units per second.
-    //##  fZVel - z component of the velocity in units per second.
-    //## **********************************************************************
-    void SetVelocity(float fXVel,
-                     float fYVel,
-                     float fZVel);
+    void EnableColliderRendering();
+    void DisableColliderRendering();
 
-    //## **********************************************************************
-    //## Set*Velocity
-    //## 
-    //## Sets one component of the matter's velocity (X/Y/Z).
-    //## **********************************************************************
-    void SetXVelocity(float fXVel);
-    void SetYVelocity(float fYVel);
-    void SetZVelocity(float fZVel);
-
-    //## **********************************************************************
-    //## UpdatePhysics
-    //##
-    //## Updates the position of the matter based on physical factors. 
-    //## Collision detection and handling is performed for physical matters.
-    //## Terrain collision and handling is performed for physical matters.
-    //##
-    //## Input:
-    //##   pScene   - pointer to current scene.
-    //##   fSeconds - time elapsed in seconds since last frame 
-    //## **********************************************************************
-    void UpdatePhysics(void* pScene,
-                       float fSeconds);
+    int IsColliderRenderingEnabled();
 
     //## **********************************************************************
     //## GetModelMatrix
@@ -376,8 +357,8 @@ private:
     //## Texture pointer
     Texture* m_pTexture;
     
-    //## Collider pointer
-    Collider* m_pCollider;
+    //## Collider list
+    List m_lColliders;
 
     //## Model matrix
     Matrix m_matModel;
@@ -414,8 +395,9 @@ private:
     //## should not be placed in the static collision octree.
     int m_nMobile;
 
-    //## The velocity of the matter, split into X/Y/Z components
-    float m_arVelocity[3];
+    //## Flag to enable collider rendering, usually for debugging
+    //## purposes. Rendering color is determined by the collider object.
+    int m_nRenderColliders;
 };
 
 #endif

@@ -30,7 +30,6 @@ Matter::Matter()
     m_pMesh     = 0;
     m_pMaterial = 0;
     m_pTexture  = 0;
-    m_pCollider = 0;
 
     m_nCurrentAnimation   = 0;
     m_nPlayOnceAnimation  = -1;
@@ -42,10 +41,7 @@ Matter::Matter()
 
     m_nPhysical = 0;
     m_nMobile   = 0;
-
-    m_arVelocity[0] = 0.0f;
-    m_arVelocity[1] = 0.0f;
-    m_arVelocity[2] = 0.0f;
+    m_nRenderColliders = 0;
 }
 
 //*****************************************************************************
@@ -85,17 +81,25 @@ void Matter::SetTexture(Texture* pTexture)
 //*****************************************************************************
 // SetCollider
 //*****************************************************************************
-void Matter::SetCollider(Collider* pCollider)
+void Matter::AddCollider(Collider* pCollider)
 {
-    m_pCollider = pCollider;
+    m_lColliders.Add(pCollider);
+}
+
+//*****************************************************************************
+// SetCollider
+//*****************************************************************************
+void Matter::RemoveCollider(Collider* pCollider)
+{
+    m_lColliders.Remove(pCollider);
 }
 
 //*****************************************************************************
 // GetCollider
 //*****************************************************************************
-Collider* Matter::GetCollider()
+List* Matter::GetColliderList()
 {
-    return m_pCollider;
+    return &m_lColliders;
 }
 
 //*****************************************************************************
@@ -206,23 +210,26 @@ void Matter::Render(void* pScene)
         glDrawArrays(GL_TRIANGLES,
                      0,
                      m_pMesh->GetVertexCount());
-    }
-}
 
-//*****************************************************************************
-// UpdatePhysics
-//*****************************************************************************
-void Matter::UpdatePhysics(void* pScene,
-                           float fSeconds)
-{
-    Scene* pScn = reinterpret_cast<Scene*>(pScene);
+        // Render all the attached colliders if feature is enabled.
+        if (m_nRenderColliders != 0)
+        {
+            ListNode* pNode = m_lColliders.GetHead();
 
-    if (m_nPhysical != 0)
-    {
-        m_arVelocity[1] += -1 * pScn->GetGravity() * fSeconds; 
-        m_arPosition[0] += m_arVelocity[0] * fSeconds;
-        m_arPosition[1] += m_arVelocity[1] * fSeconds;
-        m_arPosition[2] += m_arVelocity[2] * fSeconds;
+            // Setup state for rendering translucent collision meshes
+            glDepthMask(GL_FALSE);
+            glDisable(GL_CULL_FACE);
+
+            while (pNode != 0)
+            {
+                reinterpret_cast<Collider*>(pNode->m_pData)->Render(&matMVP);
+                pNode = pNode->m_pNext;
+            }
+
+            // Restore state
+            glEnable(GL_CULL_FACE);
+            glDepthMask(GL_TRUE);
+        }
     }
 }
 
@@ -319,6 +326,10 @@ void Matter::Translate(float fTransX,
 {
     float arOldPos[3];
     float arDir[3];
+    ListNode* pMatterNode;
+    ListNode* pColliderNode;
+    Matter* pMatter;
+    Collider* pCollider;
 
     if (m_nPhysical != 0 &&
         m_nMobile   != 0)
@@ -338,7 +349,18 @@ void Matter::Translate(float fTransX,
         arDir[1] = fTransY;
         arDir[2] = fTransZ;
 
-        reinterpret_cast<Scene*>(pScene)->GetMatterList();
+        // TODO: After implementing Octree, replace this list iteration
+        // with the octree iteration.
+        // Iterate through all matters
+        pMatterNode = reinterpret_cast<Scene*>(pScene)->GetMatterList()->GetHead();
+
+        while (pMatterNode != 0)
+        {
+            pMatter = reinterpret_cast<Matter*>(pMatterNode->m_pData);
+            pMatterNode = pMatterNode->m_pNext;
+
+            //pColliderNode = pMatter->GetColliderList();
+        }
 
     }
     else if (m_nMobile != 0)
@@ -574,18 +596,52 @@ void Matter::UpdateAnimation()
 //*****************************************************************************
 int Matter::Overlaps(Matter* pOther)
 {
-    if (pOther                != 0 &&
-        pOther->GetCollider() != 0 &&
-        m_pCollider           != 0)
+    //if (pOther                != 0 &&
+    //    pOther->GetCollider() != 0 &&
+    //    m_pCollider           != 0)
+    //{
+    //    return m_pCollider->Overlaps(pOther->GetCollider(),
+    //                                 pOther,
+    //                                 this).m_nOverlapping;
+    //}
+    //else
+    //{
+    //    return 0;
+    //}
+
+    int nOverlapping = 0;
+    ListNode* pThisColNode = m_lColliders.GetHead();
+    ListNode* pOtherColNode = pOther->m_lColliders.GetHead();
+
+    // This double loop will compare each collider with 
+    // The other matter's colliders. It seems like an expensive
+    // operation, but most matter has only one collider, so it
+    // boils down to only one check. But this could get expensive with
+    // let's say one matter that has 3 colliders, and another one that has
+    // 4 colliders. That's a total of 12 collision checks.
+    // If all the colliders are OBBs... then that might be really
+    // expensive. Might have to optimize this part.
+    while (pThisColNode != 0)
     {
-        return m_pCollider->Overlaps(pOther->GetCollider(),
-                                     pOther,
-                                     this).m_nOverlapping;
+        while (pOtherColNode != 0)
+        {
+            nOverlapping = reinterpret_cast<Collider*>(pThisColNode->m_pData)->Overlaps(
+                reinterpret_cast<Collider*>(pOtherColNode->m_pData),
+                pOther,
+                this).m_nOverlapping;
+
+            if (nOverlapping != 0)
+            {
+                return 1;
+            }
+
+            pOtherColNode = pOtherColNode->m_pNext;
+        }
+
+        pThisColNode = pThisColNode->m_pNext;
     }
-    else
-    {
-        return 0;
-    }
+
+    return 0;
 }
 
 //*****************************************************************************
@@ -604,40 +660,19 @@ void Matter::SetMobile(int nMobile)
     m_nMobile = nMobile;
 }
 
-//*****************************************************************************
-// SetVelocity
-//*****************************************************************************
-void Matter::SetVelocity(float fXVel,
-                         float fYVel,
-                         float fZVel)
+void Matter::EnableColliderRendering()
 {
-    m_arVelocity[0] = fXVel;
-    m_arVelocity[1] = fYVel;
-    m_arVelocity[2] = fZVel;
+    m_nRenderColliders = 1;
 }
 
-//*****************************************************************************
-// SetXVelocity
-//*****************************************************************************
-void Matter::SetXVelocity(float fXVel)
+void Matter::DisableColliderRendering()
 {
-    m_arVelocity[0] = fXVel;
+    m_nRenderColliders = 0;
 }
 
-//*****************************************************************************
-// SetYVelocity
-//*****************************************************************************
-void Matter::SetYVelocity(float fYVel)
+int Matter::IsColliderRenderingEnabled()
 {
-    m_arVelocity[1] = fYVel;
-}
-
-//*****************************************************************************
-// SetZVelocity
-//*****************************************************************************
-void Matter::SetZVelocity(float fZVel)
-{
-    m_arVelocity[2] = fZVel;
+    return m_nRenderColliders;
 }
 
 //*****************************************************************************

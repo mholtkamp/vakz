@@ -13,8 +13,6 @@ BoxCollider::BoxCollider()
     m_arHalfExtents[0] = 1.0f;
     m_arHalfExtents[1] = 1.0f;
     m_arHalfExtents[2] = 1.0f;
-
-    m_nRender    = 0;
 }
 
 //*****************************************************************************
@@ -58,10 +56,7 @@ const float* BoxCollider::GetRelativePosition()
 //*****************************************************************************
 void BoxCollider::Render(Matrix* pMVP)
 {
-    if (m_nRender != 0)
-    {
 
-    }
 }
 
 

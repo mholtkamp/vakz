@@ -79,7 +79,6 @@ int main()
     Texture* pFlowerPotTexture = new Texture();
     pFlowerPotTexture->LoadBMP("flowerpot_texture.bmp");
     OrientedBoxCollider* pFlowerCollider = new OrientedBoxCollider();
-    pFlowerCollider->EnableRendering();
     pFlowerCollider->SetHalfExtents(0.5f, 1.0f, 0.5f);
     pFlowerCollider->SetRelativeRotation(0.0f, 0.0f, 0.0f);
     pFlowerCollider->SetColor(0.2f, 0.1f, 8.0f, 0.3f);
@@ -89,7 +88,8 @@ int main()
     pFlower->SetMaterial(pWhiteMat);
     pFlower->SetPosition(-1.0f, 0.0f, 0.0f);
     pFlower->SetTexture(pFlowerPotTexture);
-    pFlower->SetCollider(pFlowerCollider);
+    pFlower->AddCollider(pFlowerCollider);
+    pFlower->EnableColliderRendering();
     pTestScene->AddMatter(pFlower);
     
 
@@ -106,10 +106,10 @@ int main()
     OrientedBoxCollider* pTestCollider = new OrientedBoxCollider();
     pTestCollider->SetRelativePosition(0.0f, 1.23f, 0.3f);
     pTestCollider->SetHalfExtents(0.70f, 1.23f, 0.70f);
-    pTestCollider->EnableRendering();
     pTestCollider->SetRelativeRotation(0.0f, 0.0f, 0.0f);
-    pTestAnim->SetCollider(pTestCollider);
+    pTestAnim->AddCollider(pTestCollider);
     //pTestAnim->SetPhysical(1);
+    pTestAnim->EnableColliderRendering();
 
     LogDebug("Loaded both meshes.");
 

@@ -113,23 +113,6 @@ public:
                                    void*   pOtherMatter,
                                    void*   pThisMatter) = 0;
 
-    //## **********************************************************************
-    //## Enable/DisableRendering
-    //##
-    //## Enable/Disable rendering of this individual collider for debugging.
-    //## **********************************************************************
-    void EnableRendering();
-    void DisableRendering();
-
-    //## **********************************************************************
-    //## IsRenderingEnabled
-    //##
-    //## Returns:
-    //##   int - '1' if rendering has been disabled.
-    //##       - '0' otherwise.
-    //## **********************************************************************
-    int IsRenderingEnabled();
-
 protected:
 
     //## Type of collider (ie. Mesh/Box/Sphere)
@@ -140,9 +123,6 @@ protected:
 
     //## Color to be used when rendering the collider while debugging.
     float m_arRenderColor[4];
-
-    //## Render enable flag
-    int m_nRenderEnable;
 };
 
 #endif
