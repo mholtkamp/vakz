@@ -24,7 +24,7 @@ struct OverlapResult
         m_arLeastPenAxis[0] = 0.0f;
         m_arLeastPenAxis[1] = 0.0f;
         m_arLeastPenAxis[2] = 0.0f;
-        m_fOverlapDepth = 0.0f;
+        m_fOverlapDepth = 999999.0f;
     }
 };
 

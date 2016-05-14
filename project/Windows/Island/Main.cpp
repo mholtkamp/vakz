@@ -21,7 +21,7 @@
 
 #define ROT_SPEED 70.0f
 #define MATTER_ROT_SPEED 15.0f
-#define MOVE_SPEED 5.0f
+#define MOVE_SPEED 1.0f
 #define THRESH 0.4f
 #define MAT_ROT_SPEED 0.5f
 
@@ -90,6 +90,7 @@ int main()
     pFlower->SetTexture(pFlowerPotTexture);
     pFlower->AddCollider(pFlowerCollider);
     pFlower->EnableColliderRendering();
+    pFlower->SetPhysical(1);
     pTestScene->AddMatter(pFlower);
     
 
@@ -108,7 +109,8 @@ int main()
     pTestCollider->SetHalfExtents(0.70f, 1.23f, 0.70f);
     pTestCollider->SetRelativeRotation(0.0f, 0.0f, 0.0f);
     pTestAnim->AddCollider(pTestCollider);
-    //pTestAnim->SetPhysical(1);
+    pTestAnim->SetPhysical(1);
+    pTestAnim->SetMobile(1);
     pTestAnim->EnableColliderRendering();
 
     LogDebug("Loaded both meshes.");
@@ -162,9 +164,14 @@ int main()
 
     float fFlowerX = 0.0f;
     float fSeconds = 0.0f;
-    float fZ = 10.0f;
-    float fY = 0.0f;
+    float fCamZ = 10.0f;
+    float fCamY = 0.0f;
+    float fCamX = 0.0f;
+
     float fX = 0.0f;
+    float fY = 0.0f;
+    float fZ = 0.0f;
+
     float fRotX = 0.0f;
     float fRotY = 0.0f;
     float fRotZ = 0.0f;
@@ -173,6 +180,8 @@ int main()
     float fBearX = -3.5f;
     float fBearY = 0.0f;
     float fBearZ = 0.0f;
+
+
     float fBearRotX = 0.0f;
     float fBearRotY = 0.0f;
     float fBearRotZ = 0.0f;
@@ -184,11 +193,12 @@ int main()
     float fAnimSpeed = 1.0f;
     float fRimSize = 0.2f;
 
+    int nPossesCharacter = 0;
+
     int nRenderCount = 0;
     Timer timer;
     Timer timerRender;
     timer.Start();
-
 
     while ((GetStatus() & VAKZ_QUIT) == 0)
     {
@@ -198,6 +208,10 @@ int main()
 
         // Update
         Update();
+
+        fX = 0.0f;
+        fY = 0.0f;
+        fZ = 0.0f;
 
         if (IsControllerConnected(0))
         {
@@ -222,8 +236,8 @@ int main()
             // Movement
             if (GetControllerAxisValue(VCONT_AXIS_Y, 0) < -THRESH)
             {
-                fZ -= fSeconds * MOVE_SPEED * cos(fRotY * DEGREES_TO_RADIANS);
-                fX -= fSeconds * MOVE_SPEED * sin(fRotY * DEGREES_TO_RADIANS);
+                fZ -=  fSeconds * MOVE_SPEED * cos(fRotY * DEGREES_TO_RADIANS);
+                fX -=  fSeconds * MOVE_SPEED * sin(fRotY * DEGREES_TO_RADIANS);
             }
             if (GetControllerAxisValue(VCONT_AXIS_Y, 0) > THRESH)
             {
@@ -366,6 +380,15 @@ int main()
                 fFlowerRotZ -= MATTER_ROT_SPEED * fSeconds;
         }
 
+        if (IsKeyDown(VKEY_V))
+        {
+            nPossesCharacter = 0;
+        }
+        if (IsKeyDown(VKEY_B))
+        {
+            nPossesCharacter = 1;
+        }
+
 
         pTestAnim->SetRotation(fBearRotX,
                                fBearRotY,
@@ -386,7 +409,18 @@ int main()
 
         //pTestAnim->SetPosition(fBearX, fBearY, fBearZ);
 
-        pCamera->SetPosition(fX, fY, fZ);
+        if (nPossesCharacter)
+        {
+            pTestAnim->Translate(fX, fY, fZ, pTestScene);
+        }
+        else
+        {
+            fCamX += fX;
+            fCamY += fY;
+            fCamZ += fZ;
+        }
+
+        pCamera->SetPosition(fCamX, fCamY, fCamZ);
         pCamera->SetRotation(fRotX, fRotY, fRotZ);
 
         //if (IsPointerDown())

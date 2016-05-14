@@ -129,6 +129,8 @@ OverlapResult OrientedBoxCollider::Overlaps(Collider* pOther,
     // vertex in OBB A and B
     float arAVerts[VERTICES_PER_OBB * 3];
     float arBVerts[VERTICES_PER_OBB * 3];
+    float arACenter[3];
+    float arBCenter[3];
 
     // Pointers to the matters that are currently using these two
     // colliders. T stands for "this", O stands for "other"
@@ -167,6 +169,7 @@ OverlapResult OrientedBoxCollider::Overlaps(Collider* pOther,
         {
             matA.MultiplyVec3(&arBoxVertices[i*3], &arAVerts[i*3]);
         }
+        matA.MultiplyVec3(m_arPosition, arACenter);
 
         // Now find the second box's coordinates in world space.
         pB->GenerateLocalCoordinates(arBoxVertices);
@@ -174,6 +177,7 @@ OverlapResult OrientedBoxCollider::Overlaps(Collider* pOther,
         {
             matB.MultiplyVec3(&arBoxVertices[i*3], &arBVerts[i*3]);
         }
+        matB.MultiplyVec3(pB->m_arPosition, arBCenter);
 
         LogDebug("Performing SAT with two OBBs");
 
@@ -231,7 +235,23 @@ OverlapResult OrientedBoxCollider::Overlaps(Collider* pOther,
         }
     }
 
+    // No axis separates, so boxes are overlapping
     orResult.m_nOverlapping = 1;
+
+    // Check if axis of least pen should be inverted.
+    float arCenterDisp[3] = {0.0f};
+    arCenterDisp[0] = arBCenter[0] - arACenter[0];
+    arCenterDisp[1] = arBCenter[1] - arACenter[1];
+    arCenterDisp[2] = arBCenter[2] - arACenter[2];
+
+    if (AngleBetweenVectors(arCenterDisp, orResult.m_arLeastPenAxis) < 90.0f)
+    {
+        // Vectors point in a similar direction, invert the axis
+        orResult.m_arLeastPenAxis[0] *= -1.0f;
+        orResult.m_arLeastPenAxis[1] *= -1.0f;
+        orResult.m_arLeastPenAxis[2] *= -1.0f;
+    }
+
     return orResult;
 }
 
@@ -274,6 +294,15 @@ int OrientedBoxCollider::CheckIntervalOverlap(float* arAxis, float* arVertsA, fl
     float fDotA  = 0.0f;
     float fDotB  = 0.0f;
     float fDepth = 0.0f;
+
+    // Do not check interval if axis is {0,0,0}
+    // I think this happens when crossing two parallel vectors.
+    if (arAxis[0] == 0.0f &&
+        arAxis[1] == 0.0f &&
+        arAxis[2] == 0.0f)
+    {
+        return 1;
+    }
 
     // Set initial mins and maxes
     float fMinA = DotProduct(arAxis, arVertsA);

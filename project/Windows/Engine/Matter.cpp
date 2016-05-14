@@ -3,8 +3,10 @@
 #include "VGL.h"
 #include "Camera.h"
 #include "Scene.h"
+#include "VMath.h"
 #include <stdio.h>
 
+#define COL_BUFFER 0.001f
 #define MATTER_MAX_POINT_LIGHTS 4
 #define MATTER_MAX_DIRECTIONAL_LIGHTS 1
 
@@ -324,42 +326,122 @@ void Matter::Translate(float fTransX,
                        float fTransZ,
                        void* pScene)
 {
-    float arOldPos[3];
-    float arDir[3];
-    ListNode* pMatterNode;
-    ListNode* pColliderNode;
-    Matter* pMatter;
-    Collider* pCollider;
+    int i = 0;
+    float arOldPos[3] = {0.0f};
+    float arDir[3] = {0.0f};
+
+    OverlapResult orResult;
+    ListNode* pMatterNode = 0;
+    ListNode* pColliderNode = 0;
+    ListNode* pThisColliderNode = 0;
+    Matter* pMatter = 0;
+    Collider* pCollider = 0;
+    Collider* pThisCollider = 0;
+
+    // Save the direction of movement in vector-array format
+    arDir[0] = fTransX;
+    arDir[1] = fTransY;
+    arDir[2] = fTransZ;
+
+    // Record previous position
+    arOldPos[0] = m_arPosition[0];
+    arOldPos[1] = m_arPosition[1];
+    arOldPos[2] = m_arPosition[2];
+
+    // Update the position to the tentative new position
+    m_arPosition[0] += fTransX;
+    m_arPosition[1] += fTransY;
+    m_arPosition[2] += fTransZ;
+
 
     if (m_nPhysical != 0 &&
         m_nMobile   != 0)
     {
-        // Record previous position
-        arOldPos[0] = m_arPosition[0];
-        arOldPos[1] = m_arPosition[1];
-        arOldPos[2] = m_arPosition[2];
-
-        // Update the position to the tentative new position
-        m_arPosition[0] += fTransX;
-        m_arPosition[1] += fTransY;
-        m_arPosition[2] += fTransZ;
-
-        // Save the direction of movement in vector-array format
-        arDir[0] = fTransX;
-        arDir[1] = fTransY;
-        arDir[2] = fTransZ;
-
         // TODO: After implementing Octree, replace this list iteration
         // with the octree iteration.
         // Iterate through all matters
         pMatterNode = reinterpret_cast<Scene*>(pScene)->GetMatterList()->GetHead();
 
+        // Loop through the scene matter list
         while (pMatterNode != 0)
         {
             pMatter = reinterpret_cast<Matter*>(pMatterNode->m_pData);
             pMatterNode = pMatterNode->m_pNext;
 
-            //pColliderNode = pMatter->GetColliderList();
+            // Do not check collision with self...
+            if (pMatter == this)
+            {
+                continue;
+            }
+
+            pColliderNode = pMatter->GetColliderList()->GetHead();
+            
+            // Loop though the other matter's colliders
+            while (pColliderNode != 0)
+            {
+                pCollider = reinterpret_cast<Collider*>(pColliderNode->m_pData);
+                pColliderNode = pColliderNode->m_pNext;
+
+                pThisColliderNode = GetColliderList()->GetHead();
+
+                // Loop through this matter's colliders
+                while (pThisColliderNode != 0)
+                {
+                    pThisCollider = reinterpret_cast<Collider*>(pThisColliderNode->m_pData);
+                    pThisColliderNode = pThisColliderNode->m_pNext;
+
+                    if (pThisCollider->GetType() == COLLIDER_BOX &&
+                        pCollider->GetType()     == COLLIDER_BOX)
+                    {
+                        // AABB vs AABB
+                        
+                        // Move one axis at a time
+                        // Check for overlap
+                        // And then move it out so extents do not overlap.
+
+                        // For each axis...
+                        for (i = 0; i < 3; i++)
+                        {
+                            m_arPosition[i] += arDir[i];
+
+                            orResult = pThisCollider->Overlaps(pCollider, pMatter, this);
+
+                            if (orResult.m_nOverlapping != 0)
+                            {
+                                // Collision, so back the matter based on
+                                // Both collider positions
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // OBB vs AABB
+                        // AABB vs OBB
+                        // OBB vs OBB
+
+                        // Perform the collision detection.
+                        orResult = pThisCollider->Overlaps(pCollider, pMatter, this);
+
+                        if (orResult.m_nOverlapping != 0)
+                        {
+                            // Must push back the matter along least penetration axis.
+                            // First add a small extra buffer to the pen depth to make sure
+                            // that the collider is no longer overlapping
+                            orResult.m_fOverlapDepth += COL_BUFFER;
+
+                            // No scale the unit-length axis vector by the overlap depth
+                            orResult.m_arLeastPenAxis[0] *= orResult.m_fOverlapDepth;
+                            orResult.m_arLeastPenAxis[1] *= orResult.m_fOverlapDepth;
+                            orResult.m_arLeastPenAxis[2] *= orResult.m_fOverlapDepth;
+
+                            // Now add the scaled vector to m_arPosition
+                            m_arPosition[0] += orResult.m_arLeastPenAxis[0];
+                            m_arPosition[1] += orResult.m_arLeastPenAxis[1];
+                            m_arPosition[2] += orResult.m_arLeastPenAxis[2];
+                        }
+                    }
+                }
+            }
         }
 
     }
