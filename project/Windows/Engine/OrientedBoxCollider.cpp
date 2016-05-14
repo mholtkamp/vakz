@@ -27,6 +27,7 @@ void OrientedBoxCollider::Render(Matrix* pMVP)
     int i = 0;
     int j = 0;
     float arNormalVerts[3 * 2 * 3] = {0.0f};
+    float arTemp[3] = {0.0f, 0.0f, 0.0f};
 
     int hProg = GetShaderProgram(STATIC_FULLBRIGHT_PROGRAM);
     int hPosition    = -1;
@@ -53,9 +54,27 @@ void OrientedBoxCollider::Render(Matrix* pMVP)
 
     GenerateLocalCoordinates(arBoxVertices);
 
+    // Rotate vertices about OBB center
+
+    for (i = 0; i < VERTICES_PER_OBB; i++)
+    {
+        // Translate to rotate about OBB center
+        arBoxVertices[i*3 + 0] -= m_arPosition[0];
+        arBoxVertices[i*3 + 1] -= m_arPosition[1];
+        arBoxVertices[i*3 + 2] -= m_arPosition[2];
+
+        // Rotate around OBB center
+        m_matRotation.MultiplyVec3(&arBoxVertices[i*3], arTemp);
+
+        // Translate back to world coordinates
+        arBoxVertices[i*3 + 0] = arTemp[0] + m_arPosition[0];
+        arBoxVertices[i*3 + 1] = arTemp[1] + m_arPosition[1];
+        arBoxVertices[i*3 + 2] = arTemp[2] + m_arPosition[2];
+    }
+
     // Create the final MVP matrix by multiplying the colliders
     // rotation matrix
-    matFinal = (*pMVP) * m_matRotation;
+    matFinal = (*pMVP);// * m_matRotation;
 
     glUseProgram(hProg);
 
@@ -117,6 +136,7 @@ OverlapResult OrientedBoxCollider::Overlaps(Collider* pOther,
     OverlapResult orResult;
 
     int i = 0;
+    float arTemp[3] = {0.0f, 0.0f, 0.0f};
 
     static float arXVector[3] = {1.0f, 0.0f, 0.0f};
     static float arYVector[3] = {0.0f, 1.0f, 0.0f};
@@ -167,17 +187,44 @@ OverlapResult OrientedBoxCollider::Overlaps(Collider* pOther,
         GenerateLocalCoordinates(arBoxVertices);
         for(i = 0; i < VERTICES_PER_OBB; i++)
         {
-            matA.MultiplyVec3(&arBoxVertices[i*3], &arAVerts[i*3]);
+            // Translate to rotate about OBB center
+            arBoxVertices[i*3 + 0] -= m_arPosition[0];
+            arBoxVertices[i*3 + 1] -= m_arPosition[1];
+            arBoxVertices[i*3 + 2] -= m_arPosition[2];
+
+            // Rotate around OBB center
+            m_matRotation.MultiplyVec3(&arBoxVertices[i*3], arTemp);
+
+            // Translate back to world coordinates
+            arBoxVertices[i*3 + 0] = arTemp[0] + m_arPosition[0];
+            arBoxVertices[i*3 + 1] = arTemp[1] + m_arPosition[1];
+            arBoxVertices[i*3 + 2] = arTemp[2] + m_arPosition[2];
+
+            // Now multiply by the model matrix
+            pTMatter->GetModelMatrix()->MultiplyVec3(&arBoxVertices[i*3], &arAVerts[i*3]);
         }
-        matA.MultiplyVec3(m_arPosition, arACenter);
+        pTMatter->GetModelMatrix()->MultiplyVec3(m_arPosition, arACenter);
 
         // Now find the second box's coordinates in world space.
         pB->GenerateLocalCoordinates(arBoxVertices);
         for(i = 0; i < VERTICES_PER_OBB; i++)
         {
-            matB.MultiplyVec3(&arBoxVertices[i*3], &arBVerts[i*3]);
+            // Translate to rotate about OBB center
+            arBoxVertices[i*3 + 0] -= pB->m_arPosition[0];
+            arBoxVertices[i*3 + 1] -= pB->m_arPosition[1];
+            arBoxVertices[i*3 + 2] -= pB->m_arPosition[2];
+
+            // Rotate around OBB center
+            pB->m_matRotation.MultiplyVec3(&arBoxVertices[i*3], arTemp);
+
+            // Translate back to world coordinates
+            arBoxVertices[i*3 + 0] = arTemp[0] + pB->m_arPosition[0];
+            arBoxVertices[i*3 + 1] = arTemp[1] + pB->m_arPosition[1];
+            arBoxVertices[i*3 + 2] = arTemp[2] + pB->m_arPosition[2];
+
+            pOMatter->GetModelMatrix()->MultiplyVec3(&arBoxVertices[i*3], &arBVerts[i*3]);
         }
-        matB.MultiplyVec3(pB->m_arPosition, arBCenter);
+        pOMatter->GetModelMatrix()->MultiplyVec3(pB->m_arPosition, arBCenter);
 
         LogDebug("Performing SAT with two OBBs");
 
