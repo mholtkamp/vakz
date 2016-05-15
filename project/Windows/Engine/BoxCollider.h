@@ -41,9 +41,13 @@ public:
     //## flag must be enabled by calling EnableRendering().
     //##
     //## Input:
+    //##   pMVP - matrix
+    //##   pScene - current scene
     //##   pMVP - the model-view-projection combined matrix
     //## **********************************************************************
-    void Render(Matrix* pMVP);
+    void Render(void* pMatter,
+                void* pScene,
+                Matrix* pMVP);
 
     //## **********************************************************************
     //## Overlaps
@@ -69,7 +73,8 @@ public:
 
 private:
 
-    void GenerateLocalCoordinates(float* pRes);
+    void GenerateLocalCoordinates(void* pMatter,
+                                  float* pRes);
 
     //## The local half-extents of the box.
     float m_arHalfExtents[3];

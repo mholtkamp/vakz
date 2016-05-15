@@ -90,12 +90,16 @@ public:
     //##
     //## Renders the collider for debugging purposes. The MVP matrix provided
     //## should be the same as the matrix used to render the parent Matter. 
-    //## Must be implemented by child.
+    //## Must be implemented by child class.
     //##
     //## Input:
+    //##   pMatter - related matter that is using this collider
+    //##   pScene - scene that collider is being rendered in
     //##   pMVP - model-view-projection matrix
     //## **********************************************************************
-    virtual void Render(Matrix* pMVP) = 0;
+    virtual void Render(void* pMatter,
+                        void* pScene,
+                        Matrix* pMVP) = 0;
 
     //## **********************************************************************
     //## Overlaps

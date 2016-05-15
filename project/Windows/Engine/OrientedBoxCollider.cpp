@@ -22,7 +22,9 @@ OrientedBoxCollider::~OrientedBoxCollider()
 
 }
 
-void OrientedBoxCollider::Render(Matrix* pMVP)
+void OrientedBoxCollider::Render(void* pMatter,
+                                 void* pScene,
+                                 Matrix* pMVP)
 {
     int i = 0;
     int j = 0;

@@ -18,7 +18,9 @@ public:
 
     ~OrientedBoxCollider();
 
-    void Render(Matrix* pMVP);
+    void Render(void* pMatter,
+                void* pScene,
+                Matrix* pMVP);
 
     OverlapResult Overlaps(Collider* pOther,
                            void*     pOtherMatter,

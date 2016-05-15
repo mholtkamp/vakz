@@ -224,7 +224,7 @@ void Matter::Render(void* pScene)
 
             while (pNode != 0)
             {
-                reinterpret_cast<Collider*>(pNode->m_pData)->Render(&matMVP);
+                reinterpret_cast<Collider*>(pNode->m_pData)->Render(this, pScene, &matMVP);
                 pNode = pNode->m_pNext;
             }
 

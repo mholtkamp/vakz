@@ -2,6 +2,7 @@
 #include "MeshCollider.h"
 #include "TriangleBoxCollision.h"
 #include "Matter.h"
+#include "Scene.h"
 #include "VGL.h"
 
 #define VERTICES_PER_BOX 8
@@ -56,7 +57,9 @@ const float* BoxCollider::GetRelativePosition()
 //*****************************************************************************
 // Render
 //*****************************************************************************
-void BoxCollider::Render(Matrix* pMVP)
+void BoxCollider::Render(void* pMatter,
+                         void* pScene,
+                         Matrix* pMVP)
 {
     int i = 0;
     int j = 0;
@@ -68,7 +71,10 @@ void BoxCollider::Render(Matrix* pMVP)
     int hColor       = -1;
     int hMatrixMVP   = -1;
 
-    Matrix matFinal;
+    Scene* pTScene = reinterpret_cast<Scene*>(pScene);
+
+    // Calculate the VP matrix
+    Matrix matVP = *(pTScene->GetCamera()->GetProjectionMatrix()) * (*pTScene->GetCamera()->GetViewMatrix());
 
     // First generate the point coordinates and indices
     float arBoxVertices[VERTICES_PER_BOX * 3] = {0.0f};
@@ -85,11 +91,8 @@ void BoxCollider::Render(Matrix* pMVP)
                                                     2, 7, 3,
                                                     2, 6, 7};
 
-    GenerateLocalCoordinates(arBoxVertices);
+    GenerateLocalCoordinates(pMatter, arBoxVertices);
 
-    // Create the final MVP matrix by multiplying the colliders
-    // rotation matrix
-    matFinal = (*pMVP);
 
     glUseProgram(hProg);
 
@@ -110,7 +113,7 @@ void BoxCollider::Render(Matrix* pMVP)
                           0,
                           arBoxVertices);
 
-    glUniformMatrix4fv(hMatrixMVP, 1, GL_FALSE, matFinal.GetArray());
+    glUniformMatrix4fv(hMatrixMVP, 1, GL_FALSE, matVP.GetArray());
 
     // No texturing enabled.
     glUniform1i(hTextureMode, 0);
@@ -262,15 +265,19 @@ OverlapResult BoxCollider::Overlaps(Collider* pOther,
     return orResult;
 }
 
-void BoxCollider::GenerateLocalCoordinates(float* pRes)
+void BoxCollider::GenerateLocalCoordinates(void* pMatter, 
+                                           float* pRes)
 {
     int i = 0;
+    Matter* pTMatter = reinterpret_cast<Matter*>(pMatter);
+    const float* pPosition = pTMatter->GetPosition();
+    const float* pScale    = pTMatter->GetScale();
 
     for (i = 0; i < VERTICES_PER_BOX; i++)
     {
-        pRes[i*3 + 0] = m_arPosition[0] + (1 - (i & 1)*2)*m_arHalfExtents[0];
-        pRes[i*3 + 1] = m_arPosition[1] + (1 - ((i & 2) >> 1) *2)*m_arHalfExtents[1];
-        pRes[i*3 + 2] = m_arPosition[2] + (1 - ((i & 4) >> 2) *2)*m_arHalfExtents[2];
+        pRes[i*3 + 0] = (m_arPosition[0] + (1 - (i & 1)*2)*m_arHalfExtents[0]) * pScale[0] + pPosition[0];
+        pRes[i*3 + 1] = (m_arPosition[1] + (1 - ((i & 2) >> 1) *2)*m_arHalfExtents[1]) * pScale[1] + pPosition[1];
+        pRes[i*3 + 2] = (m_arPosition[2] + (1 - ((i & 4) >> 2) *2)*m_arHalfExtents[2]) * pScale[2] + pPosition[2];
     }
 }
 
