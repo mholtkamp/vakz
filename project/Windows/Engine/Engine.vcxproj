@@ -81,7 +81,6 @@
     <ClCompile Include="ImageLoader.cpp" />
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="List.cpp" />
-    <ClCompile Include="MeshCollider.cpp" />
     <ClCompile Include="OrientedBoxCollider.cpp" />
     <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="Rect.cpp" />
@@ -140,7 +139,6 @@
     <ClInclude Include="Terrain.h" />
     <ClInclude Include="Toast.h" />
     <ClInclude Include="TriangleBoxCollision.h" />
-    <ClInclude Include="MeshCollider.h" />
     <ClInclude Include="MeshLoader.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="Primitives.h" />

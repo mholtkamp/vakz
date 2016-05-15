@@ -1,6 +1,5 @@
 #include "OrientedBoxCollider.h"
 #include "BoxCollider.h"
-#include "MeshCollider.h"
 #include "Matter.h"
 #include "Log.h"
 #include "VMath.h"
@@ -86,155 +85,16 @@ OverlapResult OrientedBoxCollider::Overlaps(Collider* pOther,
                                             void* pOtherMatter,
                                             void* pThisMatter)
 {
-    // Returning result by value, so it is okay
-    // to use this stack object.
-    OverlapResult orResult;
-
-    int i = 0;
-    float arTemp[3] = {0.0f, 0.0f, 0.0f};
-
-    static float arXVector[3] = {1.0f, 0.0f, 0.0f};
-    static float arYVector[3] = {0.0f, 1.0f, 0.0f};
-    static float arZVector[3] = {0.0f, 0.0f, 1.0f};
-    
-    // Temporary array to hold model space vertices of both OBB A and B
-    float arBoxVertices[VERTICES_PER_OBB * 3] = {0.0f};
-
-    // These arrays hold the world position coordinates for each 
-    // vertex in OBB A and B
-    float arAVerts[VERTICES_PER_OBB * 3];
-    float arBVerts[VERTICES_PER_OBB * 3];
-    float arACenter[3];
-    float arBCenter[3];
-
-    // Pointers to the matters that are currently using these two
-    // colliders. T stands for "this", O stands for "other"
-    Matter* pTMatter = 0;
-    Matter* pOMatter = 0;
-
-    // The combined matrices for matrix A and matrix B. By combined, I mean
-    // the local rotation matrix of the OBB multiplied with the owning
-    // Matter's model matrix.
-    Matrix matA;
-    Matrix matB;
-
-    // Vectors for the primary axes in OBB A/B.
-    // 3 vectors of size 3 each
-    float arAxesA[3 * 3] = {0.0f};
-    float arAxesB[3 * 3] = {0.0f};
-
-    // The combined axes from each A axis cross with each B axis
-    float arAxesC[3 * 9] = {0.0f};
-    
-
     if (pOther->GetType() == COLLIDER_ORIENTED_BOX)
     {
-        OrientedBoxCollider* pA = this;
-        OrientedBoxCollider* pB = reinterpret_cast<OrientedBoxCollider*>(pOther);
-        pTMatter = reinterpret_cast<Matter*>(pThisMatter);
-        pOMatter = reinterpret_cast<Matter*>(pOtherMatter);
-
-        // Compute the combined matrices for OBB A + B
-        matA = *pTMatter->GetModelMatrix() * m_matRotation;
-        matB = *pOMatter->GetModelMatrix() * pB->m_matRotation;
-
-        // Find all the coordinates of box A (this box) in world space.
-        GenerateLocalCoordinates(arBoxVertices);
-
-        // Transform so they are in world space now by multiplying matter's
-        // model matrix.
-        for(i = 0; i < VERTICES_PER_OBB; i++)
-        {
-            // Now multiply by the model matrix
-            pTMatter->GetModelMatrix()->MultiplyVec3(&arBoxVertices[i*3], &arAVerts[i*3]);
-        }
-        pTMatter->GetModelMatrix()->MultiplyVec3(m_arPosition, arACenter);
-
-        // Now find the second box's coordinates in world space.
-        pB->GenerateLocalCoordinates(arBoxVertices);
-
-        // Transform so they are in world space now by multiplying matter's
-        // model matrix.
-        for(i = 0; i < VERTICES_PER_OBB; i++)
-        {
-            pOMatter->GetModelMatrix()->MultiplyVec3(&arBoxVertices[i*3], &arBVerts[i*3]);
-        }
-        pOMatter->GetModelMatrix()->MultiplyVec3(pB->m_arPosition, arBCenter);
-
-        LogDebug("Performing SAT with two OBBs");
-
-        // Find the primary axes in world space for A and B
-        matA.MultiplyVec3Dir(arXVector,arAxesA);
-        matA.MultiplyVec3Dir(arYVector,&arAxesA[3]);
-        matA.MultiplyVec3Dir(arZVector,&arAxesA[6]);
-
-        matB.MultiplyVec3Dir(arXVector,arAxesB);
-        matB.MultiplyVec3Dir(arYVector,&arAxesB[3]);
-        matB.MultiplyVec3Dir(arZVector,&arAxesB[6]);
-
-        // Find the combined axes of each primary A axis
-        // crossed with each primary B axis. (9 total)
-        CrossProduct(&arAxesA[0*3], &arAxesB[0*3], &arAxesC[0*3]);
-        CrossProduct(&arAxesA[0*3], &arAxesB[1*3], &arAxesC[1*3]);
-        CrossProduct(&arAxesA[0*3], &arAxesB[2*3], &arAxesC[2*3]);
-
-        CrossProduct(&arAxesA[1*3], &arAxesB[0*3], &arAxesC[3*3]);
-        CrossProduct(&arAxesA[1*3], &arAxesB[1*3], &arAxesC[4*3]);
-        CrossProduct(&arAxesA[1*3], &arAxesB[2*3], &arAxesC[5*3]);
-
-        CrossProduct(&arAxesA[2*3], &arAxesB[0*3], &arAxesC[6*3]);
-        CrossProduct(&arAxesA[2*3], &arAxesB[1*3], &arAxesC[7*3]);
-        CrossProduct(&arAxesA[2*3], &arAxesB[2*3], &arAxesC[8*3]);
-
-        // Now that all axes are found, go through each one and project
-        // the world space vertices of A and B onto the normal and find the ranges.
-        // CheckIntervalOverlap will return 1 if there is an overlap of A's 
-        // vertex projections and B's vertex projections. If 0 is returned, then we
-        // have found an axis that separates the OBBs and thus, they do not
-        // overlap.
-        for (i = 0; i < 3; i++)
-        {
-            if (CheckIntervalOverlap(&arAxesA[i*3], arAVerts, arBVerts, orResult) == 0)
-            {
-                orResult.m_nOverlapping = 0;
-                return orResult;
-            }
-
-            if (CheckIntervalOverlap(&arAxesB[i*3], arAVerts, arBVerts, orResult) == 0)
-            {
-                orResult.m_nOverlapping = 0;
-                return orResult;
-            }
-        }
-
-        for (i = 0; i < 9; i++)
-        {
-            if (CheckIntervalOverlap(&arAxesC[i*3], arAVerts, arBVerts, orResult) == 0)
-            {
-                orResult.m_nOverlapping = 0;
-                return orResult;
-            }
-        }
+        return OBB_Overlaps_OBB(this, pThisMatter, pOther, pOtherMatter);
     }
-
-    // No axis separates, so boxes are overlapping
-    orResult.m_nOverlapping = 1;
-
-    // Check if axis of least pen should be inverted.
-    float arCenterDisp[3] = {0.0f};
-    arCenterDisp[0] = arBCenter[0] - arACenter[0];
-    arCenterDisp[1] = arBCenter[1] - arACenter[1];
-    arCenterDisp[2] = arBCenter[2] - arACenter[2];
-
-    if (AngleBetweenVectors(arCenterDisp, orResult.m_arLeastPenAxis) < 90.0f)
+    else if (pOther->GetType() == COLLIDER_BOX)
     {
-        // Vectors point in a similar direction, invert the axis
-        orResult.m_arLeastPenAxis[0] *= -1.0f;
-        orResult.m_arLeastPenAxis[1] *= -1.0f;
-        orResult.m_arLeastPenAxis[2] *= -1.0f;
+        return OBB_Overlaps_AABB(this, pThisMatter, pOther, pOtherMatter);
     }
 
-    return orResult;
+    return OverlapResult();
 }
 
 void OrientedBoxCollider::SetHalfExtents(float fHalfX,
@@ -279,93 +139,7 @@ void OrientedBoxCollider::GenerateLocalCoordinates(float* pRes)
     }
 }
 
-int OrientedBoxCollider::CheckIntervalOverlap(float* arAxis, float* arVertsA, float* arVertsB, OverlapResult& orResult)
+const Matrix* OrientedBoxCollider::GetRotationMatrix()
 {
-    int i        = 0;
-    float fDotA  = 0.0f;
-    float fDotB  = 0.0f;
-    float fDepth = 0.0f;
-
-    // Do not check interval if axis is {0,0,0}
-    // I think this happens when crossing two parallel vectors.
-    if (arAxis[0] == 0.0f &&
-        arAxis[1] == 0.0f &&
-        arAxis[2] == 0.0f)
-    {
-        return 1;
-    }
-
-    // Waited to normalize the vector until now to cut down
-    // on unnecessary normalizations. Normalization needs to be 
-    // performed to make sure the dot products return the actual
-    // projected length. The axis may not be a unit-vector if the
-    // Matter's model matrix contains scaling factors.
-    NormalizeVector(arAxis);
-
-    // Set initial mins and maxes
-    float fMinA = DotProduct(arAxis, arVertsA);
-    float fMaxA = fMinA;
-
-    float fMinB = DotProduct(arAxis, arVertsB);
-    float fMaxB = fMinB;
-
-    for (i = 1; i < VERTICES_PER_OBB; i++)
-    {
-        fDotA = DotProduct(arAxis, &arVertsA[i*3]);
-        fDotB = DotProduct(arAxis, &arVertsB[i*3]);
-
-        if (fDotA < fMinA)
-        {
-            fMinA = fDotA;
-        }
-
-        if (fDotA > fMaxA)
-        {
-            fMaxA = fDotA;
-        }
-
-        if (fDotB < fMinB)
-        {
-            fMinB = fDotB;
-        }
-
-        if (fDotB > fMaxB)
-        {
-            fMaxB = fDotB;
-        }
-    }
-
-    // Check interval overlaps
-    if (fMinB > fMaxA)
-    {
-        return 0;
-    }
-
-    if (fMaxB < fMinA)
-    {
-        return 0;
-    }
-
-    // The intervals do overlap, so return 1.
-    // But also record the penetration depth if it is lower
-    // than the previous recording in the OverlapResult object
-    if (fMaxB > fMaxA)
-    {
-        fDepth = fMaxA - fMinB;
-    }
-    else
-    {
-        fDepth = fMaxB - fMinA;
-    }
-
-    if (fDepth < orResult.m_fOverlapDepth)
-    {
-        orResult.m_fOverlapDepth = fDepth;
-        orResult.m_arLeastPenAxis[0] = arAxis[0];
-        orResult.m_arLeastPenAxis[1] = arAxis[1];
-        orResult.m_arLeastPenAxis[2] = arAxis[2];
-    }
-
-    return 1;
+    return &m_matRotation;
 }
-

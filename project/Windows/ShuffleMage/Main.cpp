@@ -12,7 +12,6 @@
 #include "ResourceLibrary.h"
 #include "DiffuseMaterial.h"
 #include "DirectionalLight.h"
-#include "MeshCollider.h"
 #include "Text.h"
 #include "VSocket.h"
 

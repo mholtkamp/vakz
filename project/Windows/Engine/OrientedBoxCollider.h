@@ -34,11 +34,11 @@ public:
                              float fRotY,
                              float fRotZ);
 
-private:
+    const Matrix* GetRotationMatrix();
 
     void GenerateLocalCoordinates(float* arRes);
 
-    int CheckIntervalOverlap(float* arAxis, float* arVertsA, float* arVertsB, OverlapResult& orResult);
+private:
 
     Matrix m_matRotation;
 

@@ -152,10 +152,10 @@ public:
     //##   arRes - a vector of size 3 that contains the result of the multiply
     //##           operationion with the last component (w) removed.
     //## **********************************************************************
-    void MultiplyVec3(float* arVec3,
+    void MultiplyVec3(const float* arVec3,
                       float* arRes);
 
-    void MultiplyVec3Dir(float* arVec3,
+    void MultiplyVec3Dir(const float* arVec3,
                          float* arRes);
 
     //## **********************************************************************
@@ -173,7 +173,7 @@ public:
     //##   arRes - a vector of size 4 that contains the result of the multiply
     //##           operationion.
     //## **********************************************************************
-    void MultiplyVec4(float* arVec4,
+    void MultiplyVec4(const float* arVec4,
                       float* arRes);
 
     //## **********************************************************************

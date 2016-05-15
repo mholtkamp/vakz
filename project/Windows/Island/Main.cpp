@@ -12,7 +12,6 @@
 #include "ResourceLibrary.h"
 #include "DiffuseMaterial.h"
 #include "DirectionalLight.h"
-#include "MeshCollider.h"
 #include "Text.h"
 #include "RimlitMaterial.h"
 
@@ -88,7 +87,7 @@ int main()
     pFlower->SetMaterial(pWhiteMat);
     pFlower->SetPosition(-1.0f, 0.0f, 0.0f);
     pFlower->SetTexture(pFlowerPotTexture);
-    pFlower->AddCollider(pFlowerCollider);
+    //pFlower->AddCollider(pFlowerCollider);
     pFlower->EnableColliderRendering();
     pFlower->SetPhysical(1);
     pTestScene->AddMatter(pFlower);
@@ -111,10 +110,12 @@ int main()
     BoxCollider* pAABB = new BoxCollider();
     pAABB->SetRelativePosition(0.0f, 1.23f, 0.0f);
     pAABB->SetHalfExtents(0.70f, 1.23f, 0.70f);
-    pTestAnim->AddCollider(pAABB);
+    pTestAnim->AddCollider(pTestCollider);
     pTestAnim->SetPhysical(1);
     pTestAnim->SetMobile(1);
     pTestAnim->EnableColliderRendering();
+    
+    pFlower->AddCollider(pAABB);
 
     LogDebug("Loaded both meshes.");
 

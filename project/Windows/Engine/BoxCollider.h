@@ -31,8 +31,6 @@ public:
 
     const float* GetHalfExtents();
 
-    const float* GetRelativePosition();
-
     //## **********************************************************************
     //## Render
     //## 
@@ -71,10 +69,9 @@ public:
     void EnableRendering();
     void DisableRendering();
 
-private:
+    void GenerateLocalCoordinates(float* pRes);
 
-    void GenerateLocalCoordinates(void* pMatter,
-                                  float* pRes);
+private:
 
     //## The local half-extents of the box.
     float m_arHalfExtents[3];

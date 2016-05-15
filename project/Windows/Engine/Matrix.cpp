@@ -395,7 +395,7 @@ void Matrix::Load(float* arValues)
 //*****************************************************************************
 // MultiplyVec3
 //*****************************************************************************
-void Matrix::MultiplyVec3(float* arVec3,
+void Matrix::MultiplyVec3(const float* arVec3,
                           float* arRes)
 {
     float arVec4[4] = {0.0f};
@@ -417,7 +417,7 @@ void Matrix::MultiplyVec3(float* arVec3,
     }
 }
 
-void Matrix::MultiplyVec3Dir(float* arVec3,
+void Matrix::MultiplyVec3Dir(const float* arVec3,
                              float* arRes)
 {
     float arVec4[4] = {0.0f};
@@ -442,7 +442,7 @@ void Matrix::MultiplyVec3Dir(float* arVec3,
 //*****************************************************************************
 // MultiplyVec4
 //*****************************************************************************
-void Matrix::MultiplyVec4(float* arVec4,
+void Matrix::MultiplyVec4(const float* arVec4,
                           float* arRes)
 {
     int i = 0;

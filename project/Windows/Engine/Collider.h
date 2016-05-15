@@ -3,12 +3,13 @@
 
 #include "Matrix.h"
 
+#define VERTICES_PER_BOX 8
+
 enum ColliderType
 {
     COLLIDER_NO_TYPE      = -1,
     COLLIDER_BOX          =  0,
-    COLLIDER_MESH         =  1,
-    COLLIDER_ORIENTED_BOX =  2
+    COLLIDER_ORIENTED_BOX =  1
 };
 
 // This struct is returned by the Overlaps() method
@@ -117,7 +118,32 @@ public:
                                    void*   pOtherMatter,
                                    void*   pThisMatter) = 0;
 
+    const float* GetRelativePosition();
+
 protected:
+
+    //## Collision functions
+    static OverlapResult OBB_Overlaps_OBB(Collider* pColA,
+                                          void* pColMatterA,
+                                          Collider* pColB,
+                                          void* pColMatterB);
+
+    static OverlapResult AABB_Overlaps_OBB(Collider* pColAABB,
+                                           void* pColMatterAABB,
+                                           Collider* pColOBB,
+                                           void* pColMatterOBB);
+
+    static OverlapResult OBB_Overlaps_AABB(Collider* pColOBB,
+                                           void* pColMatterOBB,
+                                           Collider* pColAABB,
+                                           void* pColMatterAABB);
+
+    static OverlapResult AABB_Overlaps_AABB(Collider* pColA,
+                                            void* pColMatterA,
+                                            Collider* pColB,
+                                            void* pColMatterB);
+
+    static int CheckIntervalOverlap(float* arAxis, float* arVertsA, float* arVertsB, OverlapResult& orResult);
 
     //## Type of collider (ie. Mesh/Box/Sphere)
     int m_nType;
