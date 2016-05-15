@@ -390,55 +390,25 @@ void Matter::Translate(float fTransX,
                     pThisCollider = reinterpret_cast<Collider*>(pThisColliderNode->m_pData);
                     pThisColliderNode = pThisColliderNode->m_pNext;
 
-                    if (pThisCollider->GetType() == COLLIDER_BOX &&
-                        pCollider->GetType()     == COLLIDER_BOX)
+                    // Perform the collision detection.
+                    orResult = pThisCollider->Overlaps(pCollider, pMatter, this);
+
+                    if (orResult.m_nOverlapping != 0)
                     {
-                        // AABB vs AABB
-                        
-                        // Move one axis at a time
-                        // Check for overlap
-                        // And then move it out so extents do not overlap.
+                        // Must push back the matter along least penetration axis.
+                        // First add a small extra buffer to the pen depth to make sure
+                        // that the collider is no longer overlapping
+                        orResult.m_fOverlapDepth += COL_BUFFER;
 
-                        // For each axis...
-                        for (i = 0; i < 3; i++)
-                        {
-                            m_arPosition[i] += arDir[i];
+                        // No scale the unit-length axis vector by the overlap depth
+                        orResult.m_arLeastPenAxis[0] *= orResult.m_fOverlapDepth;
+                        orResult.m_arLeastPenAxis[1] *= orResult.m_fOverlapDepth;
+                        orResult.m_arLeastPenAxis[2] *= orResult.m_fOverlapDepth;
 
-                            orResult = pThisCollider->Overlaps(pCollider, pMatter, this);
-
-                            if (orResult.m_nOverlapping != 0)
-                            {
-                                // Collision, so back the matter based on
-                                // Both collider positions
-                            }
-                        }
-                    }
-                    else
-                    {
-                        // OBB vs AABB
-                        // AABB vs OBB
-                        // OBB vs OBB
-
-                        // Perform the collision detection.
-                        orResult = pThisCollider->Overlaps(pCollider, pMatter, this);
-
-                        if (orResult.m_nOverlapping != 0)
-                        {
-                            // Must push back the matter along least penetration axis.
-                            // First add a small extra buffer to the pen depth to make sure
-                            // that the collider is no longer overlapping
-                            orResult.m_fOverlapDepth += COL_BUFFER;
-
-                            // No scale the unit-length axis vector by the overlap depth
-                            orResult.m_arLeastPenAxis[0] *= orResult.m_fOverlapDepth;
-                            orResult.m_arLeastPenAxis[1] *= orResult.m_fOverlapDepth;
-                            orResult.m_arLeastPenAxis[2] *= orResult.m_fOverlapDepth;
-
-                            // Now add the scaled vector to m_arPosition
-                            m_arPosition[0] += orResult.m_arLeastPenAxis[0];
-                            m_arPosition[1] += orResult.m_arLeastPenAxis[1];
-                            m_arPosition[2] += orResult.m_arLeastPenAxis[2];
-                        }
+                        // Now add the scaled vector to m_arPosition
+                        m_arPosition[0] += orResult.m_arLeastPenAxis[0];
+                        m_arPosition[1] += orResult.m_arLeastPenAxis[1];
+                        m_arPosition[2] += orResult.m_arLeastPenAxis[2];
                     }
                 }
             }

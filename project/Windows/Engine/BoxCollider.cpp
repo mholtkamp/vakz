@@ -136,6 +136,10 @@ OverlapResult BoxCollider::Overlaps(Collider* pOther,
     {
         return AABB_Overlaps_OBB(this, pThisMatter, pOther, pOtherMatter);
     }
+    else if (pOther->GetType() == COLLIDER_BOX)
+    {
+        return AABB_Overlaps_AABB(this, pThisMatter, pOther, pOtherMatter);
+    }
 
     return OverlapResult();
 }

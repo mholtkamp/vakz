@@ -410,7 +410,104 @@ OverlapResult Collider::AABB_Overlaps_AABB(Collider* pColA,
                                            Collider* pColB,
                                            void* pColMatterB)
 {
+    // Returning result by value, so it is okay
+    // to use this stack object.
     OverlapResult orResult;
+
+    int i = 0;
+    float arTemp[3] = {0.0f, 0.0f, 0.0f};
+
+    static float arXVector[3] = {1.0f, 0.0f, 0.0f};
+    static float arYVector[3] = {0.0f, 1.0f, 0.0f};
+    static float arZVector[3] = {0.0f, 0.0f, 1.0f};
+    
+    // Temporary array to hold model space vertices of both OBB A and B
+    float arBoxVertices[VERTICES_PER_BOX * 3] = {0.0f};
+
+    // These arrays hold the world position coordinates for each 
+    // vertex in OBB A and B
+    float arAVerts[VERTICES_PER_BOX * 3];
+    float arBVerts[VERTICES_PER_BOX * 3];
+    float arACenter[3];
+    float arBCenter[3];
+
+    // Pointers to the matters for each collider
+    Matter* pAMatter = reinterpret_cast<Matter*>(pColMatterA);
+    Matter* pBMatter = reinterpret_cast<Matter*>(pColMatterB);
+    
+    BoxCollider* pA = reinterpret_cast<BoxCollider*>(pColA);
+    BoxCollider* pB = reinterpret_cast<BoxCollider*>(pColB);
+
+    // Find all the coordinates of box A (this box) in world space.
+    pA->GenerateLocalCoordinates(arBoxVertices);
+
+    const float* pAMatPosition = pAMatter->GetPosition();
+    const float* pAMatScale = pAMatter->GetScale();
+
+    // Find the world coordinates by using the Matter's position and scale
+    for (i = 0; i < VERTICES_PER_BOX; i++)
+    {
+        arAVerts[i*3 + 0] = arBoxVertices[i*3 + 0] * pAMatScale[0] + pAMatPosition[0];
+        arAVerts[i*3 + 1] = arBoxVertices[i*3 + 1] * pAMatScale[1] + pAMatPosition[1];
+        arAVerts[i*3 + 2] = arBoxVertices[i*3 + 2] * pAMatScale[2] + pAMatPosition[2];
+    }
+    const float* pARelativePos = pA->GetRelativePosition();
+    arACenter[0] = pARelativePos[0] * pAMatScale[0] + pAMatPosition[0];
+    arACenter[1] = pARelativePos[1] * pAMatScale[1] + pAMatPosition[1];
+    arACenter[2] = pARelativePos[2] * pAMatScale[2] + pAMatPosition[2];
+
+    // Now find the second box's coordinates in world space.
+    pB->GenerateLocalCoordinates(arBoxVertices);
+
+    const float* pBMatPosition = pBMatter->GetPosition();
+    const float* pBMatScale = pBMatter->GetScale();
+
+    // Find the world coordinates by using the Matter's position and scale
+    for (i = 0; i < VERTICES_PER_BOX; i++)
+    {
+        arBVerts[i*3 + 0] = arBoxVertices[i*3 + 0] * pBMatScale[0] + pBMatPosition[0];
+        arBVerts[i*3 + 1] = arBoxVertices[i*3 + 1] * pBMatScale[1] + pBMatPosition[1];
+        arBVerts[i*3 + 2] = arBoxVertices[i*3 + 2] * pBMatScale[2] + pBMatPosition[2];
+    }
+    const float* pBRelativePos = pB->GetRelativePosition();
+    arBCenter[0] = pBRelativePos[0] * pBMatScale[0] + pBMatPosition[0];
+    arBCenter[1] = pBRelativePos[1] * pBMatScale[1] + pBMatPosition[1];
+    arBCenter[2] = pBRelativePos[2] * pBMatScale[2] + pBMatPosition[2];
+
+    // For checking AABB collisions, only the 3 primary axes need to be checked
+    if (CheckIntervalOverlap(arXVector, arAVerts, arBVerts, orResult) == 0)
+    {
+        orResult.m_nOverlapping = 0;
+        return orResult;
+    }
+    if (CheckIntervalOverlap(arYVector, arAVerts, arBVerts, orResult) == 0)
+    {
+        orResult.m_nOverlapping = 0;
+        return orResult;
+    }
+    if (CheckIntervalOverlap(arZVector, arAVerts, arBVerts, orResult) == 0)
+    {
+        orResult.m_nOverlapping = 0;
+        return orResult;
+    }
+  
+    // No axis separates, so boxes are overlapping
+    orResult.m_nOverlapping = 1;
+
+    // Check if axis of least pen should be inverted.
+    float arCenterDisp[3] = {0.0f};
+    arCenterDisp[0] = arBCenter[0] - arACenter[0];
+    arCenterDisp[1] = arBCenter[1] - arACenter[1];
+    arCenterDisp[2] = arBCenter[2] - arACenter[2];
+
+    if (AngleBetweenVectors(arCenterDisp, orResult.m_arLeastPenAxis) < 90.0f)
+    {
+        // Vectors point in a similar direction, invert the axis
+        orResult.m_arLeastPenAxis[0] *= -1.0f;
+        orResult.m_arLeastPenAxis[1] *= -1.0f;
+        orResult.m_arLeastPenAxis[2] *= -1.0f;
+    }
+
     return orResult;
 }
 

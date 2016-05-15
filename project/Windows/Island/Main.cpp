@@ -110,7 +110,7 @@ int main()
     BoxCollider* pAABB = new BoxCollider();
     pAABB->SetRelativePosition(0.0f, 1.23f, 0.0f);
     pAABB->SetHalfExtents(0.70f, 1.23f, 0.70f);
-    pTestAnim->AddCollider(pTestCollider);
+    pTestAnim->AddCollider(pAABB);
     pTestAnim->SetPhysical(1);
     pTestAnim->SetMobile(1);
     pTestAnim->EnableColliderRendering();
