@@ -2,7 +2,9 @@
 #include "MeshCollider.h"
 #include "TriangleBoxCollision.h"
 #include "Matter.h"
+#include "VGL.h"
 
+#define VERTICES_PER_BOX 8
 
 //*****************************************************************************
 // Constructor
@@ -56,7 +58,66 @@ const float* BoxCollider::GetRelativePosition()
 //*****************************************************************************
 void BoxCollider::Render(Matrix* pMVP)
 {
+    int i = 0;
+    int j = 0;
+    float arTemp[3] = {0.0f, 0.0f, 0.0f};
 
+    int hProg = GetShaderProgram(STATIC_FULLBRIGHT_PROGRAM);
+    int hPosition    = -1;
+    int hTextureMode = -1;
+    int hColor       = -1;
+    int hMatrixMVP   = -1;
+
+    Matrix matFinal;
+
+    // First generate the point coordinates and indices
+    float arBoxVertices[VERTICES_PER_BOX * 3] = {0.0f};
+    static unsigned char arBoxIndices[6 * 2 * 3] = {0, 1, 2,
+                                                    1, 2, 3,
+                                                    4, 5, 6,
+                                                    5, 6, 7,
+                                                    0, 4, 2,
+                                                    4, 2, 6,
+                                                    5, 1, 7,
+                                                    1, 7, 3,
+                                                    0, 1, 5,
+                                                    0, 4, 5,
+                                                    2, 7, 3,
+                                                    2, 6, 7};
+
+    GenerateLocalCoordinates(arBoxVertices);
+
+    // Create the final MVP matrix by multiplying the colliders
+    // rotation matrix
+    matFinal = (*pMVP);
+
+    glUseProgram(hProg);
+
+    // Unbind VBO and Texture
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    hPosition    = glGetAttribLocation(hProg, "aPosition");
+    hTextureMode = glGetUniformLocation(hProg, "uTextureMode");
+    hColor       = glGetUniformLocation(hProg, "uColor");
+    hMatrixMVP   = glGetUniformLocation(hProg, "uMatrixMVP");
+    
+    glEnableVertexAttribArray(hPosition);
+    glVertexAttribPointer(hPosition,
+                          3,
+                          GL_FLOAT,
+                          GL_FALSE,
+                          0,
+                          arBoxVertices);
+
+    glUniformMatrix4fv(hMatrixMVP, 1, GL_FALSE, matFinal.GetArray());
+
+    // No texturing enabled.
+    glUniform1i(hTextureMode, 0);
+
+    glUniform4fv(hColor, 1, m_arRenderColor);
+
+    glDrawElements(GL_TRIANGLES, 6 * 2 * 3, GL_UNSIGNED_BYTE, arBoxIndices);
 }
 
 
@@ -199,6 +260,18 @@ OverlapResult BoxCollider::Overlaps(Collider* pOther,
     }
 
     return orResult;
+}
+
+void BoxCollider::GenerateLocalCoordinates(float* pRes)
+{
+    int i = 0;
+
+    for (i = 0; i < VERTICES_PER_BOX; i++)
+    {
+        pRes[i*3 + 0] = m_arPosition[0] + (1 - (i & 1)*2)*m_arHalfExtents[0];
+        pRes[i*3 + 1] = m_arPosition[1] + (1 - ((i & 2) >> 1) *2)*m_arHalfExtents[1];
+        pRes[i*3 + 2] = m_arPosition[2] + (1 - ((i & 4) >> 2) *2)*m_arHalfExtents[2];
+    }
 }
 
 ////*****************************************************************************

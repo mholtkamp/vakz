@@ -26,7 +26,6 @@ void OrientedBoxCollider::Render(Matrix* pMVP)
 {
     int i = 0;
     int j = 0;
-    float arNormalVerts[3 * 2 * 3] = {0.0f};
     float arTemp[3] = {0.0f, 0.0f, 0.0f};
 
     int hProg = GetShaderProgram(STATIC_FULLBRIGHT_PROGRAM);
@@ -34,8 +33,6 @@ void OrientedBoxCollider::Render(Matrix* pMVP)
     int hTextureMode = -1;
     int hColor       = -1;
     int hMatrixMVP   = -1;
-
-    Matrix matFinal;
 
     // First generate the point coordinates and indices
     float arBoxVertices[VERTICES_PER_OBB * 3] = {0.0f};
@@ -53,28 +50,6 @@ void OrientedBoxCollider::Render(Matrix* pMVP)
                                                     2, 6, 7};
 
     GenerateLocalCoordinates(arBoxVertices);
-
-    // Rotate vertices about OBB center
-
-    for (i = 0; i < VERTICES_PER_OBB; i++)
-    {
-        // Translate to rotate about OBB center
-        arBoxVertices[i*3 + 0] -= m_arPosition[0];
-        arBoxVertices[i*3 + 1] -= m_arPosition[1];
-        arBoxVertices[i*3 + 2] -= m_arPosition[2];
-
-        // Rotate around OBB center
-        m_matRotation.MultiplyVec3(&arBoxVertices[i*3], arTemp);
-
-        // Translate back to world coordinates
-        arBoxVertices[i*3 + 0] = arTemp[0] + m_arPosition[0];
-        arBoxVertices[i*3 + 1] = arTemp[1] + m_arPosition[1];
-        arBoxVertices[i*3 + 2] = arTemp[2] + m_arPosition[2];
-    }
-
-    // Create the final MVP matrix by multiplying the colliders
-    // rotation matrix
-    matFinal = (*pMVP);// * m_matRotation;
 
     glUseProgram(hProg);
 
@@ -95,7 +70,7 @@ void OrientedBoxCollider::Render(Matrix* pMVP)
                           0,
                           arBoxVertices);
 
-    glUniformMatrix4fv(hMatrixMVP, 1, GL_FALSE, matFinal.GetArray());
+    glUniformMatrix4fv(hMatrixMVP, 1, GL_FALSE, pMVP->GetArray());
 
     // No texturing enabled.
     glUniform1i(hTextureMode, 0);
@@ -103,28 +78,6 @@ void OrientedBoxCollider::Render(Matrix* pMVP)
     glUniform4fv(hColor, 1, m_arRenderColor);
 
     glDrawElements(GL_TRIANGLES, 6 * 2 * 3, GL_UNSIGNED_BYTE, arBoxIndices);
-
-
-    // Now draw 3 primary normals
-    for (i = 0; i < 3; i++)
-    {
-        for (j = 0; j < 3; j++)
-        {
-            arNormalVerts[i*3*2 + 0 + j] = m_arPosition[j];
-            arNormalVerts[i*3*2 + 3 + j] = m_arPosition[j] + (i == j)*m_arHalfExtents[i]*2;
-        }
-    }
-    
-    glVertexAttribPointer(hPosition,
-                          3,
-                          GL_FLOAT,
-                          GL_FALSE,
-                          0,
-                          arNormalVerts);
-
-    glLineWidth(4.0f);
-    glDrawArrays(GL_LINES, 0, 6);
-    glLineWidth(1.0f);
 }
 
 OverlapResult OrientedBoxCollider::Overlaps(Collider* pOther,
@@ -185,21 +138,11 @@ OverlapResult OrientedBoxCollider::Overlaps(Collider* pOther,
 
         // Find all the coordinates of box A (this box) in world space.
         GenerateLocalCoordinates(arBoxVertices);
+
+        // Transform so they are in world space now by multiplying matter's
+        // model matrix.
         for(i = 0; i < VERTICES_PER_OBB; i++)
         {
-            // Translate to rotate about OBB center
-            arBoxVertices[i*3 + 0] -= m_arPosition[0];
-            arBoxVertices[i*3 + 1] -= m_arPosition[1];
-            arBoxVertices[i*3 + 2] -= m_arPosition[2];
-
-            // Rotate around OBB center
-            m_matRotation.MultiplyVec3(&arBoxVertices[i*3], arTemp);
-
-            // Translate back to world coordinates
-            arBoxVertices[i*3 + 0] = arTemp[0] + m_arPosition[0];
-            arBoxVertices[i*3 + 1] = arTemp[1] + m_arPosition[1];
-            arBoxVertices[i*3 + 2] = arTemp[2] + m_arPosition[2];
-
             // Now multiply by the model matrix
             pTMatter->GetModelMatrix()->MultiplyVec3(&arBoxVertices[i*3], &arAVerts[i*3]);
         }
@@ -207,21 +150,11 @@ OverlapResult OrientedBoxCollider::Overlaps(Collider* pOther,
 
         // Now find the second box's coordinates in world space.
         pB->GenerateLocalCoordinates(arBoxVertices);
+
+        // Transform so they are in world space now by multiplying matter's
+        // model matrix.
         for(i = 0; i < VERTICES_PER_OBB; i++)
         {
-            // Translate to rotate about OBB center
-            arBoxVertices[i*3 + 0] -= pB->m_arPosition[0];
-            arBoxVertices[i*3 + 1] -= pB->m_arPosition[1];
-            arBoxVertices[i*3 + 2] -= pB->m_arPosition[2];
-
-            // Rotate around OBB center
-            pB->m_matRotation.MultiplyVec3(&arBoxVertices[i*3], arTemp);
-
-            // Translate back to world coordinates
-            arBoxVertices[i*3 + 0] = arTemp[0] + pB->m_arPosition[0];
-            arBoxVertices[i*3 + 1] = arTemp[1] + pB->m_arPosition[1];
-            arBoxVertices[i*3 + 2] = arTemp[2] + pB->m_arPosition[2];
-
             pOMatter->GetModelMatrix()->MultiplyVec3(&arBoxVertices[i*3], &arBVerts[i*3]);
         }
         pOMatter->GetModelMatrix()->MultiplyVec3(pB->m_arPosition, arBCenter);
@@ -326,12 +259,21 @@ void OrientedBoxCollider::SetRelativeRotation(float fRotX,
 void OrientedBoxCollider::GenerateLocalCoordinates(float* pRes)
 {
     int i = 0;
+    float arTemp[3] = {0.0f, 0.0f, 0.0f};
 
     for (i = 0; i < VERTICES_PER_OBB; i++)
     {
-        pRes[i*3 + 0] = m_arPosition[0] + (1 - (i & 1)*2)*m_arHalfExtents[0];
-        pRes[i*3 + 1] = m_arPosition[1] + (1 - ((i & 2) >> 1) *2)*m_arHalfExtents[1];
-        pRes[i*3 + 2] = m_arPosition[2] + (1 - ((i & 4) >> 2) *2)*m_arHalfExtents[2];
+        pRes[i*3 + 0] = (1 - (i & 1)*2)*m_arHalfExtents[0];
+        pRes[i*3 + 1] = (1 - ((i & 2) >> 1) *2)*m_arHalfExtents[1];
+        pRes[i*3 + 2] = (1 - ((i & 4) >> 2) *2)*m_arHalfExtents[2];
+
+        // Rotate around OBB center
+        m_matRotation.MultiplyVec3(&pRes[i*3], arTemp);
+
+        // Add relative position offset
+        pRes[i*3 + 0] = arTemp[0] + m_arPosition[0];
+        pRes[i*3 + 1] = arTemp[1] + m_arPosition[1];
+        pRes[i*3 + 2] = arTemp[2] + m_arPosition[2];
     }
 }
 
@@ -351,19 +293,19 @@ int OrientedBoxCollider::CheckIntervalOverlap(float* arAxis, float* arVertsA, fl
         return 1;
     }
 
-    // Set initial mins and maxes
-    float fMinA = DotProduct(arAxis, arVertsA);
-    float fMaxA = fMinA;
-
-    float fMinB = DotProduct(arAxis, arVertsB);
-    float fMaxB = fMinB;
-
     // Waited to normalize the vector until now to cut down
     // on unnecessary normalizations. Normalization needs to be 
     // performed to make sure the dot products return the actual
     // projected length. The axis may not be a unit-vector if the
     // Matter's model matrix contains scaling factors.
     NormalizeVector(arAxis);
+
+    // Set initial mins and maxes
+    float fMinA = DotProduct(arAxis, arVertsA);
+    float fMaxA = fMinA;
+
+    float fMinB = DotProduct(arAxis, arVertsB);
+    float fMaxB = fMinB;
 
     for (i = 1; i < VERTICES_PER_OBB; i++)
     {
@@ -425,8 +367,3 @@ int OrientedBoxCollider::CheckIntervalOverlap(float* arAxis, float* arVertsA, fl
     return 1;
 }
 
-void OrientedBoxCollider::RenderPrimaryNormals(Matrix* pMVP)
-{
-    int i = 0;
-
-}

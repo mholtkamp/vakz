@@ -69,6 +69,8 @@ public:
 
 private:
 
+    void GenerateLocalCoordinates(float* pRes);
+
     //## The local half-extents of the box.
     float m_arHalfExtents[3];
 };
