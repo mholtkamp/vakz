@@ -26,6 +26,8 @@ public:
 
     void Add(void* pObject, Box& box);
     void Add(OctreeObject* pOctreeObject);
+    int Remove(void* pObject, Box& box);
+    void FindIntersectingObjects(Box& box, List& list);
     void Subdivide();
 
     OctreeNode* m_pParent;
@@ -45,7 +47,7 @@ class Octree
 
     void Add(void* pObject, Box& box);
 
-    void Remove(void* pObject);
+    int Remove(void* pObject, Box& box);
 
     void FindIntersectingObjects(Box& box, List& list);
 

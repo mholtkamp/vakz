@@ -88,6 +88,95 @@ void OctreeNode::Add(OctreeObject* pOctreeObject)
     }
 }
 
+int OctreeNode::Remove(void* pObject, Box& box)
+{
+    int  i = 0;
+
+    // Iterate over this node's list, and check if the pObject
+    // is contained in this node.
+    ListNode* pCur = m_lObjects.GetHead();
+    OctreeObject* pOctreeObject = 0;
+
+    while (pCur != 0)
+    {
+        pOctreeObject = reinterpret_cast<OctreeObject*>(pCur->m_pData);
+        pCur = pCur->m_pNext;
+
+        if (pOctreeObject->m_pObject == pObject)
+        {
+            // Perform the remove operation from the list
+            m_lObjects.Remove(pOctreeObject);
+
+            // Since the octree object is no longer being used by 
+            // the tree, delete it.
+            delete pOctreeObject;
+            pOctreeObject = 0;
+
+            return 1;
+        }
+    }
+
+    // Well, the object wasn't found in this octree node.
+    // Check which children the search box overlaps, and then
+    // try removing the target object from those nodes.
+    if (m_nSubdivided != 0)
+    {
+        for (i = 0; i < 8; i++)
+        {
+            if (m_arChildren[i]->m_lObjects.GetHead() != 0 &&
+                m_arChildren[i]->m_bRegion.Intersects(&box) != 0)
+            {
+                if (m_arChildren[i]->Remove(pObject, box) != 0)
+                {
+                    // The object was removed, return 1
+                    return 1;
+                }
+            }
+        }
+    }
+
+    // The object wasn't found in this node nor any of its children
+    return 0;
+
+}
+
+void OctreeNode::FindIntersectingObjects(Box& box, List& list)
+{
+    int i = 0;
+
+    // Iterate over this node's list, and check if the provided
+    // search box overlaps any of the list's OctreeObject boxes.
+    // If so, append them to the list.
+    ListNode* pCur = m_lObjects.GetHead();
+    OctreeObject* pOctreeObject = 0;
+
+    while (pCur != 0)
+    {
+        pOctreeObject = reinterpret_cast<OctreeObject*>(pCur->m_pData);
+        pCur = pCur->m_pNext;
+
+        if (box.Intersects(&pOctreeObject->m_box))
+        {
+            list.Add(pOctreeObject->m_pObject);
+        }
+    }
+
+    // If this node is subdivided (aka not a leaf node) then we 
+    // need to check all of the children
+    if (m_nSubdivided != 0)
+    {
+        for (i = 0; i < 8; i++)
+        {
+            if (m_arChildren[i]->m_lObjects.GetHead()       != 0 &&
+                m_arChildren[i]->m_bRegion.Intersects(&box) != 0)
+            {
+                m_arChildren[i]->FindIntersectingObjects(box, list);
+            }
+        }
+    }
+
+}
+
 void OctreeNode::Subdivide()
 {
     int i = 0;
@@ -175,4 +264,31 @@ void Octree::Add(void* pObject, Box& box)
 
     m_pRoot->Add(pObject, box);
     m_nCount++;
+}
+
+int Octree::Remove(void* pObject, Box& box)
+{
+    int nResult = 0;
+
+    if (m_nInitialized == 0)
+    {
+        return 0;
+    }
+
+    nResult = m_pRoot->Remove(pObject, box);
+
+    if (nResult != 0)
+    {
+        m_nCount--;
+    }
+
+    return nResult;
+}
+
+void Octree::FindIntersectingObjects(Box& box, List& list)
+{
+    if (m_nInitialized != 0)
+    {
+        m_pRoot->FindIntersectingObjects(box, list);
+    }
 }
