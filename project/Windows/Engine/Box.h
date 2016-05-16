@@ -9,6 +9,7 @@ public:
     ~Box();
 
     int Intersects(Box* pOther);
+    int Contains(Box* pOther);
 
     float m_arCenter[3];
     float m_arExtent[3];

@@ -33,3 +33,20 @@ int Box::Intersects(Box* pOther)
 
     return 1;
 }
+
+int Box::Contains(Box* pOther)
+{
+    if ((pOther->m_arCenter[0] - pOther->m_arExtent[0] > m_arCenter[0] - m_arExtent[0]) &&
+        (pOther->m_arCenter[0] + pOther->m_arExtent[0] < m_arCenter[0] + m_arExtent[0]) &&
+        (pOther->m_arCenter[1] - pOther->m_arExtent[1] > m_arCenter[1] - m_arExtent[1]) &&
+        (pOther->m_arCenter[1] + pOther->m_arExtent[1] < m_arCenter[1] + m_arExtent[1]) &&
+        (pOther->m_arCenter[2] - pOther->m_arExtent[2] > m_arCenter[2] - m_arExtent[2]) &&
+        (pOther->m_arCenter[2] + pOther->m_arExtent[2] < m_arCenter[2] + m_arExtent[2]))
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
