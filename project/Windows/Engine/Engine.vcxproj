@@ -72,6 +72,7 @@
   <ItemGroup>
     <ClCompile Include="AnimatedMesh.cpp" />
     <ClCompile Include="BlurEffect.cpp" />
+    <ClCompile Include="Box.cpp" />
     <ClCompile Include="BoxCollider.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Collider.cpp" />
@@ -81,6 +82,7 @@
     <ClCompile Include="ImageLoader.cpp" />
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="List.cpp" />
+    <ClCompile Include="Octree.cpp" />
     <ClCompile Include="OrientedBoxCollider.cpp" />
     <ClCompile Include="ParticleSystem.cpp" />
     <ClCompile Include="Rect.cpp" />
@@ -116,6 +118,7 @@
   <ItemGroup>
     <ClInclude Include="AnimatedMesh.h" />
     <ClInclude Include="BlurEffect.h" />
+    <ClInclude Include="Box.h" />
     <ClInclude Include="BoxCollider.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Collider.h" />
@@ -132,6 +135,7 @@
     <ClInclude Include="List.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Mesh.h" />
+    <ClInclude Include="Octree.h" />
     <ClInclude Include="OrientedBoxCollider.h" />
     <ClInclude Include="ParticleSystem.h" />
     <ClInclude Include="Rect.h" />
