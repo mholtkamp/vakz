@@ -2,6 +2,7 @@
 #define COLLIDER_H
 
 #include "Matrix.h"
+#include "Box.h"
 
 #define VERTICES_PER_BOX 8
 
@@ -119,6 +120,8 @@ public:
                                    void*   pThisMatter) = 0;
 
     const float* GetRelativePosition();
+
+    virtual void GetBounds(void* pMatter, float* arMin, float* arMax) = 0;
 
 protected:
 

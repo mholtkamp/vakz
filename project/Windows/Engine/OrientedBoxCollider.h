@@ -4,11 +4,6 @@
 #include "Collider.h"
 #include "Matrix.h"
 
-enum OrientedBoxEnum
-{
-    VERTICES_PER_OBB = 8,
-};
-
 class OrientedBoxCollider : public Collider
 {
 
@@ -37,6 +32,8 @@ public:
     const Matrix* GetRotationMatrix();
 
     void GenerateLocalCoordinates(float* arRes);
+
+     void GetBounds(void* pMatter, float* arMin, float* arMax);
 
 private:
 

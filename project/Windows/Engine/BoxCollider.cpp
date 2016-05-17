@@ -156,30 +156,17 @@ void BoxCollider::GenerateLocalCoordinates(float* pRes)
     }
 }
 
-////*****************************************************************************
-//// GetExtents
-////*****************************************************************************
-//float BoxCollider::GetMinX()
-//{
-//    return m_fMinX * m_arScale[0] + m_arPosition[0];
-//}
-//float BoxCollider::GetMaxX()
-//{
-//    return m_fMaxX * m_arScale[0] + m_arPosition[0];
-//}
-//float BoxCollider::GetMinY()
-//{
-//    return m_fMinY * m_arScale[1] + m_arPosition[1];
-//}
-//float BoxCollider::GetMaxY()
-//{
-//    return m_fMaxY * m_arScale[1] + m_arPosition[1];
-//}
-//float BoxCollider::GetMinZ()
-//{
-//    return m_fMinZ * m_arScale[2] + m_arPosition[2];
-//}
-//float BoxCollider::GetMaxZ()
-//{
-//    return m_fMaxZ * m_arScale[2] + m_arPosition[2];
-//}
+void BoxCollider::GetBounds(void* pMatter, float* arMin, float* arMax)
+{
+    Matter* pTMatter = reinterpret_cast<Matter*>(pMatter);
+    const float* pMatPosition = pTMatter->GetPosition();
+    const float* pMatScale = pTMatter->GetScale();
+
+    arMin[0] = (m_arPosition[0] - m_arHalfExtents[0])*pMatScale[0] + pMatPosition[0];
+    arMin[1] = (m_arPosition[1] - m_arHalfExtents[1])*pMatScale[1] + pMatPosition[1];
+    arMin[2] = (m_arPosition[2] - m_arHalfExtents[2])*pMatScale[2] + pMatPosition[2];
+
+    arMax[0] = (m_arPosition[0] + m_arHalfExtents[0])*pMatScale[0] + pMatPosition[0];
+    arMax[1] = (m_arPosition[1] + m_arHalfExtents[1])*pMatScale[1] + pMatPosition[1];
+    arMax[2] = (m_arPosition[2] + m_arHalfExtents[2])*pMatScale[2] + pMatPosition[2];
+}

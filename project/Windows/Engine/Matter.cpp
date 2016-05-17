@@ -292,6 +292,8 @@ void Matter::SetPosition(float fX,
     m_arPosition[0] = fX;
     m_arPosition[1] = fY;
     m_arPosition[2] = fZ;
+
+    UpdateBoundingBox();
 }
 
 //*****************************************************************************
@@ -304,6 +306,8 @@ void Matter::SetRotation(float fRotX,
     m_arRotation[0] = fRotX;
     m_arRotation[1] = fRotY;
     m_arRotation[2] = fRotZ;
+
+    UpdateBoundingBox();
 }
 
 //*****************************************************************************
@@ -316,6 +320,7 @@ void Matter::SetScale(float fScaleX,
     m_arScale[0] = fScaleX;
     m_arScale[1] = fScaleY;
     m_arScale[2] = fScaleZ;
+    UpdateBoundingBox();
 }
 
 //*****************************************************************************
@@ -352,6 +357,8 @@ void Matter::Translate(float fTransX,
     m_arPosition[0] += fTransX;
     m_arPosition[1] += fTransY;
     m_arPosition[2] += fTransZ;
+
+    UpdateBoundingBox();
 
 
     if (m_nPhysical != 0 &&
@@ -409,6 +416,8 @@ void Matter::Translate(float fTransX,
                         m_arPosition[0] += orResult.m_arLeastPenAxis[0];
                         m_arPosition[1] += orResult.m_arLeastPenAxis[1];
                         m_arPosition[2] += orResult.m_arLeastPenAxis[2];
+
+                        UpdateBoundingBox();
                     }
                 }
             }
@@ -421,6 +430,8 @@ void Matter::Translate(float fTransX,
         m_arPosition[0] += fTransX;
         m_arPosition[1] += fTransY;
         m_arPosition[2] += fTransZ;
+
+        UpdateBoundingBox();
     }
 }
 
@@ -694,6 +705,80 @@ int Matter::Overlaps(Matter* pOther)
     }
 
     return 0;
+}
+
+//*****************************************************************************
+// GetBoundingBox
+//*****************************************************************************
+const Box* Matter::GetBoundingBox()
+{
+    return &m_box;
+}
+
+//*****************************************************************************
+// UpdateBoundingBox
+//*****************************************************************************
+void Matter::UpdateBoundingBox()
+{
+    Collider* pCollider = 0;
+    
+    // Hold the collective min/max
+    float arMin[3] = {0.0f};
+    float arMax[3] = {0.0f};
+
+    // Hold the min and max for a specific collider
+    float arColMin[3] = {0.0f};
+    float arColMax[3] = {0.0f};
+
+    // Iterate over all colliders to find collective bounds
+    ListNode* pNode = m_lColliders.GetHead();
+    while (pNode != 0)
+    {
+        pCollider =  reinterpret_cast<Collider*>(pNode->m_pData);
+        pNode = pNode->m_pNext;
+
+        pCollider->GetBounds(this, arColMin, arColMax);
+
+        // If this is the first collider being examined,
+        // then just set the collective min/max to its min/max
+        if (pNode == m_lColliders.GetHead())
+        {
+            arMin[0] = arColMin[0];
+            arMin[1] = arColMin[1];
+            arMin[2] = arColMin[2];
+
+            arMax[0] = arColMax[0];
+            arMax[1] = arColMax[1];
+            arMax[2] = arColMax[2];
+        }
+        else
+        {
+            // Check mins
+            if (arColMin[0] < arMin[0])
+                arMin[0] = arColMin[0];
+            if (arColMin[1] < arMin[1])
+                arMin[1] = arColMin[1];
+            if (arColMin[2] < arMin[2])
+                arMin[2] = arColMin[2];
+
+            // Check maxes
+             if (arColMax[0] < arMax[0])
+                arMax[0] = arColMax[0];
+            if (arColMax[1] < arMax[1])
+                arMax[1] = arColMax[1];
+            if (arColMax[2] < arMax[2])
+                arMax[2] = arColMax[2];
+        }
+    }
+
+    // Now that mins and maxes have been found, update the m_box object.
+    m_box.m_arCenter[0] = (arMin[0] + arMax[0])/2.0f;
+    m_box.m_arCenter[1] = (arMin[1] + arMax[1])/2.0f;
+    m_box.m_arCenter[2] = (arMin[2] + arMax[2])/2.0f;
+
+    m_box.m_arExtent[0] = (arMax[0] - arMin[0])/2.0f;
+    m_box.m_arExtent[1] = (arMax[1] - arMin[1])/2.0f;
+    m_box.m_arExtent[2] = (arMax[2] - arMin[2])/2.0f;
 }
 
 //*****************************************************************************

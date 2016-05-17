@@ -9,6 +9,7 @@
 #include "Collider.h"
 #include "Matrix.h"
 #include "List.h"
+#include "Box.h"
 
 class Matter
 {
@@ -315,6 +316,8 @@ public:
     //## **********************************************************************
     Matrix* GetModelMatrix();
 
+    const Box* GetBoundingBox();
+
     enum MatterEnum
     {
         LOOP_NONE      = 0,
@@ -329,6 +332,10 @@ public:
     };
 
 private:
+
+    //## Uses collider vertex data to update all-inclusive
+    //## bounding box.
+    void UpdateBoundingBox();
 
     //## Generates the model matrix
     void GenerateModelMatrix();
@@ -398,6 +405,9 @@ private:
     //## Flag to enable collider rendering, usually for debugging
     //## purposes. Rendering color is determined by the collider object.
     int m_nRenderColliders;
+
+    //## Master bounding box
+    Box m_box;
 };
 
 #endif

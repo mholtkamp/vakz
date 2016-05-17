@@ -94,12 +94,12 @@ OverlapResult Collider::OBB_Overlaps_OBB(Collider* pColA,
     static float arZVector[3] = {0.0f, 0.0f, 1.0f};
     
     // Temporary array to hold model space vertices of both OBB A and B
-    float arBoxVertices[VERTICES_PER_OBB * 3] = {0.0f};
+    float arBoxVertices[VERTICES_PER_BOX * 3] = {0.0f};
 
     // These arrays hold the world position coordinates for each 
     // vertex in OBB A and B
-    float arAVerts[VERTICES_PER_OBB * 3];
-    float arBVerts[VERTICES_PER_OBB * 3];
+    float arAVerts[VERTICES_PER_BOX * 3];
+    float arBVerts[VERTICES_PER_BOX * 3];
     float arACenter[3];
     float arBCenter[3];
 
@@ -136,23 +136,25 @@ OverlapResult Collider::OBB_Overlaps_OBB(Collider* pColA,
 
     // Transform so they are in world space now by multiplying matter's
     // model matrix.
-    for(i = 0; i < VERTICES_PER_OBB; i++)
+    Matrix* pMatModelT = pTMatter->GetModelMatrix();
+    for(i = 0; i < VERTICES_PER_BOX; i++)
     {
         // Now multiply by the model matrix
-        pTMatter->GetModelMatrix()->MultiplyVec3(&arBoxVertices[i*3], &arAVerts[i*3]);
+        pMatModelT->MultiplyVec3(&arBoxVertices[i*3], &arAVerts[i*3]);
     }
-    pTMatter->GetModelMatrix()->MultiplyVec3(pA->m_arPosition, arACenter);
+    pMatModelT->MultiplyVec3(pA->m_arPosition, arACenter);
 
     // Now find the second box's coordinates in world space.
     pB->GenerateLocalCoordinates(arBoxVertices);
 
     // Transform so they are in world space now by multiplying matter's
     // model matrix.
-    for(i = 0; i < VERTICES_PER_OBB; i++)
+    Matrix* pMatModelO = pOMatter->GetModelMatrix();
+    for(i = 0; i < VERTICES_PER_BOX; i++)
     {
-        pOMatter->GetModelMatrix()->MultiplyVec3(&arBoxVertices[i*3], &arBVerts[i*3]);
+        pMatModelO->MultiplyVec3(&arBoxVertices[i*3], &arBVerts[i*3]);
     }
-    pOMatter->GetModelMatrix()->MultiplyVec3(pB->m_arPosition, arBCenter);
+    pMatModelO->MultiplyVec3(pB->m_arPosition, arBCenter);
 
     // Find the primary axes in world space for A and B
     matA.MultiplyVec3Dir(arXVector,arAxesA);
@@ -300,11 +302,12 @@ OverlapResult Collider::AABB_Overlaps_OBB(Collider* pColAABB,
 
     // Transform so they are in world space now by multiplying matter's
     // model matrix.
+    Matrix* pMatModelOBB = pOBBMatter->GetModelMatrix();
     for(i = 0; i < VERTICES_PER_BOX; i++)
     {
-        pOBBMatter->GetModelMatrix()->MultiplyVec3(&arBoxVertices[i*3], &arOBBVerts[i*3]);
+        pMatModelOBB->MultiplyVec3(&arBoxVertices[i*3], &arOBBVerts[i*3]);
     }
-    pOBBMatter->GetModelMatrix()->MultiplyVec3(pOBB->GetRelativePosition(), arOBBCenter);
+    pMatModelOBB->MultiplyVec3(pOBB->GetRelativePosition(), arOBBCenter);
 
     // Find the primary axes in world space for A and B
     arAxesAABB[0] = arXVector[0];

@@ -36,7 +36,7 @@ void OrientedBoxCollider::Render(void* pMatter,
     int hMatrixMVP   = -1;
 
     // First generate the point coordinates and indices
-    float arBoxVertices[VERTICES_PER_OBB * 3] = {0.0f};
+    float arBoxVertices[VERTICES_PER_BOX * 3] = {0.0f};
     static unsigned char arBoxIndices[6 * 2 * 3] = {0, 1, 2,
                                                     1, 2, 3,
                                                     4, 5, 6,
@@ -123,7 +123,7 @@ void OrientedBoxCollider::GenerateLocalCoordinates(float* pRes)
     int i = 0;
     float arTemp[3] = {0.0f, 0.0f, 0.0f};
 
-    for (i = 0; i < VERTICES_PER_OBB; i++)
+    for (i = 0; i < VERTICES_PER_BOX; i++)
     {
         pRes[i*3 + 0] = (1 - (i & 1)*2)*m_arHalfExtents[0];
         pRes[i*3 + 1] = (1 - ((i & 2) >> 1) *2)*m_arHalfExtents[1];
@@ -142,4 +142,48 @@ void OrientedBoxCollider::GenerateLocalCoordinates(float* pRes)
 const Matrix* OrientedBoxCollider::GetRotationMatrix()
 {
     return &m_matRotation;
+}
+
+void OrientedBoxCollider::GetBounds(void* pMatter, float* arMin, float* arMax)
+{
+    int i = 0;
+    float arBoxVertices[VERTICES_PER_BOX  * 3] = {0.0f};
+    float arTransformed[3] = {0.0f, 0.0f, 0.0f};
+    Matter* pTMatter = reinterpret_cast<Matter*>(pMatter);
+
+    GenerateLocalCoordinates(arBoxVertices);
+
+    Matrix* pModelMat = pTMatter->GetModelMatrix();
+
+    // Find the initial min/maxes
+    pModelMat->MultiplyVec3(arBoxVertices, arTransformed);
+    arMin[0] = arTransformed[0];
+    arMin[1] = arTransformed[1];
+    arMin[2] = arTransformed[2];
+    arMax[0] = arTransformed[0];
+    arMax[1] = arTransformed[1];
+    arMax[2] = arTransformed[2];
+
+    // Now iterate through the other 7 vertices and compare coordinates
+    //  to the min/max value
+    for (i = 1; i < VERTICES_PER_BOX; i++)
+    {
+        pModelMat->MultiplyVec3(&arBoxVertices[i*3], arTransformed);
+
+        // Check for minimums
+        if (arTransformed[0] < arMin[0])
+            arMin[0] = arTransformed[0];
+        if (arTransformed[1] < arMin[1])
+            arMin[1] = arTransformed[1];
+        if (arTransformed[2] < arMin[2])
+            arMin[2] = arTransformed[2];
+
+        // Check for maximums
+        if (arTransformed[0] > arMax[0])
+            arMax[0] = arTransformed[0];
+        if (arTransformed[1] > arMax[1])
+            arMax[1] = arTransformed[1];
+        if (arTransformed[2] > arMax[2])
+            arMax[2] = arTransformed[2];
+    }
 }

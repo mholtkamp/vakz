@@ -71,6 +71,8 @@ public:
 
     void GenerateLocalCoordinates(float* pRes);
 
+    void GetBounds(void* pMatter, float* arMin, float* arMax);
+
 private:
 
     //## The local half-extents of the box.
