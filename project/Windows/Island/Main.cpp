@@ -27,6 +27,26 @@
 #define FLOWER_BOX_SIZE 100.0f
 #define FLOWER_POT_COUNT 100
 
+void printlist(List& list)
+{
+    char arBuffer[128] = {0};
+
+    ListNode* pNode = list.GetHead();
+    int nValue = 0;
+    int nPos = 0;
+
+    while (pNode != 0)
+    {
+        nValue = *reinterpret_cast<int*>(pNode->m_pData);
+        pNode = pNode->m_pNext;
+
+        _itoa(nValue, &arBuffer[nPos], 10);
+        nPos += strlen(&arBuffer[nPos]);
+    }
+
+    LogDebug(arBuffer);
+}
+
 int main()
 {
     SetWindowSize(1024, 768);
@@ -44,6 +64,64 @@ int main()
 
     matTest.Load(arValues);
     matTest.Transpose();
+    //@@ END
+
+    //@@ DEBUG LINKED LIST TEST
+    List lTest;
+
+    int arNumbers[10] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+
+    lTest.Add(&arNumbers[0]);
+    lTest.Add(&arNumbers[1]);
+    lTest.Add(&arNumbers[2]);
+    lTest.Add(&arNumbers[3]);
+    lTest.Add(&arNumbers[4]);
+
+    LogDebug("Adding 5 numbers");
+    printlist(lTest);
+    
+    lTest.Remove(&arNumbers[0]);
+
+    LogDebug("Removing 0");
+    printlist(lTest);
+
+    lTest.Remove(&arNumbers[3]);
+
+    LogDebug("Removing 3");
+    printlist(lTest);
+
+    
+    lTest.Remove(&arNumbers[4]);
+
+    LogDebug("Removing 4");
+    printlist(lTest);
+
+    lTest.Insert(&arNumbers[5], 0);
+    lTest.Insert(&arNumbers[6], 10);
+    lTest.Insert(&arNumbers[7], 2);
+
+    LogDebug("Inserting 5 @ 0");
+    LogDebug("Inserting 6 @ 10");
+    LogDebug("Inserting 7 @ 2");
+    printlist(lTest);
+
+    lTest.Add(&arNumbers[8]);
+
+    LogDebug("Adding an 8");
+    printlist(lTest);
+
+    LogDebug("Removing everything");
+    for (int i = 0; i < 10; i++)
+    {
+        lTest.Remove(&arNumbers[i]);
+        printlist(lTest);
+    }
+
+    lTest.Insert(&arNumbers[9], 0);
+    LogDebug("Inserting 9 @ 0");
+    printlist(lTest);
+
+
     //@@ END
 
     Scene* pTestScene = new Scene();

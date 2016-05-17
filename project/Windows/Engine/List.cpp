@@ -101,7 +101,7 @@ void List::Insert(void* pData, int nPosition)
         // the tail to find the m_pNext and m_pPrev nodes.
         pPrev = m_pHead;
 
-        for (i = 0; i < nPosition; i++)
+        for (i = 0; i < nPosition - 1; i++)
         {
             pPrev = pPrev->m_pNext;
         }
@@ -116,6 +116,7 @@ void List::Insert(void* pData, int nPosition)
         pNewNode->m_pNext = pNext;
     }
 
+    pNewNode->m_pData = pData;
     m_nCount++;
 }
 
@@ -149,12 +150,21 @@ int List::Remove(void* pData)
         return 0;
     }
     
+    
+    // Remove the only element of the list
+    if (i        == 0 &&
+        m_nCount == 1)
+    {
+        m_pHead = 0;
+        m_pTail = 0;
+    }
     // Removing from front of list
-    if (i == 0)
+    else if (i == 0)
     {
         pTarget->m_pNext->m_pPrev = 0;
         m_pHead = pTarget->m_pNext;
     }
+    // Removing from end of the list
     else if (i == m_nCount - 1)
     {
         pTarget->m_pPrev->m_pNext = 0;
