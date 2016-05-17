@@ -28,7 +28,10 @@ public:
     void Add(OctreeObject* pOctreeObject);
     int Remove(void* pObject, Box& box);
     void FindIntersectingObjects(Box& box, List& list);
+    void Render(float* arBoxVertices);
+    int GetContainedObjectsCount();
     void Subdivide();
+    void CollapseSubdivisions();
 
     OctreeNode* m_pParent;
     OctreeNode* m_arChildren[8];
@@ -51,7 +54,8 @@ class Octree
 
     void FindIntersectingObjects(Box& box, List& list);
 
-    void Render(void* pCamera);
+    void Render(void* pCamera,
+                float* arColor);
 
 private:
     

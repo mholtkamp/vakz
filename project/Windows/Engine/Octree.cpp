@@ -1,10 +1,11 @@
 #include "Octree.h"
 #include "Log.h"
+#include "VGL.h"
+#include "Matrix.h"
+#include "Camera.h"
 #include <string.h>
 
-#define PLUS_X 1
-#define PLUS_Y 2
-#define PLUS_Z 4
+#define VERTICES_PER_BOX 8
 
 OctreeNode::OctreeNode(Box& box)
 {
@@ -112,6 +113,18 @@ int OctreeNode::Remove(void* pObject, Box& box)
             delete pOctreeObject;
             pOctreeObject = 0;
 
+            // Now that we removed the target, check if this list is empty
+            // and if this node has been subdivided.
+            if (m_nSubdivided        != 0 &&
+                m_lObjects.GetHead() == 0)
+            {
+                // Does this node contain any 
+                if(GetContainedObjectsCount() == 0)
+                {
+                    CollapseSubdivisions();
+                }
+            }
+
             return 1;
         }
     }
@@ -177,6 +190,38 @@ void OctreeNode::FindIntersectingObjects(Box& box, List& list)
 
 }
 
+void OctreeNode::Render(float* arBoxVertices)
+{
+    int i = 0;
+
+    // Render this node first
+    m_bRegion.RenderWireframe(arBoxVertices);
+
+    if (m_nSubdivided != 0)
+    {
+        for (i = 0; i < 8; i++)
+        {
+            m_arChildren[i]->Render(arBoxVertices);
+        }
+    }
+}
+
+int OctreeNode::GetContainedObjectsCount()
+{
+    int i = 0;
+    int nObjects = 0;
+
+    if (m_nSubdivided != 0)
+    {
+        for (i = 0; i < 8; i++)
+        {
+            nObjects += m_arChildren[i]->m_lObjects.Count();
+        }
+    }
+
+    return nObjects + m_lObjects.Count();
+}
+
 void OctreeNode::Subdivide()
 {
     int i = 0;
@@ -195,6 +240,7 @@ void OctreeNode::Subdivide()
         boxOctant.m_arExtent[2] = m_bRegion.m_arExtent[2]/2.0f;
 
         m_arChildren[i] = new OctreeNode(boxOctant);
+        m_arChildren[i]->m_pParent = this;
     }
 
     // Then, see if any objects in the list (should only be one at max)
@@ -227,6 +273,23 @@ void OctreeNode::Subdivide()
 
     // Mark subdivided flag
     m_nSubdivided = 1;
+}
+
+void OctreeNode::CollapseSubdivisions()
+{
+    int i = 0;
+
+    if (m_nSubdivided != 0)
+    {
+        for (i = 0; i < 8; i++)
+        {
+            delete m_arChildren[i];
+            m_arChildren[i] = 0;
+        }
+
+        // Clear the subdivided flag. As no child nodes exist anymore.
+        m_nSubdivided = 0;
+    }
 }
 
 Octree::Octree()
@@ -290,5 +353,55 @@ void Octree::FindIntersectingObjects(Box& box, List& list)
     if (m_nInitialized != 0)
     {
         m_pRoot->FindIntersectingObjects(box, list);
+    }
+}
+
+void Octree::Render(void* pCamera,
+                    float* arColor)
+{
+    Matrix matVP;
+    unsigned int hProg = GetShaderProgram(STATIC_FULLBRIGHT_PROGRAM);
+    Camera* pSceneCamera = reinterpret_cast<Camera*>(pCamera);
+    float arBoxVertices[VERTICES_PER_BOX * 3] = {0.0f};
+
+    int hPosition    = -1;
+    int hTextureMode = -1;
+    int hColor       = -1;
+    int hMatrixMVP   = -1;
+
+    if (pSceneCamera   != 0 &&
+        m_nInitialized != 0)
+    {
+
+        // Set up the opengl state
+        matVP = *pSceneCamera->GetProjectionMatrix() * *pSceneCamera->GetViewMatrix();
+
+        glUseProgram(hProg);
+
+        // Unbind VBO and Texture
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindTexture(GL_TEXTURE_2D, 0);
+
+        hPosition    = glGetAttribLocation(hProg, "aPosition");
+        hTextureMode = glGetUniformLocation(hProg, "uTextureMode");
+        hColor       = glGetUniformLocation(hProg, "uColor");
+        hMatrixMVP   = glGetUniformLocation(hProg, "uMatrixMVP");
+    
+        glVertexAttribPointer(hPosition,
+                              3,
+                              GL_FLOAT,
+                              GL_FALSE,
+                              0,
+                              arBoxVertices);
+        glEnableVertexAttribArray(hPosition);
+
+        glUniformMatrix4fv(hMatrixMVP, 1, GL_FALSE, matVP.GetArray());
+
+        // No texturing enabled.
+        glUniform1i(hTextureMode, 0);
+
+        glUniform4fv(hColor, 1, arColor);
+
+        m_pRoot->Render(arBoxVertices);
     }
 }
