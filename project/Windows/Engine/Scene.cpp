@@ -19,6 +19,8 @@ Texture Scene::s_texColorAttach;
 Texture Scene::s_texDepthAttach;
 Texture Scene::s_texEffectColorAttach;
 
+static float s_arOctreeColor[4] = {0.9f, 0.2f, 0.4f, 0.5f};
+
 //*****************************************************************************
 // Constructor
 //*****************************************************************************
@@ -33,11 +35,24 @@ Scene::Scene()
     m_arAmbientColor[2] = DEFAULT_AMBIENT_BLUE;
     m_arAmbientColor[3] = DEFAULT_AMBIENT_ALPHA;
 
-    m_fGravity = DEFAULT_GRAVITY;
-
-    m_pPhysTimer = 0;
-
     InitializeFBO();
+
+    // Create and initialize default octrees
+    m_pMatterOctree = new Octree();
+    m_pLightOctree = new Octree();
+
+    Box boxDefault;
+    boxDefault.m_arCenter[0] = 0.0f;
+    boxDefault.m_arCenter[1] = 0.0f;
+    boxDefault.m_arCenter[2] = 0.0f;
+    boxDefault.m_arExtent[0] = 50.0f;
+    boxDefault.m_arExtent[1] = 50.0f;
+    boxDefault.m_arExtent[2] = 50.0f;
+
+    m_pMatterOctree->Initialize(boxDefault);
+    m_pLightOctree->Initialize(boxDefault);
+
+    m_nRenderMatterOctree = 0;
 }
 
 //*****************************************************************************
@@ -45,10 +60,16 @@ Scene::Scene()
 //*****************************************************************************
 Scene::~Scene()
 {
-    if (m_pPhysTimer != 0)
+    if (m_pMatterOctree != 0)
     {
-        delete m_pPhysTimer;
-        m_pPhysTimer = 0;
+        delete m_pMatterOctree;
+        m_pMatterOctree = 0;
+    }
+
+    if (m_pLightOctree != 0)
+    {
+        delete m_pLightOctree;
+        m_pLightOctree = 0;
     }
 }
 
@@ -135,6 +156,19 @@ void Scene::Render()
             glDisable(GL_BLEND);
             glDisable(GL_DEPTH_TEST);
             glDepthMask(GL_TRUE);
+        }
+
+        // Render the matter octree for debugging if enabled
+        if (m_nRenderMatterOctree != 0)
+        {
+            glEnable(GL_BLEND);
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+            glEnable(GL_DEPTH_TEST);
+
+            m_pMatterOctree->Render(m_pCamera, s_arOctreeColor);
+
+            glDisable(GL_DEPTH_TEST);
+            glDisable(GL_BLEND);
         }
     }
 
@@ -244,6 +278,13 @@ void Scene::AddMatter(Matter* pMatter)
     if (pMatter != 0)
     {
         m_lMatters.Add(pMatter);
+
+        // Add object to octree if marked for sorting and currently has a collider
+        if (pMatter->IsSorted() &&
+            pMatter->GetColliderList()->Count() > 0)
+        {
+            m_pMatterOctree->Add(pMatter, *pMatter->GetBoundingBox());
+        }
     }
     else
     {
@@ -414,48 +455,11 @@ void Scene::GenerateMVPMatrix(Matrix* pModel,
 }
 
 //*****************************************************************************
-// SetGravity
-//*****************************************************************************
-void Scene::SetGravity(float fGravity)
-{
-    m_fGravity = fGravity;
-}
-
-//*****************************************************************************
-// GetGravity
-//*****************************************************************************
-float Scene::GetGravity()
-{
-    return m_fGravity;
-}
-
-//*****************************************************************************
 // Update
 //*****************************************************************************
 void Scene::Update()
 {
-    int   i     = 0;
-    float fTime = 0.0f;
 
-    // If this is the first time hitting update, create the timer.
-    if (m_pPhysTimer == 0)
-    {
-        m_pPhysTimer = new Timer();
-        m_pPhysTimer->Start();
-    }
-    
-    // Get the frame time
-    m_pPhysTimer->Stop();
-    fTime = m_pPhysTimer->Time();
-
-    // Update physics
-    //for (i = 0; i < m_nNumMatters; i++)
-    //{
-    //    m_pMatters[i]->UpdatePhysics(this, fTime);
-    //}
-
-    // Reset timer for next frame calculation
-    m_pPhysTimer->Start();
 }
 
 //*****************************************************************************
@@ -590,4 +594,77 @@ void Scene::RemoveEffect(Effect* pEffect)
 void Scene::RemoveParticleSystem(ParticleSystem* pParticleSystem)
 {
     m_lParticleSystems.Remove(pParticleSystem);
+}
+
+//*****************************************************************************
+// SetSceneBounds
+//*****************************************************************************
+void Scene::SetSceneBounds(float* arCenter,
+                    float* arExtent)
+{
+    Box boxScene;
+    boxScene.m_arCenter[0] = arCenter[0];
+    boxScene.m_arCenter[1] = arCenter[1];
+    boxScene.m_arCenter[2] = arCenter[2];
+
+    boxScene.m_arExtent[0] = arExtent[0];
+    boxScene.m_arExtent[1] = arExtent[1];
+    boxScene.m_arExtent[2] = arExtent[2];
+
+    // Delete old octrees
+    if (m_pMatterOctree != 0)
+    {
+        delete m_pMatterOctree;
+        m_pMatterOctree = 0;
+    }
+
+    if (m_pLightOctree != 0)
+    {
+        delete m_pLightOctree;
+        m_pLightOctree = 0;
+    }
+
+    // Remake new octrees
+    m_pMatterOctree = new Octree();
+    m_pLightOctree = new Octree();
+
+    m_pMatterOctree->Initialize(boxScene);
+    m_pLightOctree->Initialize(boxScene);
+
+    // Fill the initialized octrees
+    ListNode* pNode = m_lMatters.GetHead();
+    Matter* pMatter = 0;
+
+    while (pNode != 0)
+    {
+        pMatter = reinterpret_cast<Matter*>(pNode->m_pData);
+        pNode = pNode->m_pNext;
+
+        if (pMatter->IsSorted()                 != 0 &&
+            pMatter->GetColliderList()->Count()  > 0)
+        {
+            m_pMatterOctree->Add(pMatter, *pMatter->GetBoundingBox());
+        }
+    }
+
+    pNode = m_lLights.GetHead();
+    Light* pLight = 0;
+
+    while (pNode != 0)
+    {
+        pLight = reinterpret_cast<Light*>(pNode->m_pData);
+        pNode = pNode->m_pNext;
+
+        // TODO: Add light to Octree.
+    }
+}
+
+void Scene::EnableMatterOctreeRendering()
+{
+    m_nRenderMatterOctree = 1;
+}
+
+void Scene::DisableMatterOctreeRendering()
+{
+    m_nRenderMatterOctree = 0;
 }

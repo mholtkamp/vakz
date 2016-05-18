@@ -43,6 +43,7 @@ public:
 
 class Octree
 {
+public:
     Octree();
     ~Octree();
 

@@ -9,6 +9,7 @@
 #include "Effect.h"
 #include "ParticleSystem.h"
 #include "List.h"
+#include "Octree.h"
 
 class Scene
 {
@@ -190,25 +191,6 @@ public:
     int GetNumLights();
 
     //## **********************************************************************
-    //## SetGravity
-    //##
-    //## Sets the gravity of the scene. Gravity is applied to all Matters that
-    //## are flagged as physical.
-    //##
-    //## Input:
-    //##   fGravity - gravity in units per second per second
-    //## **********************************************************************
-    void SetGravity(float fGravity);
-
-    //## **********************************************************************
-    //## GetGravity
-    //##
-    //## Returns:
-    //##   fGravity - gravity in units per second per second
-    //## **********************************************************************
-    float GetGravity();
-
-    //## **********************************************************************
     //## Update
     //##
     //## Performs all regular, framely updates. This includes any physics
@@ -223,6 +205,23 @@ public:
     //## and for resolution scaling.
     //## **********************************************************************
     static void InitializeFBO();
+
+    //## **********************************************************************
+    //## SetSceneBounds
+    //##
+    //## Sets the scene bounds used for matter and light octrees.
+    //## Whenever this function is called, both octrees are deleted and
+    //## rebuilt with the new bounds.
+    //## 
+    //## Input:
+    //##   arCenter - X/Y/Z world coordinates of scene center.
+    //##   arExtent - X/Y/Z distance from center that encloses the scene
+    //## **********************************************************************
+    void SetSceneBounds(float* arCenter,
+                        float* arExtent);
+
+    void EnableMatterOctreeRendering();
+    void DisableMatterOctreeRendering();
 
     enum SceneEnum
     {
@@ -249,6 +248,10 @@ private:
     List m_lEffects;
     List m_lParticleSystems;
 
+    //## Octrees used for holding matter and lights
+    Octree* m_pMatterOctree;
+    Octree* m_pLightOctree;
+
     //## Pointer to camera that the 3D scene should be rendered from.
     Camera* m_pCamera;
 
@@ -257,10 +260,6 @@ private:
 
     //## Ambient light
     float m_arAmbientColor[4];
-    float m_fGravity;
-
-    //## Timer for physics
-    Timer* m_pPhysTimer;
 
     //## Static flag to indicate whether effect processing is ready
     static int s_nFBOInitialized;
@@ -272,6 +271,9 @@ private:
 
     //## Handles for effect FBO
     static Texture s_texEffectColorAttach;
+
+    //## Octree rendering 
+    int m_nRenderMatterOctree;
 };
 
 #endif

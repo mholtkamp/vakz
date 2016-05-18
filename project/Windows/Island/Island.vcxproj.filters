@@ -21,5 +21,8 @@
     <ClCompile Include="OldMain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="OctreeTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

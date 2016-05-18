@@ -43,6 +43,7 @@ Matter::Matter()
 
     m_nPhysical = 0;
     m_nMobile   = 0;
+    m_nSorted   = 0;
     m_nRenderColliders = 0;
 }
 
@@ -282,6 +283,7 @@ const float* Matter::GetScale()
 {
     return m_arScale;
 }
+
 //*****************************************************************************
 // SetPosition
 //*****************************************************************************
@@ -710,7 +712,7 @@ int Matter::Overlaps(Matter* pOther)
 //*****************************************************************************
 // GetBoundingBox
 //*****************************************************************************
-const Box* Matter::GetBoundingBox()
+Box* Matter::GetBoundingBox()
 {
     return &m_box;
 }
@@ -735,7 +737,6 @@ void Matter::UpdateBoundingBox()
     while (pNode != 0)
     {
         pCollider =  reinterpret_cast<Collider*>(pNode->m_pData);
-        pNode = pNode->m_pNext;
 
         pCollider->GetBounds(this, arColMin, arColMax);
 
@@ -769,6 +770,9 @@ void Matter::UpdateBoundingBox()
             if (arColMax[2] < arMax[2])
                 arMax[2] = arColMax[2];
         }
+
+        // Iterate listnode
+        pNode = pNode->m_pNext;
     }
 
     // Now that mins and maxes have been found, update the m_box object.
@@ -826,4 +830,14 @@ int Matter::IsVisible()
 void Matter::SetVisible(int nVisible)
 {
     m_nVisible = nVisible;
+}
+
+void Matter::SetSorted(int nSorted)
+{
+    m_nSorted = nSorted;
+}
+
+int Matter::IsSorted()
+{
+    return m_nSorted;
 }

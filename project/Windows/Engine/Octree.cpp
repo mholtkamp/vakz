@@ -54,7 +54,8 @@ void OctreeNode::Add(OctreeObject* pOctreeObject)
     int i = 0;
 
     // Check if any objects are contained in this node
-    if (m_lObjects.Count() == 0)
+    if (m_lObjects.Count() == 0 &&
+        m_nSubdivided      == 0)
     {
         // No objects in this node, so just add the pending
         // object to the list and return.
@@ -231,9 +232,9 @@ void OctreeNode::Subdivide()
     // Not subdivided, so go ahead and create the 8 child nodes.
     for (i = 0; i < 8; i++)
     {
-        boxOctant.m_arCenter[0] = m_bRegion.m_arCenter[0] + (1 - (i & 1)*2) * m_bRegion.m_arExtent[0];
-        boxOctant.m_arCenter[1] = m_bRegion.m_arCenter[1] + (1 - (i & 2)*2) * m_bRegion.m_arExtent[1];
-        boxOctant.m_arCenter[2] = m_bRegion.m_arCenter[2] + (1 - (i & 4)*2) * m_bRegion.m_arExtent[2];
+        boxOctant.m_arCenter[0] = m_bRegion.m_arCenter[0] + (1 - (i & 1)*2) * (m_bRegion.m_arExtent[0]/2.0f);
+        boxOctant.m_arCenter[1] = m_bRegion.m_arCenter[1] + (1 - ((i & 2) >> 1)*2) * (m_bRegion.m_arExtent[1]/2.0f);
+        boxOctant.m_arCenter[2] = m_bRegion.m_arCenter[2] + (1 - ((i & 4) >> 2)*2) * (m_bRegion.m_arExtent[2]/2.0f);
 
         boxOctant.m_arExtent[0] = m_bRegion.m_arExtent[0]/2.0f;
         boxOctant.m_arExtent[1] = m_bRegion.m_arExtent[1]/2.0f;

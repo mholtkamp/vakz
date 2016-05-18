@@ -301,6 +301,10 @@ public:
     //## **********************************************************************
     void SetMobile(int nMobile);
 
+    void SetSorted(int nSorted);
+
+    int IsSorted();
+
     void EnableColliderRendering();
     void DisableColliderRendering();
 
@@ -316,7 +320,7 @@ public:
     //## **********************************************************************
     Matrix* GetModelMatrix();
 
-    const Box* GetBoundingBox();
+    Box* GetBoundingBox();
 
     enum MatterEnum
     {
@@ -408,6 +412,10 @@ private:
 
     //## Master bounding box
     Box m_box;
+
+    //## Sorting flag. If set, matter will be stored in octree when
+    //## being added to a scene.
+    int m_nSorted;
 };
 
 #endif

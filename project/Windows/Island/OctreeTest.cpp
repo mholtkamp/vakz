@@ -1,0 +1,273 @@
+#include "Vakz.h"
+#include "Scene.h"
+#include "Quad.h"
+#include "VGL.h"
+#include "VInput.h"
+#include "VMath.h"
+#include "Log.h"
+#include "Timer.h"
+#include "Matrix.h"
+#include "BoxCollider.h"
+#include "OrientedBoxCollider.h"
+#include "ResourceLibrary.h"
+#include "DiffuseMaterial.h"
+#include "DirectionalLight.h"
+#include "Text.h"
+#include "RimlitMaterial.h"
+
+#include <stdio.h>
+#include <math.h>
+
+#define ROT_SPEED 70.0f
+#define MOVE_SPEED 15.0f
+#define THRESH 0.4f
+
+#define SPHERE_COUNT 1000
+#define SCENE_SIZE 100.0f
+#define DISTRIB_SIZE 90.0f
+#define SPHERE_MIN_SCALE 0.3f
+#define SPHERE_MAX_SCALE 0.5f
+
+int main()
+{
+    SetWindowSize(1024, 768);
+    SetResolution(1024, 768);
+    Initialize();
+
+    Scene* pTestScene = new Scene();
+    SetScene(pTestScene);
+
+    // Create camera
+    Camera* pCamera = new Camera();
+    pCamera->SetProjectionType(Camera::CAMERA_PERSPECTIVE);
+    pTestScene->SetCamera(pCamera);
+
+    // Create diffuse material
+    DiffuseMaterial* pWhiteMat = new DiffuseMaterial();
+    pWhiteMat->SetColor(0.4f, 0.4f, 1.0f, 1.0f);
+
+
+    // Sphere assets
+    StaticMesh* pSphereMesh = new StaticMesh();
+    pSphereMesh->Load("sphere.obj");
+
+    BoxCollider* pSphereCollider = new BoxCollider();
+    pSphereCollider->SetHalfExtents(1.0f, 1.0f, 1.0f);
+    pSphereCollider->SetColor(0.2f, 0.1f, 8.0f, 0.3f);
+
+    // Create matters
+    Matter* arSpheres[SPHERE_COUNT];
+
+    float arRand[3];
+    float arCenter[3]  = {0.0f, 0.0f, 0.0f};
+    float arExtents[3] = {SCENE_SIZE/2.0f,
+                          SCENE_SIZE/2.0f,
+                          SCENE_SIZE/2.0f};
+    pTestScene->SetSceneBounds(arCenter, arExtents);
+
+    for (int i = 0; i < SPHERE_COUNT; i++)
+    {
+        arSpheres[i] = new Matter();
+        arSpheres[i]->SetMesh(pSphereMesh);
+        arSpheres[i]->SetMaterial(pWhiteMat);
+        arSpheres[i]->AddCollider(pSphereCollider);
+
+        arSpheres[i]->SetPhysical(1);
+        arSpheres[i]->SetSorted(1);
+        arSpheres[i]->SetMobile(0);
+
+        arRand[0] = ((float) rand())/((float) RAND_MAX);
+        arRand[1] = ((float) rand())/((float) RAND_MAX);
+        arRand[2] = ((float) rand())/((float) RAND_MAX);
+
+        arSpheres[i]->SetPosition(arRand[0] * DISTRIB_SIZE - DISTRIB_SIZE/2.0f,
+                                  arRand[1] * DISTRIB_SIZE - DISTRIB_SIZE/2.0f,
+                                  arRand[2] * DISTRIB_SIZE - DISTRIB_SIZE/2.0f);
+
+        arRand[0] = ((float) rand())/((float) RAND_MAX);
+
+        arSpheres[i]->SetScale(arRand[0]*(SPHERE_MAX_SCALE - SPHERE_MIN_SCALE) + SPHERE_MIN_SCALE,
+                               arRand[0]*(SPHERE_MAX_SCALE - SPHERE_MIN_SCALE) + SPHERE_MIN_SCALE,
+                               arRand[0]*(SPHERE_MAX_SCALE - SPHERE_MIN_SCALE) + SPHERE_MIN_SCALE);
+
+        pTestScene->AddMatter(arSpheres[i]);
+    }
+    
+    pTestScene->EnableMatterOctreeRendering();
+
+    // Create sun
+    DirectionalLight* pSun = new DirectionalLight();
+    pSun->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
+    pSun->SetDirectionVector(3.0f, -1.0f, -2.0f);
+    pTestScene->AddLight(pSun);
+    
+
+    float fX = 0.0f;
+    float fY = 0.0f;
+    float fZ = 0.0f;
+
+    float fCamZ = 10.0f;
+    float fCamY = 0.0f;
+    float fCamX = 0.0f;
+
+    float fRotX = 0.0f;
+    float fRotY = 0.0f;
+    float fRotZ = 0.0f;
+
+    int nLock = 0;
+
+    float fSeconds = 0.0f;
+    int nRenderCount = 0;
+    Timer timer;
+    Timer timerRender;
+    timer.Start();
+
+    while ((GetStatus() & VAKZ_QUIT) == 0)
+    {
+        timer.Stop();
+
+        fSeconds = timer.Time();
+
+        // Update
+        Update();
+
+        fX = 0.0f;
+        fY = 0.0f;
+        fZ = 0.0f;
+
+        if (IsControllerConnected(0))
+        {
+            // Camera
+            if (GetControllerAxisValue(VCONT_AXIS_RZ, 0) < -THRESH)
+            {
+                fRotX += fSeconds * ROT_SPEED;
+            }
+            if (GetControllerAxisValue(VCONT_AXIS_RZ, 0) > THRESH)
+            {
+                fRotX -= fSeconds * ROT_SPEED;
+            }
+            if (GetControllerAxisValue(VCONT_AXIS_Z, 0) > THRESH)
+            {
+                fRotY -= fSeconds * ROT_SPEED;
+            }
+            if (GetControllerAxisValue(VCONT_AXIS_Z, 0) < -THRESH)
+            {
+                fRotY += fSeconds * ROT_SPEED;
+            }
+
+            // Movement
+            if (GetControllerAxisValue(VCONT_AXIS_Y, 0) < -THRESH)
+            {
+                fZ -=  fSeconds * MOVE_SPEED * cos(fRotY * DEGREES_TO_RADIANS);
+                fX -=  fSeconds * MOVE_SPEED * sin(fRotY * DEGREES_TO_RADIANS);
+            }
+            if (GetControllerAxisValue(VCONT_AXIS_Y, 0) > THRESH)
+            {
+                fZ += fSeconds * MOVE_SPEED * cos(fRotY * DEGREES_TO_RADIANS);
+                fX += fSeconds * MOVE_SPEED * sin(fRotY * DEGREES_TO_RADIANS);
+            }
+            if (GetControllerAxisValue(VCONT_AXIS_X, 0) < -THRESH)
+            {
+                fZ -= fSeconds * MOVE_SPEED * cos((90.0f + fRotY) * DEGREES_TO_RADIANS);
+                fX -= fSeconds * MOVE_SPEED * sin((90.0f + fRotY) * DEGREES_TO_RADIANS);
+            }
+            if (GetControllerAxisValue(VCONT_AXIS_X, 0) > THRESH)
+            {
+                fZ += fSeconds * MOVE_SPEED * cos((90.0f + fRotY) * DEGREES_TO_RADIANS);
+                fX += fSeconds * MOVE_SPEED * sin((90.0f + fRotY) * DEGREES_TO_RADIANS);
+            }
+            if (IsControllerButtonDown(VCONT_R1, 0))
+            {
+                fY += fSeconds * MOVE_SPEED;
+            }
+            if (IsControllerButtonDown(VCONT_L1, 0))
+            {
+                fY -= fSeconds * MOVE_SPEED;
+            }
+        }
+        else
+        {
+            //LogDebug("Controller is not connected");
+        }
+
+        // Rotate camera
+        if (IsKeyDown(VKEY_UP))
+        {
+            fRotX += fSeconds * ROT_SPEED;
+        }
+        if (IsKeyDown(VKEY_DOWN))
+        {
+            fRotX -= fSeconds * ROT_SPEED;
+        }
+        if (IsKeyDown(VKEY_RIGHT))
+        {
+            fRotY -= fSeconds * ROT_SPEED;
+        }
+        if (IsKeyDown(VKEY_LEFT))
+        {
+            fRotY += fSeconds * ROT_SPEED;
+        }
+
+        // Move
+        if (IsKeyDown(VKEY_W))
+        {
+            fZ -= fSeconds * MOVE_SPEED * cos(fRotY * DEGREES_TO_RADIANS);
+            fX -= fSeconds * MOVE_SPEED * sin(fRotY * DEGREES_TO_RADIANS);
+        }
+        if (IsKeyDown(VKEY_S))
+        {
+            fZ += fSeconds * MOVE_SPEED * cos(fRotY * DEGREES_TO_RADIANS);
+            fX += fSeconds * MOVE_SPEED * sin(fRotY * DEGREES_TO_RADIANS);
+        }
+        if (IsKeyDown(VKEY_A))
+        {
+            fZ -= fSeconds * MOVE_SPEED * cos((90.0f + fRotY) * DEGREES_TO_RADIANS);
+            fX -= fSeconds * MOVE_SPEED * sin((90.0f + fRotY) * DEGREES_TO_RADIANS);
+        }
+        if (IsKeyDown(VKEY_D))
+        {
+            fZ += fSeconds * MOVE_SPEED * cos((90.0f + fRotY) * DEGREES_TO_RADIANS);
+            fX += fSeconds * MOVE_SPEED * sin((90.0f + fRotY) * DEGREES_TO_RADIANS);
+        }
+        if (IsKeyDown(VKEY_SPACE))
+        {
+            fY += fSeconds * MOVE_SPEED;
+        }
+        if (IsKeyDown(VKEY_CONTROL))
+        {
+            fY -= fSeconds * MOVE_SPEED;
+        }
+
+        if (IsKeyDown(VKEY_M))
+        {
+            pTestScene->DisableMatterOctreeRendering();
+        }
+        fCamX += fX;
+        fCamY += fY;
+        fCamZ += fZ;
+
+        pCamera->SetPosition(fCamX, fCamY, fCamZ);
+        pCamera->SetRotation(fRotX, fRotY, fRotZ);
+
+        timer.Start();
+        if (nRenderCount == 0)
+        {
+            timerRender.Start();
+        }
+
+        Render();
+        nRenderCount++;
+
+        if(nRenderCount == 50)
+        {
+            char arMsg[32] = {0};
+            timerRender.Stop();
+            nRenderCount = 0;
+            float fRenderTime = timerRender.Time()/50.0f;
+            sprintf(arMsg, "Render Time: %f", fRenderTime);
+            LogDebug(arMsg);
+        }
+    }
+
+    exit(0);
+}
