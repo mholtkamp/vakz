@@ -61,7 +61,7 @@ void ActSwipe::OnCreate(void* pGame,
     m_pMatter->SetPosition(nMageX * TILE_WIDTH,
                            MAGE_Y_OFFSET,
                            nMageZ * TILE_HEIGHT);
-    pTheGame->GetScene()->AddMatter(m_pMatter);
+    pTheGame->GetScene()->AddActor(m_pMatter);
 #endif
 }
 

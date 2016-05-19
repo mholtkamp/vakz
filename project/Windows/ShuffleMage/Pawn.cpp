@@ -43,7 +43,7 @@ void Pawn::Construct()
 void Pawn::Register(Scene* pScene)
 {
 #ifdef SM_CLIENT
-    pScene->AddMatter(&m_matter);
+    pScene->AddActor(&m_matter);
 #endif
 }
 

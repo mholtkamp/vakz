@@ -45,6 +45,8 @@ int ParticleSystem::s_nStaticInit = 0;
 //*****************************************************************************
 ParticleSystem::ParticleSystem()
 {
+    m_nClass = ACTOR_PARTICLE;
+
     m_nGenerate = 1;
     m_nParticleCount = 1000;
 

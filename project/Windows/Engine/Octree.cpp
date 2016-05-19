@@ -137,11 +137,19 @@ int OctreeNode::Remove(void* pObject, Box& box)
     {
         for (i = 0; i < 8; i++)
         {
-            if (m_arChildren[i]->m_lObjects.GetHead() != 0 &&
+            if ((m_nSubdivided                        != 0  ||
+                m_arChildren[i]->m_lObjects.GetHead() != 0) &&
                 m_arChildren[i]->m_bRegion.Intersects(&box) != 0)
             {
                 if (m_arChildren[i]->Remove(pObject, box) != 0)
                 {
+                    // Check if this node should be collapsed
+                    if(m_lObjects.GetHead()        == 0 &&
+                        GetContainedObjectsCount() == 0)
+                    {
+                        CollapseSubdivisions();
+                    }
+
                     // The object was removed, return 1
                     return 1;
                 }
@@ -216,7 +224,7 @@ int OctreeNode::GetContainedObjectsCount()
     {
         for (i = 0; i < 8; i++)
         {
-            nObjects += m_arChildren[i]->m_lObjects.Count();
+            nObjects += m_arChildren[i]->GetContainedObjectsCount();
         }
     }
 

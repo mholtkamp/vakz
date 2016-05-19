@@ -1,6 +1,8 @@
 #ifndef LIGHT_H
 #define LIGHT_H
 
+#include "Actor.h"
+
 enum LightType
 {
     LIGHT_NO_TYPE     = -1,
@@ -8,7 +10,7 @@ enum LightType
     LIGHT_POINT       = 1
 };
 
-class Light
+class Light : public Actor
 {
 
 public:

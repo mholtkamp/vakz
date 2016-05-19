@@ -113,7 +113,7 @@ void ActBullet::OnCreate(void* pGame,
         m_arParticles[0]->SetGravity(arGravity);
         m_arParticles[0]->SetParticleCount(50);
         m_arParticles[0]->Initialize();
-        pTheGame->GetScene()->AddParticleSystem(m_arParticles[0]);
+        pTheGame->GetScene()->AddActor(m_arParticles[0]);
     }
 #endif
 }

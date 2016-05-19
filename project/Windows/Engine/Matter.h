@@ -1,6 +1,7 @@
 #ifndef MATTER_H
 #define MATTER_H
 
+#include "Actor.h"
 #include "StaticMesh.h"
 #include "AnimatedMesh.h"
 #include "SkeletalMesh.h"
@@ -11,7 +12,7 @@
 #include "List.h"
 #include "Box.h"
 
-class Matter
+class Matter : public Actor
 {
 
 public:
@@ -161,14 +162,10 @@ public:
     //##   fTransX - x translation.
     //##   fTransY - y translation.
     //##   fTransZ - z translation.
-    //##   pScene  - pointer to scene in which matter should be moved.
-    //##             Needed to resolve collision properly if physical.
-    //##             A null pointer may be passed when moving non-physical matter
     //## **********************************************************************
     void Translate(float fTransX,
                    float fTransY,
-                   float fTransZ,
-                   void* pScene);
+                   float fTransZ);
 
     //## **********************************************************************
     //## IsVisible
@@ -416,6 +413,8 @@ private:
     //## Sorting flag. If set, matter will be stored in octree when
     //## being added to a scene.
     int m_nSorted;
+
+    //## S
 };
 
 #endif

@@ -99,13 +99,13 @@ void Forest::SetSide(int nSide)
 
 void Forest::Register(Scene* pScene)
 {
-    pScene->AddMatter(&m_matGround);
-    pScene->AddMatter(&m_matGrass);
-    pScene->AddMatter(&m_matRock);
-    pScene->AddMatter(&m_matMushroom);
-    pScene->AddMatter(&m_matSignpost);
-    pScene->AddMatter(&m_matLantern);
-    pScene->AddMatter(&m_matTree);
+    pScene->AddActor(&m_matGround);
+    pScene->AddActor(&m_matGrass);
+    pScene->AddActor(&m_matRock);
+    pScene->AddActor(&m_matMushroom);
+    pScene->AddActor(&m_matSignpost);
+    pScene->AddActor(&m_matLantern);
+    pScene->AddActor(&m_matTree);
 }
 
 void Forest::LoadResources()

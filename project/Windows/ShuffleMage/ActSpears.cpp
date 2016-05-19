@@ -66,7 +66,7 @@ void ActSpears::OnCreate(void* pGame,
         m_arMatters[i]->SetPosition(m_fPosX,
                                     MAGE_Y_OFFSET,
                                     TILE_HEIGHT * i);
-        pTheGame->GetScene()->AddMatter(m_arMatters[i]);
+        pTheGame->GetScene()->AddActor(m_arMatters[i]);
     }
 #endif
 

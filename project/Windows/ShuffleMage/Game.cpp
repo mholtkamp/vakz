@@ -36,7 +36,7 @@ void Game::Construct()
     SetupCamera();
     m_light.SetColor(1.0f, 1.0f, 1.0f, 1.0f);
     m_light.SetDirectionVector(0.0f, -1.0f, 0.0f);
-    m_scene.AddLight(&m_light);
+    m_scene.AddActor(&m_light);
 
     // Set Game/Tiles for mages
     m_arMages[MAGE_1].SetGame(this);
@@ -107,7 +107,7 @@ void Game::Construct()
         m_arActMatters[i].SetMaterial(g_pDiffuseMaterial);
 
         // Add to scene
-        m_scene.AddMatter(&m_arActMatters[i]);
+        m_scene.AddActor(&m_arActMatters[i]);
     }
 }
 

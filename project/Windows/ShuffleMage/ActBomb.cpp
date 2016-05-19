@@ -105,7 +105,7 @@ void ActBomb::OnCreate(void* pGame,
     m_pParticle->SetSize(3.0f, 4.0f);
     m_pParticle->SetOrigin(m_fPosX, m_fPosY + FUSE_PARTICLE_OFFSET_Y, m_fPosZ);
     m_pParticle->Initialize();
-    pTheGame->GetScene()->AddParticleSystem(m_pParticle);
+    pTheGame->GetScene()->AddActor(m_pParticle);
 
 #else
     ServerGame* pTheGame = reinterpret_cast<ServerGame*>(m_pGame);

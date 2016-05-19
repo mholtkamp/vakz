@@ -90,7 +90,7 @@ void ActShockwave::OnCreate(void* pGame,
                                        static_cast<float>(m_nCastZ) * TILE_HEIGHT);
         }
         
-        pTheGame->GetScene()->AddMatter(m_arMatter[i]);
+        pTheGame->GetScene()->AddActor(m_arMatter[i]);
 #endif
     }
 

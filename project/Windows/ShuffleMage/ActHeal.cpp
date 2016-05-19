@@ -60,7 +60,7 @@ void ActHeal::OnCreate(void* pGame,
                            m_fPosY,
                            m_fPosZ);
 
-    pTheGame->GetScene()->AddMatter(m_pMatter);
+    pTheGame->GetScene()->AddActor(m_pMatter);
 #else
     ServerGame* pTheGame = reinterpret_cast<ServerGame*>(m_pGame);
     pTheGame->GetMage(nCaster)->Heal(HEAL_AMOUNT);

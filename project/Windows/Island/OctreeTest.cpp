@@ -22,11 +22,14 @@
 #define MOVE_SPEED 15.0f
 #define THRESH 0.4f
 
-#define SPHERE_COUNT 1000
+#define CONT_SPHERE_MOVE_RATIO 0.2f
+#define SPHERE_COUNT 0
+#define MOVING_SPHERE_COUNT 500
+#define MOVING_SPHERE_SPEED 2.0f
 #define SCENE_SIZE 100.0f
 #define DISTRIB_SIZE 90.0f
-#define SPHERE_MIN_SCALE 0.3f
-#define SPHERE_MAX_SCALE 0.5f
+#define SPHERE_MIN_SCALE 3.0f
+#define SPHERE_MAX_SCALE 3.0f
 
 int main()
 {
@@ -45,6 +48,8 @@ int main()
     // Create diffuse material
     DiffuseMaterial* pWhiteMat = new DiffuseMaterial();
     pWhiteMat->SetColor(0.4f, 0.4f, 1.0f, 1.0f);
+    DiffuseMaterial* pMovingSphereMat = new DiffuseMaterial();
+    pMovingSphereMat->SetColor(1.0f, 1.0f, 0.0f, 1.0f);
 
 
     // Sphere assets
@@ -55,15 +60,16 @@ int main()
     pSphereCollider->SetHalfExtents(1.0f, 1.0f, 1.0f);
     pSphereCollider->SetColor(0.2f, 0.1f, 8.0f, 0.3f);
 
-    // Create matters
-    Matter* arSpheres[SPHERE_COUNT];
-
     float arRand[3];
     float arCenter[3]  = {0.0f, 0.0f, 0.0f};
     float arExtents[3] = {SCENE_SIZE/2.0f,
                           SCENE_SIZE/2.0f,
                           SCENE_SIZE/2.0f};
+      
     pTestScene->SetSceneBounds(arCenter, arExtents);
+
+#if (SPHERE_COUNT > 0)  
+    Matter* arSpheres[SPHERE_COUNT];
 
     for (int i = 0; i < SPHERE_COUNT; i++)
     {
@@ -75,6 +81,7 @@ int main()
         arSpheres[i]->SetPhysical(1);
         arSpheres[i]->SetSorted(1);
         arSpheres[i]->SetMobile(0);
+        arSpheres[i]->EnableColliderRendering();
 
         arRand[0] = ((float) rand())/((float) RAND_MAX);
         arRand[1] = ((float) rand())/((float) RAND_MAX);
@@ -92,14 +99,76 @@ int main()
 
         pTestScene->AddMatter(arSpheres[i]);
     }
+
+#endif
+
+#if (MOVING_SPHERE_COUNT > 0)
+    // Create matters
+    Matter* arMovingSpheres[MOVING_SPHERE_COUNT];
+    float arVelocities[MOVING_SPHERE_COUNT * 3]; 
+
+    for (int i = 0; i < MOVING_SPHERE_COUNT; i++)
+    {
+        arMovingSpheres[i] = new Matter();
+        arMovingSpheres[i]->SetMesh(pSphereMesh);
+        arMovingSpheres[i]->SetMaterial(pMovingSphereMat);
+        arMovingSpheres[i]->AddCollider(pSphereCollider);
+
+        arMovingSpheres[i]->SetPhysical(0);
+        arMovingSpheres[i]->SetSorted(1);
+        arMovingSpheres[i]->SetMobile(1);
+        arMovingSpheres[i]->EnableColliderRendering();
+
+        arRand[0] = ((float) rand())/((float) RAND_MAX);
+        arRand[1] = ((float) rand())/((float) RAND_MAX);
+        arRand[2] = ((float) rand())/((float) RAND_MAX);
+
+        arMovingSpheres[i]->SetPosition(arRand[0] * DISTRIB_SIZE - DISTRIB_SIZE/2.0f,
+                                  arRand[1] * DISTRIB_SIZE - DISTRIB_SIZE/2.0f,
+                                  arRand[2] * DISTRIB_SIZE - DISTRIB_SIZE/2.0f);
+
+        arRand[0] = ((float) rand())/((float) RAND_MAX);
+        arRand[1] = ((float) rand())/((float) RAND_MAX);
+        arRand[2] = ((float) rand())/((float) RAND_MAX);
+
+        arVelocities[i*3 + 0] = arRand[0] * 2.0f - 1.0f;
+        arVelocities[i*3 + 1] = arRand[1] * 2.0f - 1.0f;
+        arVelocities[i*3 + 2] = arRand[2] * 2.0f - 1.0f;
+
+        NormalizeVector(&arVelocities[i*3]);
+
+        arRand[0] = ((float) rand())/((float) RAND_MAX);
+
+        arMovingSpheres[i]->SetScale(arRand[0]*(SPHERE_MAX_SCALE - SPHERE_MIN_SCALE) + SPHERE_MIN_SCALE,
+                               arRand[0]*(SPHERE_MAX_SCALE - SPHERE_MIN_SCALE) + SPHERE_MIN_SCALE,
+                               arRand[0]*(SPHERE_MAX_SCALE - SPHERE_MIN_SCALE) + SPHERE_MIN_SCALE);
+
+        pTestScene->AddActor(arMovingSpheres[i]);
+    }
     
+#endif
+
     pTestScene->EnableMatterOctreeRendering();
+
+    // Create controllable sphere
+    DiffuseMaterial* pContSphereMat = new DiffuseMaterial();
+    pContSphereMat->SetColor(1.0f, 1.0f, 0.0f, 1.0f);
+    Matter* pContSphere = new Matter();
+    pContSphere->SetMesh(pSphereMesh);
+    pContSphere->SetMaterial(pContSphereMat);
+    pContSphere->AddCollider(pSphereCollider);
+    pContSphere->SetPhysical(1);
+    pContSphere->SetSorted(0);
+    pContSphere->SetMobile(1);
+    //pTestScene->AddActor(pContSphere);
+
+    
 
     // Create sun
     DirectionalLight* pSun = new DirectionalLight();
     pSun->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
     pSun->SetDirectionVector(3.0f, -1.0f, -2.0f);
-    pTestScene->AddLight(pSun);
+    pTestScene->AddActor(pSun);
     
 
     float fX = 0.0f;
@@ -110,11 +179,16 @@ int main()
     float fCamY = 0.0f;
     float fCamX = 0.0f;
 
+    float fSphereX = 0.0f;
+    float fSphereY = 0.0f;
+    float fSphereZ = 0.0f;
+
     float fRotX = 0.0f;
     float fRotY = 0.0f;
     float fRotZ = 0.0f;
 
     int nLock = 0;
+    int nControlSphere = 0;
 
     float fSeconds = 0.0f;
     int nRenderCount = 0;
@@ -242,12 +316,104 @@ int main()
         {
             pTestScene->DisableMatterOctreeRendering();
         }
-        fCamX += fX;
-        fCamY += fY;
-        fCamZ += fZ;
 
+        if (IsKeyDown(VKEY_B))
+        {
+            nControlSphere = !nControlSphere;
+        }
+
+        if (nControlSphere == 0)
+        {
+            fCamX += fX;
+            fCamY += fY;
+            fCamZ += fZ;
+        }
+        else
+        {
+            pContSphere->Translate(fX * CONT_SPHERE_MOVE_RATIO,
+                                   fY * CONT_SPHERE_MOVE_RATIO,
+                                   fZ * CONT_SPHERE_MOVE_RATIO);
+        }
+        
         pCamera->SetPosition(fCamX, fCamY, fCamZ);
         pCamera->SetRotation(fRotX, fRotY, fRotZ);
+
+#if (MOVING_SPHERE_COUNT > 0)
+        for (int i = 0; i < MOVING_SPHERE_COUNT; i++)
+        {
+            arMovingSpheres[i]->Translate(arVelocities[i*3 + 0] * MOVING_SPHERE_SPEED * fSeconds,
+                                          arVelocities[i*3 + 1] * MOVING_SPHERE_SPEED * fSeconds,
+                                          arVelocities[i*3 + 2] * MOVING_SPHERE_SPEED * fSeconds);
+
+            const float* pPosition = arMovingSpheres[i]->GetPosition();
+            float arNewPos[3];
+            arNewPos[0] = pPosition[0];
+            arNewPos[1] = pPosition[1];
+            arNewPos[2] = pPosition[2];
+
+            // Test mins
+            if (arNewPos[0] < -SCENE_SIZE/2.0f)
+            {
+                arNewPos[0] = -SCENE_SIZE/2.0f;
+                arVelocities[i*3 + 0] *= -1.0f;
+            }
+            if (arNewPos[1] < -SCENE_SIZE/2.0f)
+            {
+                arNewPos[1] = -SCENE_SIZE/2.0f;
+                arVelocities[i*3 + 1] *= -1.0f;
+            }
+            if (arNewPos[2] < -SCENE_SIZE/2.0f)
+            {
+                arNewPos[2] = -SCENE_SIZE/2.0f;
+                arVelocities[i*3 + 2] *= -1.0f;
+            }
+
+            // Test maximums
+            if (arNewPos[0] > SCENE_SIZE/2.0f)
+            {
+                arNewPos[0] = SCENE_SIZE/2.0f;
+                arVelocities[i*3 + 0] *= -1.0f;
+            }
+            if (arNewPos[1] > SCENE_SIZE/2.0f)
+            {
+                arNewPos[1] = SCENE_SIZE/2.0f;
+                arVelocities[i*3 + 1] *= -1.0f;
+            }
+            if (arNewPos[2] > SCENE_SIZE/2.0f)
+            {
+                arNewPos[2] = SCENE_SIZE/2.0f;
+                arVelocities[i*3 + 2] *= -1.0f;
+            }
+                
+            // Check collisions with other spheres
+            List lTests;
+            pTestScene->GetNearbyMatter(arMovingSpheres[i], lTests);
+
+            ListNode* pNode = lTests.GetHead();
+
+            while (pNode != 0)
+            {
+                Matter* pOther = reinterpret_cast<Matter*>(pNode->m_pData);
+                if (pOther != arMovingSpheres[i] &&
+                    arMovingSpheres[i]->Overlaps(pOther))
+                {
+                    // Have velocity point outwards from collision
+                    float arDiff[3];
+                    arDiff[0] = arMovingSpheres[i]->GetPosition()[0] - pOther->GetPosition()[0];
+                    arDiff[1] = arMovingSpheres[i]->GetPosition()[1] - pOther->GetPosition()[1];
+                    arDiff[2] = arMovingSpheres[i]->GetPosition()[2] - pOther->GetPosition()[2];
+
+                    NormalizeVector(arDiff);
+
+                    arVelocities[i*3 + 0] = arDiff[0];
+                    arVelocities[i*3 + 1] = arDiff[1];
+                    arVelocities[i*3 + 2] = arDiff[2];
+                }
+
+                pNode = pNode->m_pNext;
+            }
+        }
+#endif
 
         timer.Start();
         if (nRenderCount == 0)

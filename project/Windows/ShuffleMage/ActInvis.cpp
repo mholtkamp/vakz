@@ -62,7 +62,7 @@ void ActInvis::OnCreate(void* pGame,
     m_pParticle->SetGravity(arGravity);
     m_pParticle->SetTexture(g_pActInvisTex);
     m_pParticle->Initialize();
-    pTheGame->GetScene()->AddParticleSystem(m_pParticle);
+    pTheGame->GetScene()->AddActor(m_pParticle);
     
 #else
     ServerGame* pTheGame = reinterpret_cast<ServerGame*>(m_pGame);

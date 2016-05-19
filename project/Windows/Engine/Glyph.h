@@ -1,6 +1,8 @@
 #ifndef GLYPH_H
 #define GLYPH_H
 
+#include "Actor.h"
+
 class Glyph
 {
 

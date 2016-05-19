@@ -1,6 +1,7 @@
 #ifndef SCENE_H
 #define SCENE_H
 
+#include "Actor.h"
 #include "Camera.h"
 #include "Matter.h"
 #include "Light.h"
@@ -32,29 +33,7 @@ public:
     //## **********************************************************************
     void Render();
 
-    //## **********************************************************************
-    //## AddMatter
-    //##
-    //## Adds a Matter object to the scene. A Matter object is anything that 
-    //## can be rendered in 3D, such as meshes and particles.
-    //## 
-    //## Input:
-    //##   pMatter - pointer to a matter object to be added to the scene.
-    //## **********************************************************************
-    void AddMatter(Matter* pMatter);
-
-    //## **********************************************************************
-    //## AddLight
-    //##
-    //## Adds a Light object to the scene. A Light object is anything that will
-    //## effect fragment color of Matters rendered to the screen. There can
-    //## only be one directional light per scene. Adding a directional light
-    //## will replace the previous directional light (if one has been set).
-    //##
-    //## Input:
-    //##   pLight - pointer to a light object to add to the scene.
-    //## **********************************************************************
-    void AddLight(Light* pLight);
+    void AddActor(Actor* pActor);
 
     //## **********************************************************************
     //## AddGlyph
@@ -78,16 +57,6 @@ public:
     //##   pEffect - pointer to effect object to be added to the scene.
     //## **********************************************************************
     void AddEffect(Effect* pEffect);
-
-    //## **********************************************************************
-    //## AddParticleSystem
-    //##
-    //## Adds a particle system to the scene.
-    //##
-    //## Input:
-    //##   pParticleSystem - pointer to particle system object to add.
-    //## **********************************************************************
-    void AddParticleSystem(ParticleSystem* pParticleSystem);
 
     //## **********************************************************************
     //## RemoveObject
@@ -220,8 +189,16 @@ public:
     void SetSceneBounds(float* arCenter,
                         float* arExtent);
 
+    void GetNearbyMatter(Matter* pMatter,
+                         List& lMatter);
+
+    void GetNearbyMatter(Box& bBounds,
+                         List& lMatter);
+
     void EnableMatterOctreeRendering();
     void DisableMatterOctreeRendering();
+
+    Octree* GetMatterOctree();
 
     enum SceneEnum
     {
@@ -233,6 +210,41 @@ public:
     };
 
 private:
+
+    
+    //## **********************************************************************
+    //## AddMatter
+    //##
+    //## Adds a Matter object to the scene. A Matter object is anything that 
+    //## can be rendered in 3D, such as meshes and particles.
+    //## 
+    //## Input:
+    //##   pMatter - pointer to a matter object to be added to the scene.
+    //## **********************************************************************
+    void AddMatter(Matter* pMatter);
+
+    //## **********************************************************************
+    //## AddLight
+    //##
+    //## Adds a Light object to the scene. A Light object is anything that will
+    //## effect fragment color of Matters rendered to the screen. There can
+    //## only be one directional light per scene. Adding a directional light
+    //## will replace the previous directional light (if one has been set).
+    //##
+    //## Input:
+    //##   pLight - pointer to a light object to add to the scene.
+    //## **********************************************************************
+    void AddLight(Light* pLight);
+
+    //## **********************************************************************
+    //## AddParticleSystem
+    //##
+    //## Adds a particle system to the scene.
+    //##
+    //## Input:
+    //##   pParticleSystem - pointer to particle system object to add.
+    //## **********************************************************************
+    void AddParticleSystem(ParticleSystem* pParticleSystem);
     
     //## From the provided pModel, pView, and pProjection matrices,
     //## returns the resultant matrix 

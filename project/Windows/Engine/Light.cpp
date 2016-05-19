@@ -5,6 +5,7 @@
 //*****************************************************************************
 Light::Light()
 {
+    m_nClass  = ACTOR_LIGHT;
     m_nType   = LIGHT_NO_TYPE;
     m_nEnable = 1;
 

@@ -270,6 +270,28 @@ void Scene::Render()
     //                  GL_NEAREST);
 }
 
+void Scene::AddActor(Actor* pActor)
+{
+    switch(pActor->GetClass())
+    {
+    case ACTOR_MATTER:
+        AddMatter(reinterpret_cast<Matter*>(pActor));
+        break;
+    case ACTOR_PARTICLE:
+        AddParticleSystem(reinterpret_cast<ParticleSystem*>(pActor));
+        break;
+    case ACTOR_LIGHT:
+        AddLight(reinterpret_cast<Light*>(pActor));
+        break;
+    default:
+        return;
+    }
+    
+    pActor->SetScene(this);
+}
+
+
+
 //*****************************************************************************
 // AddMatter
 //*****************************************************************************
@@ -667,4 +689,25 @@ void Scene::EnableMatterOctreeRendering()
 void Scene::DisableMatterOctreeRendering()
 {
     m_nRenderMatterOctree = 0;
+}
+
+void Scene::GetNearbyMatter(Matter* pMatter, 
+                            List& lMatter)
+{
+    if (pMatter != 0 &&
+        pMatter->GetColliderList()->Count() > 0)
+    {
+        m_pMatterOctree->FindIntersectingObjects(*pMatter->GetBoundingBox(), lMatter);
+    } 
+}
+
+void Scene::GetNearbyMatter(Box& bBounds, 
+                            List& lMatter)
+{
+    m_pMatterOctree->FindIntersectingObjects(bBounds, lMatter);
+}
+
+Octree* Scene::GetMatterOctree()
+{
+    return m_pMatterOctree;
 }

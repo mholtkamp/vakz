@@ -32,7 +32,7 @@ Tile::~Tile()
 void Tile::Register(Scene* pScene)
 {
 #ifdef SM_CLIENT
-    pScene->AddMatter(&m_matter);
+    pScene->AddActor(&m_matter);
 #endif
 }
 

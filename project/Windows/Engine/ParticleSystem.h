@@ -1,11 +1,12 @@
 #ifndef PARTICLE_SYSTEM_H
 #define PARTICLE_SYSTEM_H
 
+#include "Actor.h"
 #include "Texture.h"
 #include "Matrix.h"
 #include "Timer.h"
 
-class ParticleSystem
+class ParticleSystem : public Actor
 {
 public:
 

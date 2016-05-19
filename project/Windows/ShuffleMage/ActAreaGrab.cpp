@@ -128,7 +128,7 @@ void ActAreaGrab::OnCreate(void* pGame,
         m_arMatters[i]->SetPosition(m_arTargetX[i] * TILE_WIDTH,
                                     DROP_START_HEIGHT + DROP_SEPARATION*i,
                                     m_arTargetZ[i] * TILE_HEIGHT);
-        pTheGame->GetScene()->AddMatter(m_arMatters[i]);
+        pTheGame->GetScene()->AddActor(m_arMatters[i]);
     }
 #endif
 

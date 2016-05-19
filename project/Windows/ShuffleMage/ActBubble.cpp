@@ -74,7 +74,7 @@ void ActBubble::OnCreate(void* pGame,
     m_pMatter->SetScale(SHOT_BUBBLE_SCALE,
                         SHOT_BUBBLE_SCALE,
                         SHOT_BUBBLE_SCALE);
-    pTheGame->GetScene()->AddMatter(m_pMatter);
+    pTheGame->GetScene()->AddActor(m_pMatter);
 #endif
 }
 

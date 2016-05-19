@@ -4,6 +4,7 @@
 #include "Camera.h"
 #include "Scene.h"
 #include "VMath.h"
+#include "Octree.h"
 #include <stdio.h>
 
 #define COL_BUFFER 0.001f
@@ -15,6 +16,8 @@
 //*****************************************************************************
 Matter::Matter()
 {
+    m_nClass = ACTOR_MATTER;
+
     m_arPosition[0] = 0.0f;
     m_arPosition[1] = 0.0f;
     m_arPosition[2] = 0.0f;
@@ -87,6 +90,28 @@ void Matter::SetTexture(Texture* pTexture)
 void Matter::AddCollider(Collider* pCollider)
 {
     m_lColliders.Add(pCollider);
+    Scene* pScene = reinterpret_cast<Scene*>(m_pScene);
+
+    if (pScene    != 0 &&
+        m_nSorted != 0)
+    {
+        // Adding a collider to a matter that is already part of
+        // a scene, means it must be replaced into the octree
+
+        // First remove it from the octree
+        pScene->GetMatterOctree()->Remove(this, m_box);
+
+        // Update the bounding box, this will take into consideration
+        // the newly added collider now.
+        UpdateBoundingBox();
+
+        // Re-insert to octree with new bounds
+        pScene->GetMatterOctree()->Add(this, m_box);
+    }
+    else
+    {
+        UpdateBoundingBox();
+    }
 }
 
 //*****************************************************************************
@@ -330,8 +355,7 @@ void Matter::SetScale(float fScaleX,
 //*****************************************************************************
 void Matter::Translate(float fTransX,
                        float fTransY,
-                       float fTransZ,
-                       void* pScene)
+                       float fTransZ)
 {
     int i = 0;
     float arOldPos[3] = {0.0f};
@@ -344,6 +368,19 @@ void Matter::Translate(float fTransX,
     Matter* pMatter = 0;
     Collider* pCollider = 0;
     Collider* pThisCollider = 0;
+
+    if (m_pScene == 0)
+    {
+        return;
+    }
+
+    // If this object needs to be sorted, first remove it
+    // from the octree because its position will be updated
+    if (m_nSorted != 0)
+    {
+        reinterpret_cast<Scene*>(m_pScene)->GetMatterOctree()->Remove(this, m_box);
+    }
+    
 
     // Save the direction of movement in vector-array format
     arDir[0] = fTransX;
@@ -369,7 +406,15 @@ void Matter::Translate(float fTransX,
         // TODO: After implementing Octree, replace this list iteration
         // with the octree iteration.
         // Iterate through all matters
-        pMatterNode = reinterpret_cast<Scene*>(pScene)->GetMatterList()->GetHead();
+        
+        //pMatterNode = reinterpret_cast<Scene*>(m_pScene)->GetMatterList()->GetHead();
+        
+        List lNearbyMatter;
+        reinterpret_cast<Scene*>(m_pScene)->GetNearbyMatter(this, lNearbyMatter);
+        pMatterNode = lNearbyMatter.GetHead();
+
+        //@@ DEBUG
+        int nCollisionChecks = 0;
 
         // Loop through the scene matter list
         while (pMatterNode != 0)
@@ -400,6 +445,7 @@ void Matter::Translate(float fTransX,
                     pThisColliderNode = pThisColliderNode->m_pNext;
 
                     // Perform the collision detection.
+                    nCollisionChecks++;
                     orResult = pThisCollider->Overlaps(pCollider, pMatter, this);
 
                     if (orResult.m_nOverlapping != 0)
@@ -425,15 +471,12 @@ void Matter::Translate(float fTransX,
             }
         }
 
+        //printf("Collision Checks: %d\n", nCollisionChecks);
     }
-    else if (m_nMobile != 0)
-    {
-        // The object is mobile, so just move it :)
-        m_arPosition[0] += fTransX;
-        m_arPosition[1] += fTransY;
-        m_arPosition[2] += fTransZ;
 
-        UpdateBoundingBox();
+    if (m_nSorted != 0)
+    {
+        reinterpret_cast<Scene*>(m_pScene)->GetMatterOctree()->Add(this, m_box);
     }
 }
 
@@ -661,19 +704,6 @@ void Matter::UpdateAnimation()
 //*****************************************************************************
 int Matter::Overlaps(Matter* pOther)
 {
-    //if (pOther                != 0 &&
-    //    pOther->GetCollider() != 0 &&
-    //    m_pCollider           != 0)
-    //{
-    //    return m_pCollider->Overlaps(pOther->GetCollider(),
-    //                                 pOther,
-    //                                 this).m_nOverlapping;
-    //}
-    //else
-    //{
-    //    return 0;
-    //}
-
     int nOverlapping = 0;
     ListNode* pThisColNode = m_lColliders.GetHead();
     ListNode* pOtherColNode = pOther->m_lColliders.GetHead();
