@@ -9,10 +9,7 @@
 //*****************************************************************************
 Timer::Timer()
 {
-#if defined(WINDOWS)
-    m_llStart = 0;
-    m_llEnd = 0;
-#endif
+    QueryPerformanceFrequency(&m_liFrequency);
 }
 
 //*****************************************************************************
@@ -29,7 +26,7 @@ Timer::~Timer()
 void Timer::Start()
 {
 #if defined (WINDOWS)
-    m_llStart = GetTickCount();
+    QueryPerformanceCounter(&m_liStart);
 #elif defined(ANDROID)
     gettimeofday(&m_tvStart, 0);
 #endif
@@ -41,7 +38,7 @@ void Timer::Start()
 void Timer::Stop()
 {
 #if defined (WINDOWS)
-    m_llEnd = GetTickCount();
+    QueryPerformanceCounter(&m_liEnd);
 #elif defined(ANDROID)
     gettimeofday(&m_tvEnd, 0);
 #endif
@@ -53,7 +50,7 @@ void Timer::Stop()
 float Timer::Time()
 {
 #if defined (WINDOWS)
-    return static_cast<float>(m_llEnd - m_llStart)/1000.0f;
+    return static_cast<float>(m_liEnd.QuadPart - m_liStart.QuadPart)/m_liFrequency.QuadPart;
 #elif defined(ANDROID)
     float fSeconds = 0.0f;
     fSeconds = static_cast<float>(m_tvEnd.tv_sec - m_tvStart.tv_sec);

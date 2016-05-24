@@ -25,11 +25,11 @@
 #define CONT_SPHERE_MOVE_RATIO 0.2f
 #define SPHERE_COUNT 0
 #define MOVING_SPHERE_COUNT 500
-#define MOVING_SPHERE_SPEED 2.0f
+#define MOVING_SPHERE_SPEED 15.0f
 #define SCENE_SIZE 100.0f
 #define DISTRIB_SIZE 90.0f
-#define SPHERE_MIN_SCALE 3.0f
-#define SPHERE_MAX_SCALE 3.0f
+#define SPHERE_MIN_SCALE 1.0f
+#define SPHERE_MAX_SCALE 1.0f
 
 int main()
 {
@@ -198,6 +198,8 @@ int main()
 
     while ((GetStatus() & VAKZ_QUIT) == 0)
     {
+        glFinish();
+
         timer.Stop();
 
         fSeconds = timer.Time();

@@ -3,6 +3,9 @@
 
 #if defined(ANDROID)
 #include <sys/time.h>
+#elif defined (WINDOWS)
+#include <Windows.h>
+
 #endif
 
 class Timer
@@ -49,8 +52,10 @@ public:
 private:
 
 #if defined(WINDOWS)
-    long long m_llStart;
-    long long m_llEnd;
+    LARGE_INTEGER m_liStart;
+    LARGE_INTEGER m_liEnd;
+    LARGE_INTEGER m_liFrequency;
+
 #elif defined(ANDROID)
     struct timeval m_tvStart;
     struct timeval m_tvEnd;

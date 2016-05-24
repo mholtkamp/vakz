@@ -399,14 +399,10 @@ void Matter::Translate(float fTransX,
 
     UpdateBoundingBox();
 
-
     if (m_nPhysical != 0 &&
         m_nMobile   != 0)
     {
-        // TODO: After implementing Octree, replace this list iteration
-        // with the octree iteration.
-        // Iterate through all matters
-        
+        //@@ DEBUG: for testing non-octree, use this linked list instead
         //pMatterNode = reinterpret_cast<Scene*>(m_pScene)->GetMatterList()->GetHead();
         
         List lNearbyMatter;
