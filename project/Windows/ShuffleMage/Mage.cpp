@@ -226,7 +226,7 @@ void Mage::SetPosition(int nX,
     Pawn::SetPosition(nX, nZ);
 
 #ifdef SM_CLIENT
-        m_matter.Translate(0.0f, MAGE_Y_OFFSET, 0.0f, 0);
+        m_matter.Translate(0.0f, MAGE_Y_OFFSET, 0.0f);
 #endif
 }
 
@@ -236,7 +236,7 @@ void Mage::UpdatePosition(int nX,
     Pawn::UpdatePosition(nX, nZ);
 
 #ifdef SM_CLIENT
-        m_matter.Translate(0.0f, MAGE_Y_OFFSET, 0.0f, 0);
+        m_matter.Translate(0.0f, MAGE_Y_OFFSET, 0.0f);
 #endif
 }
 

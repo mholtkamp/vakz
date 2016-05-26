@@ -27,14 +27,13 @@ DirectionalLight::~DirectionalLight()
 // SetRenderState
 //*****************************************************************************
 void DirectionalLight::SetRenderState(void*        pScene,
-                                      unsigned int hProg,
-                                      int          nLightIndex)
+                                      unsigned int hProg)
 {
     int hVector = glGetUniformLocation(hProg, "uDirLightVector");
     int hColor  = glGetUniformLocation(hProg, "uDirLightColor");
 
     glUniform3fv(hVector, 1, m_arDirection);
-    glUniform4fv(hColor,  1, m_arColor);
+    glUniform3fv(hColor,  1, m_arColor);
 }
 
 //*****************************************************************************

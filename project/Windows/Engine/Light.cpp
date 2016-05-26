@@ -12,7 +12,6 @@ Light::Light()
     m_arColor[0] = 1.0f;
     m_arColor[1] = 1.0f;
     m_arColor[2] = 1.0f;
-    m_arColor[3] = 1.0f;
 }
 
 //*****************************************************************************
@@ -44,15 +43,17 @@ int Light::IsEnabled()
 //*****************************************************************************
 void Light::SetColor(float fRed,
                      float fGreen,
-                     float fBlue,
-                     float fAlpha)
+                     float fBlue)
 {
     m_arColor[0] = fRed;
     m_arColor[1] = fGreen;
     m_arColor[2] = fBlue;
-    m_arColor[3] = fAlpha;
 }
 
+float* Light::GetColor()
+{
+    return m_arColor;
+}
 //*****************************************************************************
 // GetType
 //*****************************************************************************

@@ -86,6 +86,7 @@
     <ClCompile Include="Octree.cpp" />
     <ClCompile Include="OrientedBoxCollider.cpp" />
     <ClCompile Include="ParticleSystem.cpp" />
+    <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="Rect.cpp" />
     <ClCompile Include="RimlitMaterial.cpp" />
     <ClCompile Include="Sound.cpp" />

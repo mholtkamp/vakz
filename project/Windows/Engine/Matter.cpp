@@ -5,10 +5,11 @@
 #include "Scene.h"
 #include "VMath.h"
 #include "Octree.h"
+#include "PointLight.h"
 #include <stdio.h>
 
 #define COL_BUFFER 0.001f
-#define MATTER_MAX_POINT_LIGHTS 4
+#define MATTER_MAX_POINT_LIGHTS 3
 #define MATTER_MAX_DIRECTIONAL_LIGHTS 1
 
 //*****************************************************************************
@@ -138,7 +139,8 @@ void Matter::Render(void* pScene)
     int               i             =  0;
     unsigned int      hProg         =  0;
     int               hMatrixMVP    = -1;
-    int               hMatrixM      = -1;
+    int               hMatrixModel  = -1;
+    int               hMatrixNormal = -1;
     int               hAmbientColor = -1;
     int               hTexture      = -1;
     int               hTextureMode  = -1;
@@ -199,9 +201,12 @@ void Matter::Render(void* pScene)
         if (pDirLight != 0)
         {
             pDirLight->SetRenderState(pScene,
-                                      hProg,
-                                      0);
+                                      hProg);
         }
+
+        // Setup point lights
+        SetPointLightRenderState(pScene,
+                                 hProg);
         
         // Fetch ambient light from the scene
         pAmbientColor = reinterpret_cast<Scene*>(pScene)->GetAmbientLight();
@@ -221,13 +226,17 @@ void Matter::Render(void* pScene)
             hMatrixMVP = glGetUniformLocation(hProg, "uMatrixMVP");
             glUniformMatrix4fv(hMatrixMVP, 1, GL_FALSE, matMVP.GetArray());
 
+            // Uploade the model matrix (for lighting)
+            hMatrixModel = glGetUniformLocation(hProg, "uMatrixModel");
+            glUniformMatrix4fv(hMatrixModel, 1, GL_FALSE, m_matModel.GetArray());
+
             // Create the normal matrix
             m_matModel.Inverse();
             m_matModel.Transpose();
 
-            // Upload model matrix to shader for normal transformations
-            hMatrixM = glGetUniformLocation(hProg, "uMatrixM");
-            glUniformMatrix4fv(hMatrixM, 1, GL_FALSE, m_matModel.GetArray());
+            // Upload normal matrix to shader for normal transformations
+            hMatrixNormal = glGetUniformLocation(hProg, "uMatrixNormal");
+            glUniformMatrix4fv(hMatrixNormal, 1, GL_FALSE, m_matModel.GetArray());
         }
         else
         {
@@ -409,9 +418,6 @@ void Matter::Translate(float fTransX,
         reinterpret_cast<Scene*>(m_pScene)->GetNearbyMatter(this, lNearbyMatter);
         pMatterNode = lNearbyMatter.GetHead();
 
-        //@@ DEBUG
-        int nCollisionChecks = 0;
-
         // Loop through the scene matter list
         while (pMatterNode != 0)
         {
@@ -441,7 +447,6 @@ void Matter::Translate(float fTransX,
                     pThisColliderNode = pThisColliderNode->m_pNext;
 
                     // Perform the collision detection.
-                    nCollisionChecks++;
                     orResult = pThisCollider->Overlaps(pCollider, pMatter, this);
 
                     if (orResult.m_nOverlapping != 0)
@@ -466,8 +471,6 @@ void Matter::Translate(float fTransX,
                 }
             }
         }
-
-        //printf("Collision Checks: %d\n", nCollisionChecks);
     }
 
     if (m_nSorted != 0)
@@ -866,4 +869,109 @@ void Matter::SetSorted(int nSorted)
 int Matter::IsSorted()
 {
     return m_nSorted;
+}
+
+void Matter::SetPointLightRenderState(void*        pScene,
+                                      unsigned int hProg)
+{
+    int i = 0;
+
+    int hLightPositions   = glGetUniformLocation(hProg, "uPointLightPositions");
+    int hLightColors      = glGetUniformLocation(hProg, "uPointLightColors");
+    int hLightIntensities = glGetUniformLocation(hProg, "uPointLightIntensities");
+    int hNumLights        = glGetUniformLocation(hProg, "uNumPointLights");
+
+    float fDist    = 0.0f;
+    float fMaxDist = 0.0f;
+    int nFarthestLight = 0;
+
+    PointLight* arPointLights[MATTER_MAX_POINT_LIGHTS] = {0,0,0};
+    float arLightPositions[MATTER_MAX_POINT_LIGHTS * 3] = {0.0f};
+    float arLightColors[MATTER_MAX_POINT_LIGHTS * 3] = {0.0f};
+    float arLightIntensities[MATTER_MAX_POINT_LIGHTS] = {0.0f};
+
+    int nNumLights = 0;
+
+    // Get nearby point lights from scene's pointlight octree
+    List lPointLights;
+    reinterpret_cast<Scene*>(pScene)->GetNearbyPointLights(this, lPointLights);
+
+    // Iterate through list and choose the 3 closest point lights
+    ListNode* pNode = lPointLights.GetHead();
+    PointLight* pCurLight = 0;
+
+    while (pNode != 0)
+    {
+        pCurLight = reinterpret_cast<PointLight*>(pNode->m_pData);
+
+        if (nNumLights < MATTER_MAX_POINT_LIGHTS)
+        {
+            // Haven't found 3 lights yet, so just add this to the array
+            arPointLights[nNumLights] = pCurLight;
+
+            fDist = DistanceBetweenPoints(pCurLight->GetPosition(),
+                                          m_arPosition);
+
+            // Record the maximum distance
+            if (fDist >= fMaxDist)
+            {
+                fMaxDist       = fDist;
+                nFarthestLight = nNumLights;
+            }
+            // Increment light count
+            nNumLights++;
+        }
+        else
+        {
+            // 3 lights have been found. Check if this one is closer
+            fDist = DistanceBetweenPoints(pCurLight->GetPosition(),
+                                          m_arPosition);
+
+            if (fDist < fMaxDist)
+            {
+                // This light is closer than the farthest light on record.
+                // Replace the farthest light with this one
+                arPointLights[nFarthestLight] = pCurLight;
+
+                fMaxDist = 0.0f;
+
+                // Iterate through array and find the new farthest light
+                for (i = 0; i < MATTER_MAX_POINT_LIGHTS; i++)
+                {
+                    fDist = DistanceBetweenPoints(arPointLights[i]->GetPosition(), m_arPosition);
+
+                    if (fDist >= fMaxDist)
+                    {
+                        fMaxDist = fDist;
+                        nFarthestLight = i;
+                    }
+                }
+            }
+        }
+
+        pNode = pNode->m_pNext;
+    }
+
+    // Setup pos/color arrays
+    for (i = 0; i < nNumLights; i++)
+    {
+        float* arLightPos = arPointLights[i]->GetPosition();
+        float* arLightCol = arPointLights[i]->GetColor();
+
+        arLightPositions[i*3 + 0] = arLightPos[0];
+        arLightPositions[i*3 + 1] = arLightPos[1];
+        arLightPositions[i*3 + 2] = arLightPos[2];
+
+        arLightColors[i*3 + 0] = arLightCol[0];
+        arLightColors[i*3 + 1] = arLightCol[1];
+        arLightColors[i*3 + 2] = arLightCol[2];
+
+        arLightIntensities[i] = arPointLights[i]->GetIntensity();
+    }
+
+    // Now time to actually set the shader uniforms
+    glUniform3fv(hLightPositions, 3, arLightPositions);
+    glUniform3fv(hLightColors, 3, arLightColors);
+    glUniform1fv(hLightIntensities, 3, arLightIntensities);
+    glUniform1i(hNumLights, nNumLights);
 }

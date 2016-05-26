@@ -34,7 +34,7 @@ void Game::Construct()
     m_nPlayerSide = SIDE_1;
 
     SetupCamera();
-    m_light.SetColor(1.0f, 1.0f, 1.0f, 1.0f);
+    m_light.SetColor(1.0f, 1.0f, 1.0f);
     m_light.SetDirectionVector(0.0f, -1.0f, 0.0f);
     m_scene.AddActor(&m_light);
 

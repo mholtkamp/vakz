@@ -27,11 +27,9 @@ public:
     //## Input:
     //##   pScene      - pointer to the scene being rendered.
     //##   hProg       - handle to the shader program that is already bound.
-    //##   nLightIndex - currently unused, but left for growth.
     //## **********************************************************************
     void SetRenderState(void*        pScene,
-                        unsigned int hProg,
-                        int          nLightIndex);
+                        unsigned int hProg);
 
     //## **********************************************************************
     //## SetDirectionVector

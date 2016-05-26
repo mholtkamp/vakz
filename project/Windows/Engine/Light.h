@@ -51,18 +51,17 @@ public:
     //## SetColor
     //##
     //## Sets the color of the light. Values should be between 0.0f and 1.0f.
-    //## The alpha component of the light color is not currently used.
     //##
     //## Input:
     //##   fRed   - red component of color.
     //##   fGreen - green component.
     //##   fBlue  - blue component.
-    //##   fAlpha - alpha comonent.
     //## **********************************************************************
     void SetColor(float fRed,
                   float fGreen,
-                  float fBlue,
-                  float fAlpha);
+                  float fBlue);
+
+    float* GetColor();
 
     //## **********************************************************************
     //## SetRenderState
@@ -74,11 +73,9 @@ public:
     //## Input:
     //##   pScene      - pointer to current scene.
     //##   hProg       - handle to currently bound shader program.
-    //##   nLightIndex - currently not used, left for growth.
     //## **********************************************************************
     virtual void SetRenderState(void*        pScene,
-                                unsigned int hProg,
-                                int          nLightIndex) = 0;
+                                unsigned int hProg) = 0;
 
     //## **********************************************************************
     //## GetType
@@ -100,7 +97,7 @@ protected:
     int m_nEnable;
 
     //## Color of the light
-    float m_arColor[4];  
+    float m_arColor[3];  
 };
 
 #endif

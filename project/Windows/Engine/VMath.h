@@ -37,7 +37,6 @@ static inline void NormalizeVector(float* arVec)
     }
 }
 
-
 static inline float AngleBetweenVectors(float* arA, float* arB)
 {
     float fMagA = Magnitude(arA);
@@ -46,6 +45,13 @@ static inline float AngleBetweenVectors(float* arA, float* arB)
     float fDot = DotProduct(arA, arB);
 
     return acosf(fDot/(fMagA * fMagB)) * RADIANS_TO_DEGREES;
+}
+
+static inline float DistanceBetweenPoints(float* arA, float* arB)
+{
+    return sqrtf((arB[0] - arA[0])*(arB[0] - arA[0]) + 
+                 (arB[1] - arA[1])*(arB[1] - arA[1]) + 
+                 (arB[2] - arA[2])*(arB[2] - arA[2]));
 }
 
 #endif

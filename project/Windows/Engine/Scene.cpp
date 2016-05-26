@@ -5,6 +5,7 @@
 #include "Settings.h"
 #include "Toast.h"
 #include "Quad.h"
+#include "PointLight.h"
 
 #define DEFAULT_AMBIENT_RED   0.12f
 #define DEFAULT_AMBIENT_GREEN 0.12f
@@ -39,7 +40,7 @@ Scene::Scene()
 
     // Create and initialize default octrees
     m_pMatterOctree = new Octree();
-    m_pLightOctree = new Octree();
+    m_pPointLightOctree = new Octree();
 
     Box boxDefault;
     boxDefault.m_arCenter[0] = 0.0f;
@@ -50,7 +51,7 @@ Scene::Scene()
     boxDefault.m_arExtent[2] = 50.0f;
 
     m_pMatterOctree->Initialize(boxDefault);
-    m_pLightOctree->Initialize(boxDefault);
+    m_pPointLightOctree->Initialize(boxDefault);
 
     m_nRenderMatterOctree = 0;
 }
@@ -66,10 +67,10 @@ Scene::~Scene()
         m_pMatterOctree = 0;
     }
 
-    if (m_pLightOctree != 0)
+    if (m_pPointLightOctree != 0)
     {
-        delete m_pLightOctree;
-        m_pLightOctree = 0;
+        delete m_pPointLightOctree;
+        m_pPointLightOctree = 0;
     }
 }
 
@@ -325,9 +326,11 @@ void Scene::AddLight(Light* pLight)
         {
             m_pDirectionalLight = reinterpret_cast<DirectionalLight*>(pLight);
         }
-        else
+        else if (pLight->GetType() == LIGHT_POINT)
         {
-            m_lLights.Add(pLight);
+            PointLight* pPointLight = reinterpret_cast<PointLight*>(pLight);
+            m_lLights.Add(pPointLight);
+            m_pPointLightOctree->Add(pPointLight, *pPointLight->GetBox());
         }
     }
     else
@@ -622,7 +625,7 @@ void Scene::RemoveParticleSystem(ParticleSystem* pParticleSystem)
 // SetSceneBounds
 //*****************************************************************************
 void Scene::SetSceneBounds(float* arCenter,
-                    float* arExtent)
+                           float* arExtent)
 {
     Box boxScene;
     boxScene.m_arCenter[0] = arCenter[0];
@@ -640,18 +643,18 @@ void Scene::SetSceneBounds(float* arCenter,
         m_pMatterOctree = 0;
     }
 
-    if (m_pLightOctree != 0)
+    if (m_pPointLightOctree != 0)
     {
-        delete m_pLightOctree;
-        m_pLightOctree = 0;
+        delete m_pPointLightOctree;
+        m_pPointLightOctree = 0;
     }
 
     // Remake new octrees
     m_pMatterOctree = new Octree();
-    m_pLightOctree = new Octree();
+    m_pPointLightOctree = new Octree();
 
     m_pMatterOctree->Initialize(boxScene);
-    m_pLightOctree->Initialize(boxScene);
+    m_pPointLightOctree->Initialize(boxScene);
 
     // Fill the initialized octrees
     ListNode* pNode = m_lMatters.GetHead();
@@ -670,14 +673,14 @@ void Scene::SetSceneBounds(float* arCenter,
     }
 
     pNode = m_lLights.GetHead();
-    Light* pLight = 0;
+    PointLight* pLight = 0;
 
     while (pNode != 0)
     {
-        pLight = reinterpret_cast<Light*>(pNode->m_pData);
+        pLight = reinterpret_cast<PointLight*>(pNode->m_pData);
         pNode = pNode->m_pNext;
 
-        // TODO: Add light to Octree.
+        m_pPointLightOctree->Add(pLight, *pLight->GetBox());
     }
 }
 
@@ -705,6 +708,22 @@ void Scene::GetNearbyMatter(Box& bBounds,
                             List& lMatter)
 {
     m_pMatterOctree->FindIntersectingObjects(bBounds, lMatter);
+}
+
+void Scene::GetNearbyPointLights(Matter* pMatter,
+                                 List& lPointLights)
+{
+    if (pMatter != 0 &&
+        pMatter->GetColliderList()->Count() > 0)
+    {
+        m_pPointLightOctree->FindIntersectingObjects(*pMatter->GetBoundingBox(), lPointLights);
+    }
+}
+
+void Scene::GetNearbyPointLights(Box& bBounds,
+                                 List& lPointLights)
+{
+    m_pPointLightOctree->FindIntersectingObjects(bBounds, lPointLights);
 }
 
 Octree* Scene::GetMatterOctree()

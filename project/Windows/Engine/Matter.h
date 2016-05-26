@@ -344,6 +344,10 @@ private:
     //## Updates variables reponsible for animation
     void UpdateAnimation();
 
+    //## Called to set point light uniforms in shader program
+    void SetPointLightRenderState(void* pScene,
+                                  unsigned int hProg);
+
     //## Visible flag
     int m_nVisible;
 
@@ -413,8 +417,6 @@ private:
     //## Sorting flag. If set, matter will be stored in octree when
     //## being added to a scene.
     int m_nSorted;
-
-    //## S
 };
 
 #endif

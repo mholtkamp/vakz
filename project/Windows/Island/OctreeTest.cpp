@@ -12,6 +12,7 @@
 #include "ResourceLibrary.h"
 #include "DiffuseMaterial.h"
 #include "DirectionalLight.h"
+#include "PointLight.h"
 #include "Text.h"
 #include "RimlitMaterial.h"
 
@@ -25,7 +26,7 @@
 #define CONT_SPHERE_MOVE_RATIO 0.2f
 #define SPHERE_COUNT 0
 #define MOVING_SPHERE_COUNT 500
-#define MOVING_SPHERE_SPEED 15.0f
+#define MOVING_SPHERE_SPEED 4.0f
 #define SCENE_SIZE 100.0f
 #define DISTRIB_SIZE 90.0f
 #define SPHERE_MIN_SCALE 1.0f
@@ -49,7 +50,7 @@ int main()
     DiffuseMaterial* pWhiteMat = new DiffuseMaterial();
     pWhiteMat->SetColor(0.4f, 0.4f, 1.0f, 1.0f);
     DiffuseMaterial* pMovingSphereMat = new DiffuseMaterial();
-    pMovingSphereMat->SetColor(1.0f, 1.0f, 0.0f, 1.0f);
+    pMovingSphereMat->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
 
 
     // Sphere assets
@@ -117,7 +118,7 @@ int main()
         arMovingSpheres[i]->SetPhysical(0);
         arMovingSpheres[i]->SetSorted(1);
         arMovingSpheres[i]->SetMobile(1);
-        arMovingSpheres[i]->EnableColliderRendering();
+        //arMovingSpheres[i]->EnableColliderRendering();
 
         arRand[0] = ((float) rand())/((float) RAND_MAX);
         arRand[1] = ((float) rand())/((float) RAND_MAX);
@@ -152,7 +153,7 @@ int main()
 
     // Create controllable sphere
     DiffuseMaterial* pContSphereMat = new DiffuseMaterial();
-    pContSphereMat->SetColor(1.0f, 1.0f, 0.0f, 1.0f);
+    pContSphereMat->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
     Matter* pContSphere = new Matter();
     pContSphere->SetMesh(pSphereMesh);
     pContSphere->SetMaterial(pContSphereMat);
@@ -166,10 +167,24 @@ int main()
 
     // Create sun
     DirectionalLight* pSun = new DirectionalLight();
-    pSun->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
+    pSun->SetColor(1.0f, 1.0f, 1.0f);
     pSun->SetDirectionVector(3.0f, -1.0f, -2.0f);
-    pTestScene->AddActor(pSun);
+    //pTestScene->AddActor(pSun);
     
+    // Point light
+    PointLight* pPointLight = new PointLight();
+    pPointLight->SetColor(1.0f, 0.0f, 0.0f);
+    pPointLight->SetPosition(0.0f, 0.0f, 0.0f);
+    pPointLight->SetIntensity(50.0f);
+    Box plBox;
+    plBox.m_arCenter[0] = 0.0f;
+    plBox.m_arCenter[1] = 0.0f;
+    plBox.m_arCenter[2] = 0.0f;
+    plBox.m_arExtent[0] = 50.0f;
+    plBox.m_arExtent[1] = 50.0f;
+    plBox.m_arExtent[2] = 50.0f;
+    pPointLight->SetBox(plBox);
+    pTestScene->AddActor(pPointLight);
 
     float fX = 0.0f;
     float fY = 0.0f;

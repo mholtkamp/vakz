@@ -195,6 +195,12 @@ public:
     void GetNearbyMatter(Box& bBounds,
                          List& lMatter);
 
+    void GetNearbyPointLights(Matter* pMatter,
+                              List& lPointLights);
+
+    void GetNearbyPointLights(Box& bBounds,
+                              List& lPointLights);
+
     void EnableMatterOctreeRendering();
     void DisableMatterOctreeRendering();
 
@@ -262,7 +268,7 @@ private:
 
     //## Octrees used for holding matter and lights
     Octree* m_pMatterOctree;
-    Octree* m_pLightOctree;
+    Octree* m_pPointLightOctree;
 
     //## Pointer to camera that the 3D scene should be rendered from.
     Camera* m_pCamera;
