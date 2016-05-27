@@ -202,6 +202,15 @@ void Matter::Render(void* pScene)
         {
             pDirLight->SetRenderState(pScene,
                                       hProg);
+            glUniform1i(glGetUniformLocation(hProg, "uDirLightOn"), 1);
+        }
+        else
+        {
+            // Disable directional light in shader
+            glUniform1i(glGetUniformLocation(hProg, "uDirLightOn"), 0);
+
+            float arZeroColor[] = {0.0f, 0.0f, 0.0f};
+            glUniform3fv(glGetUniformLocation(hProg, "uDirLightColor"), 1, arZeroColor);
         }
 
         // Setup point lights

@@ -171,20 +171,81 @@ int main()
     pSun->SetDirectionVector(3.0f, -1.0f, -2.0f);
     //pTestScene->AddActor(pSun);
     
-    // Point light
+    // Point light 1
     PointLight* pPointLight = new PointLight();
     pPointLight->SetColor(1.0f, 0.0f, 0.0f);
-    pPointLight->SetPosition(0.0f, 0.0f, 0.0f);
-    pPointLight->SetIntensity(50.0f);
+    pPointLight->SetPosition(0.0f, -50.0f, 0.0f);
+    pPointLight->SetIntensity(100.0f);
     Box plBox;
-    plBox.m_arCenter[0] = 0.0f;
-    plBox.m_arCenter[1] = 0.0f;
-    plBox.m_arCenter[2] = 0.0f;
-    plBox.m_arExtent[0] = 50.0f;
-    plBox.m_arExtent[1] = 50.0f;
-    plBox.m_arExtent[2] = 50.0f;
+    plBox.m_arCenter[0] = -50.0f;
+    plBox.m_arCenter[1] = -50.0f;
+    plBox.m_arCenter[2] = -50.0f;
+    plBox.m_arExtent[0] = 100.0f;
+    plBox.m_arExtent[1] = 100.0f;
+    plBox.m_arExtent[2] = 100.0f;
     pPointLight->SetBox(plBox);
     pTestScene->AddActor(pPointLight);
+
+    // Point light 2
+    PointLight* pPointLight2 = new PointLight();
+    pPointLight2->SetColor(0.0f, 0.0f, 1.0f);
+    pPointLight2->SetPosition(0.0f, 50.0f, 0.0f);
+    pPointLight2->SetIntensity(100.0f);
+    Box pl2Box;
+    pl2Box.m_arCenter[0] = 0.0f;
+    pl2Box.m_arCenter[1] = 50.0f;
+    pl2Box.m_arCenter[2] = 0.0f;
+    pl2Box.m_arExtent[0] = 100.0f;
+    pl2Box.m_arExtent[1] = 100.0f;
+    pl2Box.m_arExtent[2] = 100.0f;
+    pPointLight2->SetBox(pl2Box);
+    pTestScene->AddActor(pPointLight2);
+
+    // Point light 3
+    PointLight* pPointLight3 = new PointLight();
+    pPointLight3->SetColor(0.0f, 1.0f, 1.0f);
+    pPointLight3->SetPosition(0.0f, 20.0f, 0.0f);
+    pPointLight3->SetIntensity(10.0f);
+    Box pl3Box;
+    pl3Box.m_arCenter[0] = 0.0f;
+    pl3Box.m_arCenter[1] = 20.0f;
+    pl3Box.m_arCenter[2] = 0.0f;
+    pl3Box.m_arExtent[0] = 10.0f;
+    pl3Box.m_arExtent[1] = 10.0f;
+    pl3Box.m_arExtent[2] = 10.0f;
+    pPointLight3->SetBox(pl3Box);
+    pTestScene->AddActor(pPointLight3);
+
+    // Point light 4
+    PointLight* pPointLight4 = new PointLight();
+    pPointLight4->SetColor(0.0f, 1.0f, 1.0f);
+    pPointLight4->SetPosition(-5.0f, 20.0f, 0.0f);
+    pPointLight4->SetIntensity(10.0f);
+    Box pl4Box;
+    pl4Box.m_arCenter[0] = -5.0f;
+    pl4Box.m_arCenter[1] = 20.0f;
+    pl4Box.m_arCenter[2] = 0.0f;
+    pl4Box.m_arExtent[0] = 10.0f;
+    pl4Box.m_arExtent[1] = 10.0f;
+    pl4Box.m_arExtent[2] = 10.0f;
+    pPointLight4->SetBox(pl4Box);
+    pTestScene->AddActor(pPointLight4);
+    
+    // Point light 5
+    PointLight* pPointLight5 = new PointLight();
+    pPointLight5->SetColor(0.0f, 1.0f, 1.0f);
+    pPointLight5->SetPosition(5.0f, 20.0f, 0.0f);
+    pPointLight5->SetIntensity(10.0f);
+    Box pl5Box;
+    pl5Box.m_arCenter[0] = 5.0f;
+    pl5Box.m_arCenter[1] = 20.0f;
+    pl5Box.m_arCenter[2] = 0.0f;
+    pl5Box.m_arExtent[0] = 10.0f;
+    pl5Box.m_arExtent[1] = 10.0f;
+    pl5Box.m_arExtent[2] = 10.0f;
+    pPointLight5->SetBox(pl5Box);
+    pTestScene->AddActor(pPointLight5);
+
 
     float fX = 0.0f;
     float fY = 0.0f;

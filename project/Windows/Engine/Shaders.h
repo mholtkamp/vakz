@@ -122,7 +122,7 @@ GLSL_VERSION_STRING
 "uniform mat4 uMatrixMVP;\n"
 "uniform mat4 uMatrixModel;\n"
 "uniform mat4 uMatrixNormal;\n"
-"uniform vec3 uLightPositions[3];\n"
+"uniform vec3 uPointLightPositions[3];\n"
 "uniform int uNumPointLights;\n"
 
 "void main()\n"
@@ -132,7 +132,7 @@ GLSL_VERSION_STRING
 "   vec3 lWorldPos = (uMatrixModel * vec4(aPosition, 1.0)).xyz;\n"
 "   for (int i = 0; (i < uNumPointLights) && (i < 3); i++)\n"
 "   {\n"
-"       vPointLightDir[i] = uLightPositions[i] - lWorldPos;\n"
+"       vPointLightDir[i] = uPointLightPositions[i] - lWorldPos;\n"
 "   }\n"
 "   gl_Position = uMatrixMVP * vec4(aPosition, 1.0);\n"
 "}\n";
@@ -151,6 +151,7 @@ GLSL_VERSION_STRING
 "uniform vec4 uDiffuseColor;\n"
 "uniform vec3 uDirLightVector;\n"
 "uniform vec3 uDirLightColor;\n"
+"uniform int  uDirLightOn;\n"
 "uniform vec3 uPointLightColors[3];\n"
 "uniform float uPointLightIntensities[3];\n"
 "uniform int uNumPointLights;\n"
@@ -164,7 +165,7 @@ GLSL_VERSION_STRING
 // Directional Light Power
 "   vec3  lLightVector = normalize(-1.0*uDirLightVector);\n"
 "   vec3  lNormalVector = normalize(vNormal);\n"
-"   float lPower = dot(lLightVector, lNormalVector);\n"
+"   float lPower = clamp(dot(lLightVector, lNormalVector), 0.0, 1.0);\n"
 
 "   vec4  lObjectColor = uDiffuseColor;\n"
 "   if (uTextureMode == 1)\n"
@@ -172,17 +173,22 @@ GLSL_VERSION_STRING
 "       lObjectColor = lObjectColor * texture(uTexture,  vTexCoord);\n"
 "   }\n"
 "   vec3  lAmbient = lObjectColor.rgb * uAmbientColor.rgb;\n"
-"   vec3  lDiffuse = clamp(lPower * uDirLightColor * lObjectColor.rgb, 0.0, 1.0);\n"
 
 // Add point lighting
+"   float lPointPowers[3] = float[](0.0, 0.0, 0.0);\n"
 "   for (int i = 0; (i < uNumPointLights) && (i < 3); i++)\n"
 "   {\n"
 "       float lPointDist = length(vPointLightDir[i]);\n"
 "       float lPointPower = clamp((uPointLightIntensities[i] - lPointDist)/uPointLightIntensities[i], 0.0f, 1.0);\n"
-"       lPointPower = lPointPower * clamp(dot(normalize(vPointLightDir[i]), lNormalVector), 0.0, 1.0);\n"
-"       lDiffuse = max(lPointPower * uPointLightColors[i] * lObjectColor.rgb, lDiffuse);\n"
+"       lPointPowers[i] = lPointPower * clamp(dot(normalize(vPointLightDir[i]), lNormalVector), 0.0, 1.0);\n"
 "   }\n"
 
+"   vec3 lLightColor = (lPower         * uDirLightColor + \n"
+"                      lPointPowers[0] * uPointLightColors[0] + \n"
+"                      lPointPowers[1] * uPointLightColors[1] + \n"
+"                      lPointPowers[2] * uPointLightColors[2])/float(uDirLightOn + uNumPointLights);\n"
+
+"   vec3  lDiffuse = clamp(lLightColor * lObjectColor.rgb, 0.0, 1.0);\n"
 
 "   oFragColor.rgb = lDiffuse.rgb + lAmbient.rgb;\n"
 "   oFragColor.a   = lObjectColor.a;\n"
@@ -210,7 +216,7 @@ GLSL_VERSION_STRING
 "uniform mat4 uMatrixMVP;\n"
 "uniform mat4 uMatrixModel;\n"
 "uniform mat4 uMatrixNormal;\n"
-"uniform vec3 uLightPositions[3];\n"
+"uniform vec3 uPointLightPositions[3];\n"
 "uniform int uNumPointLights;\n"
 "uniform float uMix;\n"
 
@@ -225,7 +231,7 @@ GLSL_VERSION_STRING
 "   vec3 lWorldPos = (uMatrixModel * vec4(lPosition, 1.0)).xyz;\n"
 "   for (int i = 0; (i < uNumPointLights) && (i < 3); i++)\n"
 "   {\n"
-"       vPointLightDir[i] = uLightPositions[i] - lWorldPos;\n"
+"       vPointLightDir[i] = uPointLightPositions[i] - lWorldPos;\n"
 "   }\n"
 "   gl_Position = uMatrixMVP * vec4(lPosition, 1.0);\n"
 "}\n";
