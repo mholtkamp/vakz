@@ -18,14 +18,6 @@ public:
     ~DiffuseMaterial();
 
     //## **********************************************************************
-    //## GetType
-    //##
-    //## Returns:
-    //##   int - type of Material. Refer to MaterialType enum in Material.h
-    //## **********************************************************************
-    int GetType();
-
-    //## **********************************************************************
     //## SetRenderState
     //##
     //## Sets up the opengl to properly render matter.

@@ -869,6 +869,24 @@ int LoadShaders()
                                pRimlitFragmentShader);
     }
 
+    // Static Toon Shader
+    if (nStatus != 0)
+    {
+        LogDebug("Building Static Toon Shader");
+        nStatus = BuildProgram(STATIC_TOON_PROGRAM,
+                               pStaticMeshVertexShader,
+                               pToonFragmentShader);
+    }
+
+    // Animated Toon Shader
+    if (nStatus != 0)
+    {
+        LogDebug("Building Animated Toon Shader");
+        nStatus = BuildProgram(ANIMATED_TOON_PROGRAM,
+                               pAnimatedMeshVertexShader,
+                               pToonFragmentShader);
+    }
+
     return nStatus;
 }
 
@@ -928,6 +946,18 @@ unsigned int GetMatterShaderProgram(int nMeshType,
         nMaterialType == MATERIAL_RIMLIT)
     {
         return s_arPrograms[ANIMATED_RIMLIT_PROGRAM];
+    }
+
+    if (nMeshType     == MESH_STATIC &&
+        nMaterialType == MATERIAL_TOON)
+    {
+        return s_arPrograms[STATIC_TOON_PROGRAM];
+    }
+
+    if (nMeshType     == MESH_ANIMATED &&
+        nMaterialType == MATERIAL_TOON)
+    {
+        return s_arPrograms[ANIMATED_TOON_PROGRAM];
     }
 
     return 0;

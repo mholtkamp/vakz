@@ -46,10 +46,14 @@ public:
                             float fY,
                             float fZ);
 
+    void SetIntensity(float fIntensity);
+
 private:
 
     //## Float array to hold 3 dimensional direction vector.
     float m_arDirection[3];
+
+    float m_fIntensity;
 };
 
 

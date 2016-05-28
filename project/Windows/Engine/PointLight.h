@@ -31,6 +31,8 @@ public:
     void SetRenderState(void*        pScene,
                         unsigned int hProg);
 
+    void SetRadius(float fRadius);
+
     void SetIntensity(float fIntensity);
 
     void SetPosition(float fX,
@@ -38,6 +40,8 @@ public:
                      float fZ);
 
     void SetBox(Box& box);
+
+    float GetRadius();
 
     float GetIntensity();
 
@@ -55,6 +59,9 @@ private:
 
     //## Intensity of the light
     float m_fIntensity;
+
+    //## Radius of effect
+    float m_fRadius;
     
 };
 

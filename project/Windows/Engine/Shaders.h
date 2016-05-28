@@ -152,7 +152,9 @@ GLSL_VERSION_STRING
 "uniform vec3 uDirLightVector;\n"
 "uniform vec3 uDirLightColor;\n"
 "uniform int  uDirLightOn;\n"
+"uniform float uDirLightIntensity;\n"
 "uniform vec3 uPointLightColors[3];\n"
+"uniform float uPointLightRadii[3];\n"
 "uniform float uPointLightIntensities[3];\n"
 "uniform int uNumPointLights;\n"
 "uniform sampler2D uTexture;\n"
@@ -165,7 +167,7 @@ GLSL_VERSION_STRING
 // Directional Light Power
 "   vec3  lLightVector = normalize(-1.0*uDirLightVector);\n"
 "   vec3  lNormalVector = normalize(vNormal);\n"
-"   float lPower = clamp(dot(lLightVector, lNormalVector), 0.0, 1.0);\n"
+"   float lPower = clamp(dot(lLightVector, lNormalVector), 0.0, 1.0) * float(uDirLightOn) * uDirLightIntensity;\n"
 
 "   vec4  lObjectColor = uDiffuseColor;\n"
 "   if (uTextureMode == 1)\n"
@@ -179,15 +181,16 @@ GLSL_VERSION_STRING
 "   for (int i = 0; (i < uNumPointLights) && (i < 3); i++)\n"
 "   {\n"
 "       float lPointDist = length(vPointLightDir[i]);\n"
-"       float lPointPower = clamp((uPointLightIntensities[i] - lPointDist)/uPointLightIntensities[i], 0.0f, 1.0);\n"
-"       lPointPowers[i] = lPointPower * clamp(dot(normalize(vPointLightDir[i]), lNormalVector), 0.0, 1.0);\n"
+"       float lPointPower = clamp((uPointLightRadii[i] - lPointDist)/uPointLightRadii[i], 0.0f, 1.0);\n"
+"       lPointPowers[i] = lPointPower * uPointLightIntensities[i] * clamp(dot(normalize(vPointLightDir[i]), lNormalVector), 0.0, 1.0);\n"
 "   }\n"
 
-"   vec3 lLightColor = (lPower         * uDirLightColor + \n"
+"   vec3 lLightColor = lPower          * uDirLightColor + \n"
 "                      lPointPowers[0] * uPointLightColors[0] + \n"
 "                      lPointPowers[1] * uPointLightColors[1] + \n"
-"                      lPointPowers[2] * uPointLightColors[2])/float(uDirLightOn + uNumPointLights);\n"
+"                      lPointPowers[2] * uPointLightColors[2];\n"
 
+// Get final RGB val
 "   vec3  lDiffuse = clamp(lLightColor * lObjectColor.rgb, 0.0, 1.0);\n"
 
 "   oFragColor.rgb = lDiffuse.rgb + lAmbient.rgb;\n"
@@ -528,4 +531,72 @@ GLSL_VERSION_STRING
 "   }\n"
 "}\n";
 
+
+//## **************************************************************************
+//## Toon Fragment Shader
+//## **************************************************************************
+static const char* pToonFragmentShader = 
+GLSL_VERSION_STRING
+"precision mediump float;\n"
+"in vec2 vTexCoord;\n"
+"in vec3 vNormal;\n"
+"in vec3 vPointLightDir[3];"
+"out vec4 oFragColor;\n"
+"uniform vec4 uDiffuseColor;\n"
+"uniform vec3 uDirLightVector;\n"
+"uniform vec3 uDirLightColor;\n"
+"uniform int  uDirLightOn;\n"
+"uniform float uDirLightIntensity;\n"
+"uniform vec3 uPointLightColors[3];\n"
+"uniform float uPointLightRadii[3];\n"
+"uniform float uPointLightIntensities[3];\n"
+"uniform int uNumPointLights;\n"
+"uniform sampler2D uTexture;\n"
+"uniform vec4 uAmbientColor;\n"
+"uniform int uTextureMode;\n"
+"uniform int uLightIntervals;\n"
+
+"void main()\n"
+"{\n"
+
+"   float lIntervals = float(uLightIntervals);\n"
+
+// Directional Light Power
+"   vec3  lLightVector = normalize(-1.0*uDirLightVector);\n"
+"   vec3  lNormalVector = normalize(vNormal);\n"
+"   float lPower = clamp(dot(lLightVector, lNormalVector), 0.0, 1.0);\n"
+"   lPower = float(int((lPower - 0.001) * lIntervals))/lIntervals * (lIntervals/ (lIntervals - 1.0)) * float(uDirLightOn) * uDirLightIntensity;\n"
+
+"   vec4  lObjectColor = uDiffuseColor;\n"
+"   if (uTextureMode == 1)\n"
+"   {\n"
+"       lObjectColor = lObjectColor * texture(uTexture,  vTexCoord);\n"
+"   }\n"
+"   vec3  lAmbient = lObjectColor.rgb * uAmbientColor.rgb;\n"
+
+// Add point lighting
+"   float lPointPowers[3] = float[](0.0, 0.0, 0.0);\n"
+"   for (int i = 0; (i < uNumPointLights) && (i < 3); i++)\n"
+"   {\n"
+"       float lPointDist = length(vPointLightDir[i]);\n"
+"       float lPointPower = clamp((uPointLightRadii[i] - lPointDist)/uPointLightRadii[i], 0.0f, 1.0);\n"
+"       lPointPowers[i] = lPointPower * clamp(dot(normalize(vPointLightDir[i]), lNormalVector), 0.0, 1.0);\n"
+"       lPointPowers[i] = uPointLightIntensities[i] * float(int((lPointPowers[i] - 0.001) * lIntervals))/lIntervals * (lIntervals/ (lIntervals - 1.0));\n"
+"   }\n"
+
+"   vec3 lLightColor = lPower          * uDirLightColor + \n"
+"                      lPointPowers[0] * uPointLightColors[0] + \n"
+"                      lPointPowers[1] * uPointLightColors[1] + \n"
+"                      lPointPowers[2] * uPointLightColors[2];\n"
+
+// Get final RGB val
+"   vec3  lDiffuse = clamp(lLightColor * lObjectColor.rgb, 0.0, 1.0);\n"
+
+"   oFragColor.rgb = lDiffuse.rgb + lAmbient.rgb;\n"
+"   oFragColor.a   = lObjectColor.a;\n"
+"   if (oFragColor.a < 0.004)\n"
+"   {\n"
+"       discard;\n"
+"   }\n"
+"}\n";
 #endif

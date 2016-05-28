@@ -16,7 +16,9 @@ enum ProgramEnum
     PARTICLE_RENDER_PROGRAM         = 8,
     STATIC_RIMLIT_PROGRAM           = 9,
     ANIMATED_RIMLIT_PROGRAM         = 10,
-    MAX_PROGRAMS                    = 11
+    STATIC_TOON_PROGRAM             = 11,
+    ANIMATED_TOON_PROGRAM           = 12,
+    MAX_PROGRAMS                    = 13
 };
 
 //## **************************************************************************

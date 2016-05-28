@@ -10,11 +10,17 @@ PointLight::PointLight()
     m_arPosition[2] = 0.0f;
 
     m_fIntensity = 1.0f;
+    m_fRadius    = 1.0f;
 }
 
 PointLight::~PointLight()
 {
 
+}
+
+void PointLight::SetRadius(float fRadius)
+{
+    m_fRadius = fRadius;
 }
 
 void PointLight::SetIntensity(float fIntensity)
@@ -34,6 +40,11 @@ void PointLight::SetPosition(float fX,
 void PointLight::SetBox(Box& box)
 {
     m_box = box;
+}
+
+float PointLight::GetRadius()
+{
+    return m_fRadius;
 }
 
 float PointLight::GetIntensity()

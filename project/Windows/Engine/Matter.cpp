@@ -887,6 +887,7 @@ void Matter::SetPointLightRenderState(void*        pScene,
 
     int hLightPositions   = glGetUniformLocation(hProg, "uPointLightPositions");
     int hLightColors      = glGetUniformLocation(hProg, "uPointLightColors");
+    int hLightRadii       = glGetUniformLocation(hProg, "uPointLightRadii");
     int hLightIntensities = glGetUniformLocation(hProg, "uPointLightIntensities");
     int hNumLights        = glGetUniformLocation(hProg, "uNumPointLights");
 
@@ -898,6 +899,7 @@ void Matter::SetPointLightRenderState(void*        pScene,
     float arLightPositions[MATTER_MAX_POINT_LIGHTS * 3] = {0.0f};
     float arLightColors[MATTER_MAX_POINT_LIGHTS * 3] = {0.0f};
     float arLightIntensities[MATTER_MAX_POINT_LIGHTS] = {0.0f};
+    float arLightRadii[MATTER_MAX_POINT_LIGHTS] = {0.0f};
 
     int nNumLights = 0;
 
@@ -976,11 +978,13 @@ void Matter::SetPointLightRenderState(void*        pScene,
         arLightColors[i*3 + 2] = arLightCol[2];
 
         arLightIntensities[i] = arPointLights[i]->GetIntensity();
+        arLightRadii[i]       = arPointLights[i]->GetRadius();
     }
 
     // Now time to actually set the shader uniforms
     glUniform3fv(hLightPositions, 3, arLightPositions);
     glUniform3fv(hLightColors, 3, arLightColors);
     glUniform1fv(hLightIntensities, 3, arLightIntensities);
+    glUniform1fv(hLightRadii, 3, arLightRadii);
     glUniform1i(hNumLights, nNumLights);
 }
