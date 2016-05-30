@@ -301,6 +301,7 @@ int Initialize(void* pData)
     DWORD        dwExStyle;                         // Window Extended Style
     DWORD        dwStyle;                           // Window Style
     RECT        WindowRect;                         // Grabs Rectangle Upper Left / Lower Right Values
+
     WindowRect.left   = (long) 0;                      // Set Left Value To 0
     WindowRect.right  = (long) g_nScreenWidth;         // Set Right Value To Requested Width
     WindowRect.top    = (long) 0;                       // Set Top Value To 0
@@ -324,8 +325,17 @@ int Initialize(void* pData)
         return FALSE;                               // Return FALSE
     }
 
-    dwExStyle = WS_EX_APPWINDOW | WS_EX_WINDOWEDGE; // Window Extended Style
-    dwStyle = WS_OVERLAPPEDWINDOW;                  // Windows Style
+    if (g_nFullScreen != 0)
+    {
+        dwExStyle = WS_EX_APPWINDOW; // Window Extended Style
+        dwStyle = WS_POPUP | WS_CLIPCHILDREN;                  // Windows Style
+    }
+    else
+    {
+        dwExStyle = WS_EX_APPWINDOW | WS_EX_WINDOWEDGE; // Window Extended Style
+        dwStyle = WS_OVERLAPPEDWINDOW;                  // Windows Style
+    }
+
 
     AdjustWindowRectEx(&WindowRect, dwStyle, FALSE, dwExStyle);    // Adjust Window To True Requested Size
 
@@ -404,6 +414,19 @@ int Initialize(void* pData)
         KillGLWindow();                                // Reset The Display
         MessageBox(NULL, "Can't Activate The GL Rendering Context.", "ERROR", MB_OK | MB_ICONEXCLAMATION);
         return FALSE;                                  // Return FALSE
+    }
+
+    if (g_nFullScreen != 0)
+    {
+        DEVMODE dmScreenSettings;                   // Device Mode
+        memset(&dmScreenSettings,0,sizeof(dmScreenSettings));       // Makes Sure Memory's Cleared
+        dmScreenSettings.dmSize=sizeof(dmScreenSettings);       // Size Of The Devmode Structure
+        dmScreenSettings.dmPelsWidth    = g_nScreenWidth;            // Selected Screen Width
+        dmScreenSettings.dmPelsHeight   = g_nScreenHeight;           // Selected Screen Height
+        dmScreenSettings.dmBitsPerPel   = 32;             // Selected Bits Per Pixel
+        dmScreenSettings.dmFields = DM_BITSPERPEL|DM_PELSWIDTH|DM_PELSHEIGHT;
+
+        ChangeDisplaySettings(&dmScreenSettings,CDS_FULLSCREEN);
     }
 
     if (LoadVGL() == 0)
@@ -516,4 +539,10 @@ unsigned char GetStatus()
 {
     return s_ucStatus;
 }
+
+void SetFullScreen(int nFullScreen)
+{
+    g_nFullScreen = nFullScreen;
+}
+
 #endif

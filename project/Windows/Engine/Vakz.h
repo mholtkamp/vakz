@@ -105,4 +105,6 @@ void Update();
 //## **************************************************************************
 unsigned char GetStatus();
 
+void SetFullScreen(int nFullScreen);
+
 #endif

@@ -51,8 +51,9 @@ void printlist(List& list)
 
 int main()
 {
-    SetWindowSize(1024, 768);
-    SetResolution(1024, 768);
+    SetWindowSize(1920, 1080);
+    SetResolution(1920, 1080);
+    SetFullScreen(1);
     Initialize();
 
     //@@ DEBUG INVERSE TEST
