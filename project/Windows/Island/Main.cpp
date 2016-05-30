@@ -51,8 +51,6 @@ void printlist(List& list)
 
 int main()
 {
-    SetWindowSize(1920, 1080);
-    SetResolution(1920, 1080);
     SetFullScreen(1);
     Initialize();
 
@@ -123,8 +121,6 @@ int main()
     lTest.Insert(&arNumbers[9], 0);
     LogDebug("Inserting 9 @ 0");
     printlist(lTest);
-
-
     //@@ END
 
     Scene* pTestScene = new Scene();

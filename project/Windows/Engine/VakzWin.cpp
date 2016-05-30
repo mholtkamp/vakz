@@ -302,6 +302,14 @@ int Initialize(void* pData)
     DWORD        dwStyle;                           // Window Style
     RECT        WindowRect;                         // Grabs Rectangle Upper Left / Lower Right Values
 
+    if (g_nFullScreen != 0)
+    {
+        // If the window should be full screen,
+        // query the native resolution of primary monitor
+        g_nScreenWidth = GetSystemMetrics(SM_CXSCREEN);
+        g_nScreenHeight = GetSystemMetrics(SM_CYSCREEN);
+    }
+
     WindowRect.left   = (long) 0;                      // Set Left Value To 0
     WindowRect.right  = (long) g_nScreenWidth;         // Set Right Value To Requested Width
     WindowRect.top    = (long) 0;                       // Set Top Value To 0
