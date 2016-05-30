@@ -269,7 +269,7 @@ int main()
     pTestText->SetPosition(-0.9f, 0.8f);
     pTestText->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
     pTestText->SetScale(fTextScaleX, fTextScaleY);
-    pTestText->SetText("Animation:\nWave");
+    pTestText->SetText("The Quick Brown Fox Jumps Over The Lazy Dog\nSOMETHING: HAPPENED\nwhile(true)\n{\nprintf(\"beep\");\n\n A little bit more of the symbols: ^_^  :D (>^.^)>\n}");
 
     // Add the test cube to the scene
     pTestScene->AddActor(pTestAnim);

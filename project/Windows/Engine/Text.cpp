@@ -5,9 +5,11 @@
 #include <ctype.h>
 
 #define DEFAULT_LINE_SPACING 0.2f
+#define DEFAULT_CHAR_SPACING -0.2f
 #define DEFAULT_CHAR_WIDTH   0.05f
 #define DEFAULT_CHAR_HEIGHT  0.05f
-#define CHAR_UNIT            0.125f
+#define CHAR_UNIT_WIDTH      0.125f
+#define CHAR_UNIT_HEIGHT     0.0625f
 #define TEXCOORD_BUFFER      0.004f
 
 //*****************************************************************************
@@ -27,6 +29,7 @@ Text::Text()
     m_fScaleX      = 1.0f;
     m_fScaleY      = 1.0f;
     m_fLineSpacing = DEFAULT_LINE_SPACING;
+    m_fCharSpacing = DEFAULT_CHAR_SPACING;
 
     m_pFont = reinterpret_cast<Font*>(ResourceLibrary::GetDefaultFont());
 
@@ -195,7 +198,7 @@ void Text::GenerateVertexArray(float** pArray,
     float* pVertexArray  = *pArray;
     float  fCharWidth    = DEFAULT_CHAR_WIDTH;
     float  fCharHeight   = DEFAULT_CHAR_HEIGHT;
-    int    nCharOffX     = 0;
+    float    fCharOffX     = 0.0f;
     float  fCharOffY     = 0.0f;
 
     for (i = 0; i < nTextLength; i++)
@@ -203,26 +206,25 @@ void Text::GenerateVertexArray(float** pArray,
         unsigned int index; 
         float xIndex;
         float yIndex;
-        char target = (char) toupper(m_pText[i]);
+        char target = m_pText[i];
+        float  fLowerDrop    = 0.0f;
 
-        if(target == '\0')         // Breakout on null terminating char
+        if (target == '\0')         // Breakout on null terminating char
             break;
-        else if(target >= ' ' &&   // Valid character range
-                target <= 'Z')
+
+        if (target == 'g' ||
+            target == 'j' ||
+            target == 'p' ||
+            target == 'q' ||
+            target == 'y')
         {
-            index = target - 0x20;
+            fLowerDrop = fCharHeight * 0.25f;
         }
-        else if (target == '\n')
-        {
-            index = ' ' - 0x20;
-        }
-        else
-            // Do not render the rest, dip out.
-            // (this might need to be changed later)
-            break;
+        
+        index = target;
 
         yIndex = (float) (index/8);
-        xIndex = (float) (index%8);
+        xIndex = (float) (index%16);
 
         // Each character will be drawn with two triangles like so
         //    2--3  5
@@ -231,51 +233,51 @@ void Text::GenerateVertexArray(float** pArray,
         //    1  4--6
 
         // Texcoords
-        pVertexArray[i*24 + 2] = CHAR_UNIT * xIndex;
-        pVertexArray[i*24 + 3] = 1.0f - CHAR_UNIT * (yIndex+1.0f);
+        pVertexArray[i*24 + 2] = CHAR_UNIT_WIDTH * xIndex;
+        pVertexArray[i*24 + 3] = 1.0f - CHAR_UNIT_HEIGHT * (yIndex+1.0f);
 
-        pVertexArray[i*24 + 6] = CHAR_UNIT * xIndex;
-        pVertexArray[i*24 + 7] = 1.0f - CHAR_UNIT * (yIndex) - TEXCOORD_BUFFER; 
+        pVertexArray[i*24 + 6] = CHAR_UNIT_WIDTH * xIndex;
+        pVertexArray[i*24 + 7] = 1.0f - CHAR_UNIT_HEIGHT * (yIndex) - TEXCOORD_BUFFER; 
 
-        pVertexArray[i*24 + 10] = CHAR_UNIT * (xIndex+1.0f);
-        pVertexArray[i*24 + 11] = 1.0f - CHAR_UNIT * (yIndex) - TEXCOORD_BUFFER; 
+        pVertexArray[i*24 + 10] = CHAR_UNIT_WIDTH * (xIndex+1.0f);
+        pVertexArray[i*24 + 11] = 1.0f - CHAR_UNIT_HEIGHT * (yIndex) - TEXCOORD_BUFFER; 
 
-        pVertexArray[i*24 + 14] = CHAR_UNIT * xIndex;
-        pVertexArray[i*24 + 15] = 1.0f - CHAR_UNIT * (yIndex+1.0f);
+        pVertexArray[i*24 + 14] = CHAR_UNIT_WIDTH * xIndex;
+        pVertexArray[i*24 + 15] = 1.0f - CHAR_UNIT_HEIGHT * (yIndex+1.0f);
 
-        pVertexArray[i*24 + 18] = CHAR_UNIT * (xIndex+1.0f);
-        pVertexArray[i*24 + 19] = 1.0f - CHAR_UNIT * (yIndex) - TEXCOORD_BUFFER; 
+        pVertexArray[i*24 + 18] = CHAR_UNIT_WIDTH * (xIndex+1.0f);
+        pVertexArray[i*24 + 19] = 1.0f - CHAR_UNIT_HEIGHT * (yIndex) - TEXCOORD_BUFFER; 
 
-        pVertexArray[i*24 + 22] = CHAR_UNIT * (xIndex+1.0f);
-        pVertexArray[i*24 + 23] = 1.0f - CHAR_UNIT * (yIndex+1.0f);
+        pVertexArray[i*24 + 22] = CHAR_UNIT_WIDTH * (xIndex+1.0f);
+        pVertexArray[i*24 + 23] = 1.0f - CHAR_UNIT_HEIGHT * (yIndex+1.0f);
 
         // Position
-        pVertexArray[i*24 + 0] = nCharOffX*fCharWidth;
-        pVertexArray[i*24 + 1] = fCharOffY;
+        pVertexArray[i*24 + 0] = fCharOffX;
+        pVertexArray[i*24 + 1] = fCharOffY - fLowerDrop;
 
-        pVertexArray[i*24 + 4] = nCharOffX*fCharWidth;
-        pVertexArray[i*24 + 5] = fCharHeight + fCharOffY;
+        pVertexArray[i*24 + 4] = fCharOffX;
+        pVertexArray[i*24 + 5] = fCharHeight + fCharOffY - fLowerDrop;
 
-        pVertexArray[i*24 + 8] = fCharWidth + nCharOffX*fCharWidth;
-        pVertexArray[i*24 + 9] = fCharHeight + fCharOffY;
+        pVertexArray[i*24 + 8] = fCharWidth + fCharOffX;
+        pVertexArray[i*24 + 9] = fCharHeight + fCharOffY - fLowerDrop;
 
-        pVertexArray[i*24 + 12] = nCharOffX*fCharWidth;
-        pVertexArray[i*24 + 13] = fCharOffY;
+        pVertexArray[i*24 + 12] = fCharOffX;
+        pVertexArray[i*24 + 13] = fCharOffY - fLowerDrop;
 
-        pVertexArray[i*24 + 16] = fCharWidth + nCharOffX*fCharWidth;
-        pVertexArray[i*24 + 17] = fCharHeight + fCharOffY;
+        pVertexArray[i*24 + 16] = fCharWidth + fCharOffX;
+        pVertexArray[i*24 + 17] = fCharHeight + fCharOffY - fLowerDrop;
 
-        pVertexArray[i*24 + 20] = fCharWidth + nCharOffX*fCharWidth;
-        pVertexArray[i*24 + 21] = fCharOffY;
+        pVertexArray[i*24 + 20] = fCharWidth + fCharOffX;
+        pVertexArray[i*24 + 21] = fCharOffY - fLowerDrop;
 
         if (target == '\n')
         {
-            nCharOffX = 0;
+            fCharOffX = 0.0f;
             fCharOffY -= fCharHeight + m_fLineSpacing*fCharHeight;
         }
         else
         {
-            nCharOffX++;
+            fCharOffX += fCharWidth + m_fCharSpacing*fCharWidth;
         }
     }
 }
@@ -283,4 +285,9 @@ void Text::GenerateVertexArray(float** pArray,
 void Text::SetFont(Font* pFont)
 {
     m_pFont = pFont;
+}
+
+void Text::SetCharSpacing(float fCharSpacing)
+{
+    m_fCharSpacing = fCharSpacing;
 }

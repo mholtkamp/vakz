@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Express 2013 for Windows Desktop
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Engine", "Engine\Engine.vcxproj", "{E8E61552-1D55-4307-AB68-E6485A321210}"
 EndProject
@@ -16,6 +16,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ShuffleMage", "ShuffleMage\
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ShuffleMageServer", "ShuffleMageServer\ShuffleMageServer.vcxproj", "{B364B4E1-90EB-4967-9B27-58E7E99841EE}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TextureToHeader", "TextureToHeader\TextureToHeader.vcxproj", "{B9670BE5-4B1E-4EDE-9710-600F659378C1}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E8E61552-1D55-4307-AB68-E6485A321210} = {E8E61552-1D55-4307-AB68-E6485A321210}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +44,10 @@ Global
 		{B364B4E1-90EB-4967-9B27-58E7E99841EE}.Debug|Win32.Build.0 = Debug|Win32
 		{B364B4E1-90EB-4967-9B27-58E7E99841EE}.Release|Win32.ActiveCfg = Release|Win32
 		{B364B4E1-90EB-4967-9B27-58E7E99841EE}.Release|Win32.Build.0 = Release|Win32
+		{B9670BE5-4B1E-4EDE-9710-600F659378C1}.Debug|Win32.ActiveCfg = Debug|Win32
+		{B9670BE5-4B1E-4EDE-9710-600F659378C1}.Debug|Win32.Build.0 = Debug|Win32
+		{B9670BE5-4B1E-4EDE-9710-600F659378C1}.Release|Win32.ActiveCfg = Release|Win32
+		{B9670BE5-4B1E-4EDE-9710-600F659378C1}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

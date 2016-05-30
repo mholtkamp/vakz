@@ -54,6 +54,8 @@ public:
     //## **********************************************************************
     void SetLineSpacing(float fLineSpacing);
 
+    void SetCharSpacing(float fCharSpacing);
+
     //## **********************************************************************
     //## SetText
     //##
@@ -108,6 +110,9 @@ private:
     //## Variable to store spacing between lines
     float m_fLineSpacing;
 
+    //## Space between individual characters
+    float m_fCharSpacing;
+    
     //## Pointer to font to use when rendering.
     Font* m_pFont;
 

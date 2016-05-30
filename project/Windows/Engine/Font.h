@@ -62,8 +62,8 @@ public:
     enum FontEnum
     {
         LEGACY_TYPE   = 0,
-        LEGACY_WIDTH  = 128,
-        LEGACY_HEIGHT = 128
+        LEGACY_WIDTH  = 256,
+        LEGACY_HEIGHT = 512
     };
 
 private:
