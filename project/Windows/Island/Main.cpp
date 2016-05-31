@@ -261,12 +261,12 @@ int main()
 
     // Create some screen text
     Text* pTestText = new Text();
-    float fTextScaleX = 0.6f;
+    float fTextScaleX = 0.5f;
     float fTextScaleY = 0.8f;
     pTestText->SetPosition(-0.9f, 0.8f);
     pTestText->SetColor(1.0f, 1.0f, 1.0f, 1.0f);
     pTestText->SetScale(fTextScaleX, fTextScaleY);
-    pTestText->SetText("The Quick Brown Fox Jumps Over The Lazy Dog\nSOMETHING: HAPPENED\nwhile(true)\n{\nprintf(\"beep\");\n\n A little bit more of the symbols: ^_^  :D (>^.^)>\n}");
+    pTestText->SetText("The Quick Brown Fox Jumps Over The Lazy Dog\n1234567890  935076721029845\nSOMETHING: HAPPENED\nwhile(true)\n{\nprintf(\"beep\");\n\n A little bit more of the symbols: ^_^  :D (>^.^)>\n}\n\n\n 2.13359f  5.25f  0.00f");
 
     // Add the test cube to the scene
     pTestScene->AddActor(pTestAnim);
