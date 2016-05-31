@@ -205,6 +205,8 @@ void Scene::Render()
                 nEffectOn = 1;
                 break;
             }
+
+            pNode = pNode->m_pNext;
         }
 
         pNode = m_lEffects.GetHead();
@@ -219,6 +221,8 @@ void Scene::Render()
                                 s_texColorAttach.GetHandle(),
                                 s_texDepthAttach.GetHandle());
             }
+
+            pNode = pNode->m_pNext;
         }
     }
 

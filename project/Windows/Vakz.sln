@@ -22,6 +22,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TextureToHeader", "TextureT
 		{E8E61552-1D55-4307-AB68-E6485A321210} = {E8E61552-1D55-4307-AB68-E6485A321210}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LevelEditor", "LevelEditor\LevelEditor.vcxproj", "{9BBBC3A3-791A-494D-9CAA-E4B1238F0FA1}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E8E61552-1D55-4307-AB68-E6485A321210} = {E8E61552-1D55-4307-AB68-E6485A321210}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -48,6 +53,10 @@ Global
 		{B9670BE5-4B1E-4EDE-9710-600F659378C1}.Debug|Win32.Build.0 = Debug|Win32
 		{B9670BE5-4B1E-4EDE-9710-600F659378C1}.Release|Win32.ActiveCfg = Release|Win32
 		{B9670BE5-4B1E-4EDE-9710-600F659378C1}.Release|Win32.Build.0 = Release|Win32
+		{9BBBC3A3-791A-494D-9CAA-E4B1238F0FA1}.Debug|Win32.ActiveCfg = Debug|Win32
+		{9BBBC3A3-791A-494D-9CAA-E4B1238F0FA1}.Debug|Win32.Build.0 = Debug|Win32
+		{9BBBC3A3-791A-494D-9CAA-E4B1238F0FA1}.Release|Win32.ActiveCfg = Release|Win32
+		{9BBBC3A3-791A-494D-9CAA-E4B1238F0FA1}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
