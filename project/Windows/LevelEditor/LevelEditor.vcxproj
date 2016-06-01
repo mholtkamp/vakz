@@ -69,9 +69,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AssetBank.cpp" />
+    <ClCompile Include="Button.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="TextField.cpp" />
+    <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ActorProperties.h" />
+    <ClInclude Include="AssetBank.h" />
+    <ClInclude Include="AssetProperties.h" />
+    <ClInclude Include="Button.h" />
+    <ClInclude Include="Constants.h" />
+    <ClInclude Include="Outliner.h" />
+    <ClInclude Include="TextField.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

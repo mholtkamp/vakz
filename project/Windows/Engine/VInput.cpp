@@ -6,6 +6,8 @@
 #include <ctype.h>
 
 static int s_arKeys[VINPUT_MAX_KEYS]       = {0};
+static int s_arJustDownRepeatKeys[VINPUT_MAX_KEYS] = {0};
+static int s_arJustDownKeys[VINPUT_MAX_KEYS] = {0};
 static int s_arButtons[VINPUT_MAX_BUTTONS] = {0};
 static int s_arTouches[VINPUT_MAX_TOUCHES] = {0};
 
@@ -26,8 +28,17 @@ void SetKey(int nKey)
     if (nKey >= 0 &&
         nKey <  VINPUT_MAX_KEYS)
     {
+        if (s_arKeys[nKey] == 0)
+            s_arJustDownKeys[nKey] = 1;
         s_arKeys[nKey] = 1;
+        s_arJustDownRepeatKeys[nKey] = 1;
     }
+}
+
+void ResetJustDownKeys()
+{
+    memset(s_arJustDownKeys, 0, VINPUT_MAX_KEYS * sizeof(int));
+    memset(s_arJustDownRepeatKeys, 0, VINPUT_MAX_KEYS * sizeof(int));
 }
 
 //*****************************************************************************
@@ -70,6 +81,35 @@ int IsKeyDown(int nKey)
         nKey <  VINPUT_MAX_KEYS)
     {
         return s_arKeys[nKey];
+    }
+    else
+    {
+        LogWarning("Invalid key queried in IsKeyDown().");
+        return 0;
+    }
+}
+
+
+int IsKeyJustDownRepeat(int nKey)
+{
+    if (nKey >= 0 &&
+        nKey <  VINPUT_MAX_KEYS)
+    {
+        return s_arJustDownRepeatKeys[nKey];
+    }
+    else
+    {
+        LogWarning("Invalid key queried in IsKeyDown().");
+        return 0;
+    }
+}
+
+int IsKeyJustDown(int nKey)
+{
+    if (nKey >= 0 &&
+        nKey <  VINPUT_MAX_KEYS)
+    {
+        return s_arJustDownKeys[nKey];
     }
     else
     {

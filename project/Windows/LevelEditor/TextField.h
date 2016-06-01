@@ -102,6 +102,8 @@ private:
     float m_fTextOffsetX;
     float m_fTextOffsetY;
 
+    char arKeyDown[NUM_KEYS];
+
     int m_nBufferSize;
     int m_nMaxSize;
 

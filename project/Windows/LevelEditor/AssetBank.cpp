@@ -23,6 +23,7 @@ void AssetBank::UpdateView()
 void AssetBank::InitializeView()
 {
     Window::InitializeView();
+
 }
 
 void AssetBank::RegisterScene(Scene* pScene)

@@ -9,10 +9,10 @@
 
 Window::Window()
 {
-    m_fX      = 0.0f;
-    m_fY      = 0.0f;
-    m_fWidth  = 1.0f;
-    m_fHeight = 1.0f;
+    m_rect.m_fX      = 0.0f;
+    m_rect.m_fY      = 0.0f;
+    m_rect.m_fWidth  = 1.0f;
+    m_rect.m_fHeight = 1.0f;
 
     m_fPadding = 0.0f;
 

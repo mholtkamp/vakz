@@ -57,7 +57,45 @@ enum VakzKeyEnum
     VKEY_UP        = 38,
     VKEY_DOWN      = 40,
     VKEY_LEFT      = 37,
-    VKEY_RIGHT     = 39
+    VKEY_RIGHT     = 39,
+
+    VKEY_NUMPAD0   = 96,
+    VKEY_NUMPAD1   = 97,
+    VKEY_NUMPAD2   = 98,
+    VKEY_NUMPAD3   = 99,
+    VKEY_NUMPAD4   = 100,
+    VKEY_NUMPAD5   = 101,
+    VKEY_NUMPAD6   = 102,
+    VKEY_NUMPAD7   = 103,
+    VKEY_NUMPAD8   = 104,
+    VKEY_NUMPAD9   = 105,
+
+    VKEY_F1 = 112,
+    VKEY_F2 = 113,
+    VKEY_F3 = 114,
+    VKEY_F4 = 115,
+    VKEY_F5 = 116,
+    VKEY_F6 = 117,
+    VKEY_F7 = 118,
+    VKEY_F8 = 119,
+    VKEY_F9 = 120,
+    VKEY_F10 = 121,
+    VKEY_F11 = 122,
+    VKEY_F12 = 123,
+
+    VKEY_PERIOD = 0xBE,
+    VKEY_COMMA  = 0xBC,
+    VKEY_PLUS   = 0xBB,
+    VKEY_MINUS  = 0xBD,
+
+    VKEY_COLON         = 0xBA,
+    VKEY_QUESTION      = 0xBF,
+    VKEY_SQUIGGLE      = 0xC0,
+    VKEY_LEFT_BRACKET  = 0xDB,
+    VKEY_BACK_SLASH    = 0xDC,
+    VKEY_RIGHT_BRACKET = 0xDD,
+    VKEY_QUOTE         = 0xDE
+
 };
 
 enum VakzButtonEnum
@@ -125,6 +163,42 @@ enum VakzKeyEnum
     VKEY_DOWN            = 20,
     VKEY_LEFT            = 21,
     VKEY_RIGHT           = 22,
+
+    VKEY_NUMPAD0   = 144,
+    VKEY_NUMPAD1   = 145,
+    VKEY_NUMPAD2   = 146,
+    VKEY_NUMPAD3   = 147,
+    VKEY_NUMPAD4   = 148,
+    VKEY_NUMPAD5   = 149,
+    VKEY_NUMPAD6   = 150,
+    VKEY_NUMPAD7   = 151,
+    VKEY_NUMPAD8   = 152,
+    VKEY_NUMPAD9   = 153,
+
+    VKEY_F1 = 131,
+    VKEY_F2 = 132,
+    VKEY_F3 = 133,
+    VKEY_F4 = 134,
+    VKEY_F5 = 135,
+    VKEY_F6 = 136,
+    VKEY_F7 = 137,
+    VKEY_F8 = 138,
+    VKEY_F9 = 139,
+    VKEY_F10 = 140,
+    VKEY_F11 = 141,
+    VKEY_F12 = 142,
+
+    VKEY_PERIOD = 56,
+    VKEY_COMMA  = 55,
+    VKEY_PLUS   = 70,
+    VKEY_MINUS  = 69,
+    VKEY_COLON  = 74,
+    VKEY_QUESTION = 76,
+    VKEY_SQUIGGLE      = 216, // Couldnt find keycode
+    VKEY_LEFT_BRACKET  = 71,
+    VKEY_BACK_SLASH    = 73,
+    VKEY_RIGHT_BRACKET = 72,
+    VKEY_QUOTE         = 218 // Couldnt find keycode
 };
 
 enum VakzButtonEnum
@@ -212,6 +286,8 @@ void SetKey(int nKey);
 //## **********************************************************************
 void ClearKey(int nKey);
 
+void ResetJustDownKeys();
+
 void ClearAllKeys();
 
 //## **********************************************************************
@@ -227,6 +303,10 @@ void ClearAllKeys();
 //##         '0' if key is up.
 //## **********************************************************************
 int IsKeyDown(int nKey);
+
+int IsKeyJustDownRepeat(int nKey);
+
+int IsKeyJustDown(int nKey);
 
 //## **********************************************************************
 //## SetButton

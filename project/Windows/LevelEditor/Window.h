@@ -4,6 +4,7 @@
 #include "Scene.h"
 #include "Quad.h"
 #include "Text.h"
+#include "Rect.h"
 
 static const float s_arColor1[4] = {1.0f, 0.0f, 0.0f, 1.0f};
 static const float s_arColor2[4] = {0.85f, 0.5f, 0.42f, 1.0f};
@@ -39,10 +40,7 @@ private:
     Quad m_quadHeader;
     Quad m_quadBackground;
 
-    float m_fX;
-    float m_fY;
-    float m_fWidth;
-    float m_fHeight;
+    Rect m_rect;
 
     float m_fPadding;
 
