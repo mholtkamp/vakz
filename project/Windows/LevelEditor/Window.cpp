@@ -15,7 +15,8 @@ Window::Window()
     m_rect.m_fWidth  = 1.0f;
     m_rect.m_fHeight = 1.0f;
 
-    m_fPadding = 0.0f;
+    m_fPadding = 0.01f;
+    m_fSpacing = 0.08f;
 
     m_nVisible = 1;
     m_pScene   = 0;
@@ -24,6 +25,12 @@ Window::Window()
 Window::~Window()
 {
 
+}
+
+void Window::Initialize()
+{
+    InitializeView();
+    UpdateView();
 }
 
 int Window::IsVisible()
@@ -39,6 +46,11 @@ void Window::SetVisible(int nVisible)
 void Window::SetPadding(float fPadding)
 {
     m_fPadding = fPadding;
+}
+
+void Window::SetSpacing(float fSpacing)
+{
+    m_fSpacing = fSpacing;
 }
 
 void Window::InitializeView()

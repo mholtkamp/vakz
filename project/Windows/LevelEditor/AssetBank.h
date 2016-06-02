@@ -5,7 +5,7 @@
 #include "Button.h"
 #include "TextField.h"
 
-#define BANK_VISIBLE_ITEMS 5
+#define BANK_VISIBLE_ITEMS 7
 
 class AssetBank : public Window
 {
@@ -38,6 +38,7 @@ private:
     int m_nShowMeshes;
     int m_nShowTextures;
     int m_nShowSounds;
+    Button* m_pPrevHover;
 };
 
 #endif

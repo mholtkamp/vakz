@@ -8,11 +8,11 @@
 #include "TextField.h"
 #include "Button.h"
 
-static const float s_arColor1[4] = {1.0f, 0.9333f, 0.871f, 1.0f};
-static const float s_arColor2[4] = {1.0f, 0.749f, 0.510f, 1.0f};
-static const float s_arColor3[4] = {0.894f, 0.553f, 0.227f, 1.0f};
-static const float s_arColor4[4] = {0.753f, 0.384f, 0.310f, 1.0f};
-static const float s_arColor5[4] = {0.573f, 0.282f, 0.0f, 1.0f};
+static const float s_arColor1[4] = {1.0f, 0.851f, 0.741f, 1.0f};
+static const float s_arColor2[4] = {0.992f, 0.710f, 0.502f, 1.0f};
+static const float s_arColor3[4] = {0.835f, 0.510f, 0.270f, 1.0f};
+static const float s_arColor4[4] = {0.686f, 0.361f, 0.122f, 1.0f};
+static const float s_arColor5[4] = {0.494f, 0.208f, 0.0f, 1.0f};
 
 #define HEADER_HEIGHT 0.08f
 #define WINDOW_WIDTH 0.35f
@@ -29,6 +29,10 @@ public:
     void SetVisible(int nVisible);
 
     void SetPadding(float fPadding);
+
+    void SetSpacing(float fSpacing);
+
+    void Initialize();
 
     virtual void HandleInput() = 0;
 
@@ -53,6 +57,7 @@ protected:
     Rect m_rect;
 
     float m_fPadding;
+    float m_fSpacing;
 
     int m_nVisible;
     Scene* m_pScene;

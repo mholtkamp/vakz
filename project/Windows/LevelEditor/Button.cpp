@@ -1,13 +1,13 @@
 #include "Button.h"
 #include "VInput.h"
 
-#define DEFAULT_X_OFFSET 0.01f
-#define DEFAULT_Y_OFFSET 0.04f
+#define DEFAULT_X_OFFSET 0.008f
+#define DEFAULT_Y_OFFSET 0.01f
 
 Button::Button()
 {
-    m_quad.SetVisible(0);
-    m_text.SetVisible(0);
+    m_quad.SetVisible(1);
+    m_text.SetVisible(1);
     m_quad.SetColor(0.7f, 0.2f, 0.22f, 1.0f);
     m_quad.EnableBorder(1);
     m_quad.SetBorderColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -15,6 +15,8 @@ Button::Button()
     m_text.SetColor(1.0f, 1.0f, 1.0f, 1.0f);
     m_fTextOffsetX = DEFAULT_X_OFFSET;
     m_fTextOffsetY = DEFAULT_Y_OFFSET;
+
+    m_text.SetScale(0.4f, 0.7f);
 }
 
 Button::~Button()
@@ -34,6 +36,18 @@ int Button::IsTouched()
     return IsPointerDown(0) && m_rect.Contains(fTouchX, fTouchY);
 }
 
+int Button::IsPointerHovering()
+{
+    float fTouchX;
+    float fTouchY;
+
+    GetTouchPositionNormalized(fTouchX,
+                               fTouchY,
+                               0);
+
+    return m_rect.Contains(fTouchX, fTouchY);
+}
+
 void Button::SetRect(float fX,
                      float fY,
                      float fWidth,
@@ -48,6 +62,28 @@ void Button::SetRect(float fX,
                        fY + m_fTextOffsetY);
 
     m_quad.SetBox(fX, fY, fWidth, fHeight);
+}
+
+void Button::SetTextScale(float fScaleX,
+                          float fScaleY)
+{
+    m_text.SetScale(fScaleX, fScaleY);
+}
+
+void Button::SetTextOffsetX(float fOffsetX)
+{
+    m_fTextOffsetX = fOffsetX;
+
+    m_text.SetPosition(m_rect.m_fX + m_fTextOffsetX,
+                       m_rect.m_fY + m_fTextOffsetY);
+}
+
+void Button::SetTextOffsetY(float fOffsetY)
+{
+    m_fTextOffsetY = fOffsetY;
+
+    m_text.SetPosition(m_rect.m_fX + m_fTextOffsetX,
+                       m_rect.m_fY + m_fTextOffsetY);
 }
 
 void Button::SetTexture(Texture* pTexture)

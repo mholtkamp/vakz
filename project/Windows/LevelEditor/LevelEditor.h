@@ -10,6 +10,8 @@ public:
 
     LevelEditor();
     ~LevelEditor();
+    void Initialize();
+    void HandleInput();
 
     Scene m_scene;
     AssetBank m_winAssetBank;

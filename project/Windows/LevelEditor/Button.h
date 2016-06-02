@@ -17,10 +17,19 @@ public:
 
     int IsTouched();
 
+    int IsPointerHovering();
+
     void SetRect(float fX,
                  float fY,
                  float fWidth,
                  float fHeight);
+
+    void SetTextScale(float fScaleX,
+                      float fScaleY);
+
+    void SetTextOffsetX(float fOffsetX);
+
+    void SetTextOffsetY(float fOffsetY);
 
     void SetTexture(Texture* pTexture);
 
