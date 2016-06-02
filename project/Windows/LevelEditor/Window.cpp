@@ -60,6 +60,23 @@ void Window::InitializeView()
                           s_arColor3[2],
                           s_arColor3[3]);
 }
+
+void Window::UpdateView()
+{
+    m_quadHeader.SetBox(m_rect.m_fX, 
+                        m_rect.m_fY + m_rect.m_fHeight - HEADER_HEIGHT,
+                        m_rect.m_fWidth,
+                        HEADER_HEIGHT);
+
+    m_quadBackground.SetBox(m_rect.m_fX,
+                            m_rect.m_fY,
+                            m_rect.m_fWidth,
+                            m_rect.m_fHeight);
+
+    m_textHeader.SetPosition(m_rect.m_fX + 0.015, 
+                             m_rect.m_fY + m_rect.m_fHeight - HEADER_HEIGHT + 0.016);
+}
+
 void Window::RegisterScene(Scene* pScene)
 {
     m_pScene = pScene;

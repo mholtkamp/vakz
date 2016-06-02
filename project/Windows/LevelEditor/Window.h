@@ -14,7 +14,8 @@ static const float s_arColor3[4] = {0.894f, 0.553f, 0.227f, 1.0f};
 static const float s_arColor4[4] = {0.753f, 0.384f, 0.310f, 1.0f};
 static const float s_arColor5[4] = {0.573f, 0.282f, 0.0f, 1.0f};
 
-#define HEADER_HEIGHT 0.05f
+#define HEADER_HEIGHT 0.08f
+#define WINDOW_WIDTH 0.35f
 
 class Window
 {
@@ -31,7 +32,7 @@ public:
 
     virtual void HandleInput() = 0;
 
-    virtual void UpdateView() = 0;
+    virtual void UpdateView();
 
     virtual void InitializeView();
 
