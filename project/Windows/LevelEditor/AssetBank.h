@@ -23,6 +23,8 @@ public:
 
 private:
 
+    void OpenFile();
+
     // View objects
     Button m_btToggleMesh;
     Button m_btToggleTexture;
