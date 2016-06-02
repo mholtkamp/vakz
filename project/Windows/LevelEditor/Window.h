@@ -5,11 +5,14 @@
 #include "Quad.h"
 #include "Text.h"
 #include "Rect.h"
+#include "TextField.h"
+#include "Button.h"
 
-static const float s_arColor1[4] = {1.0f, 0.0f, 0.0f, 1.0f};
-static const float s_arColor2[4] = {0.85f, 0.5f, 0.42f, 1.0f};
-static const float s_arColor3[4] = {0.68f, 0.5f, 0.5f, 1.0f};
-static const float s_arColor4[4] = {0.7f, 0.7f, 0.4f, 1.0f};
+static const float s_arColor1[4] = {1.0f, 0.9333f, 0.871f, 1.0f};
+static const float s_arColor2[4] = {1.0f, 0.749f, 0.510f, 1.0f};
+static const float s_arColor3[4] = {0.894f, 0.553f, 0.227f, 1.0f};
+static const float s_arColor4[4] = {0.753f, 0.384f, 0.310f, 1.0f};
+static const float s_arColor5[4] = {0.573f, 0.282f, 0.0f, 1.0f};
 
 #define HEADER_HEIGHT 0.05f
 
@@ -34,7 +37,13 @@ public:
 
     virtual void RegisterScene(Scene* pScene);
     
-private:
+protected:
+
+    void ColorButtonDown(Button& button);
+    void ColorButtonHover(Button& button);
+    void ColorButtonOff(Button& button);
+
+    void SetupTextField(TextField& field);
 
     Text m_textHeader;
     Quad m_quadHeader;

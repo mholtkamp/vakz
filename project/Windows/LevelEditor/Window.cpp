@@ -1,4 +1,5 @@
 #include "Window.h"
+#include "Button.h"
 
 #define DEFAULT_WINDOW_WIDTH 0.5f
 
@@ -44,15 +45,15 @@ void Window::InitializeView()
 {
     m_textHeader.SetScale(DEFAULT_TEXT_SCALE_X,
                           DEFAULT_TEXT_SCALE_Y);
-    m_textHeader.SetColor(s_arColor1[0],
-                          s_arColor1[1],
-                          s_arColor1[2],
-                          s_arColor1[3]);
+    m_textHeader.SetColor(s_arColor5[0],
+                          s_arColor5[1],
+                          s_arColor5[2],
+                          s_arColor5[3]);
 
-    m_quadBackground.SetColor(s_arColor4[0],
-                              s_arColor4[1],
-                              s_arColor4[2],
-                              s_arColor4[3]);
+    m_quadBackground.SetColor(s_arColor5[0],
+                              s_arColor5[1],
+                              s_arColor5[2],
+                              s_arColor5[3]);
 
     m_quadHeader.SetColor(s_arColor3[0],
                           s_arColor3[1],
@@ -65,4 +66,87 @@ void Window::RegisterScene(Scene* pScene)
     m_pScene->AddGlyph(&m_quadBackground);
     m_pScene->AddGlyph(&m_quadHeader);
     m_pScene->AddGlyph(&m_textHeader);
+}
+
+void Window::ColorButtonDown(Button& button)
+{
+    button.SetBackgroundColor(s_arColor3[0],
+                              s_arColor3[1],
+                              s_arColor3[2],
+                              s_arColor3[3]);
+
+    button.SetTextColor(s_arColor5[0],
+                        s_arColor5[1],
+                        s_arColor5[2],
+                        s_arColor5[3]);
+
+    button.EnableBorder(0);
+}
+
+void Window::ColorButtonHover(Button& button)
+{
+    button.SetBackgroundColor(s_arColor4[0],
+                              s_arColor4[1],
+                              s_arColor4[2],
+                              s_arColor4[3]);
+
+    button.SetTextColor(s_arColor2[0],
+                        s_arColor2[1],
+                        s_arColor2[2],
+                        s_arColor2[3]);
+
+    button.EnableBorder(1);
+
+    button.SetBorderColor(s_arColor3[0],
+                          s_arColor3[1],
+                          s_arColor3[2],
+                          s_arColor3[3]);
+}
+
+void Window::ColorButtonOff(Button& button)
+{
+
+    button.SetBackgroundColor(s_arColor4[0],
+                              s_arColor4[1],
+                              s_arColor4[2],
+                              s_arColor4[3]);
+
+    button.SetTextColor(s_arColor2[0],
+                        s_arColor2[1],
+                        s_arColor2[2],
+                        s_arColor2[3]);
+
+    button.EnableBorder(0);
+}
+
+void Window::SetupTextField(TextField& field)
+{
+    field.SetBackColor(s_arColor5[0],
+                       s_arColor5[1],
+                       s_arColor5[2],
+                       s_arColor5[3]);
+    field.SetTextColor(s_arColor3[0],
+                       s_arColor3[1],
+                       s_arColor3[2],
+                       s_arColor3[3]);
+    field.SetBorderColor(s_arColor3[0],
+                         s_arColor3[1],
+                         s_arColor3[2],
+                         s_arColor3[3]);
+
+    field.SetSelectBackColor(s_arColor4[0],
+                             s_arColor4[1],
+                             s_arColor4[2],
+                             s_arColor4[3]);
+    field.SetSelectTextColor(s_arColor2[0],
+                             s_arColor2[1],
+                             s_arColor2[2],
+                             s_arColor2[3]);
+    field.SetSelectBorderColor(s_arColor2[0],
+                               s_arColor2[1],
+                               s_arColor2[2],
+                               s_arColor2[3]);
+
+    field.SetTextScale(DEFAULT_TEXT_SCALE_X,
+                       DEFAULT_TEXT_SCALE_Y);
 }

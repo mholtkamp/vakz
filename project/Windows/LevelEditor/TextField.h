@@ -12,7 +12,6 @@ public:
 
     enum TextFieldEnum
     {
-        NUM_KEYS         = 128,
         DEFAULT_MAX_SIZE = 32
     };
 
@@ -101,8 +100,6 @@ private:
 
     float m_fTextOffsetX;
     float m_fTextOffsetY;
-
-    char arKeyDown[NUM_KEYS];
 
     int m_nBufferSize;
     int m_nMaxSize;
