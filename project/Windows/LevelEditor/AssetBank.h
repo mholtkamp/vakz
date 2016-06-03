@@ -23,7 +23,7 @@ public:
 
 private:
 
-    void OpenFile();
+    void ImportAsset();
 
     // View objects
     Button m_btToggleMesh;

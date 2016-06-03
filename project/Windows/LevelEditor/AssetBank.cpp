@@ -49,7 +49,7 @@ void AssetBank::HandleInput()
     if (IsKeyJustDown(VKEY_I) &&
         IsKeyDown(VKEY_CONTROL))
     {
-        OpenFile();
+        ImportAsset();
     }
 
     if (IsPointerDown())
@@ -275,7 +275,7 @@ void AssetBank::RegisterScene(Scene* pScene)
     }
 }
 
-void AssetBank::OpenFile()
+void AssetBank::ImportAsset()
 {
     OPENFILENAME ofn;       // common dialog box structure
     char szFile[260];       // buffer for file name

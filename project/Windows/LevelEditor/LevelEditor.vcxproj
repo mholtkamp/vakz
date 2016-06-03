@@ -78,6 +78,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ActorProperties.h" />
+    <ClInclude Include="Asset.h" />
     <ClInclude Include="AssetBank.h" />
     <ClInclude Include="AssetProperties.h" />
     <ClInclude Include="Button.h" />
