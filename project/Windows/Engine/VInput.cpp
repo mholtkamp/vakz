@@ -8,8 +8,11 @@
 static int s_arKeys[VINPUT_MAX_KEYS]       = {0};
 static int s_arJustDownRepeatKeys[VINPUT_MAX_KEYS] = {0};
 static int s_arJustDownKeys[VINPUT_MAX_KEYS] = {0};
+static int s_arJustUpKeys[VINPUT_MAX_KEYS] = {0};
 static int s_arButtons[VINPUT_MAX_BUTTONS] = {0};
 static int s_arTouches[VINPUT_MAX_TOUCHES] = {0};
+static int s_arJustUpTouches[VINPUT_MAX_TOUCHES] = {0};
+static int s_arJustDownTouches[VINPUT_MAX_TOUCHES] = {0};
 
 static int s_arPointerX[VINPUT_MAX_TOUCHES] = {0};
 static int s_arPointerY[VINPUT_MAX_TOUCHES] = {0};
@@ -35,10 +38,14 @@ void SetKey(int nKey)
     }
 }
 
-void ResetJustDownKeys()
+void ResetJusts()
 {
     memset(s_arJustDownKeys, 0, VINPUT_MAX_KEYS * sizeof(int));
     memset(s_arJustDownRepeatKeys, 0, VINPUT_MAX_KEYS * sizeof(int));
+    memset(s_arJustUpKeys, 0, VINPUT_MAX_KEYS * sizeof(int));
+
+    memset(s_arJustUpTouches, 0, VINPUT_MAX_TOUCHES * sizeof(int));
+    memset(s_arJustDownTouches, 0, VINPUT_MAX_TOUCHES * sizeof(int));
 }
 
 //*****************************************************************************
@@ -49,6 +56,8 @@ void ClearKey(int nKey)
     if (nKey >= 0 &&
         nKey <  VINPUT_MAX_KEYS)
     {
+        if (s_arKeys[nKey] != 0)
+            s_arJustUpKeys[nKey] = 1;
         s_arKeys[nKey] = 0;
     }
 }
@@ -113,7 +122,21 @@ int IsKeyJustDown(int nKey)
     }
     else
     {
-        LogWarning("Invalid key queried in IsKeyDown().");
+        LogWarning("Invalid key queried in IsKeyJustDown().");
+        return 0;
+    }
+}
+
+int IsKeyJustUp(int nKey)
+{
+    if (nKey >= 0 &&
+        nKey <  VINPUT_MAX_KEYS)
+    {
+        return s_arJustUpKeys[nKey];
+    }
+    else
+    {
+        LogWarning("Invalid key queried in IsKeyJustUp().");
         return 0;
     }
 }
@@ -130,6 +153,8 @@ void SetButton(int nButton)
 
         if (nButton == VBUTTON_LEFT)
         {
+            if (s_arTouches[0] == 0)
+                s_arJustDownTouches[0] = 1;
             s_arTouches[0] = 1;
         }
     }
@@ -147,6 +172,8 @@ void ClearButton(int nButton)
 
         if (nButton == VBUTTON_LEFT)
         {
+            if (s_arTouches[0] == 1)
+                s_arJustUpTouches[0] = 1;
             s_arTouches[0] = 0;
         }
     }
@@ -177,6 +204,8 @@ void SetTouch(int nTouch)
     if (nTouch >= 0 &&
         nTouch <  VINPUT_MAX_TOUCHES)
     {
+        if (s_arTouches[nTouch] == 0)
+            s_arJustDownTouches[nTouch] = 1;
         s_arTouches[nTouch] = 1;
     }
     else
@@ -193,6 +222,8 @@ void ClearTouch(int nTouch)
     if (nTouch >= 0 &&
         nTouch <  VINPUT_MAX_TOUCHES)
     {
+        if (s_arTouches[nTouch] != 0)
+            s_arJustUpTouches[nTouch] = 1;
         s_arTouches[nTouch] = 0;
     }
 }
@@ -274,6 +305,96 @@ int IsPointerDown(int nPointer)
     else
     {
         LogWarning("Invalid pointer queried in IsPointerDown().");
+        return 0;
+    }
+}
+
+//*****************************************************************************
+// IsPointerJustUp
+//*****************************************************************************
+int IsPointerJustUp(int nPointer)
+{
+    float fX = 0.0f;
+    float fY = 0.0f;
+
+    if (nPointer >= 0 &&
+        nPointer <  VINPUT_MAX_TOUCHES)
+    {
+        // If either the left mouse button is down or the specified
+        // touch index is down, then return 1.
+        if (s_arJustUpTouches[nPointer] != 0)
+        {
+            if (s_nKeyboardEnable != 0)
+            {
+                GetPointerPositionNormalized(fX, fY, nPointer);
+                if (fY > 0.0f)
+                {
+                    return 1;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            else
+            {
+                // Return true if down and no keyboard.
+                return 1;
+            }
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    else
+    {
+        LogWarning("Invalid pointer queried in IsPointerJustUp().");
+        return 0;
+    }
+}
+
+//*****************************************************************************
+// IsPointerJustDown
+//*****************************************************************************
+int IsPointerJustDown(int nPointer)
+{
+    float fX = 0.0f;
+    float fY = 0.0f;
+
+    if (nPointer >= 0 &&
+        nPointer <  VINPUT_MAX_TOUCHES)
+    {
+        // If either the left mouse button is down or the specified
+        // touch index is down, then return 1.
+        if (s_arJustDownTouches[nPointer] != 0)
+        {
+            if (s_nKeyboardEnable != 0)
+            {
+                GetPointerPositionNormalized(fX, fY, nPointer);
+                if (fY > 0.0f)
+                {
+                    return 1;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            else
+            {
+                // Return true if down and no keyboard.
+                return 1;
+            }
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    else
+    {
+        LogWarning("Invalid pointer queried in IsPointerJustDown().");
         return 0;
     }
 }

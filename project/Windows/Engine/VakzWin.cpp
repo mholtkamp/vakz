@@ -521,8 +521,8 @@ void Update()
     MSG     msg;                                   // Windows Message Structure
     BOOL    done = FALSE;                          // Bool Variable To Exit Loop
 
-    // Reset just down keys
-    ResetJustDownKeys();
+    // Reset just down/up keys
+    ResetJusts();
 
     while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))  // Is There A Message Waiting?
     {

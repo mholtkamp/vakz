@@ -286,7 +286,7 @@ void SetKey(int nKey);
 //## **********************************************************************
 void ClearKey(int nKey);
 
-void ResetJustDownKeys();
+void ResetJusts();
 
 void ClearAllKeys();
 
@@ -307,6 +307,8 @@ int IsKeyDown(int nKey);
 int IsKeyJustDownRepeat(int nKey);
 
 int IsKeyJustDown(int nKey);
+
+int IsKeyJustUp(int nKey);
 
 //## **********************************************************************
 //## SetButton
@@ -379,6 +381,9 @@ void ClearTouch(int nTouch);
 //##         '0' otherwise.
 //## **********************************************************************
 int IsTouchDown(int nTouch);
+
+int IsPointerJustUp(int nPointer = 0);
+int IsPointerJustDown(int nPointer = 0);
 
 //## **********************************************************************
 //## IsPointerDown

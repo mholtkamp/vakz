@@ -15,6 +15,8 @@ Button::Button()
     m_text.SetColor(1.0f, 1.0f, 1.0f, 1.0f);
     m_fTextOffsetX = DEFAULT_X_OFFSET;
     m_fTextOffsetY = DEFAULT_Y_OFFSET;
+    
+    m_nVisible = 1;
 
     m_text.SetScale(0.4f, 0.7f);
 }
@@ -106,6 +108,12 @@ void Button::SetVisible(int nVisible)
 {
     m_quad.SetVisible(nVisible);
     m_text.SetVisible(nVisible);
+    m_nVisible = nVisible;
+}
+
+int Button::IsVisible()
+{
+    return m_nVisible;
 }
 
 void Button::EnableBorder(int nEnable)

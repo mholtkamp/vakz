@@ -1,6 +1,7 @@
 #include "AssetBank.h"
 #include "Log.h"
 #include "VInput.h"
+#include "Asset.h"
 #include <Windows.h>
 
 #define TOGGLE_BUTTON_HEIGHT 0.06f
@@ -25,11 +26,43 @@ AssetBank::AssetBank()
     m_rect.m_fHeight = 0.87f;
 
     m_pPrevHover = 0;
+
+    m_nDispAsset = DISP_MESHES;
+    m_nDispOffset = 0;
+    m_pSelectedAsset = 0;
+    m_nSelectedAsset = 0;
 }
 
 AssetBank::~AssetBank()
 {
+    // Delete the asset lists as all of the assets were allocated 
+    // on the heap in the LoadMesh() LoadTexture() and LoadSound() methods
+    ListNode* pNode = m_lMeshes.GetHead();
+    while (pNode != 0)
+    {
+        delete reinterpret_cast<MeshAsset*>(pNode->m_pData);
+        pNode->m_pData = 0;
 
+        pNode = pNode->m_pNext;
+    }
+
+    pNode = m_lTextures.GetHead();
+    while (pNode != 0)
+    {
+        delete reinterpret_cast<TextureAsset*>(pNode->m_pData);
+        pNode->m_pData = 0;
+
+        pNode = pNode->m_pNext;
+    }
+
+    pNode = m_lSounds.GetHead();
+    while (pNode != 0)
+    {
+        delete reinterpret_cast<Asset*>(pNode->m_pData);
+        pNode->m_pData = 0;
+
+        pNode = pNode->m_pNext;
+    }
 }
 
 void AssetBank::HandleInput()
@@ -50,6 +83,7 @@ void AssetBank::HandleInput()
         IsKeyDown(VKEY_CONTROL))
     {
         ImportAsset();
+        UpdateView();
     }
 
     if (IsPointerDown())
@@ -154,6 +188,115 @@ void AssetBank::HandleInput()
 
         m_pPrevHover = pHover;
     }
+
+    if (IsPointerJustUp())
+    {
+        ColorButtonOff(m_btToggleMesh);
+        ColorButtonOff(m_btToggleTexture);
+        ColorButtonOff(m_btToggleSound);
+
+        if (m_btToggleMesh.IsPointerHovering())
+        {
+            m_nDispAsset = DISP_MESHES;
+            m_nDispOffset = 0;
+            UpdateView();
+        }
+        else if (m_btToggleTexture.IsPointerHovering())
+        {
+            m_nDispAsset = DISP_TEXTURES;
+            m_nDispOffset = 0;
+            UpdateView();
+        }
+        else if (m_btToggleSound.IsPointerHovering())
+        {
+            m_nDispAsset = DISP_SOUNDS;
+            m_nDispOffset = 0;
+            UpdateView();
+        }
+        else if (m_btAddAsset.IsPointerHovering())
+        {
+            ImportAsset();
+            UpdateView();
+        }
+        else if (m_btDeleteAsset.IsPointerHovering())
+        {
+            
+        }
+        else if (m_btCreateMatter.IsPointerHovering())
+        {
+        
+        }
+        else
+        {
+            // Check each of the asset bank items
+            for (int i = 0; i < BANK_VISIBLE_ITEMS; i++)
+            {
+                if(m_arBankButtons[i].IsVisible() &&
+                   m_arBankButtons[i].IsPointerHovering())
+                {
+                    // First, figure out which asset this button refers to
+                    List* pList = 0;
+                    Asset* pSelAsset = 0;
+
+                    switch(m_nDispAsset)
+                    {
+                    case DISP_MESHES:
+                        pList = &m_lMeshes;
+                        break;
+                    case DISP_TEXTURES:
+                        pList = &m_lTextures;
+                        break;
+                    case DISP_SOUNDS:
+                        pList = &m_lSounds;
+                        break;
+                    default:
+                        break;
+                    }
+
+                    if (pList != 0)
+                    {
+                        ListNode* pNode = pList->Get(i + m_nDispOffset);
+                        if (pNode != 0)
+                        {
+                            pSelAsset = reinterpret_cast<Asset*>(pNode->m_pData);
+                        }
+                        else
+                        {
+                            // Node doesn't exist. Shouldn't reach this ever...
+                            break;
+                        }
+                    }
+
+                    // Second, check if the new selected asset is equivalent to
+                    // the old selected asset.
+                    if (m_pSelectedAsset == pSelAsset)
+                    {
+                        // pEditor->SetDetailedAsset().
+                    }
+                    else
+                    {
+                        // Un-down the previous selected item button
+                        ColorButtonOff(m_arBankButtons[m_nSelectedAsset]);
+
+                        m_pSelectedAsset = pSelAsset;
+                        m_nSelectedAsset = i;
+                    }
+                }
+            }
+        }
+    }
+
+    // Always highlight the selected asset type
+    if (m_nDispAsset == DISP_MESHES)
+        ColorButtonDown(m_btToggleMesh);
+    if (m_nDispAsset == DISP_TEXTURES)
+        ColorButtonDown(m_btToggleTexture);
+    if (m_nDispAsset == DISP_SOUNDS)
+        ColorButtonDown(m_btToggleSound);
+    // Always highlight the selected bank item
+    if (m_nSelectedAsset >= 0 &&
+        m_nSelectedAsset < BANK_VISIBLE_ITEMS)
+        ColorButtonDown(m_arBankButtons[m_nSelectedAsset]);
 }
 
 void AssetBank::UpdateView()
@@ -183,12 +326,42 @@ void AssetBank::UpdateView()
     fX = m_rect.m_fX + m_fPadding + 0.03f;
     fY -= m_fSpacing;
 
+    List* pList = 0;
+    switch (m_nDispAsset)
+    {
+    case DISP_MESHES:
+        pList = &m_lMeshes;
+        break;
+    case DISP_TEXTURES:
+        pList = &m_lTextures;
+        break;
+    case DISP_SOUNDS:
+        pList = &m_lSounds;
+        break;
+    default:
+        pList = &m_lMeshes;
+        break;
+    }
+
+    ListNode* pNode = pList->Get(m_nDispOffset);
     for (int i = 0; i < BANK_VISIBLE_ITEMS; i++)
     {
         m_arBankButtons[i].SetRect(fX,
                                    fY,
                                    BANK_ITEM_WIDTH,
                                    BANK_ITEM_HEIGHT);
+
+        if (pNode != 0)
+        {
+            m_arBankButtons[i].SetVisible(1);
+            m_arBankButtons[i].SetTextString(reinterpret_cast<Asset*>(pNode->m_pData)->m_arName);
+
+            pNode = pNode->m_pNext;
+        }
+        else
+        {
+            m_arBankButtons[i].SetVisible(0);
+        }
 
         fY -= m_fSpacing;
     }
@@ -277,10 +450,12 @@ void AssetBank::RegisterScene(Scene* pScene)
 
 void AssetBank::ImportAsset()
 {
+    // Cryptic Win32 code borrowed from MSDN website (and slightly modified)
     OPENFILENAME ofn;       // common dialog box structure
     char szFile[260];       // buffer for file name
     HWND hwnd = GetActiveWindow();              // owner window
     HANDLE hf;              // file handle
+    char* pStr = 0;
 
     // Initialize OPENFILENAME
     ZeroMemory(&ofn, sizeof(ofn));
@@ -299,13 +474,61 @@ void AssetBank::ImportAsset()
     ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
 
     // Display the Open dialog box. 
+    if (GetOpenFileName(&ofn) != 0) 
+    {
+        pStr = ofn.lpstrFile;
 
-    if (GetOpenFileName(&ofn)==TRUE) 
-        hf = CreateFile(ofn.lpstrFile, 
-                        GENERIC_READ,
-                        0,
-                        (LPSECURITY_ATTRIBUTES) NULL,
-                        OPEN_EXISTING,
-                        FILE_ATTRIBUTE_NORMAL,
-                        (HANDLE) NULL);
+        // Check file extension.
+        ofn.lpstrFile += strlen(ofn.lpstrFile);
+        ofn.lpstrFile -= 3;
+        
+        // Load texture
+        if (strcmp(ofn.lpstrFile, "bmp") == 0 ||
+            strcmp(ofn.lpstrFile, "BMP") == 0)
+        {
+            LoadTexture(pStr);
+        }
+
+        // Load mesh
+        if (strcmp(ofn.lpstrFile, "obj") == 0 ||
+            strcmp(ofn.lpstrFile, "OBJ") == 0)
+        {
+            LoadMesh(pStr);
+        }
+
+        // Load sound
+        if (strcmp(ofn.lpstrFile, "wav") == 0 ||
+            strcmp(ofn.lpstrFile, "WAV") == 0)
+        {
+            LoadSound(pStr);
+        }
+    }
+}
+
+
+void AssetBank::LoadMesh(char* pStr)
+{
+    MeshAsset* pMeshAsset = new MeshAsset();
+    pMeshAsset->m_pMesh = new StaticMesh();
+    pMeshAsset->m_pMesh->Load(pStr);
+    pMeshAsset->SetNameFromFile(pStr);
+    pMeshAsset->SetFilePath(pStr);
+
+    m_lMeshes.Add(pMeshAsset);
+}
+
+void AssetBank::LoadTexture(char* pStr)
+{
+    TextureAsset* pTextureAsset = new TextureAsset();
+    pTextureAsset->m_pTexture = new Texture();
+    pTextureAsset->m_pTexture->LoadBMP(pStr, 1);
+    pTextureAsset->SetNameFromFile(pStr);
+    pTextureAsset->SetFilePath(pStr);
+
+    m_lTextures.Add(pTextureAsset);
+}
+
+void AssetBank::LoadSound(char* pStr)
+{
+
 }

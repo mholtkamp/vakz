@@ -39,6 +39,8 @@ public:
 
     void SetVisible(int nVisible);
 
+    int IsVisible();
+
     void EnableBorder(int nEnable);
 
     void SetBackgroundColor(float fRed,
@@ -64,6 +66,7 @@ private:
 
     float m_fTextOffsetX;
     float m_fTextOffsetY;
+    int m_nVisible;
 };
 
 #endif

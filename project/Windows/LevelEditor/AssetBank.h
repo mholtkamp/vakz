@@ -4,8 +4,13 @@
 #include "Window.h"
 #include "Button.h"
 #include "TextField.h"
+#include "Asset.h"
 
 #define BANK_VISIBLE_ITEMS 7
+
+#define DISP_MESHES 0
+#define DISP_TEXTURES 1
+#define DISP_SOUNDS 2
 
 class AssetBank : public Window
 {
@@ -25,6 +30,10 @@ private:
 
     void ImportAsset();
 
+    void LoadMesh(char* pStr);
+    void LoadTexture(char* pStr);
+    void LoadSound(char* pStr);
+
     // View objects
     Button m_btToggleMesh;
     Button m_btToggleTexture;
@@ -41,6 +50,14 @@ private:
     int m_nShowTextures;
     int m_nShowSounds;
     Button* m_pPrevHover;
+    List m_lMeshes;
+    List m_lTextures;
+    List m_lSounds;
+
+    int m_nDispAsset;
+    int m_nDispOffset;
+    Asset* m_pSelectedAsset;
+    int m_nSelectedAsset;
 };
 
 #endif
