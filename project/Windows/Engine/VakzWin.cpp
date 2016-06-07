@@ -227,6 +227,12 @@ LRESULT CALLBACK WndProc(HWND    hWnd,            // Handle For This Window
         return 0;
     }
 
+    case WM_MOUSEWHEEL:
+    {
+        SetScrollWheelDelta(GET_WHEEL_DELTA_WPARAM(wParam)/WHEEL_DELTA);
+
+        return 0;
+    }
     case WM_MOUSEMOVE:
     {
         int nX = LOWORD(lParam);

@@ -667,4 +667,7 @@ int IsTouchDownRaw(int nTouch);
 //## **********************************************************************
 int CharToKey(char cTarget);
 
+int GetScrollWheelDelta();
+
+void SetScrollWheelDelta(int nDelta);
 #endif

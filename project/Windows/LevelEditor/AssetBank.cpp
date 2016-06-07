@@ -72,6 +72,10 @@ void AssetBank::HandleInput()
         // Do not handle input if window is not visible
         return;
     }
+
+    float fX = 0.0f;
+    float fY = 0.0f;
+    GetPointerPositionNormalized(fX, fY);
     
     // Clear previous hovered button
     if (m_pPrevHover != 0)
@@ -286,6 +290,47 @@ void AssetBank::HandleInput()
         }
     }
 
+    // Check mouse wheel
+    if (m_rect.Contains(fX, fY) &&
+        GetScrollWheelDelta() != 0)
+    {
+        // Color the previously selected button off
+        if (m_nSelectedAsset - m_nDispOffset >= 0 &&
+            m_nSelectedAsset - m_nDispOffset < BANK_VISIBLE_ITEMS)
+            ColorButtonOff(m_arBankButtons[m_nSelectedAsset - m_nDispOffset]);
+
+        m_nDispOffset += -1 * GetScrollWheelDelta();
+
+        List* pList = 0;
+
+        switch(m_nDispAsset)
+        {
+        case DISP_MESHES:
+            pList = &m_lMeshes;
+            break;
+        case DISP_TEXTURES:
+            pList = &m_lTextures;
+            break;
+        case DISP_SOUNDS:
+            pList = &m_lSounds;
+            break;
+        default:
+            break;
+        }
+
+        if (m_nDispOffset >= pList->Count())
+        {
+            m_nDispOffset = pList->Count() - 1;
+        }
+
+        if (m_nDispOffset < 0)
+        {
+            m_nDispOffset = 0;
+        }
+
+        UpdateView();
+    }
+
     // Always highlight the selected asset type
     if (m_nDispAsset == DISP_MESHES)
         ColorButtonDown(m_btToggleMesh);
@@ -294,9 +339,9 @@ void AssetBank::HandleInput()
     if (m_nDispAsset == DISP_SOUNDS)
         ColorButtonDown(m_btToggleSound);
     // Always highlight the selected bank item
-    if (m_nSelectedAsset >= 0 &&
-        m_nSelectedAsset < BANK_VISIBLE_ITEMS)
-        ColorButtonDown(m_arBankButtons[m_nSelectedAsset]);
+    if (m_nSelectedAsset - m_nDispOffset >= 0 &&
+        m_nSelectedAsset - m_nDispOffset < BANK_VISIBLE_ITEMS)
+        ColorButtonDown(m_arBankButtons[m_nSelectedAsset - m_nDispOffset]);
 }
 
 void AssetBank::UpdateView()

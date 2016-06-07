@@ -14,6 +14,8 @@ static int s_arTouches[VINPUT_MAX_TOUCHES] = {0};
 static int s_arJustUpTouches[VINPUT_MAX_TOUCHES] = {0};
 static int s_arJustDownTouches[VINPUT_MAX_TOUCHES] = {0};
 
+static int s_nScrollWheelDelta = 0;
+
 static int s_arPointerX[VINPUT_MAX_TOUCHES] = {0};
 static int s_arPointerY[VINPUT_MAX_TOUCHES] = {0};
 
@@ -46,6 +48,8 @@ void ResetJusts()
 
     memset(s_arJustUpTouches, 0, VINPUT_MAX_TOUCHES * sizeof(int));
     memset(s_arJustDownTouches, 0, VINPUT_MAX_TOUCHES * sizeof(int));
+
+    s_nScrollWheelDelta = 0;
 }
 
 //*****************************************************************************
@@ -769,4 +773,14 @@ int CharToKey(char cTarget)
 #endif
 
     return 0;
+}
+
+void SetScrollWheelDelta(int nDelta)
+{
+    s_nScrollWheelDelta = nDelta;
+}
+
+int GetScrollWheelDelta()
+{
+    return s_nScrollWheelDelta;
 }
