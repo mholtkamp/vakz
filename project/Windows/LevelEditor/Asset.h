@@ -11,15 +11,25 @@
 
 #define ASSET_NAME_BUFFER_SIZE 16
 
+enum AssetType
+{
+    ASSET_NONE = 0,
+    ASSET_MESH = 1,
+    ASSET_TEXTURE = 2,
+    ASSET_SOUND = 3
+};
+
 struct Asset
 {
     char m_arName[ASSET_NAME_BUFFER_SIZE];
     char* m_pPath;
+    int m_nType;
 
     Asset()
     {
         memset(m_arName, 0, ASSET_NAME_BUFFER_SIZE);
         m_pPath = 0;
+        m_nType = ASSET_NONE;
     }
 
     virtual ~Asset()
@@ -81,6 +91,11 @@ struct Asset
         strcpy(m_pPath, pPath);
         m_pPath[nLen] = 0;
     }
+
+    int GetType()
+    {
+        return m_nType;
+    }
 };
 
 struct MeshAsset : public Asset
@@ -93,6 +108,7 @@ struct MeshAsset : public Asset
     {
         m_pMesh     = 0;
         m_pMaterial = 0;
+        m_nType = ASSET_MESH;
     }
 
     ~MeshAsset()
@@ -130,6 +146,7 @@ struct TextureAsset : public Asset
     TextureAsset()
     {
         m_pTexture = 0;
+        m_nType = ASSET_TEXTURE;
     }
 
     ~TextureAsset()

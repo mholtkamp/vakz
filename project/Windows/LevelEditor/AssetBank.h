@@ -8,9 +8,9 @@
 
 #define BANK_VISIBLE_ITEMS 7
 
-#define DISP_MESHES 0
-#define DISP_TEXTURES 1
-#define DISP_SOUNDS 2
+#define DISP_MESHES ASSET_MESH
+#define DISP_TEXTURES ASSET_TEXTURE
+#define DISP_SOUNDS ASSET_SOUND
 
 class AssetBank : public Window
 {

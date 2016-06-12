@@ -199,6 +199,11 @@ void AssetBank::HandleInput()
         ColorButtonOff(m_btToggleTexture);
         ColorButtonOff(m_btToggleSound);
 
+        // Color off the selected bank item
+        if (m_nSelectedAsset - m_nDispOffset >= 0 &&
+            m_nSelectedAsset - m_nDispOffset < BANK_VISIBLE_ITEMS)
+            ColorButtonOff(m_arBankButtons[m_nSelectedAsset - m_nDispOffset]);
+
         if (m_btToggleMesh.IsPointerHovering())
         {
             m_nDispAsset = DISP_MESHES;
@@ -280,11 +285,15 @@ void AssetBank::HandleInput()
                     else
                     {
                         // Un-down the previous selected item button
-                        ColorButtonOff(m_arBankButtons[m_nSelectedAsset]);
+                        if (m_nSelectedAsset - m_nDispOffset >= 0 &&
+                            m_nSelectedAsset - m_nDispOffset < BANK_VISIBLE_ITEMS)
+                            ColorButtonOff(m_arBankButtons[m_nSelectedAsset - m_nDispOffset]);
 
                         m_pSelectedAsset = pSelAsset;
-                        m_nSelectedAsset = i;
+                        m_nSelectedAsset = i + m_nDispOffset;
                     }
+
+                    UpdateView();
                 }
             }
         }
@@ -339,8 +348,10 @@ void AssetBank::HandleInput()
     if (m_nDispAsset == DISP_SOUNDS)
         ColorButtonDown(m_btToggleSound);
     // Always highlight the selected bank item
-    if (m_nSelectedAsset - m_nDispOffset >= 0 &&
-        m_nSelectedAsset - m_nDispOffset < BANK_VISIBLE_ITEMS)
+    if (m_nSelectedAsset - m_nDispOffset >= 0                 &&
+        m_nSelectedAsset - m_nDispOffset < BANK_VISIBLE_ITEMS &&
+        m_pSelectedAsset != 0                                 &&
+        m_pSelectedAsset->GetType() == m_nDispAsset)
         ColorButtonDown(m_arBankButtons[m_nSelectedAsset - m_nDispOffset]);
 }
 
