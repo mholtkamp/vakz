@@ -11,6 +11,8 @@ public:
 
     void HandleInput();
 
+    void InitializeView();
+
     void UpdateView();
 
     void RegisterScene(Scene* pScene);
