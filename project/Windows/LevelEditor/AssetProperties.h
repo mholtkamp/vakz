@@ -27,7 +27,7 @@ private:
     Text m_tRimColor;
     TextField m_tfRimColor[4];
     Text m_tRimStyle;
-    TextField m_btRimStyle;
+    Button m_btRimStyle;
     Text m_tRimSize;
     TextField m_tfRimSize;
     Text m_tIntervals;

@@ -489,3 +489,32 @@ void TextField::SetTextScale(float fScaleX,
 {
     m_text.SetScale(fScaleX, fScaleY);
 }
+
+void TextField::SetBackColor(const float* arColor)
+{
+    memcpy(m_arBackColor, arColor, 4 * sizeof(float));
+}
+
+void TextField::SetBorderColor(const float* arColor)
+{
+    memcpy(m_arBorderColor, arColor, 4 * sizeof(float));
+}
+
+void TextField::SetTextColor(const float* arColor)
+{
+    memcpy(m_arTextColor, arColor, 4 * sizeof(float));
+}
+
+void TextField::SetSelectBackColor(const float* arColor)
+{
+    memcpy(m_arSelBackColor, arColor, 4 * sizeof(float));
+}
+
+void TextField::SetSelectBorderColor(const float* arColor)
+{
+    memcpy(m_arSelBorderColor, arColor, 4 * sizeof(float));
+}
+void TextField::SetSelectTextColor(const float* arColor)
+{
+    memcpy(m_arSelTextColor, arColor, 4 * sizeof(float));
+}

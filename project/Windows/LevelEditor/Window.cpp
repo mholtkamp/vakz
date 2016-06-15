@@ -179,3 +179,14 @@ void Window::SetupTextField(TextField& field)
     field.SetTextScale(DEFAULT_TEXT_SCALE_X,
                        DEFAULT_TEXT_SCALE_Y);
 }
+
+void Window::SetTextFieldColors(TextField& field)
+{
+    field.SetBackColor(s_arColor4);
+    field.SetBorderColor(s_arColorTrans);
+    field.SetTextColor(s_arColor2);
+
+    field.SetSelectBackColor(s_arColor3);
+    field.SetSelectBorderColor(s_arColorTrans);
+    field.SetSelectTextColor(s_arColor5);
+}

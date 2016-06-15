@@ -3,6 +3,7 @@
 
 #include "Scene.h"
 #include "AssetBank.h"
+#include "AssetProperties.h"
 
 class LevelEditor
 {
@@ -15,6 +16,7 @@ public:
 
     Scene m_scene;
     AssetBank m_winAssetBank;
+    AssetProperties m_winAssetProperties;
 };
 
 #endif

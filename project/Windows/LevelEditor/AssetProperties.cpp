@@ -1,8 +1,22 @@
 #include "AssetProperties.h"
 
+#define TF_SCALE_X 0.4f
+#define TF_SCALE_Y 0.6f
+
+#define T_SCALE_X 0.5f
+#define T_SCALE_Y 0.65f
+
+#define BT_SCALE_X 0.5f
+#define BT_SCALE_Y 0.65f
+
+#define TEXT_COLOR s_arColor2
+
 AssetProperties::AssetProperties()
 {
-
+    m_rect.m_fX = -1.0f;
+    m_rect.m_fY = -1.0f;
+    m_rect.m_fWidth = WINDOW_WIDTH;
+    m_rect.m_fHeight = 1.13f;
 }
 
 AssetProperties::~AssetProperties()
@@ -17,46 +31,130 @@ void AssetProperties::HandleInput()
 
 void AssetProperties::InitializeView()
 {
-    //// Mesh Properties Views
-    //m_tMaterialType;
-    //m_btMaterialType;
-    //m_tColor;
-    //m_tfColor[4];
-    //m_tRimColor;
-    //m_tfRimColor[4];
-    //m_tRimStyle;
-    //m_btRimStyle;
-    //m_tRimSize;
-    //m_tfRimSize;
-    //m_tIntervals;
-    //m_tfIntervals;
-    //
-    //m_tDefaultTexture;
-    //m_btDefaultTexture;
-    //m_btAssignDefaultTexture;
+    Window::InitializeView();
 
-    //m_tCollider;
-    //m_btCollider;
-    //m_btAddCollider;
-    //m_btRemoveCollider;
+    m_textHeader.SetText("Asset Properties");
 
-    //m_tColliderCenter;
-    //m_tfColliderCenter[3];
-    //m_tColliderExtents;
-    //m_tfColliderExtents[3];
-    //m_tColliderRotation;
-    //m_tfColliderRotation[3];
-    //m_tColliderColor;
-    //m_tfColliderColor[4];
+    // MESH
 
-    //// Texture Properties Views
-    //m_tTextureFilter;
-    //m_btTextureFilter;
+    // Material Section
+    m_tMaterialType.SetText("Material:");
+    m_tMaterialType.SetColor(TEXT_COLOR);
+    m_tMaterialType.SetScale(T_SCALE_X, T_SCALE_Y);
+
+    ColorButtonOff(m_btMaterialType);
+    m_btMaterialType.SetTextScale(BT_SCALE_X, BT_SCALE_Y);
+
+    m_tColor.SetText("Color");
+    m_tColor.SetColor(TEXT_COLOR);
+    m_tColor.SetScale(T_SCALE_X, T_SCALE_Y);
+
+    m_tRimColor.SetText("Rim Color");
+    m_tRimColor.SetColor(TEXT_COLOR);
+    m_tRimColor.SetScale(T_SCALE_X, T_SCALE_Y);
+
+    m_tRimStyle.SetText("Rim Style");
+    m_tRimStyle.SetColor(TEXT_COLOR);
+    m_tRimStyle.SetScale(T_SCALE_X, T_SCALE_Y);
+
+    ColorButtonOff(m_btRimStyle);
+    m_btRimStyle.SetTextScale(BT_SCALE_X, BT_SCALE_Y);
+
+    m_tRimSize.SetText("Rim Size");
+    m_tRimSize.SetColor(TEXT_COLOR);
+    m_tRimSize.SetScale(T_SCALE_X, T_SCALE_Y);
+
+    SetTextFieldColors(m_tfRimSize);
+    m_tfRimSize.SetTextScale(TF_SCALE_X, TF_SCALE_Y);
+
+    m_tIntervals.SetText("Intervals");
+    m_tIntervals.SetColor(TEXT_COLOR);
+    m_tIntervals.SetScale(T_SCALE_X, T_SCALE_Y);
+
+    SetTextFieldColors(m_tfIntervals);
+    m_tfIntervals.SetTextScale(TF_SCALE_X, TF_SCALE_Y);
+
+    // Default Texture Section
+    m_tDefaultTexture.SetText("Texture:");
+    m_tDefaultTexture.SetColor(TEXT_COLOR);
+    m_tDefaultTexture.SetScale(T_SCALE_X, T_SCALE_Y);
+
+    ColorButtonOff(m_btDefaultTexture);
+    m_btDefaultTexture.SetTextScale(BT_SCALE_X, BT_SCALE_Y);
+
+    ColorButtonOff(m_btAssignDefaultTexture);
+    m_btAssignDefaultTexture.SetTextScale(BT_SCALE_X, BT_SCALE_Y);
+
+    // Collider Section
+    m_tCollider.SetText("Collider:");
+    m_tCollider.SetColor(TEXT_COLOR);
+    m_tCollider.SetScale(T_SCALE_X, T_SCALE_Y);
+
+    ColorButtonOff(m_btCollider);
+    m_btCollider.SetTextScale(BT_SCALE_X, BT_SCALE_Y);
+
+    ColorButtonOff(m_btAddCollider);
+    m_btAddCollider.SetTextScale(BT_SCALE_X, BT_SCALE_Y);
+    m_btAddCollider.SetTextString("+");
+
+    ColorButtonOff(m_btRemoveCollider);
+    m_btRemoveCollider.SetTextScale(BT_SCALE_X, BT_SCALE_Y);
+    m_btRemoveCollider.SetTextString("-");
+
+    m_tColliderCenter.SetText("Center");
+    m_tColliderCenter.SetColor(TEXT_COLOR);
+    m_tColliderCenter.SetScale(T_SCALE_X, T_SCALE_Y);
+
+    m_tColliderExtents.SetText("Extents");
+    m_tColliderExtents.SetColor(TEXT_COLOR);
+    m_tColliderExtents.SetScale(T_SCALE_X, T_SCALE_Y);
+    
+    m_tColliderRotation.SetText("Rotation");
+    m_tColliderRotation.SetColor(TEXT_COLOR);
+    m_tColliderRotation.SetScale(T_SCALE_X, T_SCALE_Y);
+
+    m_tColliderColor.SetText("Color");
+    m_tColliderColor.SetColor(TEXT_COLOR);
+    m_tColliderColor.SetScale(T_SCALE_X, T_SCALE_Y);
+
+    // TEXTURE
+
+    m_tTextureFilter.SetText("Filter:");
+    m_tTextureFilter.SetColor(TEXT_COLOR);
+    m_tTextureFilter.SetScale(T_SCALE_X, T_SCALE_Y);
+    
+    ColorButtonOff(m_btTextureFilter);
+    m_btTextureFilter.SetTextScale(BT_SCALE_X, BT_SCALE_Y);
+
+    // Set textfield-array data
+    for (int i = 0; i < 3; i++)
+    {
+        SetTextFieldColors(m_tfColliderCenter[i]);
+        m_tfColliderCenter[i].SetTextScale(TF_SCALE_X, TF_SCALE_Y);
+
+        SetTextFieldColors(m_tfColliderExtents[i]);
+        m_tfColliderExtents[i].SetTextScale(TF_SCALE_X, TF_SCALE_Y);
+
+        SetTextFieldColors(m_tfColliderRotation[i]);
+        m_tfColliderRotation[i].SetTextScale(TF_SCALE_X, TF_SCALE_Y);
+    }
+
+    for (int i = 0; i < 4; i++)
+    {
+        SetTextFieldColors(m_tfColor[i]);
+        m_tfColor[i].SetTextScale(TF_SCALE_X, TF_SCALE_Y);
+
+        SetTextFieldColors(m_tfRimColor[i]);
+        m_tfRimColor[i].SetTextScale(TF_SCALE_X, TF_SCALE_Y);
+
+        SetTextFieldColors(m_tfColliderColor[i]);
+        m_tfColliderColor[i].SetTextScale(TF_SCALE_X, TF_SCALE_Y);
+    }
 }
 
 void AssetProperties::UpdateView()
 {
-
+    Window::UpdateView();
 }
 
 void AssetProperties::RegisterScene(Scene* pScene)
@@ -65,6 +163,8 @@ void AssetProperties::RegisterScene(Scene* pScene)
     {
         return;
     }
+
+    Window::RegisterScene(pScene);
 
     // Mesh Properties Views
     pScene->AddGlyph(&m_tMaterialType);

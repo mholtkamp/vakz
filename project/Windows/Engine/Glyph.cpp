@@ -1,4 +1,5 @@
 #include "Glyph.h"
+#include <string.h>
 
 //*****************************************************************************
 // Constructor
@@ -37,6 +38,11 @@ void Glyph::SetColor(float fRed,
     m_arColor[1] = fGreen;
     m_arColor[2] = fBlue;
     m_arColor[3] = fAlpha;
+}
+
+void Glyph::SetColor(const float* arColor)
+{
+    memcpy(m_arColor, arColor, sizeof(float) * 4);
 }
 
 //*****************************************************************************

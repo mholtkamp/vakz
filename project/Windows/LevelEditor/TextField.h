@@ -49,6 +49,13 @@ public:
                             float fBlue,
                             float fAlpha);
 
+    void SetBackColor(const float* arColor);
+    void SetBorderColor(const float* arColor);
+    void SetTextColor(const float* arColor);
+    void SetSelectBackColor(const float* arColor);
+    void SetSelectBorderColor(const float* arColor);
+    void SetSelectTextColor(const float* arColor);
+
     void SetRect(float fX,
                  float fY,
                  float fWidth,

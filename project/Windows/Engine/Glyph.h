@@ -47,6 +47,8 @@ public:
                           float fBlue,
                           float fAlpha);
 
+    virtual void SetColor(const float* arColor);
+
     //## **********************************************************************
     //## SetPosition
     //##

@@ -13,6 +13,7 @@ static const float s_arColor2[4] = {0.992f, 0.710f, 0.502f, 1.0f};
 static const float s_arColor3[4] = {0.835f, 0.510f, 0.270f, 1.0f};
 static const float s_arColor4[4] = {0.686f, 0.361f, 0.122f, 1.0f};
 static const float s_arColor5[4] = {0.494f, 0.208f, 0.0f, 1.0f};
+static const float s_arColorTrans[4] = {0.0f, 0.0f, 0.0f, 0.0f};
 
 #define HEADER_HEIGHT 0.08f
 #define WINDOW_WIDTH 0.35f
@@ -47,6 +48,8 @@ protected:
     void ColorButtonDown(Button& button);
     void ColorButtonHover(Button& button);
     void ColorButtonOff(Button& button);
+
+    void SetTextFieldColors(TextField& field);
 
     void SetupTextField(TextField& field);
 
