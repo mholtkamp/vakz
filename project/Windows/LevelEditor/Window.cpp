@@ -20,6 +20,7 @@ Window::Window()
 
     m_nVisible = 1;
     m_pScene   = 0;
+    m_pEditor  = 0;
 }
 
 Window::~Window()
@@ -85,8 +86,8 @@ void Window::UpdateView()
                             m_rect.m_fWidth,
                             m_rect.m_fHeight);
 
-    m_textHeader.SetPosition(m_rect.m_fX + 0.015, 
-                             m_rect.m_fY + m_rect.m_fHeight - HEADER_HEIGHT + 0.016);
+    m_textHeader.SetPosition(m_rect.m_fX + 0.015f, 
+                             m_rect.m_fY + m_rect.m_fHeight - HEADER_HEIGHT + 0.016f);
 }
 
 void Window::RegisterScene(Scene* pScene)
@@ -189,4 +190,9 @@ void Window::SetTextFieldColors(TextField& field)
     field.SetSelectBackColor(s_arColor3);
     field.SetSelectBorderColor(s_arColorTrans);
     field.SetSelectTextColor(s_arColor5);
+}
+
+void Window::SetEditor(void* pEditor)
+{
+    m_pEditor = pEditor;
 }

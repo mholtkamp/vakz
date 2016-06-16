@@ -35,6 +35,8 @@ public:
 
     void Initialize();
 
+    void SetEditor(void* pEditor);
+
     virtual void HandleInput() = 0;
 
     virtual void UpdateView();
@@ -64,6 +66,8 @@ protected:
 
     int m_nVisible;
     Scene* m_pScene;
+
+   void* m_pEditor;
 };
 
 #endif

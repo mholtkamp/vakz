@@ -2,6 +2,7 @@
 #define ASSET_PROPERTIES_H
 
 #include "Window.h"
+#include "Asset.h"
 
 class AssetProperties : public Window
 {
@@ -15,9 +16,25 @@ public:
 
     void UpdateView();
 
+    void HideViews();
+
+    void UpdateView_Mesh();
+    void UpdateView_Texture();
+    void UpdateView_Sound();
+
+    void HandleInput_Mesh();
+    void HandleInput_Texture();
+    void HandleInput_Sound();
+
     void RegisterScene(Scene* pScene);
 
+    void SetDetailedAsset(Asset* pAsset);
+
 private:
+
+    // General Property Views
+    Text m_tName1;
+    Text m_tName2;
 
     // Mesh Properties Views
     Text m_tMaterialType;
@@ -55,6 +72,9 @@ private:
     Text m_tTextureFilter;
     Button m_btTextureFilter;
 
+    // Data
+    Asset* m_pAsset;
+    Button* m_pPrevHover;
 };
 
 #endif

@@ -26,6 +26,8 @@ public:
 
     void RegisterScene(Scene* pScene);
 
+    Asset* GetSelectedAsset();
+
 private:
 
     void ImportAsset();

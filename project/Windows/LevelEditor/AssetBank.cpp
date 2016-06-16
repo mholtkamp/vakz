@@ -2,6 +2,7 @@
 #include "Log.h"
 #include "VInput.h"
 #include "Asset.h"
+#include "LevelEditor.h"
 #include <Windows.h>
 
 #define TOGGLE_BUTTON_HEIGHT 0.06f
@@ -100,43 +101,46 @@ void AssetBank::HandleInput()
             pDown = &m_btToggleMesh;
         }
 
-        if (m_btToggleTexture.IsTouched())
+        else if (m_btToggleTexture.IsTouched())
         {
             ColorButtonDown(m_btToggleTexture);
             pDown = &m_btToggleTexture;
         }
 
-        if (m_btToggleSound.IsTouched())
+        else if (m_btToggleSound.IsTouched())
         {
             ColorButtonDown(m_btToggleSound);
             pDown = &m_btToggleSound;
         }
 
-        for (int i = 0; i < BANK_VISIBLE_ITEMS; i++)
-        {
-            if (m_arBankButtons[i].IsTouched())
-            {
-                ColorButtonDown(m_arBankButtons[i]);
-                pDown = &m_arBankButtons[i];
-            }
-        }
-
-        if (m_btAddAsset.IsTouched())
+        else if (m_btAddAsset.IsTouched())
         {
             ColorButtonDown(m_btAddAsset);
             pDown = &m_btAddAsset;
         }
 
-        if (m_btDeleteAsset.IsTouched())
+        else if (m_btDeleteAsset.IsTouched())
         {
             ColorButtonDown(m_btDeleteAsset);
             pDown = &m_btDeleteAsset;
         }
 
-        if (m_btCreateMatter.IsTouched())
+        else if (m_btCreateMatter.IsTouched())
         {
             ColorButtonDown(m_btCreateMatter);
             pDown = &m_btCreateMatter;
+        }
+
+        else
+        {
+            for (int i = 0; i < BANK_VISIBLE_ITEMS; i++)
+            {
+                if (m_arBankButtons[i].IsTouched())
+                {
+                    ColorButtonDown(m_arBankButtons[i]);
+                    pDown = &m_arBankButtons[i];
+                }
+            }
         }
 
         m_pPrevHover = pDown;
@@ -151,43 +155,46 @@ void AssetBank::HandleInput()
             pHover = &m_btToggleMesh;
         }
 
-        if (m_btToggleTexture.IsPointerHovering())
+        else if (m_btToggleTexture.IsPointerHovering())
         {
             ColorButtonHover(m_btToggleTexture);
             pHover = &m_btToggleTexture;
         }
 
-        if (m_btToggleSound.IsPointerHovering())
+        else if (m_btToggleSound.IsPointerHovering())
         {
             ColorButtonHover(m_btToggleSound);
             pHover = &m_btToggleSound;
         }
 
-        for (int i = 0; i < BANK_VISIBLE_ITEMS; i++)
-        {
-            if (m_arBankButtons[i].IsPointerHovering())
-            {
-                ColorButtonHover(m_arBankButtons[i]);
-                pHover = &m_arBankButtons[i];
-            }
-        }
-
-        if (m_btAddAsset.IsPointerHovering())
+        else if (m_btAddAsset.IsPointerHovering())
         {
             ColorButtonHover(m_btAddAsset);
             pHover = &m_btAddAsset;
         }
 
-        if (m_btDeleteAsset.IsPointerHovering())
+        else if (m_btDeleteAsset.IsPointerHovering())
         {
             ColorButtonHover(m_btDeleteAsset);
             pHover = &m_btDeleteAsset;
         }
 
-        if (m_btCreateMatter.IsPointerHovering())
+        else if (m_btCreateMatter.IsPointerHovering())
         {
             ColorButtonHover(m_btCreateMatter);
             pHover = &m_btCreateMatter;
+        }
+
+        else
+        {
+            for (int i = 0; i < BANK_VISIBLE_ITEMS; i++)
+            {
+                if (m_arBankButtons[i].IsPointerHovering())
+                {
+                    ColorButtonHover(m_arBankButtons[i]);
+                    pHover = &m_arBankButtons[i];
+                }
+            }
         }
 
         m_pPrevHover = pHover;
@@ -280,7 +287,10 @@ void AssetBank::HandleInput()
                     // the old selected asset.
                     if (m_pSelectedAsset == pSelAsset)
                     {
-                        // pEditor->SetDetailedAsset().
+                        if (m_pEditor != 0)
+                        {
+                            reinterpret_cast<LevelEditor*>(m_pEditor)->SetDetailedAsset(m_pSelectedAsset);
+                        }
                     }
                     else
                     {
@@ -570,6 +580,7 @@ void AssetBank::LoadMesh(char* pStr)
     pMeshAsset->SetNameFromFile(pStr);
     pMeshAsset->SetFilePath(pStr);
 
+    pMeshAsset->m_pMaterial = new DiffuseMaterial();
     m_lMeshes.Add(pMeshAsset);
 }
 
@@ -587,4 +598,9 @@ void AssetBank::LoadTexture(char* pStr)
 void AssetBank::LoadSound(char* pStr)
 {
 
+}
+
+Asset* AssetBank::GetSelectedAsset()
+{
+    return m_pSelectedAsset;
 }

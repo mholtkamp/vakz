@@ -5,10 +5,11 @@ enum MaterialType
 {
     MATERIAL_NO_TYPE     = -1,
     MATERIAL_DIFFUSE     = 0,
-    MATERIAL_SPECULAR    = 1,
-    MATERIAL_FULLBRIGHT  = 2,
-    MATERIAL_RIMLIT      = 3,
-    MATERIAL_TOON        = 4
+    MATERIAL_FULLBRIGHT  = 1,
+    MATERIAL_RIMLIT      = 2,
+    MATERIAL_TOON        = 3,
+
+    MATERIAL_NUM_TYPES   = 4,
 };
 
 class Material
