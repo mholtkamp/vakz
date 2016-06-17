@@ -14,16 +14,11 @@ public:
     void SetRenderState(void*        pScene,
                         unsigned int hProg);
 
-    void SetColor(float fRed,
-                  float fGreen,
-                  float fBlue,
-                  float fAlpha);
-
     void SetLightingIntervalCount(int nIntervals);
 
-private:
+    int GetLightingIntervalCount();
 
-    float m_arColor[4];
+private:
 
     int m_nIntervals;
 };

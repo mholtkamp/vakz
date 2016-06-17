@@ -8,11 +8,6 @@ ToonMaterial::ToonMaterial()
 {
     m_nType = MATERIAL_TOON;
 
-    m_arColor[0] = 1.0f;
-    m_arColor[1] = 1.0f;
-    m_arColor[2] = 1.0f;
-    m_arColor[3] = 1.0f;
-
     m_nIntervals = 3;
 }
 
@@ -37,23 +32,14 @@ void ToonMaterial::SetRenderState(void*        pScene,
 }
 
 //*****************************************************************************
-// SetColor
-//*****************************************************************************
-void ToonMaterial::SetColor(float fRed,
-                               float fGreen,
-                               float fBlue,
-                               float fAlpha)
-{
-    m_arColor[0] = fRed;
-    m_arColor[1] = fGreen;
-    m_arColor[2] = fBlue;
-    m_arColor[3] = fAlpha;
-}
-
-//*****************************************************************************
 // SetLightingIntervalCount
 //*****************************************************************************
 void ToonMaterial::SetLightingIntervalCount(int nIntervals)
 {
     m_nIntervals = nIntervals;
+}
+
+int ToonMaterial::GetLightingIntervalCount()
+{
+    return m_nIntervals;
 }

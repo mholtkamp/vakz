@@ -37,27 +37,6 @@ public:
     //## **********************************************************************
     void SetRenderState(void*        pScene,
                         unsigned int hProg);
-
-    //## **********************************************************************
-    //## SetColor
-    //## 
-    //## Sets the new modulation color of material.
-    //## 
-    //## Input:
-    //##   fRed   - red value.
-    //##   fGreen - green value.
-    //##   fBlue  - blue value.
-    //##   fAlpha - alpha value.
-    //## **********************************************************************
-    void SetColor(float fRed,
-                  float fGreen,
-                  float fBlue,
-                  float fAlpha);
-
-private:
-
-    // Modulation color
-    float m_arColor[4];
 };
 
 #endif

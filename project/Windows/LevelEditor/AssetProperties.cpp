@@ -5,9 +5,10 @@
 #include "RimlitMaterial.h"
 #include "ToonMaterial.h"
 #include "LevelEditor.h"
+#include "OrientedBoxCollider.h"
 
-#define TF_SCALE_X 0.4f
-#define TF_SCALE_Y 0.6f
+#define TF_SCALE_X 0.35f
+#define TF_SCALE_Y 0.64f
 
 #define T_SCALE_X 0.35f
 #define T_SCALE_Y 0.64f
@@ -73,6 +74,55 @@ void AssetProperties::HandleInput_Mesh()
 
     MeshAsset* pAsset = reinterpret_cast<MeshAsset*>(m_pAsset);
 
+    if (IsKeyDown(VKEY_ENTER)||
+        IsPointerJustUp())
+    {
+        if (pAsset->m_pMaterial->GetType() == MATERIAL_TOON &&
+            m_tfIntervals.IsSelected())
+            reinterpret_cast<ToonMaterial*>(pAsset->m_pMaterial)->SetLightingIntervalCount(atoi(m_tfIntervals.GetText()));
+
+        if (pAsset->m_pMaterial->GetType() == MATERIAL_RIMLIT &&
+            m_tfRimSize.IsSelected())
+            reinterpret_cast<RimlitMaterial*>(pAsset->m_pMaterial)->SetRimSize((float) atof(m_tfRimSize.GetText()));
+
+        for (int i = 0; i < 3; i++)
+        {
+            //m_tfColliderCenter[i].Update(nJustUp, fX, fY);
+            //m_tfColliderExtents[i].Update(nJustUp, fX, fY);
+            //m_tfColliderRotation[i].Update(nJustUp, fX, fY);
+        }
+
+        for (int i = 0; i < 4; i++)
+        {
+            if (m_tfColor[i].IsSelected())
+            {
+                float arNewColor[4];
+                memcpy(arNewColor, pAsset->m_pMaterial->GetColor(), sizeof(float) * 4);
+                arNewColor[i] = (float) atof(m_tfColor[i].GetText());
+                pAsset->m_pMaterial->SetColor(arNewColor);
+            }
+            
+            if (pAsset->m_pMaterial->GetType() == MATERIAL_RIMLIT &&
+                m_tfRimColor[i].IsSelected())
+            {
+                float arNewColor[4];
+                memcpy(arNewColor, reinterpret_cast<RimlitMaterial*>(pAsset->m_pMaterial)->GetRimColor(), sizeof(float) * 4);
+                arNewColor[i] = (float) atof(m_tfColor[i].GetText());
+                reinterpret_cast<RimlitMaterial*>(pAsset->m_pMaterial)->SetRimColor(arNewColor);
+            }
+
+            //ListNode* pCurColliderNode = pAsset->m_lColliders.Get(m_nCurCollider);
+
+            //if (pAsset->m_lColliders.Count() >= 0 &&
+            //    pCurColliderNode             != 0)
+            //{
+            //    float arNewColor[4];
+            //    memcpy(arNewColor, reinterpret_cast<OrientedBoxCollider*>(pCurColliderNode->m_pData)->GetColor(), sizeof(float) * 4);
+            //    arNewColor[i] = atof(m_tfColliderColor[i].GetText());
+            //    reinterpret_cast<OrientedBoxCollider*>(pCurColliderNode->m_pData)->SetColor(arNewColor);
+            //}
+        }
+    }
     if (IsPointerJustUp())
     {
         if(m_btMaterialType.IsPointerHovering())
@@ -202,6 +252,25 @@ void AssetProperties::HandleInput_Mesh()
 
         m_pPrevHover = pHover;
     }
+
+    // Update all text fields
+    int nJustUp = IsPointerJustUp();
+    m_tfIntervals.Update(nJustUp, fX, fY);
+    m_tfRimSize.Update(nJustUp, fX, fY);
+
+    for (int i = 0; i < 3; i++)
+    {
+        m_tfColliderCenter[i].Update(nJustUp, fX, fY);
+        m_tfColliderExtents[i].Update(nJustUp, fX, fY);
+        m_tfColliderRotation[i].Update(nJustUp, fX, fY);
+    }
+
+    for (int i = 0; i < 4; i++)
+    {
+        m_tfColor[i].Update(nJustUp, fX, fY);
+        m_tfRimColor[i].Update(nJustUp, fX, fY);
+        m_tfColliderColor[i].Update(nJustUp, fX, fY);
+    }
 }
 
 void AssetProperties::HandleInput_Texture()
@@ -277,7 +346,7 @@ void AssetProperties::InitializeView()
     m_tColor.SetColor(TEXT_COLOR);
     m_tColor.SetScale(T_SCALE_X, T_SCALE_Y);
 
-    m_tRimColor.SetText("Rim Color");
+    m_tRimColor.SetText("Rim");
     m_tRimColor.SetColor(TEXT_COLOR);
     m_tRimColor.SetScale(T_SCALE_X, T_SCALE_Y);
 
@@ -294,6 +363,7 @@ void AssetProperties::InitializeView()
 
     SetTextFieldColors(m_tfRimSize);
     m_tfRimSize.SetTextScale(TF_SCALE_X, TF_SCALE_Y);
+    m_tfRimSize.SetMaxSize(6);
 
     m_tIntervals.SetText("Intervals");
     m_tIntervals.SetColor(TEXT_COLOR);
@@ -301,6 +371,7 @@ void AssetProperties::InitializeView()
 
     SetTextFieldColors(m_tfIntervals);
     m_tfIntervals.SetTextScale(TF_SCALE_X, TF_SCALE_Y);
+    m_tfIntervals.SetMaxSize(3);
 
     // Default Texture Section
     m_tDefaultTexture.SetText("Texture:");
@@ -370,13 +441,16 @@ void AssetProperties::InitializeView()
     for (int i = 0; i < 4; i++)
     {
         SetTextFieldColors(m_tfColor[i]);
-        m_tfColor[i].SetTextScale(TF_SCALE_X, TF_SCALE_Y);
+        m_tfColor[i].SetMaxSize(6);
+        m_tfColor[i].SetTextScale(0.25f, 0.64f);
 
         SetTextFieldColors(m_tfRimColor[i]);
-        m_tfRimColor[i].SetTextScale(TF_SCALE_X, TF_SCALE_Y);
+        m_tfRimColor[i].SetMaxSize(6);
+        m_tfRimColor[i].SetTextScale(0.25f, 0.64f);
 
         SetTextFieldColors(m_tfColliderColor[i]);
-        m_tfColliderColor[i].SetTextScale(TF_SCALE_X, TF_SCALE_Y);
+        m_tfColliderColor[i].SetMaxSize(6);
+        m_tfColliderColor[i].SetTextScale(0.25f, 0.64f);
     }
 }
 
@@ -402,6 +476,8 @@ void AssetProperties::UpdateView()
 
 void AssetProperties::UpdateView_Mesh()
 {
+    HideViews();
+
     float fX = m_rect.m_fX + m_fPadding;
     float fY = m_rect.m_fY + m_rect.m_fHeight - HEADER_HEIGHT - 0.07f;
 
@@ -446,8 +522,11 @@ void AssetProperties::UpdateView_Mesh()
                                  fY - BUTTON_OFF_Y,
                                  0.06f,
                                  BUTTON_HEIGHT);
+            m_tfColor[i].SetText_Float(pAsset->m_pMaterial->GetColor()[i]);
             m_tfColor[i].SetVisible(1);
         }
+
+        fY -= m_fSpacing;
 
         switch(pAsset->m_pMaterial->GetType())
         {
@@ -458,10 +537,59 @@ void AssetProperties::UpdateView_Mesh()
             m_btMaterialType.SetTextString("Fullbright");
             break;
         case MATERIAL_RIMLIT:
+        {
             m_btMaterialType.SetTextString("Rimlit");
+            m_tRimStyle.SetPosition(fX, fY);
+            m_tRimStyle.SetVisible(1);
+            m_btRimStyle.SetRect(fX + 0.14f,
+                                 fY - BUTTON_OFF_Y,
+                                 0.1f,
+                                 BUTTON_HEIGHT);
+            if (reinterpret_cast<RimlitMaterial*>(pAsset->m_pMaterial)->GetRimSize() == RIM_STYLE_SOFT)
+                m_btRimStyle.SetTextString("Soft");
+            else
+                m_btRimStyle.SetTextString("Hard");
+            m_btRimStyle.SetVisible(1);
+
+            fY -= m_fSpacing;
+
+            m_tRimSize.SetPosition(fX, fY);
+            m_tRimSize.SetVisible(1);
+            m_tfRimSize.SetRect(fX + 0.14f,
+                                fY - BUTTON_OFF_Y,
+                                0.1f,
+                                BUTTON_HEIGHT);
+            m_tfRimSize.SetText_Float(reinterpret_cast<RimlitMaterial*>(pAsset->m_pMaterial)->GetRimSize());
+            m_tfRimSize.SetVisible(1);
+
+            fY -= m_fSpacing;
+
+            m_tRimColor.SetPosition(fX, fY);
+            m_tRimColor.SetVisible(1);
+            
+            for (int i = 0; i < 4; i++)
+            {
+                m_tfRimColor[i].SetRect(fX + 0.01f + 0.065f * (i+1),
+                                        fY - BUTTON_OFF_Y,
+                                        0.06f,
+                                        BUTTON_HEIGHT);
+                m_tfRimColor[i].SetText_Float(reinterpret_cast<RimlitMaterial*>(pAsset->m_pMaterial)->GetRimColor()[i]);
+                m_tfRimColor[i].SetVisible(1);
+            }
+
+            fY -= m_fSpacing;
             break;
+        }
         case MATERIAL_TOON:
             m_btMaterialType.SetTextString("Toon");
+
+            m_tIntervals.SetPosition(fX, fY);
+            m_tIntervals.SetVisible(1);
+            
+            m_tfIntervals.SetRect(fX + 0.135f, fY - BUTTON_OFF_Y, 0.06f, BUTTON_HEIGHT);
+            m_tfIntervals.SetText_Int(reinterpret_cast<ToonMaterial*>(pAsset->m_pMaterial)->GetLightingIntervalCount());
+            m_tfIntervals.SetVisible(1);
+
             break;
         default:
             m_btMaterialType.SetTextString("Unknown");

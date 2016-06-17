@@ -2,9 +2,10 @@
 #include "VInput.h"
 #include "Log.h"
 #include <string.h>
+#include <stdio.h>
 
-#define DEFAULT_X_OFFSET 0.01f
-#define DEFAULT_Y_OFFSET 0.04f
+#define DEFAULT_X_OFFSET 0.003f
+#define DEFAULT_Y_OFFSET 0.01f
 
 TextField::TextField()
 {
@@ -55,6 +56,8 @@ TextField::TextField()
 
     // Enable the border for the quad
     m_quad.EnableBorder(1);
+
+    m_nVisible = 1;
 }
 
 TextField::~TextField()
@@ -75,6 +78,11 @@ void TextField::SetBackColor(float fRed,
     m_arBackColor[1] = fGreen;
     m_arBackColor[2] = fBlue;
     m_arBackColor[3] = fAlpha;
+
+    if (m_nSelected == 0)
+    {
+        m_quad.SetColor(m_arBackColor);
+    }
 }
 
 void TextField::SetBorderColor(float fRed,
@@ -86,6 +94,14 @@ void TextField::SetBorderColor(float fRed,
     m_arBorderColor[1] = fGreen;
     m_arBorderColor[2] = fBlue;
     m_arBorderColor[3] = fAlpha;
+
+    if (m_nSelected == 0)
+    {
+        m_quad.SetBorderColor(m_arBorderColor[0],
+                              m_arBorderColor[1],
+                              m_arBorderColor[2],
+                              m_arBorderColor[3]);
+    }
 }
 
 void TextField::SetTextColor(float fRed,
@@ -97,6 +113,11 @@ void TextField::SetTextColor(float fRed,
     m_arTextColor[1] = fGreen;
     m_arTextColor[2] = fBlue;
     m_arTextColor[3] = fAlpha;
+
+    if (m_nSelected == 0)
+    {
+        m_text.SetColor(m_arTextColor);
+    }
 }
 
 void TextField::SetSelectBackColor(float fRed,
@@ -108,6 +129,11 @@ void TextField::SetSelectBackColor(float fRed,
     m_arSelBackColor[1] = fGreen;
     m_arSelBackColor[2] = fBlue;
     m_arSelBackColor[3] = fAlpha;
+
+    if (m_nSelected != 0)
+    {
+        m_quad.SetColor(m_arSelBackColor);
+    }
 }
 
 void TextField::SetSelectBorderColor(float fRed,
@@ -119,6 +145,14 @@ void TextField::SetSelectBorderColor(float fRed,
     m_arSelBorderColor[1] = fGreen;
     m_arSelBorderColor[2] = fBlue;
     m_arSelBorderColor[3] = fAlpha;
+
+    if (m_nSelected != 0)
+    {
+        m_quad.SetBorderColor(m_arSelBorderColor[0],
+                              m_arSelBorderColor[1],
+                              m_arSelBorderColor[2],
+                              m_arSelBorderColor[3]);
+    }
 }
 
 
@@ -131,6 +165,11 @@ void TextField::SetSelectTextColor(float fRed,
     m_arSelTextColor[1] = fGreen;
     m_arSelTextColor[2] = fBlue;
     m_arSelTextColor[3] = fAlpha;
+
+    if (m_nSelected != 0)
+    {
+        m_text.SetColor(m_arSelTextColor);
+    }
 }
 
 void TextField::SetRect(float fX,
@@ -187,12 +226,45 @@ void TextField::SetSelect(int nSelect)
     }
 }
 
+int TextField::IsSelected()
+{
+    return m_nSelected;
+}
+
+void TextField::ExtractInt(int& nInt)
+{
+    if(m_nSelected)
+    {
+        nInt = atoi(m_pTextString);
+    }
+}
+
+void TextField::ExtractFloat(float& fFloat)
+{
+    if (m_nSelected)
+    {
+        fFloat = (float) atof(m_pTextString);
+    }
+}
+
+void TextField::ExtractString(char* pString, int nSize)
+{
+    if (m_nSelected)
+    {
+        strncpy(pString, m_pTextString, nSize);
+    }
+}
+
+
 void TextField::Update(int nMouseDown,
                        float fX,
                        float fY)
 {
     int i = 0;
     int nShift = 0;
+
+    if (m_nVisible == 0)
+        return;
 
     if (nMouseDown != 0)
     {
@@ -472,6 +544,26 @@ void TextField::SetMaxSize(int nMaxSize)
     m_nMaxSize = nMaxSize;
 }
 
+void TextField::SetText(char* pStr)
+{
+    strncpy(m_pTextString, pStr, m_nMaxSize);
+    m_text.SetText(m_pTextString);
+}
+
+void TextField::SetText_Float(float fFloat)
+{
+    memset(m_pTextString, 0, m_nMaxSize);
+    _snprintf(m_pTextString, m_nMaxSize-1, "%f", fFloat);
+    m_text.SetText(m_pTextString);
+}
+
+void TextField::SetText_Int(int nInt)
+{
+    memset(m_pTextString, 0, m_nMaxSize);
+    _snprintf(m_pTextString, m_nMaxSize-1, "%d", nInt);
+    m_text.SetText(m_pTextString);
+}
+
 void TextField::AddToScene(Scene& scene)
 {
     scene.AddGlyph(&m_quad);
@@ -482,6 +574,8 @@ void TextField::SetVisible(int nVisible)
 {
     m_quad.SetVisible(nVisible);
     m_text.SetVisible(nVisible);
+    
+    m_nVisible = nVisible;
 }
 
 void TextField::SetTextScale(float fScaleX,
@@ -493,28 +587,64 @@ void TextField::SetTextScale(float fScaleX,
 void TextField::SetBackColor(const float* arColor)
 {
     memcpy(m_arBackColor, arColor, 4 * sizeof(float));
+
+    if (m_nSelected == 0)
+    {
+        m_quad.SetColor(m_arBackColor);
+    }
 }
 
 void TextField::SetBorderColor(const float* arColor)
 {
     memcpy(m_arBorderColor, arColor, 4 * sizeof(float));
+
+    if (m_nSelected == 0)
+    {
+        m_quad.SetBorderColor(m_arBorderColor[0],
+                              m_arBorderColor[1],
+                              m_arBorderColor[2],
+                              m_arBorderColor[3]);
+    }
 }
 
 void TextField::SetTextColor(const float* arColor)
 {
     memcpy(m_arTextColor, arColor, 4 * sizeof(float));
+
+    if (m_nSelected == 0)
+    {
+        m_text.SetColor(m_arTextColor);
+    }
 }
 
 void TextField::SetSelectBackColor(const float* arColor)
 {
     memcpy(m_arSelBackColor, arColor, 4 * sizeof(float));
+
+    if (m_nSelected != 0)
+    {
+        m_quad.SetColor(m_arSelBackColor);
+    }
 }
 
 void TextField::SetSelectBorderColor(const float* arColor)
 {
     memcpy(m_arSelBorderColor, arColor, 4 * sizeof(float));
+
+    if (m_nSelected != 0)
+    {
+        m_quad.SetBorderColor(m_arSelBorderColor[0],
+                              m_arSelBorderColor[1],
+                              m_arSelBorderColor[2],
+                              m_arSelBorderColor[3]);
+    }
 }
 void TextField::SetSelectTextColor(const float* arColor)
 {
     memcpy(m_arSelTextColor, arColor, 4 * sizeof(float));
+
+    if (m_nSelected != 0)
+    {
+        m_text.SetColor(m_arSelTextColor);
+    }
 }

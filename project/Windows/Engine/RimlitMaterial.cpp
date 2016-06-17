@@ -9,11 +9,6 @@ RimlitMaterial::RimlitMaterial()
 {
     m_nType = MATERIAL_RIMLIT;
 
-    m_arDiffuseColor[0] = 1.0f;
-    m_arDiffuseColor[1] = 1.0f;
-    m_arDiffuseColor[2] = 1.0f;
-    m_arDiffuseColor[3] = 1.0f;
-
     m_arRimColor[0] = 1.0f;
     m_arRimColor[1] = 0.0f;
     m_arRimColor[2] = 0.0f;
@@ -49,7 +44,7 @@ void RimlitMaterial::SetRenderState(void*        pScene,
 
 
     // Set uniforms
-    glUniform4fv(hDiffuseColor, 1, m_arDiffuseColor);
+    glUniform4fv(hDiffuseColor, 1, m_arColor);
     glUniform4fv(hRimColor, 1, m_arRimColor);
 
     reinterpret_cast<Scene*>(pScene)->GetCamera()->GetViewVector(arViewVec);
@@ -57,17 +52,6 @@ void RimlitMaterial::SetRenderState(void*        pScene,
 
     glUniform1f(hRimSize,  m_fRimSize);
     glUniform1i(hRimStyle, m_nRimStyle);
-}
-
-//*****************************************************************************
-// SetDiffuseColor
-//*****************************************************************************
-void RimlitMaterial::SetDiffuseColor(float arDiff[4])
-{
-    m_arDiffuseColor[0] = arDiff[0];
-    m_arDiffuseColor[1] = arDiff[1];
-    m_arDiffuseColor[2] = arDiff[2];
-    m_arDiffuseColor[3] = arDiff[3];
 }
 
 //*****************************************************************************
@@ -95,4 +79,19 @@ void RimlitMaterial::SetRimSize(float fSize)
 void RimlitMaterial::SetRimStyle(int nStyle)
 {
     m_nRimStyle = nStyle;
+}
+
+int RimlitMaterial::GetRimStyle()
+{
+    return m_nRimStyle;
+}
+
+float RimlitMaterial::GetRimSize()
+{
+    return m_fRimSize;
+}
+
+float* RimlitMaterial::GetRimColor()
+{
+    return m_arRimColor;
 }

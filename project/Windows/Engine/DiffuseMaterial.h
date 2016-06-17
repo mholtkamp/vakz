@@ -29,26 +29,6 @@ public:
     void SetRenderState(void*        pScene,
                         unsigned int hProg);
 
-    //## **********************************************************************
-    //## SetColor
-    //##
-    //## Sets the diffuse material color. Values should be in range 0.0f to 1.0f
-    //##
-    //## Input:
-    //##   fRed   - red component.
-    //##   fGreen - green component.
-    //##   fBlue  - blue component.
-    //##   fAlpha - alpha component.
-    //## **********************************************************************
-    void SetColor(float fRed,
-                  float fGreen,
-                  float fBlue,
-                  float fAlpha);
-
-private:
-
-    // Material color
-    float m_arColor[4];
 };
 
 #endif

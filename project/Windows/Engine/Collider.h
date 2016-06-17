@@ -87,6 +87,8 @@ public:
                   float fBlue,
                   float fAlpha);
 
+    float* GetColor();
+
     //## **********************************************************************
     //## Render
     //##

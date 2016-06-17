@@ -77,6 +77,11 @@ void Collider::SetColor(float fRed,
     m_arRenderColor[3] = fAlpha;
 }
 
+float* Collider::GetColor()
+{
+    return m_arRenderColor;
+}
+
 OverlapResult Collider::OBB_Overlaps_OBB(Collider* pColA,
                                          void* pColMatterA,
                                          Collider* pColB,

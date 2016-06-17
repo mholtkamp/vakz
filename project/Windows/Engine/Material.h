@@ -49,10 +49,22 @@ public:
     virtual void SetRenderState(void*        pScene,
                                 unsigned int hProg) = 0;
 
+    void SetColor(float fRed,
+                  float fGreen,
+                  float fBlue,
+                  float fAlpha);
+
+    void SetColor(float* arColor);
+
+    float* GetColor();
+
 protected:
 
     //## Material Type
     int m_nType;
+
+    // Material color
+    float m_arColor[4];
 };
 
 #endif

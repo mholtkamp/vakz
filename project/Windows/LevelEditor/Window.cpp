@@ -189,7 +189,7 @@ void Window::SetTextFieldColors(TextField& field)
 
     field.SetSelectBackColor(s_arColor3);
     field.SetSelectBorderColor(s_arColorTrans);
-    field.SetSelectTextColor(s_arColor5);
+    field.SetSelectTextColor(s_arColor4);
 }
 
 void Window::SetEditor(void* pEditor)

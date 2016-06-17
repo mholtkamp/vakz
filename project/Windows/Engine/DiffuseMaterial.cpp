@@ -7,11 +7,6 @@
 DiffuseMaterial::DiffuseMaterial()
 {
     m_nType = MATERIAL_DIFFUSE;
-
-    m_arColor[0] = 1.0f;
-    m_arColor[1] = 1.0f;
-    m_arColor[2] = 1.0f;
-    m_arColor[3] = 1.0f;
 }
 
 //*****************************************************************************
@@ -30,18 +25,4 @@ void DiffuseMaterial::SetRenderState(void*        pScene,
 {
     int hColor = glGetUniformLocation(hProg, "uDiffuseColor");
     glUniform4fv(hColor, 1, m_arColor);
-}
-
-//*****************************************************************************
-// SetColor
-//*****************************************************************************
-void DiffuseMaterial::SetColor(float fRed,
-                               float fGreen,
-                               float fBlue,
-                               float fAlpha)
-{
-    m_arColor[0] = fRed;
-    m_arColor[1] = fGreen;
-    m_arColor[2] = fBlue;
-    m_arColor[3] = fAlpha;
 }

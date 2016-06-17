@@ -29,19 +29,6 @@ public:
                         unsigned int hProg);
 
     //## **********************************************************************
-    //## SetDiffuseColor
-    //##
-    //## Sets the diffuse material color. Values should be in range 0.0f to 1.0f
-    //##
-    //## Input:
-    //##   fRed   - red component.
-    //##   fGreen - green component.
-    //##   fBlue  - blue component.
-    //##   fAlpha - alpha component.
-    //## **********************************************************************
-    void SetDiffuseColor(float arDiffuseColor[4]);
-
-    //## **********************************************************************
     //## SetColor
     //##
     //## Sets the diffuse material color. Values should be in range 0.0f to 1.0f
@@ -88,10 +75,11 @@ public:
     //## **********************************************************************
     void SetRimStyle(int nStyle);
 
-private:
+    int GetRimStyle();
+    float GetRimSize();
+    float* GetRimColor();
 
-    // Diffuse color
-    float m_arDiffuseColor[4];
+private:
 
     // Rim color
     float m_arRimColor[4];

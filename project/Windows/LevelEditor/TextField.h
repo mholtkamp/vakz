@@ -49,6 +49,10 @@ public:
                             float fBlue,
                             float fAlpha);
 
+    void SetText(char* pStr);
+    void SetText_Float(float fFloat);
+    void SetText_Int(int nInt);
+
     void SetBackColor(const float* arColor);
     void SetBorderColor(const float* arColor);
     void SetTextColor(const float* arColor);
@@ -62,6 +66,11 @@ public:
                  float fHeight);
 
     void SetSelect(int nSelect);
+    int IsSelected();
+
+    void ExtractInt(int& nInt);
+    void ExtractFloat(float& fFloat);
+    void ExtractString(char* pString, int nSize);
 
     void Update(int   nMouseDown,
                 float fX,
@@ -113,7 +122,7 @@ private:
 
     char* m_pTextString;
 
-    
+    int m_nVisible;
 };
 
 #endif
