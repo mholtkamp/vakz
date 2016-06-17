@@ -30,6 +30,7 @@ AssetProperties::AssetProperties()
 
     m_pAsset = 0;
     m_pPrevHover = 0;
+    m_nCurCollider = 0;
 }
 
 AssetProperties::~AssetProperties()
@@ -79,11 +80,17 @@ void AssetProperties::HandleInput_Mesh()
     {
         if (pAsset->m_pMaterial->GetType() == MATERIAL_TOON &&
             m_tfIntervals.IsSelected())
+        {
             reinterpret_cast<ToonMaterial*>(pAsset->m_pMaterial)->SetLightingIntervalCount(atoi(m_tfIntervals.GetText()));
+            UpdateView();
+        }
 
         if (pAsset->m_pMaterial->GetType() == MATERIAL_RIMLIT &&
             m_tfRimSize.IsSelected())
+        {
             reinterpret_cast<RimlitMaterial*>(pAsset->m_pMaterial)->SetRimSize((float) atof(m_tfRimSize.GetText()));
+            UpdateView();
+        }
 
         for (int i = 0; i < 3; i++)
         {
@@ -100,6 +107,7 @@ void AssetProperties::HandleInput_Mesh()
                 memcpy(arNewColor, pAsset->m_pMaterial->GetColor(), sizeof(float) * 4);
                 arNewColor[i] = (float) atof(m_tfColor[i].GetText());
                 pAsset->m_pMaterial->SetColor(arNewColor);
+                UpdateView();
             }
             
             if (pAsset->m_pMaterial->GetType() == MATERIAL_RIMLIT &&
@@ -107,25 +115,63 @@ void AssetProperties::HandleInput_Mesh()
             {
                 float arNewColor[4];
                 memcpy(arNewColor, reinterpret_cast<RimlitMaterial*>(pAsset->m_pMaterial)->GetRimColor(), sizeof(float) * 4);
-                arNewColor[i] = (float) atof(m_tfColor[i].GetText());
+                arNewColor[i] = (float) atof(m_tfRimColor[i].GetText());
                 reinterpret_cast<RimlitMaterial*>(pAsset->m_pMaterial)->SetRimColor(arNewColor);
+                UpdateView();
             }
 
-            //ListNode* pCurColliderNode = pAsset->m_lColliders.Get(m_nCurCollider);
+            ListNode* pCurColliderNode = pAsset->m_lColliders.Get(m_nCurCollider);
 
-            //if (pAsset->m_lColliders.Count() >= 0 &&
-            //    pCurColliderNode             != 0)
-            //{
-            //    float arNewColor[4];
-            //    memcpy(arNewColor, reinterpret_cast<OrientedBoxCollider*>(pCurColliderNode->m_pData)->GetColor(), sizeof(float) * 4);
-            //    arNewColor[i] = atof(m_tfColliderColor[i].GetText());
-            //    reinterpret_cast<OrientedBoxCollider*>(pCurColliderNode->m_pData)->SetColor(arNewColor);
-            //}
+            if (pAsset->m_lColliders.Count() >= 0 &&
+                pCurColliderNode             != 0)
+            {
+                OrientedBoxCollider* pCollider = reinterpret_cast<OrientedBoxCollider*>(pCurColliderNode->m_pData);
+                
+                if (m_tfColliderColor[i].IsSelected())
+                {
+                    float arNewColor[4];
+                    memcpy(arNewColor, pCollider->GetColor(), sizeof(float) * 4);
+                    arNewColor[i] = (float) atof(m_tfColliderColor[i].GetText());
+                    pCollider->SetColor(arNewColor);
+                    UpdateView();
+                }
+
+                if (i < 3 &&
+                    m_tfColliderCenter[i].IsSelected())
+                {
+                    float arCenter[3];
+                    memcpy(arCenter, pCollider->GetRelativePosition(), sizeof(float) * 3);
+                    arCenter[i] = (float) atof(m_tfColliderCenter[i].GetText());
+                    pCollider->SetRelativePosition(arCenter[0], arCenter[1], arCenter[2]);
+                    UpdateView();
+                }
+
+                if (i < 3 &&
+                    m_tfColliderExtents[i].IsSelected())
+                {
+                    float arExtents[3];
+                    memcpy(arExtents, pCollider->GetHalfExtents(), sizeof(float) * 3);
+                    arExtents[i] = (float) atof(m_tfColliderExtents[i].GetText());
+                    pCollider->SetHalfExtents(arExtents[0], arExtents[1], arExtents[2]);
+                    UpdateView();
+                }
+
+                if (i < 3 &&
+                    m_tfColliderRotation[i].IsSelected())
+                {
+                    float arRotation[3];
+                    memcpy(arRotation, pCollider->GetRelativeRotation(), sizeof(float) * 3);
+                    arRotation[i] = (float) atof(m_tfColliderRotation[i].GetText());
+                    pCollider->SetRelativeRotation(arRotation[0], arRotation[1], arRotation[2]);
+                    UpdateView();
+                }
+            }
         }
     }
     if (IsPointerJustUp())
     {
-        if(m_btMaterialType.IsPointerHovering())
+        if(m_btMaterialType.IsVisible() &&
+           m_btMaterialType.IsPointerHovering())
         {
             // Change material type
             int nType = pAsset->m_pMaterial->GetType();
@@ -164,6 +210,59 @@ void AssetProperties::HandleInput_Mesh()
 
             // Set the new material
             pAsset->m_pMaterial = pNewMat;
+
+            UpdateView();
+        }
+        else if (m_btRimStyle.IsVisible() &&
+                 m_btRimStyle.IsPointerHovering())
+        {
+            if (pAsset->m_pMaterial->GetType() == MATERIAL_RIMLIT)
+            {
+                int nStyle = reinterpret_cast<RimlitMaterial*>(pAsset->m_pMaterial)->GetRimStyle();
+                if (nStyle == RIM_STYLE_HARD)
+                    nStyle = RIM_STYLE_SOFT;
+                else
+                    nStyle = RIM_STYLE_HARD;
+                reinterpret_cast<RimlitMaterial*>(pAsset->m_pMaterial)->SetRimStyle(nStyle);
+            }
+
+            UpdateView();
+        }
+        else if (m_btCollider.IsVisible() &&
+                 m_btCollider.IsPointerHovering())
+        {
+            m_nCurCollider++;
+
+            if (m_nCurCollider >= pAsset->m_lColliders.Count())
+                m_nCurCollider = 0;
+            else if (m_nCurCollider < 0)
+                m_nCurCollider = 0;
+
+            UpdateView();
+        }
+        else if (m_btAddCollider.IsVisible() &&
+                 m_btAddCollider.IsPointerHovering())
+        {
+            pAsset->m_lColliders.Add(new OrientedBoxCollider());
+
+            UpdateView();
+        }
+        else if (m_btRemoveCollider.IsVisible() &&
+                 m_btRemoveCollider.IsPointerHovering() &&
+                 pAsset->m_lColliders.Count() > 0)
+        {
+            OrientedBoxCollider* pCollider = reinterpret_cast<OrientedBoxCollider*>(pAsset->m_lColliders.Get(pAsset->m_lColliders.Count() - 1)->m_pData);
+            pAsset->m_lColliders.Remove(pCollider);
+
+            // free data that the Add Button created
+            delete pCollider;
+            pCollider = 0;
+
+            // Make sure the current collider variable is still in bounds
+            if (m_nCurCollider >= pAsset->m_lColliders.Count())
+                m_nCurCollider = pAsset->m_lColliders.Count() - 1;
+            else if (m_nCurCollider < 0)
+                m_nCurCollider = 0;
 
             UpdateView();
         }
@@ -400,15 +499,15 @@ void AssetProperties::InitializeView()
     m_btRemoveCollider.SetTextScale(BT_SCALE_X, BT_SCALE_Y);
     m_btRemoveCollider.SetTextString("-");
 
-    m_tColliderCenter.SetText("Center");
+    m_tColliderCenter.SetText("Pos");
     m_tColliderCenter.SetColor(TEXT_COLOR);
     m_tColliderCenter.SetScale(T_SCALE_X, T_SCALE_Y);
 
-    m_tColliderExtents.SetText("Extents");
+    m_tColliderExtents.SetText("Ext");
     m_tColliderExtents.SetColor(TEXT_COLOR);
     m_tColliderExtents.SetScale(T_SCALE_X, T_SCALE_Y);
     
-    m_tColliderRotation.SetText("Rotation");
+    m_tColliderRotation.SetText("Rot");
     m_tColliderRotation.SetColor(TEXT_COLOR);
     m_tColliderRotation.SetScale(T_SCALE_X, T_SCALE_Y);
 
@@ -429,13 +528,16 @@ void AssetProperties::InitializeView()
     for (int i = 0; i < 3; i++)
     {
         SetTextFieldColors(m_tfColliderCenter[i]);
-        m_tfColliderCenter[i].SetTextScale(TF_SCALE_X, TF_SCALE_Y);
+        m_tfColliderCenter[i].SetTextScale(0.3f, 0.64f);
+        m_tfColliderCenter[i].SetMaxSize(8);
 
         SetTextFieldColors(m_tfColliderExtents[i]);
-        m_tfColliderExtents[i].SetTextScale(TF_SCALE_X, TF_SCALE_Y);
+        m_tfColliderExtents[i].SetTextScale(0.3f, 0.64f);
+        m_tfColliderExtents[i].SetMaxSize(8);
 
         SetTextFieldColors(m_tfColliderRotation[i]);
-        m_tfColliderRotation[i].SetTextScale(TF_SCALE_X, TF_SCALE_Y);
+        m_tfColliderRotation[i].SetTextScale(0.3f, 0.64f);
+        m_tfColliderRotation[i].SetMaxSize(8);
     }
 
     for (int i = 0; i < 4; i++)
@@ -545,7 +647,7 @@ void AssetProperties::UpdateView_Mesh()
                                  fY - BUTTON_OFF_Y,
                                  0.1f,
                                  BUTTON_HEIGHT);
-            if (reinterpret_cast<RimlitMaterial*>(pAsset->m_pMaterial)->GetRimSize() == RIM_STYLE_SOFT)
+            if (reinterpret_cast<RimlitMaterial*>(pAsset->m_pMaterial)->GetRimStyle() == RIM_STYLE_SOFT)
                 m_btRimStyle.SetTextString("Soft");
             else
                 m_btRimStyle.SetTextString("Hard");
@@ -590,10 +692,103 @@ void AssetProperties::UpdateView_Mesh()
             m_tfIntervals.SetText_Int(reinterpret_cast<ToonMaterial*>(pAsset->m_pMaterial)->GetLightingIntervalCount());
             m_tfIntervals.SetVisible(1);
 
+            fY -= m_fSpacing;
+
             break;
         default:
             m_btMaterialType.SetTextString("Unknown");
             break;
+        }
+
+        // Collider Properties
+        m_tCollider.SetPosition(fX, fY);
+        m_tCollider.SetVisible(1);
+
+        m_btCollider.SetRect(fX + 0.15f,
+                             fY - BUTTON_OFF_Y,
+                             0.035f,
+                             BUTTON_HEIGHT);
+        m_btCollider.SetVisible(1);
+        if (pAsset->m_lColliders.Count() == 0)
+        {
+            m_btCollider.SetTextString("X");
+        }
+        else
+        {
+            // Verify the bounds of m_nCurCollider
+            if (m_nCurCollider >= pAsset->m_lColliders.Count())
+                m_nCurCollider = pAsset->m_lColliders.Count() - 1;
+            if (m_nCurCollider < 0)
+                m_nCurCollider = 0;
+
+            m_btCollider.SetTextString_Int(m_nCurCollider);
+        }
+
+        m_btAddCollider.SetRect(fX + 0.20f,
+                                fY - BUTTON_OFF_Y,
+                                0.035f,
+                                BUTTON_HEIGHT);
+        m_btAddCollider.SetVisible(1);
+
+        m_btRemoveCollider.SetRect(fX + 0.25f,
+                                   fY - BUTTON_OFF_Y,
+                                   0.035f,
+                                   BUTTON_HEIGHT);
+        m_btRemoveCollider.SetVisible(1);
+
+        fY -= m_fSpacing;
+
+        if (pAsset->m_lColliders.Count() > 0)
+        {
+            OrientedBoxCollider* pCollider = reinterpret_cast<OrientedBoxCollider*>(pAsset->m_lColliders.Get(m_nCurCollider)->m_pData);
+
+            m_tColliderCenter.SetPosition(fX, fY);
+            m_tColliderCenter.SetVisible(1);
+
+            m_tColliderExtents.SetPosition(fX, fY - m_fSpacing);
+            m_tColliderExtents.SetVisible(1);
+
+            m_tColliderRotation.SetPosition(fX, fY - 2*m_fSpacing);
+            m_tColliderRotation.SetVisible(1);
+
+            m_tColliderColor.SetPosition(fX, fY - 3*m_fSpacing);
+            m_tColliderColor.SetVisible(1);
+
+            for (int i = 0; i < 3; i++)
+            {
+                m_tfColliderCenter[i].SetRect(fX + 0.05f + 0.095f*i,
+                                              fY - BUTTON_OFF_Y,
+                                              0.085f,
+                                              BUTTON_HEIGHT);
+                m_tfColliderCenter[i].SetVisible(1);
+                m_tfColliderCenter[i].SetText_Float(pCollider->GetRelativePosition()[i], 2);
+
+                m_tfColliderExtents[i].SetRect(fX + 0.05f + 0.095f*i,
+                                               fY - BUTTON_OFF_Y - m_fSpacing,
+                                               0.085f,
+                                               BUTTON_HEIGHT);
+                m_tfColliderExtents[i].SetVisible(1);
+                m_tfColliderExtents[i].SetText_Float(pCollider->GetHalfExtents()[i], 2);
+
+                m_tfColliderRotation[i].SetRect(fX + 0.05f + 0.095f*i,
+                                                fY - BUTTON_OFF_Y - m_fSpacing*2,
+                                                0.085f,
+                                                BUTTON_HEIGHT);
+                m_tfColliderRotation[i].SetVisible(1);
+                m_tfColliderRotation[1].SetText_Float(pCollider->GetRelativeRotation()[i], 2);
+            }
+
+            for (int i = 0; i < 4; i++)
+            {
+                m_tfColliderColor[i].SetRect(fX + 0.01f + 0.065f * (i+1),
+                                             fY - BUTTON_OFF_Y - m_fSpacing*3,
+                                             0.06f,
+                                             BUTTON_HEIGHT);
+                m_tfColliderColor[i].SetVisible(1);
+                m_tfColliderColor[i].SetText_Float(pCollider->GetColor()[i]);
+            }
+
+            fY -= m_fSpacing*4;
         }
         
     }

@@ -87,6 +87,8 @@ public:
                   float fBlue,
                   float fAlpha);
 
+    void SetColor(float* arColor);
+
     float* GetColor();
 
     //## **********************************************************************

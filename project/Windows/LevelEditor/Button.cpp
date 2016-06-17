@@ -1,5 +1,6 @@
 #include "Button.h"
 #include "VInput.h"
+#include <stdio.h>
 
 #define DEFAULT_X_OFFSET 0.008f
 #define DEFAULT_Y_OFFSET 0.01f
@@ -143,4 +144,18 @@ void Button::SetBorderColor(float fRed,
                             float fAlpha)
 {
     m_quad.SetBorderColor(fRed, fGreen, fBlue, fAlpha);
+}
+
+void Button::SetTextString_Float(float fFloat)
+{
+    char arBuffer[16] = {0};
+    _snprintf(arBuffer, 15, "%f", fFloat);
+    m_text.SetText(arBuffer);
+}
+
+void Button::SetTextString_Int(int nInt)
+{
+    char arBuffer[16] = {0};
+    _snprintf(arBuffer, 15, "%d", nInt);
+    m_text.SetText(arBuffer);
 }

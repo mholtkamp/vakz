@@ -106,6 +106,16 @@ void OrientedBoxCollider::SetHalfExtents(float fHalfX,
     m_arHalfExtents[2] = fHalfZ;
 }
 
+float* OrientedBoxCollider::GetHalfExtents()
+{
+    return m_arHalfExtents;
+}
+
+float* OrientedBoxCollider::GetRelativeRotation()
+{
+    return m_arRotation;
+}
+
 void OrientedBoxCollider::SetRelativeRotation(float fRotX,
                                               float fRotY,
                                               float fRotZ)

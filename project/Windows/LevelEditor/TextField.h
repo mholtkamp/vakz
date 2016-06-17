@@ -51,6 +51,7 @@ public:
 
     void SetText(char* pStr);
     void SetText_Float(float fFloat);
+    void SetText_Float(float fFloat, int nPlaces);
     void SetText_Int(int nInt);
 
     void SetBackColor(const float* arColor);

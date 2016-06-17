@@ -77,6 +77,14 @@ void Collider::SetColor(float fRed,
     m_arRenderColor[3] = fAlpha;
 }
 
+void Collider::SetColor(float* arColor)
+{
+    m_arRenderColor[0] = arColor[0];
+    m_arRenderColor[1] = arColor[1];
+    m_arRenderColor[2] = arColor[2];
+    m_arRenderColor[3] = arColor[3];
+}
+
 float* Collider::GetColor()
 {
     return m_arRenderColor;

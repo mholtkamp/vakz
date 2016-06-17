@@ -75,6 +75,7 @@ private:
     // Data
     Asset* m_pAsset;
     Button* m_pPrevHover;
+    int m_nCurCollider;
 };
 
 #endif

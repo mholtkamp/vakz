@@ -35,6 +35,10 @@ public:
 
      void GetBounds(void* pMatter, float* arMin, float* arMax);
 
+     float* GetHalfExtents();
+
+     float* GetRelativeRotation();
+
 private:
 
     Matrix m_matRotation;

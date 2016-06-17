@@ -58,6 +58,10 @@ public:
                         float fBlue,
                         float fAlpha);
 
+    void SetTextString_Int(int nInt);
+
+    void SetTextString_Float(float fFloat);
+
 private:
 
     Rect m_rect;

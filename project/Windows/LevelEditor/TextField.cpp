@@ -557,6 +557,13 @@ void TextField::SetText_Float(float fFloat)
     m_text.SetText(m_pTextString);
 }
 
+void TextField::SetText_Float(float fFloat, int nPlaces)
+{
+    memset(m_pTextString, 0, m_nMaxSize);
+    _snprintf(m_pTextString, m_nMaxSize-1, "%.*f", nPlaces, fFloat);
+    m_text.SetText(m_pTextString);
+}
+
 void TextField::SetText_Int(int nInt)
 {
     memset(m_pTextString, 0, m_nMaxSize);
