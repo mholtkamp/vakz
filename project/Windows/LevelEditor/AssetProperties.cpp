@@ -92,13 +92,6 @@ void AssetProperties::HandleInput_Mesh()
             UpdateView();
         }
 
-        for (int i = 0; i < 3; i++)
-        {
-            //m_tfColliderCenter[i].Update(nJustUp, fX, fY);
-            //m_tfColliderExtents[i].Update(nJustUp, fX, fY);
-            //m_tfColliderRotation[i].Update(nJustUp, fX, fY);
-        }
-
         for (int i = 0; i < 4; i++)
         {
             if (m_tfColor[i].IsSelected())
@@ -775,7 +768,7 @@ void AssetProperties::UpdateView_Mesh()
                                                 0.085f,
                                                 BUTTON_HEIGHT);
                 m_tfColliderRotation[i].SetVisible(1);
-                m_tfColliderRotation[1].SetText_Float(pCollider->GetRelativeRotation()[i], 2);
+                m_tfColliderRotation[i].SetText_Float(pCollider->GetRelativeRotation()[i], 2);
             }
 
             for (int i = 0; i < 4; i++)
