@@ -520,7 +520,6 @@ void AssetBank::ImportAsset()
     OPENFILENAME ofn;       // common dialog box structure
     char szFile[260];       // buffer for file name
     HWND hwnd = GetActiveWindow();              // owner window
-    HANDLE hf;              // file handle
     char* pStr = 0;
 
     // Initialize OPENFILENAME

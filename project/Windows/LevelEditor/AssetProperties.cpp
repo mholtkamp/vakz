@@ -259,6 +259,16 @@ void AssetProperties::HandleInput_Mesh()
 
             UpdateView();
         }
+        else if (m_btAssignDefaultTexture.IsVisible() &&
+                 m_btAssignDefaultTexture.IsPointerHovering())
+        {
+            Asset* pSelAsset = reinterpret_cast<LevelEditor*>(m_pEditor)->GetSelectedAsset();
+            if (pSelAsset->GetType() == ASSET_TEXTURE)
+            {
+                pAsset->m_pDefaultTextureAsset = pSelAsset;
+                UpdateView();
+            }
+        }
     }
     else if (IsPointerDown())
     {
@@ -475,6 +485,7 @@ void AssetProperties::InitializeView()
 
     ColorButtonOff(m_btAssignDefaultTexture);
     m_btAssignDefaultTexture.SetTextScale(BT_SCALE_X, BT_SCALE_Y);
+    m_btAssignDefaultTexture.SetTextString("v");
 
     // Collider Section
     m_tCollider.SetText("Collider:");
@@ -692,6 +703,37 @@ void AssetProperties::UpdateView_Mesh()
             m_btMaterialType.SetTextString("Unknown");
             break;
         }
+
+        // Default Texture
+        m_tDefaultTexture.SetPosition(fX, fY);
+        m_tDefaultTexture.SetVisible(1);
+
+        m_btDefaultTexture.SetRect(fX + 0.12f,
+                                   fY - BUTTON_OFF_Y,
+                                   0.16f,
+                                   BUTTON_HEIGHT);
+        m_btDefaultTexture.SetVisible(1);
+        if (pAsset->m_pDefaultTextureAsset != 0)
+        {
+            m_btDefaultTexture.SetTextString(pAsset->m_pDefaultTextureAsset->m_arName);
+
+            if (strlen(pAsset->m_pDefaultTextureAsset->m_arName) > 10)
+            {
+                m_btDefaultTexture.SetTextScale(0.25f, BT_SCALE_Y);
+            }
+            else
+            {
+                m_btDefaultTexture.SetTextScale(BT_SCALE_X, BT_SCALE_Y);
+            }
+        }
+
+        m_btAssignDefaultTexture.SetRect(fX + 0.29f,
+                                         fY - BUTTON_OFF_Y,
+                                         0.035f,
+                                         BUTTON_HEIGHT);
+        m_btAssignDefaultTexture.SetVisible(1);
+
+        fY -= m_fSpacing;
 
         // Collider Properties
         m_tCollider.SetPosition(fX, fY);

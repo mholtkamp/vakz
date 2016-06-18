@@ -103,12 +103,14 @@ struct MeshAsset : public Asset
     StaticMesh* m_pMesh;
     Material* m_pMaterial;
     List m_lColliders;
+    Asset* m_pDefaultTextureAsset;
 
     MeshAsset()
     {
         m_pMesh     = 0;
         m_pMaterial = 0;
         m_nType = ASSET_MESH;
+        m_pDefaultTextureAsset = 0;
     }
 
     ~MeshAsset()
