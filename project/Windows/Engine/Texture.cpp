@@ -17,6 +17,7 @@ Texture::Texture()
     m_nWidth   = 0;
     m_nHeight  = 0;
     m_nFormat  = 0;
+    m_nFiltering = LINEAR;
 }
 
 //*****************************************************************************
@@ -201,6 +202,8 @@ void Texture::SetFiltering(int nFilterType)
 	    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     }
+
+    m_nFiltering = nFilterType;
 }
 
 //*****************************************************************************
@@ -217,4 +220,9 @@ unsigned int Texture::GetHandle()
 void Texture::SetHandle(unsigned int hTexture)
 {
     m_hTexture = hTexture;
+}
+
+int Texture::GetFiltering()
+{
+    return m_nFiltering;
 }

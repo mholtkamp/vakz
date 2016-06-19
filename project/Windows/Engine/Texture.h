@@ -84,6 +84,8 @@ public:
     //## **********************************************************************
     void SetHandle(unsigned int hTexture);
 
+    int GetFiltering();
+
     enum TextureEnum
     {
         TEXTURE_MAX_SIZE        = 2048,
@@ -110,6 +112,9 @@ private:
 
     //## Format of texture (ie. ALPHA, RGB, RGBA).
     int m_nFormat;
+
+    //## Filtering method, LINEAR or NEAREST
+    int m_nFiltering;
 };
 
 #endif

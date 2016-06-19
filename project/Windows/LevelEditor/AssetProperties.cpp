@@ -320,7 +320,13 @@ void AssetProperties::HandleInput_Texture()
 
     if (IsPointerJustUp())
     {
-
+        if (m_btTextureFilter.IsPointerHovering())
+        {
+            int nFiltering = pAsset->m_pTexture->GetFiltering();
+            nFiltering = !nFiltering;
+            pAsset->m_pTexture->SetFiltering(nFiltering);
+            UpdateView();
+        }
     }
     else if (IsPointerDown())
     {
@@ -899,6 +905,14 @@ void AssetProperties::UpdateView_Texture()
 
     float fX = m_rect.m_fX + m_fPadding;
     float fY = m_rect.m_fY + m_rect.m_fHeight - HEADER_HEIGHT - 0.07f;
+    
+    if (m_pAsset == 0 ||
+        m_pAsset->GetType() != ASSET_TEXTURE)
+    {
+        return;
+    }
+
+    TextureAsset* pAsset = reinterpret_cast<TextureAsset*>(m_pAsset);
 
     // Set name of asset first
     m_tName1.SetPosition(fX, fY);
@@ -907,6 +921,22 @@ void AssetProperties::UpdateView_Texture()
     m_tName2.SetText(m_pAsset->m_arName);
     m_tName2.SetPosition(fX + 0.08f, fY);
     m_tName2.SetVisible(1);
+
+    fY -= m_fSpacing;
+    
+    // Filter-type
+    m_tTextureFilter.SetPosition(fX, fY);
+    m_tTextureFilter.SetVisible(1);
+
+    m_btTextureFilter.SetRect(fX + 0.11f,
+                              fY - BUTTON_OFF_Y,
+                              0.15f,
+                              BUTTON_HEIGHT);
+    m_btTextureFilter.SetVisible(1);
+    if (pAsset->m_pTexture->GetFiltering() == Texture::LINEAR)
+        m_btTextureFilter.SetTextString("Linear");
+    else 
+        m_btTextureFilter.SetTextString("Nearest");
 
     fY -= m_fSpacing;
 }
