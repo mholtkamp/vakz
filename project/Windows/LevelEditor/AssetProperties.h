@@ -32,6 +32,8 @@ public:
 
 private:
 
+    void ExtractFields_Mesh();
+
     // General Property Views
     Text m_tName1;
     Text m_tName2;
@@ -76,6 +78,7 @@ private:
     Asset* m_pAsset;
     Button* m_pPrevHover;
     int m_nCurCollider;
+    TextField* m_pSelectedField;
 };
 
 #endif

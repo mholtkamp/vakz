@@ -58,6 +58,8 @@ TextField::TextField()
     m_quad.EnableBorder(1);
 
     m_nVisible = 1;
+    m_pNextField = 0;
+    m_nClearOnSelect = 1;
 }
 
 TextField::~TextField()
@@ -208,6 +210,11 @@ void TextField::SetSelect(int nSelect)
                         m_arSelTextColor[1],
                         m_arSelTextColor[2],
                         m_arSelTextColor[3]);
+
+        if (m_nClearOnSelect != 0)
+        {
+            SetText("");
+        }
     }
     else
     {
@@ -314,6 +321,19 @@ void TextField::Update(int nMouseDown,
             m_text.SetText(m_pTextString);
             return;
         }
+    }
+}
+
+void TextField::Update(int nMouseDown,
+                       float fX,
+                       float fY,
+                       TextField*& pSelected)
+{
+    Update(nMouseDown, fX, fY);
+
+    if (m_nSelected != 0)
+    {
+        pSelected = this;
     }
 }
 
@@ -654,4 +674,20 @@ void TextField::SetSelectTextColor(const float* arColor)
     {
         m_text.SetColor(m_arSelTextColor);
     }
+}
+
+void TextField::SetNextField(TextField* pNext)
+{
+    m_pNextField = pNext;    
+}
+
+void TextField::Tab()
+{
+    if (m_pNextField != 0)
+    {
+        // There is a next field so we can tab.
+        m_pNextField->SetSelect(1);
+    }
+    
+    SetSelect(0);
 }

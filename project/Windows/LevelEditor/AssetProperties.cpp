@@ -31,6 +31,7 @@ AssetProperties::AssetProperties()
     m_pAsset = 0;
     m_pPrevHover = 0;
     m_nCurCollider = 0;
+    m_pSelectedField = 0;
 }
 
 AssetProperties::~AssetProperties()
@@ -78,87 +79,14 @@ void AssetProperties::HandleInput_Mesh()
     if (IsKeyDown(VKEY_ENTER)||
         IsPointerJustUp())
     {
-        if (pAsset->m_pMaterial->GetType() == MATERIAL_TOON &&
-            m_tfIntervals.IsSelected())
+        ExtractFields_Mesh();
+    }
+    if (IsKeyJustDown(VKEY_TAB))
+    {
+        ExtractFields_Mesh();
+        if (m_pSelectedField != 0)
         {
-            reinterpret_cast<ToonMaterial*>(pAsset->m_pMaterial)->SetLightingIntervalCount(atoi(m_tfIntervals.GetText()));
-            UpdateView();
-        }
-
-        if (pAsset->m_pMaterial->GetType() == MATERIAL_RIMLIT &&
-            m_tfRimSize.IsSelected())
-        {
-            reinterpret_cast<RimlitMaterial*>(pAsset->m_pMaterial)->SetRimSize((float) atof(m_tfRimSize.GetText()));
-            UpdateView();
-        }
-
-        for (int i = 0; i < 4; i++)
-        {
-            if (m_tfColor[i].IsSelected())
-            {
-                float arNewColor[4];
-                memcpy(arNewColor, pAsset->m_pMaterial->GetColor(), sizeof(float) * 4);
-                arNewColor[i] = (float) atof(m_tfColor[i].GetText());
-                pAsset->m_pMaterial->SetColor(arNewColor);
-                UpdateView();
-            }
-            
-            if (pAsset->m_pMaterial->GetType() == MATERIAL_RIMLIT &&
-                m_tfRimColor[i].IsSelected())
-            {
-                float arNewColor[4];
-                memcpy(arNewColor, reinterpret_cast<RimlitMaterial*>(pAsset->m_pMaterial)->GetRimColor(), sizeof(float) * 4);
-                arNewColor[i] = (float) atof(m_tfRimColor[i].GetText());
-                reinterpret_cast<RimlitMaterial*>(pAsset->m_pMaterial)->SetRimColor(arNewColor);
-                UpdateView();
-            }
-
-            ListNode* pCurColliderNode = pAsset->m_lColliders.Get(m_nCurCollider);
-
-            if (pAsset->m_lColliders.Count() >= 0 &&
-                pCurColliderNode             != 0)
-            {
-                OrientedBoxCollider* pCollider = reinterpret_cast<OrientedBoxCollider*>(pCurColliderNode->m_pData);
-                
-                if (m_tfColliderColor[i].IsSelected())
-                {
-                    float arNewColor[4];
-                    memcpy(arNewColor, pCollider->GetColor(), sizeof(float) * 4);
-                    arNewColor[i] = (float) atof(m_tfColliderColor[i].GetText());
-                    pCollider->SetColor(arNewColor);
-                    UpdateView();
-                }
-
-                if (i < 3 &&
-                    m_tfColliderCenter[i].IsSelected())
-                {
-                    float arCenter[3];
-                    memcpy(arCenter, pCollider->GetRelativePosition(), sizeof(float) * 3);
-                    arCenter[i] = (float) atof(m_tfColliderCenter[i].GetText());
-                    pCollider->SetRelativePosition(arCenter[0], arCenter[1], arCenter[2]);
-                    UpdateView();
-                }
-
-                if (i < 3 &&
-                    m_tfColliderExtents[i].IsSelected())
-                {
-                    float arExtents[3];
-                    memcpy(arExtents, pCollider->GetHalfExtents(), sizeof(float) * 3);
-                    arExtents[i] = (float) atof(m_tfColliderExtents[i].GetText());
-                    pCollider->SetHalfExtents(arExtents[0], arExtents[1], arExtents[2]);
-                    UpdateView();
-                }
-
-                if (i < 3 &&
-                    m_tfColliderRotation[i].IsSelected())
-                {
-                    float arRotation[3];
-                    memcpy(arRotation, pCollider->GetRelativeRotation(), sizeof(float) * 3);
-                    arRotation[i] = (float) atof(m_tfColliderRotation[i].GetText());
-                    pCollider->SetRelativeRotation(arRotation[0], arRotation[1], arRotation[2]);
-                    UpdateView();
-                }
-            }
+            m_pSelectedField->Tab();
         }
     }
     if (IsPointerJustUp())
@@ -357,21 +285,28 @@ void AssetProperties::HandleInput_Mesh()
 
     // Update all text fields
     int nJustUp = IsPointerJustUp();
-    m_tfIntervals.Update(nJustUp, fX, fY);
-    m_tfRimSize.Update(nJustUp, fX, fY);
+    if (nJustUp != 0)
+    {
+        // The pointer is just up so clear the selected field and see if a new 
+        // field has been selected
+        m_pSelectedField = 0;
+    }
+
+    m_tfIntervals.Update(nJustUp, fX, fY, m_pSelectedField);
+    m_tfRimSize.Update(nJustUp, fX, fY, m_pSelectedField);
 
     for (int i = 0; i < 3; i++)
     {
-        m_tfColliderCenter[i].Update(nJustUp, fX, fY);
-        m_tfColliderExtents[i].Update(nJustUp, fX, fY);
-        m_tfColliderRotation[i].Update(nJustUp, fX, fY);
+        m_tfColliderCenter[i].Update(nJustUp, fX, fY, m_pSelectedField);
+        m_tfColliderExtents[i].Update(nJustUp, fX, fY, m_pSelectedField);
+        m_tfColliderRotation[i].Update(nJustUp, fX, fY, m_pSelectedField);
     }
 
     for (int i = 0; i < 4; i++)
     {
-        m_tfColor[i].Update(nJustUp, fX, fY);
-        m_tfRimColor[i].Update(nJustUp, fX, fY);
-        m_tfColliderColor[i].Update(nJustUp, fX, fY);
+        m_tfColor[i].Update(nJustUp, fX, fY, m_pSelectedField);
+        m_tfRimColor[i].Update(nJustUp, fX, fY, m_pSelectedField);
+        m_tfColliderColor[i].Update(nJustUp, fX, fY, m_pSelectedField);
     }
 }
 
@@ -418,6 +353,124 @@ void AssetProperties::HandleInput_Sound()
     float fX = 0.0f;
     float fY = 0.0f;
     GetPointerPositionNormalized(fX,fY);
+}
+
+void AssetProperties::ExtractFields_Mesh()
+{
+    MeshAsset* pAsset = reinterpret_cast<MeshAsset*>(m_pAsset);
+
+    if (m_pSelectedField == 0)
+    {
+        // Nothing selected, so do not extract
+        return;
+    }
+
+    if (strlen(m_pSelectedField->GetText()) == 0)
+    {
+        // Nothing was entered into textfield, so do not extract
+        // anything from it.
+        m_pSelectedField->SetSelect(0);
+        UpdateView();
+        return;
+    }
+
+    if (pAsset->m_pMaterial->GetType() == MATERIAL_TOON &&
+        m_tfIntervals.IsSelected())
+    {
+        reinterpret_cast<ToonMaterial*>(pAsset->m_pMaterial)->SetLightingIntervalCount(atoi(m_tfIntervals.GetText()));
+        m_pSelectedField->SetSelect(0);
+        UpdateView();
+        return;
+    }
+
+    if (pAsset->m_pMaterial->GetType() == MATERIAL_RIMLIT &&
+        m_tfRimSize.IsSelected())
+    {
+        reinterpret_cast<RimlitMaterial*>(pAsset->m_pMaterial)->SetRimSize((float) atof(m_tfRimSize.GetText()));
+        UpdateView();
+        return;
+    }
+
+    for (int i = 0; i < 4; i++)
+    {
+        if (m_tfColor[i].IsSelected())
+        {
+            float arNewColor[4];
+            memcpy(arNewColor, pAsset->m_pMaterial->GetColor(), sizeof(float) * 4);
+            arNewColor[i] = (float) atof(m_tfColor[i].GetText());
+            pAsset->m_pMaterial->SetColor(arNewColor);
+            m_tfColor[i].SetSelect(0);
+            UpdateView();
+            return;
+        }
+            
+        if (pAsset->m_pMaterial->GetType() == MATERIAL_RIMLIT &&
+            m_tfRimColor[i].IsSelected())
+        {
+            float arNewColor[4];
+            memcpy(arNewColor, reinterpret_cast<RimlitMaterial*>(pAsset->m_pMaterial)->GetRimColor(), sizeof(float) * 4);
+            arNewColor[i] = (float) atof(m_tfRimColor[i].GetText());
+            reinterpret_cast<RimlitMaterial*>(pAsset->m_pMaterial)->SetRimColor(arNewColor);
+            m_tfRimColor[i].SetSelect(0);
+            UpdateView();
+            return;
+        }
+
+        ListNode* pCurColliderNode = pAsset->m_lColliders.Get(m_nCurCollider);
+
+        if (pAsset->m_lColliders.Count() >= 0 &&
+            pCurColliderNode             != 0)
+        {
+            OrientedBoxCollider* pCollider = reinterpret_cast<OrientedBoxCollider*>(pCurColliderNode->m_pData);
+                
+            if (m_tfColliderColor[i].IsSelected())
+            {
+                float arNewColor[4];
+                memcpy(arNewColor, pCollider->GetColor(), sizeof(float) * 4);
+                arNewColor[i] = (float) atof(m_tfColliderColor[i].GetText());
+                pCollider->SetColor(arNewColor);
+                m_tfColliderColor[i].SetSelect(0);
+                UpdateView();
+                return;
+            }
+
+            if (i < 3 &&
+                m_tfColliderCenter[i].IsSelected())
+            {
+                float arCenter[3];
+                memcpy(arCenter, pCollider->GetRelativePosition(), sizeof(float) * 3);
+                arCenter[i] = (float) atof(m_tfColliderCenter[i].GetText());
+                pCollider->SetRelativePosition(arCenter[0], arCenter[1], arCenter[2]);
+                m_tfColliderCenter[i].SetSelect(0);
+                UpdateView();
+                return;
+            }
+
+            if (i < 3 &&
+                m_tfColliderExtents[i].IsSelected())
+            {
+                float arExtents[3];
+                memcpy(arExtents, pCollider->GetHalfExtents(), sizeof(float) * 3);
+                arExtents[i] = (float) atof(m_tfColliderExtents[i].GetText());
+                pCollider->SetHalfExtents(arExtents[0], arExtents[1], arExtents[2]);
+                m_tfColliderExtents[i].SetSelect(0);
+                UpdateView();
+                return;
+            }
+
+            if (i < 3 &&
+                m_tfColliderRotation[i].IsSelected())
+            {
+                float arRotation[3];
+                memcpy(arRotation, pCollider->GetRelativeRotation(), sizeof(float) * 3);
+                arRotation[i] = (float) atof(m_tfColliderRotation[i].GetText());
+                pCollider->SetRelativeRotation(arRotation[0], arRotation[1], arRotation[2]);
+                m_tfColliderRotation[i].SetSelect(0);
+                UpdateView();
+                return;
+            }
+        }
+    }
 }
 
 void AssetProperties::InitializeView()
@@ -532,16 +585,19 @@ void AssetProperties::InitializeView()
     for (int i = 0; i < 3; i++)
     {
         SetTextFieldColors(m_tfColliderCenter[i]);
-        m_tfColliderCenter[i].SetTextScale(0.3f, 0.64f);
+        m_tfColliderCenter[i].SetTextScale(0.26f, 0.64f);
         m_tfColliderCenter[i].SetMaxSize(8);
+        m_tfColliderCenter[i].SetNextField( (i < 2) ? &m_tfColliderCenter[i+1] : &m_tfColliderExtents[0]);
 
         SetTextFieldColors(m_tfColliderExtents[i]);
-        m_tfColliderExtents[i].SetTextScale(0.3f, 0.64f);
+        m_tfColliderExtents[i].SetTextScale(0.26f, 0.64f);
         m_tfColliderExtents[i].SetMaxSize(8);
+        m_tfColliderExtents[i].SetNextField( (i < 2) ? &m_tfColliderExtents[i+1] : &m_tfColliderRotation[0]);
 
         SetTextFieldColors(m_tfColliderRotation[i]);
-        m_tfColliderRotation[i].SetTextScale(0.3f, 0.64f);
+        m_tfColliderRotation[i].SetTextScale(0.26f, 0.64f);
         m_tfColliderRotation[i].SetMaxSize(8);
+        m_tfColliderRotation[i].SetNextField( (i < 2) ? &m_tfColliderRotation[i+1] : &m_tfColliderColor[0]);
     }
 
     for (int i = 0; i < 4; i++)
@@ -549,14 +605,17 @@ void AssetProperties::InitializeView()
         SetTextFieldColors(m_tfColor[i]);
         m_tfColor[i].SetMaxSize(6);
         m_tfColor[i].SetTextScale(0.25f, 0.64f);
+        m_tfColor[i].SetNextField( (i < 3) ? &m_tfColor[i+1] : 0);
 
         SetTextFieldColors(m_tfRimColor[i]);
         m_tfRimColor[i].SetMaxSize(6);
         m_tfRimColor[i].SetTextScale(0.25f, 0.64f);
+        m_tfRimColor[i].SetNextField( (i < 3) ? &m_tfRimColor[i+1] : 0);
 
         SetTextFieldColors(m_tfColliderColor[i]);
         m_tfColliderColor[i].SetMaxSize(6);
         m_tfColliderColor[i].SetTextScale(0.25f, 0.64f);
+        m_tfColliderColor[i].SetNextField( (i < 3) ? &m_tfColliderColor[i+1] : 0);
     }
 }
 
@@ -631,6 +690,7 @@ void AssetProperties::UpdateView_Mesh()
             m_tfColor[i].SetText_Float(pAsset->m_pMaterial->GetColor()[i]);
             m_tfColor[i].SetVisible(1);
         }
+
 
         fY -= m_fSpacing;
 
@@ -725,6 +785,10 @@ void AssetProperties::UpdateView_Mesh()
             {
                 m_btDefaultTexture.SetTextScale(BT_SCALE_X, BT_SCALE_Y);
             }
+        }
+        else 
+        {
+            m_btDefaultTexture.SetTextString("");
         }
 
         m_btAssignDefaultTexture.SetRect(fX + 0.29f,

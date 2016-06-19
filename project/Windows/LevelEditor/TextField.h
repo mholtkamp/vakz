@@ -77,6 +77,11 @@ public:
                 float fX,
                 float fY);
 
+    void Update(int nMouseDown,
+                float fX,
+                float fY,
+                TextField*& pSelected);
+
     int GetSelected();
 
     char* GetText();
@@ -91,6 +96,10 @@ public:
                       float fScaleY);
 
     void ClearText();
+
+    void SetNextField(TextField* pNext);
+
+    void Tab();
     
 
 private:
@@ -104,6 +113,8 @@ private:
     Quad m_quad;
     Text m_text;
     Rect m_rect;
+
+    TextField* m_pNextField;
 
     int m_nSelected;
 
@@ -124,6 +135,8 @@ private:
     char* m_pTextString;
 
     int m_nVisible;
+
+    int m_nClearOnSelect;
 };
 
 #endif
