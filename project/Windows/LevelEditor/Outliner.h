@@ -34,11 +34,15 @@ private:
 
     // Data
     Button* m_pPrevHover;
+    int m_nDispOffset;
 
     Actor* m_pSelectedActor;
     int m_nSelectedActor;
 
-    // List
+    int m_nMatterID;
+    int m_nLightID;
+    int m_nParticleID;
+
     List m_lActors;
 };
 

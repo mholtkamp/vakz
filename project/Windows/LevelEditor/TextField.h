@@ -99,6 +99,8 @@ public:
 
     void SetNextField(TextField* pNext);
 
+    void SetClearOnSelect(int nClear);
+
     void Tab();
     
 

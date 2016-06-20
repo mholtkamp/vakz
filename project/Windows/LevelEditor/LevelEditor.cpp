@@ -19,12 +19,17 @@ void LevelEditor::Initialize()
     m_winAssetProperties.SetEditor(this);
     m_winAssetProperties.RegisterScene(&m_scene);
     m_winAssetProperties.Initialize();
+
+    m_winOutliner.SetEditor(this);
+    m_winOutliner.RegisterScene(&m_scene);
+    m_winOutliner.Initialize();
 }
 
 void LevelEditor::HandleInput()
 {
     m_winAssetBank.HandleInput();
     m_winAssetProperties.HandleInput();
+    m_winOutliner.HandleInput();
 }
 
 Asset* LevelEditor::GetSelectedAsset()

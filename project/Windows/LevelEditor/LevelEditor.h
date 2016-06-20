@@ -5,6 +5,7 @@
 #include "Asset.h"
 #include "AssetBank.h"
 #include "AssetProperties.h"
+#include "Outliner.h"
 
 class LevelEditor
 {
@@ -21,6 +22,7 @@ public:
     Scene m_scene;
     AssetBank m_winAssetBank;
     AssetProperties m_winAssetProperties;
+    Outliner m_winOutliner;
 };
 
 #endif

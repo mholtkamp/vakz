@@ -681,6 +681,11 @@ void TextField::SetNextField(TextField* pNext)
     m_pNextField = pNext;    
 }
 
+void TextField::SetClearOnSelect(int nClear)
+{
+    m_nClearOnSelect = nClear;
+}
+
 void TextField::Tab()
 {
     if (m_pNextField != 0)
