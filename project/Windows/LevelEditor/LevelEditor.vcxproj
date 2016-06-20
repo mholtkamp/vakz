@@ -74,6 +74,7 @@
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="LevelEditor.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Outliner.cpp" />
     <ClCompile Include="TextField.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
