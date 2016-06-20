@@ -1,6 +1,7 @@
 #include "Outliner.h"
 #include "VInput.h"
 #include "PointLight.h"
+#include "LevelEditor.h"
 
 #include <stdio.h>
 
@@ -376,6 +377,43 @@ void Outliner::HandleInput()
         if (m_tfSearch.IsSelected())
         {
             m_tfSearch.SetSelect(0);
+            UpdateView();
+        }
+    }
+    if (IsKeyJustUp(VKEY_DELETE))
+    {
+        if (m_pSelectedActor != 0)
+        {
+            // Check to see if the inspected actor was the one that was just deleted
+            //LevelEditor* pEditor = reinterpret_cast<LevelEditor*>(m_pEditor);
+            //if (pEditor->GetInspectedActor() == m_pSelectedActor)
+            //{
+            //    pEditor->ClearInspectedActor();
+            //}
+
+            // Delete listnode
+            m_lActors.Remove(m_pSelectedActor);
+
+            // Delete Actor data
+            delete m_pSelectedActor;
+            m_pSelectedActor = 0;
+
+            // Auto select the next actor if one exists
+            if (m_nDispOffset + m_nSelectedActor >= 0 &&
+                m_nDispOffset + m_nSelectedActor < m_lActors.Count())
+            {
+                m_pSelectedActor = reinterpret_cast<Actor*>(m_lActors.Get(m_nDispOffset + m_nSelectedActor)->m_pData);
+            }
+            else
+            {
+                m_nSelectedActor--;
+
+                if (m_nSelectedActor >= m_lActors.Count())
+                    m_nSelectedActor = m_lActors.Count() - 1;
+                else if (m_nSelectedActor < 0)
+                    m_nSelectedActor = 0;
+            }
+
             UpdateView();
         }
     }

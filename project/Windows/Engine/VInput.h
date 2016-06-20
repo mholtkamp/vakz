@@ -94,7 +94,9 @@ enum VakzKeyEnum
     VKEY_LEFT_BRACKET  = 0xDB,
     VKEY_BACK_SLASH    = 0xDC,
     VKEY_RIGHT_BRACKET = 0xDD,
-    VKEY_QUOTE         = 0xDE
+    VKEY_QUOTE         = 0xDE,
+
+    VKEY_DELETE = 0x2E
 
 };
 
@@ -198,7 +200,9 @@ enum VakzKeyEnum
     VKEY_LEFT_BRACKET  = 71,
     VKEY_BACK_SLASH    = 73,
     VKEY_RIGHT_BRACKET = 72,
-    VKEY_QUOTE         = 218 // Couldnt find keycode
+    VKEY_QUOTE         = 218, // Couldnt find keycode
+
+    VKEY_DELETE = 67
 };
 
 enum VakzButtonEnum
