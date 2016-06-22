@@ -79,7 +79,7 @@
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ActorProperties.h" />
+    <ClInclude Include="Inspector.h" />
     <ClInclude Include="Asset.h" />
     <ClInclude Include="AssetBank.h" />
     <ClInclude Include="AssetProperties.h" />

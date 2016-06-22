@@ -278,7 +278,8 @@ void ParticleSystem::Update()
 
     // Since the rendering relies on the particle update being finished,
     // and the gpu does its processing asynchronously, we must wait until
-    // the gpu processing is done by using a sync object.
+    // the gpu processing is done by using a sync object. glFinish should
+    // work too, but might not be as effectient.
     m_pSync = glFenceSync(GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
 
     glDisable(GL_RASTERIZER_DISCARD);
