@@ -12,6 +12,8 @@
 #define MATTER_MAX_POINT_LIGHTS 3
 #define MATTER_MAX_DIRECTIONAL_LIGHTS 1
 
+int Matter::s_nGlobalColliderRenderingEnable = 1;
+
 //*****************************************************************************
 // Constructor
 //*****************************************************************************
@@ -258,7 +260,8 @@ void Matter::Render(void* pScene)
                      m_pMesh->GetVertexCount());
 
         // Render all the attached colliders if feature is enabled.
-        if (m_nRenderColliders != 0)
+        if (s_nGlobalColliderRenderingEnable != 0 &&
+            m_nRenderColliders != 0)
         {
             ListNode* pNode = m_lColliders.GetHead();
 
@@ -371,11 +374,12 @@ void Matter::SetScale(float fScaleX,
 //*****************************************************************************
 // Translate
 //*****************************************************************************
-void Matter::Translate(float fTransX,
-                       float fTransY,
-                       float fTransZ)
+int Matter::Translate(float fTransX,
+                      float fTransY,
+                      float fTransZ)
 {
     int i = 0;
+    int nRet = 0;
     float arOldPos[3] = {0.0f};
     float arDir[3] = {0.0f};
 
@@ -389,7 +393,7 @@ void Matter::Translate(float fTransX,
 
     if (m_pScene == 0)
     {
-        return;
+        return 0;
     }
 
     // If this object needs to be sorted, first remove it
@@ -460,6 +464,9 @@ void Matter::Translate(float fTransX,
 
                     if (orResult.m_nOverlapping != 0)
                     {
+                        // Flag the translate return as true.
+                        nRet = 1;
+
                         // Must push back the matter along least penetration axis.
                         // First add a small extra buffer to the pen depth to make sure
                         // that the collider is no longer overlapping
@@ -486,6 +493,8 @@ void Matter::Translate(float fTransX,
     {
         reinterpret_cast<Scene*>(m_pScene)->GetMatterOctree()->Add(this, m_box);
     }
+
+    return nRet;
 }
 
 //*****************************************************************************
@@ -987,4 +996,9 @@ void Matter::SetPointLightRenderState(void*        pScene,
     glUniform1fv(hLightIntensities, 3, arLightIntensities);
     glUniform1fv(hLightRadii, 3, arLightRadii);
     glUniform1i(hNumLights, nNumLights);
+}
+
+void Matter::SetGlobalColliderRenderingEnable(int nEnable)
+{
+    s_nGlobalColliderRenderingEnable = nEnable;
 }

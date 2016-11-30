@@ -36,7 +36,7 @@ Scene::Scene()
     m_arAmbientColor[2] = DEFAULT_AMBIENT_BLUE;
     m_arAmbientColor[3] = DEFAULT_AMBIENT_ALPHA;
 
-    InitializeFBO();
+    //InitializeFBO();
 
     // Create and initialize default octrees
     m_pMatterOctree = new Octree();
@@ -92,23 +92,23 @@ void Scene::Render()
     ParticleSystem* pParticle = 0;
     Effect* pEffect           = 0;
 
-    quadScreen.SetPosition(-1.0f, -1.0f);
-    quadScreen.SetDimensions(2.0f, 2.0f);
+    //quadScreen.SetPosition(-1.0f, -1.0f);
+    //quadScreen.SetDimensions(2.0f, 2.0f);
 
-    // Bind the FBO
-    glBindFramebuffer(GL_FRAMEBUFFER, s_hFBO);
-    glFramebufferTexture2D(GL_FRAMEBUFFER,
-                           GL_COLOR_ATTACHMENT0,
-                           GL_TEXTURE_2D,
-                           s_texColorAttach.GetHandle(),
-                           0);
+    //// Bind the FBO
+    //glBindFramebuffer(GL_FRAMEBUFFER, s_hFBO);
+    //glFramebufferTexture2D(GL_FRAMEBUFFER,
+    //                       GL_COLOR_ATTACHMENT0,
+    //                       GL_TEXTURE_2D,
+    //                       s_texColorAttach.GetHandle(),
+    //                       0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    // Adjust the viewport to match the FBO size
-    glViewport(0,0, g_nResolutionX, g_nResolutionY);
+    //// Adjust the viewport to match the FBO size
+    //glViewport(0,0, g_nResolutionX, g_nResolutionY);
 
     // Render 3D Objects
     if (m_pCamera != 0)
@@ -239,24 +239,24 @@ void Scene::Render()
     glDisable(GL_BLEND);
     glEnable(GL_DEPTH_TEST);
 
-    // Now render a full-screen quad to the screen.
-    // Note: glBlitFramebuffer was previously used but the result
-    // would be flipped on certain android devices.
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    //// Now render a full-screen quad to the screen.
+    //// Note: glBlitFramebuffer was previously used but the result
+    //// would be flipped on certain android devices.
+    //glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-    // Change viewport to draw on entire screen
-    glViewport(0,0, g_nScreenWidth, g_nScreenHeight);
+    //// Change viewport to draw on entire screen
+    //glViewport(0,0, g_nScreenWidth, g_nScreenHeight);
 
-    if (nEffectOn != 0)
-    {
-        quadScreen.SetTexture(&s_texEffectColorAttach);
-    }
-    else
-    {
-        quadScreen.SetTexture(&s_texColorAttach);
-    }
-    quadScreen.Render();
-    
+    //if (nEffectOn != 0)
+    //{
+    //    quadScreen.SetTexture(&s_texEffectColorAttach);
+    //}
+    //else
+    //{
+    //    quadScreen.SetTexture(&s_texColorAttach);
+    //}
+    //quadScreen.Render();
+    //
 
 
     //@@ Old

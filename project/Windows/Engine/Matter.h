@@ -162,10 +162,14 @@ public:
     //##   fTransX - x translation.
     //##   fTransY - y translation.
     //##   fTransZ - z translation.
+    //## 
+    //## Returns:
+    //##   int - 1 if hit a sorted object (if this matter is physical)
+    //##         0 otherwise.
     //## **********************************************************************
-    void Translate(float fTransX,
-                   float fTransY,
-                   float fTransZ);
+    int Translate(float fTransX,
+                  float fTransY,
+                  float fTransZ);
 
     //## **********************************************************************
     //## IsVisible
@@ -307,6 +311,9 @@ public:
 
     int IsColliderRenderingEnabled();
 
+    static void SetGlobalColliderRenderingEnable(int nEnable);
+    
+
     //## **********************************************************************
     //## GetModelMatrix
     //## 
@@ -333,6 +340,8 @@ public:
     };
 
 private:
+
+    static int s_nGlobalColliderRenderingEnable;
 
     //## Uses collider vertex data to update all-inclusive
     //## bounding box.
