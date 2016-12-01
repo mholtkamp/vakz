@@ -4,6 +4,9 @@
 #include <string.h>
 
 #if defined(WINDOWS)
+#include <windows.h>
+#include <Xinput.h>
+
 enum VakzKeyEnum
 {
     VKEY_BACK = 10,
@@ -107,6 +110,38 @@ enum VakzButtonEnum
     VBUTTON_MIDDLE = 2,
     VBUTTON_X1     = 3,
     VBUTTON_X2     = 4
+};
+
+enum VakzControllerEnum
+{
+    VCONT_A = XINPUT_GAMEPAD_A,
+    VCONT_B = XINPUT_GAMEPAD_B,
+    VCONT_C = 0,
+    VCONT_X = XINPUT_GAMEPAD_X,
+    VCONT_Y = XINPUT_GAMEPAD_Y,
+    VCONT_Z = 0,
+    VCONT_L1 = XINPUT_GAMEPAD_LEFT_SHOULDER,
+    VCONT_R1 = XINPUT_GAMEPAD_RIGHT_SHOULDER,
+    VCONT_L2 = 0,
+    VCONT_R2 = 0,
+    VCONT_THUMBL = XINPUT_GAMEPAD_LEFT_THUMB,
+    VCONT_THUMBR = XINPUT_GAMEPAD_RIGHT_THUMB,
+    VCONT_START = XINPUT_GAMEPAD_START,
+    VCONT_SELECT = XINPUT_GAMEPAD_BACK,
+
+    VCONT_AXIS_X = 0,
+    VCONT_AXIS_Y = 0,
+    VCONT_AXIS_Z = 0,
+    VCONT_AXIS_RZ = 0,
+    VCONT_AXIS_HAT_X = 0,
+    VCONT_AXIS_HAT_Y = 0,
+
+    VCONT_AXIS_LTRIGGER = 1,
+    VCONT_AXIS_RTRIGGER = 2, 
+    VCONT_AXIS_LTHUMB_X = 3,
+    VCONT_AXIS_LTHUMB_Y = 4,
+    VCONT_AXIS_RTHUMB_X = 5,
+    VCONT_AXIS_RTHUMB_Y = 6
 };
 
 #elif defined(ANDROID)
@@ -214,6 +249,33 @@ enum VakzButtonEnum
     VBUTTON_X2     = 4
 };
 
+enum VakzControllerEnum
+{
+    VCONT_A = 96,
+    VCONT_B = 97,
+    VCONT_C = 98,
+    VCONT_X = 99,
+    VCONT_Y = 100,
+    VCONT_Z = 101,
+    VCONT_L1 = 102,
+    VCONT_R1 = 103,
+    VCONT_L2 = 104,
+    VCONT_R2 = 105,
+    VCONT_THUMBL = 106,
+    VCONT_THUMBR = 107,
+    VCONT_START = 108,
+    VCONT_SELECT = 109,
+
+    VCONT_AXIS_X = 0,
+    VCONT_AXIS_Y = 1,
+    VCONT_AXIS_Z = 11,
+    VCONT_AXIS_RZ = 14,
+    VCONT_AXIS_HAT_X = 15,
+    VCONT_AXIS_HAT_Y = 16,
+    VCONT_AXIS_LTRIGGER = 17,
+    VCONT_AXIS_RTRIGGER = 18
+};
+
 #endif
 
 enum VInputEnum
@@ -224,33 +286,6 @@ enum VInputEnum
     VINPUT_MAX_CONTROLLERS = 4,
     VINPUT_CONT_BUTTONS    = 14,
     VINPUT_CONT_AXES       = 18
-};
-
-enum VControllerEnum
-{
-    VCONT_A        = 96,
-    VCONT_B        = 97,
-    VCONT_C        = 98,
-    VCONT_X        = 99,
-    VCONT_Y        = 100,
-    VCONT_Z        = 101,
-    VCONT_L1       = 102,
-    VCONT_R1       = 103,
-    VCONT_L2       = 104,
-    VCONT_R2       = 105,
-    VCONT_THUMBL   = 106,
-    VCONT_THUMBR   = 107,
-    VCONT_START    = 108,
-    VCONT_SELECT   = 109,
-
-    VCONT_AXIS_X        = 0,
-    VCONT_AXIS_Y        = 1,
-    VCONT_AXIS_Z        = 11,
-    VCONT_AXIS_RZ       = 14,
-    VCONT_AXIS_HAT_X    = 15,
-    VCONT_AXIS_HAT_Y    = 16,
-    VCONT_AXIS_LTRIGGER = 17,
-    VCONT_AXIS_RTRIGGER = 18
 };
 
 class Controller
@@ -594,6 +629,8 @@ void AssignController(int nInputDevice);
 //##         '0'
 //## **********************************************************************
 int IsControllerConnected(int nIndex);
+
+void RefreshControllerStates();
 
 //## **********************************************************************
 //## ShowSoftKeyboard

@@ -5,6 +5,7 @@
 #include <string.h>
 #include <ctype.h>
 
+
 static int s_arKeys[VINPUT_MAX_KEYS]       = {0};
 static int s_arJustDownRepeatKeys[VINPUT_MAX_KEYS] = {0};
 static int s_arJustDownKeys[VINPUT_MAX_KEYS] = {0};
@@ -20,10 +21,16 @@ static int s_arPointerX[VINPUT_MAX_TOUCHES] = {0};
 static int s_arPointerY[VINPUT_MAX_TOUCHES] = {0};
 
 static Controller s_arControllers[VINPUT_MAX_CONTROLLERS];
+
 static int s_nNumControllers = 0;
 
 static Keyboard* s_pKeyboard = 0;
 static int s_nKeyboardEnable = 0;
+
+#if defined (WINDOWS)
+static XINPUT_STATE s_arXinputStates[4] = {0};
+static int s_arActiveControllers[4] = {0};
+#endif
 
 //*****************************************************************************
 // SetKey
@@ -515,6 +522,7 @@ void SetTouchPosition(int nTouchX,
 void SetControllerButton(int nControllerButton,
                          int nControllerNumber)
 {
+#if !defined(WINDOWS)
     if (nControllerNumber >= 0 &&
         nControllerNumber <  VINPUT_MAX_CONTROLLERS)
     {
@@ -525,6 +533,7 @@ void SetControllerButton(int nControllerButton,
             s_arControllers[nControllerNumber].arButtons[nControllerButton - VCONT_A] = 1;
         }
     }
+#endif
 }
 
 //*****************************************************************************
@@ -533,6 +542,7 @@ void SetControllerButton(int nControllerButton,
 void ClearControllerButton(int nControllerButton,
                            int nControllerNumber)
 {
+#if !defined(WINDOWS)
     if (nControllerNumber >= 0 &&
         nControllerNumber <  VINPUT_MAX_CONTROLLERS)
     {
@@ -543,6 +553,7 @@ void ClearControllerButton(int nControllerButton,
             s_arControllers[nControllerNumber].arButtons[nControllerButton - VCONT_A] = 0;
         }
     }
+#endif
 }
 
 //*****************************************************************************
@@ -551,6 +562,18 @@ void ClearControllerButton(int nControllerButton,
 int IsControllerButtonDown(int nControllerButton,
                            int nControllerNumber)
 {
+#if defined(WINDOWS)
+
+    if (s_arXinputStates[nControllerNumber].Gamepad.wButtons & nControllerButton)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+
+#else
     if (nControllerNumber >= 0 &&
         nControllerNumber <  VINPUT_MAX_CONTROLLERS)
     {
@@ -563,6 +586,7 @@ int IsControllerButtonDown(int nControllerButton,
     }
 
     return 0;
+#endif
 }
 
 //*****************************************************************************
@@ -572,6 +596,7 @@ void SetControllerAxisValue(int   nControllerAxis,
                              float fAxisValue, 
                              int   nControllerNumber)
 {
+#if !defined(WINDOWS)
     if (nControllerNumber >= 0 &&
         nControllerNumber <  VINPUT_MAX_CONTROLLERS)
     {
@@ -581,6 +606,7 @@ void SetControllerAxisValue(int   nControllerAxis,
             s_arControllers[nControllerNumber].arAxes[nControllerAxis] = fAxisValue;
         }
     }
+#endif
 }
 
 //*****************************************************************************
@@ -589,6 +615,41 @@ void SetControllerAxisValue(int   nControllerAxis,
 float GetControllerAxisValue(int nControllerAxis,
                              int nControllerNumber)
 {
+#if defined (WINDOWS)
+    float fRet = 0.0f;
+
+    // Is the controller connected? if not 0.0f
+    if (IsControllerConnected(nControllerNumber) == 0)
+    {
+        return 0.0f;
+    }
+
+    switch (nControllerAxis)
+    {
+    case VCONT_AXIS_LTRIGGER:
+        fRet = (float) s_arXinputStates[nControllerNumber].Gamepad.bLeftTrigger / 255;
+        break;
+    case VCONT_AXIS_RTRIGGER:
+        fRet = (float) s_arXinputStates[nControllerNumber].Gamepad.bRightTrigger / 255;
+        break;
+    case VCONT_AXIS_LTHUMB_X:
+        fRet = (float)s_arXinputStates[nControllerNumber].Gamepad.sThumbLX / 32767;
+        break;
+    case VCONT_AXIS_LTHUMB_Y:
+        fRet = (float)s_arXinputStates[nControllerNumber].Gamepad.sThumbLY / 32767;
+        break;
+    case VCONT_AXIS_RTHUMB_X:
+        fRet = (float)s_arXinputStates[nControllerNumber].Gamepad.sThumbRX / 32767;
+        break;
+    case VCONT_AXIS_RTHUMB_Y:
+        fRet = (float)s_arXinputStates[nControllerNumber].Gamepad.sThumbRY / 32767;
+        break;
+    default:
+        break;
+    }
+
+    return fRet;
+#else
     if (nControllerNumber >= 0 &&
         nControllerNumber <  VINPUT_MAX_CONTROLLERS)
     {
@@ -600,6 +661,7 @@ float GetControllerAxisValue(int nControllerAxis,
     }
 
     return 0.0f;
+#endif
 }
 
 //*****************************************************************************
@@ -631,11 +693,13 @@ int GetControllerIndex(int nInputDevice)
 //*****************************************************************************
 void AssignController(int nInputDevice)
 {
+#if !defined(WINDOWS)
     if (s_nNumControllers < VINPUT_MAX_CONTROLLERS)
     {
         s_arControllers[s_nNumControllers].nDevice = nInputDevice;
         s_nNumControllers++;
     }
+#endif
 }
 
 //*****************************************************************************
@@ -643,6 +707,9 @@ void AssignController(int nInputDevice)
 //*****************************************************************************
 int IsControllerConnected(int nIndex)
 {
+#if defined (WINDOWS)
+    return s_arActiveControllers[nIndex];
+#else
     if (nIndex < s_nNumControllers)
     {
         return 1;
@@ -651,6 +718,30 @@ int IsControllerConnected(int nIndex)
     {
         return 0;
     }
+#endif
+}
+
+//*****************************************************************************
+// RefreshControllerStates
+//*****************************************************************************
+void RefreshControllerStates()
+{
+#if defined (WINDOWS)
+    memset(s_arXinputStates, 0, sizeof(XINPUT_STATE) * VINPUT_MAX_CONTROLLERS);
+
+    for (int i = 0; i < XUSER_MAX_COUNT; i++)
+    {
+        if (XInputGetState(i, &s_arXinputStates[i]) == 0)
+        {
+            s_arActiveControllers[i] = 1;
+        }
+        else
+        {
+            s_arActiveControllers[i] = 0;
+        }
+    }
+    
+#endif
 }
 
 //*****************************************************************************

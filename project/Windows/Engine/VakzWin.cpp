@@ -549,6 +549,7 @@ void Update()
         s_pScene->Update();
     }
 
+    RefreshControllerStates();
     UpdateSoftKeyboard();
 }
 
