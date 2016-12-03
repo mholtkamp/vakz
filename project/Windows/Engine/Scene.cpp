@@ -626,6 +626,22 @@ void Scene::RemoveParticleSystem(ParticleSystem* pParticleSystem)
 }
 
 //*****************************************************************************
+// RemovePointLightFromOctree
+//*****************************************************************************
+void Scene::RemovePointLightFromOctree(class PointLight* pLight)
+{
+    m_pPointLightOctree->Remove(pLight, *pLight->GetBox());
+}
+
+//*****************************************************************************
+// AddPointLightToOctree
+//*****************************************************************************
+void Scene::AddPointLightToOctree(class PointLight* pLight)
+{
+    m_pPointLightOctree->Add(pLight, *pLight->GetBox());
+}
+
+//*****************************************************************************
 // SetSceneBounds
 //*****************************************************************************
 void Scene::SetSceneBounds(float* arCenter,

@@ -121,6 +121,9 @@ public:
 
     int GetNumMatters();
 
+    void RemovePointLightFromOctree(class PointLight* pLight);
+    void AddPointLightToOctree(class PointLight* pLight);
+
     //## **********************************************************************
     //## SetAmbientLight
     //##

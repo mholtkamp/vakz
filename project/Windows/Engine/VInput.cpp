@@ -29,6 +29,7 @@ static int s_nKeyboardEnable = 0;
 
 #if defined (WINDOWS)
 static XINPUT_STATE s_arXinputStates[4] = {0};
+static XINPUT_STATE s_arXinputPrevStates[4] = { 0 };
 static int s_arActiveControllers[4] = {0};
 #endif
 
@@ -590,6 +591,25 @@ int IsControllerButtonDown(int nControllerButton,
 }
 
 //*****************************************************************************
+// IsControllerButtonJustDown
+//*****************************************************************************
+int IsControllerButtonJustDown(int nControllerButton,
+                               int nControllerNumber)
+{
+#if defined (WINDOWS)
+    if ((s_arXinputStates[nControllerNumber].Gamepad.wButtons & nControllerButton) != 0 &&
+        (s_arXinputPrevStates[nControllerNumber].Gamepad.wButtons & nControllerButton) == 0)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+#endif
+}
+
+//*****************************************************************************
 // SetControllerAxisValue
 //*****************************************************************************
 void SetControllerAxisValue(int   nControllerAxis,
@@ -727,6 +747,7 @@ int IsControllerConnected(int nIndex)
 void RefreshControllerStates()
 {
 #if defined (WINDOWS)
+    memcpy(s_arXinputPrevStates, s_arXinputStates, sizeof(XINPUT_STATE) * VINPUT_MAX_CONTROLLERS);
     memset(s_arXinputStates, 0, sizeof(XINPUT_STATE) * VINPUT_MAX_CONTROLLERS);
 
     for (int i = 0; i < XUSER_MAX_COUNT; i++)

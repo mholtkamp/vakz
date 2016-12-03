@@ -570,6 +570,23 @@ int IsControllerButtonDown(int nControllerButton,
                            int nControllerNumber);
 
 //## **********************************************************************
+//## IsControllerButtonJustDown
+//## 
+//## Queries if a button was just pressed.
+//##
+//## Input:
+//##   nControllerButton - button enum value
+//##   nControllerNumber - controller index
+//##
+//## Returns:
+//##   int - '1' if button is down.
+//##         '0' otherwise.
+//## **********************************************************************
+int IsControllerButtonJustDown(int nControllerButton,
+                               int nControllerNumber);
+
+
+//## **********************************************************************
 //## SetControllerAxisValue
 //## 
 //## Sets the value of analog axis.

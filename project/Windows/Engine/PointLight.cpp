@@ -1,5 +1,6 @@
 #include "PointLight.h"
 #include "VGL.h"
+#include "Scene.h"
 
 PointLight::PointLight()
 {
@@ -32,9 +33,22 @@ void PointLight::SetPosition(float fX,
                              float fY,
                              float fZ)
 {
+    Scene* pScene = reinterpret_cast<Scene*>(GetScene());
+
+    // Remove the light from wherever it was in the octree
+    pScene->RemovePointLightFromOctree(this);
+
+    // Update the position
     m_arPosition[0] = fX;
     m_arPosition[1] = fY;
     m_arPosition[2] = fZ;
+
+    // Update the box center
+    m_box.m_arCenter[0] = fX;
+    m_box.m_arCenter[1] = fY;
+    m_box.m_arCenter[2] = fZ;
+
+    pScene->AddPointLightToOctree(this);
 }
 
 void PointLight::SetBox(Box& box)

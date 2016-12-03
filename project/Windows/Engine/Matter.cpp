@@ -924,46 +924,49 @@ void Matter::SetPointLightRenderState(void*        pScene,
     {
         pCurLight = reinterpret_cast<PointLight*>(pNode->m_pData);
 
-        if (nNumLights < MATTER_MAX_POINT_LIGHTS)
+        if (pCurLight->IsEnabled())
         {
-            // Haven't found 3 lights yet, so just add this to the array
-            arPointLights[nNumLights] = pCurLight;
-
-            fDist = DistanceBetweenPoints(pCurLight->GetPosition(),
-                                          m_arPosition);
-
-            // Record the maximum distance
-            if (fDist >= fMaxDist)
+            if (nNumLights < MATTER_MAX_POINT_LIGHTS)
             {
-                fMaxDist       = fDist;
-                nFarthestLight = nNumLights;
-            }
-            // Increment light count
-            nNumLights++;
-        }
-        else
-        {
-            // 3 lights have been found. Check if this one is closer
-            fDist = DistanceBetweenPoints(pCurLight->GetPosition(),
-                                          m_arPosition);
+                // Haven't found 3 lights yet, so just add this to the array
+                arPointLights[nNumLights] = pCurLight;
 
-            if (fDist < fMaxDist)
-            {
-                // This light is closer than the farthest light on record.
-                // Replace the farthest light with this one
-                arPointLights[nFarthestLight] = pCurLight;
+                fDist = DistanceBetweenPoints(pCurLight->GetPosition(),
+                    m_arPosition);
 
-                fMaxDist = 0.0f;
-
-                // Iterate through array and find the new farthest light
-                for (i = 0; i < MATTER_MAX_POINT_LIGHTS; i++)
+                // Record the maximum distance
+                if (fDist >= fMaxDist)
                 {
-                    fDist = DistanceBetweenPoints(arPointLights[i]->GetPosition(), m_arPosition);
+                    fMaxDist = fDist;
+                    nFarthestLight = nNumLights;
+                }
+                // Increment light count
+                nNumLights++;
+            }
+            else
+            {
+                // 3 lights have been found. Check if this one is closer
+                fDist = DistanceBetweenPoints(pCurLight->GetPosition(),
+                    m_arPosition);
 
-                    if (fDist >= fMaxDist)
+                if (fDist < fMaxDist)
+                {
+                    // This light is closer than the farthest light on record.
+                    // Replace the farthest light with this one
+                    arPointLights[nFarthestLight] = pCurLight;
+
+                    fMaxDist = 0.0f;
+
+                    // Iterate through array and find the new farthest light
+                    for (i = 0; i < MATTER_MAX_POINT_LIGHTS; i++)
                     {
-                        fMaxDist = fDist;
-                        nFarthestLight = i;
+                        fDist = DistanceBetweenPoints(arPointLights[i]->GetPosition(), m_arPosition);
+
+                        if (fDist >= fMaxDist)
+                        {
+                            fMaxDist = fDist;
+                            nFarthestLight = i;
+                        }
                     }
                 }
             }
