@@ -261,7 +261,7 @@ void ParticleSystem::Update()
     glUniform1f(s_hMaxSize, m_fMaxSize);
     glUniform3fv(s_hGravity, 1, m_arGravity);
     glUniform1i(s_hSeed, rand());
-    glUniform1f(s_hDeltaTime, 0.016f /*fDeltaTime*/);
+    glUniform1f(s_hDeltaTime, fDeltaTime);
     glUniform1i(s_hGenerate, m_nGenerate);
     glUniform3fv(s_hOrigin, 1, m_arOrigin);
     glUniform3fv(s_hSpawnVariance, 1, m_arSpawnVariance);
