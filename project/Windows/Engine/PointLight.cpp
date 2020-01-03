@@ -36,7 +36,10 @@ void PointLight::SetPosition(float fX,
     Scene* pScene = reinterpret_cast<Scene*>(GetScene());
 
     // Remove the light from wherever it was in the octree
-    pScene->RemovePointLightFromOctree(this);
+	if (pScene)
+	{
+		pScene->RemovePointLightFromOctree(this);
+	}
 
     // Update the position
     m_arPosition[0] = fX;
@@ -48,7 +51,10 @@ void PointLight::SetPosition(float fX,
     m_box.m_arCenter[1] = fY;
     m_box.m_arCenter[2] = fZ;
 
-    pScene->AddPointLightToOctree(this);
+	if (pScene)
+	{
+		pScene->AddPointLightToOctree(this);
+	}
 }
 
 void PointLight::SetBox(Box& box)

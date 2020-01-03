@@ -745,7 +745,18 @@ static int BuildProgram(int          nProgramIndex,
         // and return failure.
         if (nLinked == 0)
         {
-            LogError("Shader program failed to link");
+			// Clear buffer to hold 
+			memset(pLogBuffer, 0, LOG_SIZE);
+
+			// Get compilation log
+			glGetProgramInfoLog(hProgram,      // Handle to shader program
+				LOG_SIZE - 1,   // Max size of buffer
+				0,              // Returned actual size, 0 = don't care
+				pLogBuffer);    // Pointer to buffer
+
+			LogError("Shader program failed to link");
+			LogError(pLogBuffer);
+
             nStatus = 0;
         }
         // Otherwise assign the shader program to specified target

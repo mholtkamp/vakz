@@ -3,6 +3,8 @@
 
 #define GLSL_VERSION_STRING "#version 300 es\n"
 
+#define GLSL_PRECISION "precision mediump int;\n precision mediump float;\n"
+
 //## **************************************************************************
 //## Quad Shader
 //## 
@@ -21,6 +23,7 @@
 
 static const char* pQuadVertexShader = 
 GLSL_VERSION_STRING
+GLSL_PRECISION
 "in vec2 aPosition;\n"
 "in vec2 aTexCoord;\n"
 "out vec2 vTexCoord;\n"
@@ -33,7 +36,7 @@ GLSL_VERSION_STRING
 
 static const char* pQuadFragmentShader = 
 GLSL_VERSION_STRING
-"precision mediump float;\n"
+GLSL_PRECISION
 "uniform int uType;\n"
 "uniform vec4 uColor;\n"
 "uniform sampler2D uTexture;\n"
@@ -77,6 +80,7 @@ GLSL_VERSION_STRING
 
 static const char* pTextVertexShader = 
 GLSL_VERSION_STRING
+GLSL_PRECISION
 "in vec2 aPosition;\n"
 "in vec2 aTexCoord;\n"
 "out vec2 vTexCoord;\n"
@@ -92,7 +96,7 @@ GLSL_VERSION_STRING
 
 static const char* pTextFragmentShader = 
 GLSL_VERSION_STRING
-"precision mediump float;\n"
+GLSL_PRECISION
 "uniform vec4 uColor;\n"
 "uniform sampler2D uTexture;\n"
 "in vec2 vTexCoord;\n"
@@ -113,6 +117,7 @@ GLSL_VERSION_STRING
 //## **************************************************************************
 static const char* pStaticMeshVertexShader = 
 GLSL_VERSION_STRING
+GLSL_PRECISION
 "in vec3 aPosition;\n"
 "in vec2 aTexCoord;\n"
 "in vec3 aNormal;\n"
@@ -143,7 +148,7 @@ GLSL_VERSION_STRING
 //## **************************************************************************
 static const char* pDiffuseFragmentShader = 
 GLSL_VERSION_STRING
-"precision mediump float;\n"
+GLSL_PRECISION
 "in vec2 vTexCoord;\n"
 "in vec3 vNormal;\n"
 "in vec3 vPointLightDir[3];"
@@ -207,6 +212,7 @@ GLSL_VERSION_STRING
 //## **************************************************************************
 static const char* pAnimatedMeshVertexShader = 
 GLSL_VERSION_STRING
+GLSL_PRECISION
 "in vec3 aPosition1;\n"
 "in vec2 aTexCoord1;\n"
 "in vec3 aNormal1;\n"
@@ -244,7 +250,7 @@ GLSL_VERSION_STRING
 //## **************************************************************************
 static const char* pFullbrightFragmentShader = 
 GLSL_VERSION_STRING
-"precision mediump float;\n"
+GLSL_PRECISION
 "in vec2 vTexCoord;\n"
 "out vec4 oFragColor;\n"
 "uniform vec4 uColor;\n"
@@ -270,6 +276,7 @@ GLSL_VERSION_STRING
 //## **************************************************************************
 static const char* pEffectVertexShader = 
 GLSL_VERSION_STRING
+GLSL_PRECISION
 "in vec2 aPosition;\n"
 "in vec2 aTexCoord;\n"
 "out vec2 vTexCoord;\n"
@@ -285,7 +292,7 @@ GLSL_VERSION_STRING
 //## **************************************************************************
 static const char* pBlurFragmentShader =
 GLSL_VERSION_STRING
-"precision mediump float;\n"
+GLSL_PRECISION
 "uniform vec2 uDimensions;\n"
 "uniform int uBlurFactor;\n"
 "uniform int uSampleDistance;\n"
@@ -315,6 +322,7 @@ GLSL_VERSION_STRING
 //## **************************************************************************
 static const char* pParticleUpdateVertexShader =
 GLSL_VERSION_STRING
+GLSL_PRECISION
 
 // Randomizer uniforms
 "uniform float uMinLifetime;\n"
@@ -406,7 +414,7 @@ GLSL_VERSION_STRING
 //## **************************************************************************
 static const char* pParticleUpdateFragmentShader =
 GLSL_VERSION_STRING
-"precision mediump float;\n"
+GLSL_PRECISION
 "out vec4 oFragColor;\n"
 "void main()\n"
 "{\n"
@@ -431,6 +439,7 @@ static int nParticleUpdateFeedbackVaryingsCount = 5;
 //## **************************************************************************
 static const char* pParticleRenderVertexShader =
 GLSL_VERSION_STRING
+GLSL_PRECISION
 
 "uniform mat4 uMatrixVP;\n"
 
@@ -454,7 +463,7 @@ GLSL_VERSION_STRING
 //## **************************************************************************
 static const char* pParticleRenderFragmentShader =
 GLSL_VERSION_STRING
-"precision mediump float;\n"
+GLSL_PRECISION
 "uniform int uTexType;\n"
 "uniform sampler2D uTexture;\n"
 "in vec4 vColor;\n"
@@ -481,7 +490,7 @@ GLSL_VERSION_STRING
 //## **************************************************************************
 static const char* pRimlitFragmentShader = 
 GLSL_VERSION_STRING
-"precision mediump float;\n"
+GLSL_PRECISION
 "in vec2 vTexCoord;\n"
 "in vec3 vNormal;\n"
 "out vec4 oFragColor;\n"
@@ -537,7 +546,7 @@ GLSL_VERSION_STRING
 //## **************************************************************************
 static const char* pToonFragmentShader = 
 GLSL_VERSION_STRING
-"precision mediump float;\n"
+GLSL_PRECISION
 "in vec2 vTexCoord;\n"
 "in vec3 vNormal;\n"
 "in vec3 vPointLightDir[3];"
